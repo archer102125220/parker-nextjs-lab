@@ -1,0 +1,36 @@
+{
+  "name": "parker-nextjs-lab",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_OPTIONS='--inspect' next dev --turbopack  -H 0.0.0.0 -p 3000",
+    "dev-https": "cross-env NODE_OPTIONS=--dns-result-order=ipv4first yarn local-ssl-proxy --key local-ssl/key.pem --cert local-ssl/cert.pem --source 3001 --target 3000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "15.2.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@babel/node": "^7.26.0",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/register": "^7.25.9",
+    "@eslint/eslintrc": "^3",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "axios": "^1.8.4",
+    "axios-mock-adapter": "^2.1.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.4",
+    "eslint-config-prettier": "^10.1.1",
+    "local-ssl-proxy": "^2.0.5",
+    "prettier": "^3.5.3",
+    "sass": "^1.86.0",
+    "typescript": "^5"
+  }
+}
