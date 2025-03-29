@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="body_1"
+  width="24" height="24">
+  <style>
+    @keyframes refresh-dash {
+    0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+    }
+    50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35px;
+    }
+    100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124px;
+    }
+    }
+    .refresh_animation {
+    animation: refresh-dash 1.5s ease-in-out infinite;
+    }
+  </style>
+  <g transform="matrix(0.48 0 0 0.48 -12 -12)">
+    <path
+      class="refresh_animation"
+      d="M70 50C 70 55.52285 68.04738 60.236893 64.142136 64.142136C 60.236893 68.04738 55.52285 70 50 70C 44.477154 70 39.763107 68.04738 35.857864 64.142136C 31.952621 60.236893 30 55.52285 30 50C 30 44.477154 31.952621 39.763107 35.857864 35.857864C 39.763107 31.952621 44.477154 30 50 30C 55.52285 30 60.236893 31.952621 64.142136 35.857864C 68.04738 39.763107 70 44.477154 70 50C 70 50.23274 69.99594 50.4654 69.987816 50.69799"
+      stroke="#000000" stroke-width="4" stroke-dasharray="1,200" stroke-dashoffset="0"
+      stroke-linecap="round" fill="none"></path>
+  </g>
+</svg>

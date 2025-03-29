@@ -2,6 +2,7 @@
 import type { NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
+  console.log({ request: request.nextUrl });
   // if (!process.env.WP_USER || !process.env.WP_APP_PASS) {
   //   return NextResponse.next();
   // }
