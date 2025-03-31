@@ -1,31 +1,32 @@
 import { PhoneNumberUtil } from 'google-libphonenumber';
 
 import PHONE_AREA_CODE from '@/assets/phoneCountryCode';
+import type { phoneAreaCode } from '@/assets/phoneCountryCode';
 
 const phoneUtil = PhoneNumberUtil.getInstance();
 
 export function checkPhone(phone = '000', countryCode = '') {
   const result = { countryCodeError: false, phoneError: true };
   if (
-    isNaN(countryCode) ||
+    isNaN(Number(countryCode)) ||
     typeof countryCode !== 'string' ||
     countryCode === ''
   ) {
     result.countryCodeError = true;
   }
 
-  if (isNaN(phone)) {
+  if (isNaN(Number(phone))) {
     result.phoneError = true;
     return result;
   }
 
   try {
-    const phoneAreaCodeObj =
+    const phoneAreaCodeObj: phoneAreaCode =
       typeof countryCode === 'string' && countryCode !== ''
         ? PHONE_AREA_CODE.find(
             (_phoneCountryCode) =>
-              _phoneCountryCode.phoneCode.padStart(3, 0) ===
-              countryCode.padStart(3, 0)
+              _phoneCountryCode.phoneCode?.padStart(3, '0') ===
+              countryCode.padStart(3, '0')
           ) || {}
         : {};
     if (

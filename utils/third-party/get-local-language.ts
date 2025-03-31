@@ -1,6 +1,8 @@
-import { defaultLang } from '@/i18n';
+import { cookies } from 'next/headers';
+// import { defaultLang } from '@/i18n';
 
-export function getLocalLanguage(defaultLanguag = defaultLang) {
+// https://nextjs.org/docs/app/api-reference/functions/cookies#setting-a-cookie
+export async function getLocalLanguage(defaultLanguag = 'zh-tw') {
   if (typeof window?.localStorage === 'object') {
     const usedLang = window.localStorage.getItem('usedLang');
     if (typeof usedLang === 'string' && usedLang !== '') {
@@ -8,6 +10,7 @@ export function getLocalLanguage(defaultLanguag = defaultLang) {
     }
   }
   if (typeof window?.navigator?.languages === 'object') {
+    // @ts-ignore
     const _lang = window.navigator.userLanguage || window.navigator.language;
     const langArr = _lang.split('-');
     const lang =
@@ -20,11 +23,11 @@ export function getLocalLanguage(defaultLanguag = defaultLang) {
 
     return lang;
   }
-  const locale = useCookie('___i18n_locale', {
-    default: () => ''
-  });
-  if (locale !== '') {
-    return locale.value;
+
+  const cookieStore = await cookies();
+  const locale = cookieStore.get('___i18n_locale');
+  if (typeof locale === 'string' && locale !== '') {
+    return locale;
   }
   return defaultLanguag;
 }

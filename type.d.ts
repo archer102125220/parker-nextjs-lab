@@ -10,6 +10,7 @@ export declare global {
     };
     onYouTubeIframeAPIReady: () => void;
     youTubeIsCreated?: boolean;
+    gtag: Function;
   }
 }
 

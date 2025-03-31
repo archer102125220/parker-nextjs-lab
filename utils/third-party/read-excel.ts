@@ -1,7 +1,17 @@
 import _readXlsxFile from 'read-excel-file';
+import type { Row, ParsedObjectsResult } from 'read-excel-file';
 
-export const readXlsxFile = _readXlsxFile;
-export function handleReadExcel() {
+type readXlsxFileType = typeof _readXlsxFile;
+
+interface Result {
+  // excel?: ParsedObjectsResult<Object>;
+  excel?: ParsedObjectsResult<Object> | Row[];
+  files?: File | ArrayBuffer;
+}
+
+export const readXlsxFile: readXlsxFileType = _readXlsxFile;
+
+export function handleReadExcel(): Promise<Result> {
   return new Promise((resolve, reject) => {
     try {
       const input = document.createElement('input');
@@ -14,8 +24,9 @@ export function handleReadExcel() {
         '.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'
       );
       input.addEventListener('change', () => {
-        readXlsxFile(input.files[0]).then((rows) => {
-          resolve({ excel: rows, files: input.files[0] });
+        const file = input.files?.[0] || new ArrayBuffer();
+        readXlsxFile(file).then((rows) => {
+          resolve({ excel: rows, files: file });
         });
       });
       input.click();

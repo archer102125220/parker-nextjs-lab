@@ -13,11 +13,11 @@ export function googleGAInit(googleGAID = '') {
   // script.addEventListener('load', () => init(googleGAID));
 
   script.async = true;
-  script.setAttribute('async', true);
+  script.setAttribute('async', 'true');
   script.src = src;
   script.setAttribute('src', src);
 
-  document.querySelector('head').append(script);
+  document.querySelector('head')?.append(script);
 }
 function init(googleGAID = '') {
   window.dataLayer = window.dataLayer || [];

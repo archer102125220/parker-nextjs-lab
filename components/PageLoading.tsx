@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 
@@ -7,7 +6,7 @@ interface PageLoadingProps {
 }
 
 function PageLoading(props: Readonly<PageLoadingProps>) {
-  const { loading } = props;
+  const { loading = false } = props;
 
   return loading === true ? (
     <Box
@@ -25,13 +24,5 @@ function PageLoading(props: Readonly<PageLoadingProps>) {
     <></>
   );
 }
-
-PageLoading.propTypes = {
-  loading: PropTypes.bool
-};
-
-PageLoading.defaultProps = {
-  loading: false
-};
 
 export default PageLoading;
