@@ -2,8 +2,11 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
-  // console.log({ request: request.nextUrl });
-  console.log({ href: request.nextUrl?.href });
+  console.log('____one____');
 
   return NextResponse.next();
 }
+
+// export const config = {
+//   matcher: ['/one']
+// };
