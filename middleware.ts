@@ -1,36 +1,70 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-import { middleware as middlewareOne } from '@/middleware/one';
+import globalTestMiddleware from '@/middleware/globalTest';
+import logMiddleware from '@/middleware/log';
+import {
+  middleware as middlewareOne,
+  exactMiddleware as exactMiddlewareOne
+} from '@/app/one/middleware';
 
-// 定義靜態檔案的附檔名或路徑模式
-const staticFileExtensions =
+// 靜態檔案相關設定
+const STATIC_FILE_EXTENSIONS: RegExp =
   /\.(js|css|svg|jpg|png|ico|gif|webp|txt|json|woff2?|ttf|eot|map)$/;
-const staticFilePrefixes = [
+const STATIC_FILE_PREFIXES: Array<string> = [
   '/_next/static',
   '/favicon.ico',
   '/sitemap.xml',
   '/robots.txt'
 ];
 
+const GLOBAL_MIDDLEWARE_SETTINGS: Array<Function> = [
+  globalTestMiddleware,
+  logMiddleware
+];
+
+type MiddlewareSetting = {
+  patch: string;
+  handler: (request: NextRequest) => Promise<NextResponse>;
+  exact?: boolean;
+};
+const MIDDLEWARE_SETTINGS: Array<MiddlewareSetting> = [
+  {
+    patch: '/one',
+    handler: exactMiddlewareOne,
+    exact: true
+  },
+  {
+    patch: '/one',
+    handler: middlewareOne
+  }
+];
+
 export async function middleware(request: NextRequest) {
-  const { pathname } = new URL(request.url);
-
-  // 檢查是否為靜態檔案附檔名
-  if (staticFileExtensions.test(pathname)) {
-    return NextResponse.next(); // 允許 Next.js 處理靜態檔案
+  // 排除靜態檔案
+  if (
+    STATIC_FILE_EXTENSIONS.test(request.nextUrl.pathname) ||
+    STATIC_FILE_PREFIXES.some((prefix) =>
+      request.nextUrl.pathname.startsWith(prefix)
+    )
+  ) {
+    return NextResponse.next();
   }
 
-  // 檢查是否為靜態檔案路徑前綴
-  if (staticFilePrefixes.some((prefix) => pathname.startsWith(prefix))) {
-    return NextResponse.next(); // 允許 Next.js 處理靜態檔案
+  for (const middlewareHandler of GLOBAL_MIDDLEWARE_SETTINGS) {
+    const middlewareResponse = await middlewareHandler(request);
+    if (middlewareResponse) {
+      return middlewareResponse; // 如果全域 Middleware 回傳了 NextResponse，則直接返回
+    }
   }
 
-  // 如果不是靜態檔案，則執行你的其他 Middleware 邏輯
-  console.log({ href: request.nextUrl?.href });
-
-  if (pathname.startsWith('/one')) {
-    return middlewareOne(request);
+  const pathname = request.nextUrl.pathname;
+  const middlewareSetting = MIDDLEWARE_SETTINGS.find(
+    ({ patch, exact = false }) =>
+      exact === false ? pathname.startsWith(patch) : pathname === patch
+  );
+  if (typeof middlewareSetting?.handler === 'function') {
+    return await middlewareSetting.handler(request);
   }
 
   return NextResponse.next();
