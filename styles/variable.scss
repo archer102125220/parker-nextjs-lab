@@ -31,7 +31,7 @@ $background-color-base: #f5f7fa;
 $card-animation-color: rgba(144, 142, 142, 0.71);
 $button-animation-color: rgba(144, 142, 142, 0.71);
 
-:root {
+@mixin globalcssVariable {
   /* Brand Color */
   /* background-color: $primary; */
   --primary: #{$primary};
