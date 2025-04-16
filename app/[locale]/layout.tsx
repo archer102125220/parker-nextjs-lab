@@ -19,7 +19,7 @@ const roboto = Roboto({
   variable: '--font-roboto'
 });
 
-export async function LocaleLayout(props: Readonly<LocaleLayout>) {
+export default async function LocaleLayout(props: Readonly<LocaleLayout>) {
   const { children, params } = props;
 
   // Ensure that the incoming `locale` is valid
@@ -65,5 +65,3 @@ export async function LocaleLayout(props: Readonly<LocaleLayout>) {
     </html>
   );
 }
-
-export default LocaleLayout;
