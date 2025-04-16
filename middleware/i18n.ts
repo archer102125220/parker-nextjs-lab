@@ -11,11 +11,11 @@ export const i18nMiddleware = createMiddleware(routing);
 // - … the ones containing a dot (e.g. `favicon.ico`)
 const EXCEPT_PREFIXES: Array<string> = ['/api', '/trpc', '/_next', '/_vercel'];
 
-export function middleware(request: NextRequest) {
+export function middleware(request: NextRequest): NextResponse {
   if (
     EXCEPT_PREFIXES.some((prefix) =>
       request.nextUrl.pathname.startsWith(prefix)
-    )
+    ) === false
   ) {
     return i18nMiddleware(request);
   }

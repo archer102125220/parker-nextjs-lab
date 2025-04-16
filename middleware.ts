@@ -2,7 +2,9 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 import globalTestMiddleware from '@/middleware/globalTest';
+import i18nMiddleware from '@/middleware/i18n';
 import logMiddleware from '@/middleware/log';
+
 import {
   middleware as middlewareOne,
   exactMiddleware as exactMiddlewareOne
@@ -20,6 +22,7 @@ const STATIC_FILE_PREFIXES: Array<string> = [
 
 const GLOBAL_MIDDLEWARE_SETTINGS: Array<Function> = [
   globalTestMiddleware,
+  i18nMiddleware,
   logMiddleware
 ];
 
