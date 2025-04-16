@@ -1,3 +1,5 @@
+// @use 'flag-icons/sass/_flag-icons-base.scss' as *;
+
 @mixin mobile {
   @media (max-width: 707px) {
     @content;
