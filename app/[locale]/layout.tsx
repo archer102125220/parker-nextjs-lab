@@ -2,10 +2,9 @@ import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { Roboto } from 'next/font/google';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
-import { ThemeProvider } from '@mui/material/styles';
 
 import { routing } from '@/i18n/routing';
-import theme from '@/styles/theme';
+import MuiThemeProvider from '@/components/MuiThemeProvider';
 
 interface LocaleLayout {
   children: React.ReactNode;
@@ -62,7 +61,7 @@ export async function LocaleLayout(props: Readonly<LocaleLayout>) {
       <body>
         <NextIntlClientProvider>
           <AppRouterCacheProvider>
-            <ThemeProvider theme={theme}>{children}</ThemeProvider>
+            <MuiThemeProvider>{children}</MuiThemeProvider>
           </AppRouterCacheProvider>
         </NextIntlClientProvider>
       </body>
