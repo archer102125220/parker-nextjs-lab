@@ -6,7 +6,7 @@ import logMiddleware from '@/middleware/log';
 import {
   middleware as middlewareOne,
   exactMiddleware as exactMiddlewareOne
-} from '@/app/one/middleware';
+} from '@/app/[locale]/one/middleware';
 
 // 靜態檔案相關設定
 const STATIC_FILE_EXTENSIONS: RegExp =

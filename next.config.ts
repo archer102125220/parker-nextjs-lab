@@ -1,5 +1,9 @@
 import type { NextConfig } from 'next';
+import createNextIntlPlugin from 'next-intl/plugin';
 import withPWAInit from '@ducanh2912/next-pwa';
+
+// https://next-intl.dev/docs/getting-started/app-router/with-i18n-routing
+const withNextIntl = createNextIntlPlugin();
 
 // https://ducanh-next-pwa.vercel.app/docs
 const withPWA = withPWAInit({
@@ -118,7 +122,7 @@ const withPWA = withPWAInit({
           },
           plugins: [
             {
-              cacheKeyWillBeUsed: async function (cacheKeyResponse)  {
+              cacheKeyWillBeUsed: async function (cacheKeyResponse) {
                 const request = cacheKeyResponse.request;
                 if (
                   cacheKeyResponse.mode === 'write' ||
@@ -163,15 +167,17 @@ const withPWA = withPWAInit({
       }
     ]
   },
-  fallbacks: undefined,
+  fallbacks: undefined
 });
 
-const nextConfig: NextConfig = withPWA({
-  /* config options here */
-  sassOptions: {
-    additionalData:
-      '@use "@/styles/variable.scss" as *; @use "@/styles/mixin.scss" as *;'
-  }
-});
+const nextConfig: NextConfig = withPWA(
+  withNextIntl({
+    /* config options here */
+    sassOptions: {
+      additionalData:
+        '@use "@/styles/variable.scss" as *; @use "@/styles/mixin.scss" as *;'
+    }
+  })
+);
 
 export default nextConfig;

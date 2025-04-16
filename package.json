@@ -6,8 +6,9 @@
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev --turbopack  -H 0.0.0.0 -p 3001",
     "dev-https": "cross-env NODE_OPTIONS='--inspect' next dev  --turbopack --experimental-https -H 0.0.0.0 -p 3000",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "cross-env NITRO_PORT=3001 next start",
+    "lint": "next lint",
+    "create-i18n": "babel-node ./i18n/google-sheet-to-json.mjs"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",
@@ -27,6 +28,7 @@
     "lodash": "^4.17.21",
     "lru-cache": "^11.1.0",
     "next": "15.2.4",
+    "next-intl": "^4.0.2",
     "qs": "^6.14.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -49,9 +51,11 @@
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
     "eslint-config-prettier": "^10.1.1",
+    "flat": "^6.0.1",
     "postcss": "^8.5.3",
     "prettier": "^3.5.3",
     "sass": "^1.86.0",
+    "spreadsheet-to-json": "^2.0.0",
     "tailwindcss": "^4.0.17",
     "typescript": "^5",
     "webpack": "^5.99.5"
