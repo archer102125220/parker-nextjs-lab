@@ -1,4 +1,5 @@
 'use client';
+// https://zh-hans.react.dev/reference/rsc/use-client
 import { createTheme as muiCreateTheme } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
 import type { Localization } from '@mui/material/locale';
