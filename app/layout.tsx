@@ -1,9 +1,10 @@
+import type { ReactNode } from 'react';
 import type { Metadata, Viewport } from 'next';
 
 import '@/app/global.scss';
 
 interface RootLayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const SYSTEM_NAME = "Parker's Next.js lab";

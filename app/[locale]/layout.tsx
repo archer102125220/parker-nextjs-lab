@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { Roboto } from 'next/font/google';
@@ -7,7 +8,7 @@ import { routing } from '@/i18n/routing';
 import MuiThemeProvider from '@/components/MuiThemeProvider';
 
 interface LocaleLayout {
-  children: React.ReactNode;
+  children: ReactNode;
   params: Promise<{ locale: string }>;
 }
 

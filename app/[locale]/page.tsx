@@ -1,13 +1,13 @@
 import Image from 'next/image';
 
-import { useTranslations } from 'next-intl';
+// import { useTranslations } from 'next-intl';
 
-import { Link } from '@/i18n/navigation';
+// import { Link } from '@/i18n/navigation';
 
 import styles from '@/app/[locale]/page.module.scss';
 
 export default function Home() {
-  const t = useTranslations();
+  // const t = useTranslations();
 
   return (
     <div className={styles.page}>
