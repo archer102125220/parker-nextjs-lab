@@ -52,10 +52,6 @@ export async function LocaleLayout(props: Readonly<LocaleLayout>) {
         />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-        />
-        <link
-          rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
       </head>
