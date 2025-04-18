@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 // import { Link } from '@/i18n/navigation';
 
-import styles from '@/app/[locale]/page.module.scss';
+import styles from '@/app/[locale]/locale-root-page.module.scss';
 
 export default function Home() {
   // const t = useTranslations();

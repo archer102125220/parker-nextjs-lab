@@ -1,0 +1,107 @@
+@keyframes dialog_open {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes dialog_content {
+  from {
+    transform: translate(0px, 120px);
+  }
+  to {
+    transform: translate(0px, 0px);
+  }
+}
+.dialog_root {
+  position: var(--dialog_root_position);
+
+  &-dialog {
+    position: var(--dialog_position, fixed);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: var(--dialog_z_index, 2);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #00000080;
+
+    opacity: var(--dialog_opacity);
+
+    transition: opacity 0.15s;
+
+    animation-name: dialog_open;
+    animation-duration: 0.3s;
+
+    &-center {
+      margin: auto;
+
+      animation-name: dialog_content;
+      animation-duration: 0.3s;
+
+      &-container {
+        display: flex;
+        flex-direction: column;
+        // justify-content: space-between;
+
+        width: var(--dialog_width);
+        height: var(--dialog_height);
+        min-width: var(--dialog_min_width);
+        min-height: var(--dialog_min_height);
+        max-width: 100vw;
+        max-height: 100vh;
+        padding: 20px;
+        border-radius: 8px;
+
+        background-color: #fff;
+
+        &-title {
+          padding-bottom: 20px;
+
+          font-size: 18px;
+          font-weight: 600;
+          line-height: 25.2px;
+          text-align: center;
+          color: #000000;
+        }
+
+        &-content {
+          font-family: PingFang SC;
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 22.4px;
+          text-align: left;
+          text-underline-position: from-font;
+          text-decoration-skip-ink: none;
+          color: #909090;
+        }
+
+        &-action {
+          display: flex;
+          gap: 16px;
+          flex-direction: row;
+          flex-wrap: wrap;
+          justify-content: space-around;
+
+          margin-top: 16px;
+
+          &-btn {
+            // width: 135px;
+            // width: 115px;
+            // min-width: 135px;
+            // min-width: 125px;
+            min-width: 90px;
+            min-height: 45px;
+            font-size: 18px;
+          }
+        }
+      }
+    }
+  }
+}

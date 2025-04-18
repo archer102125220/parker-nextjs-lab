@@ -24,3 +24,5 @@ export declare module 'next/config' {
   function getConfig(): NextConfig;
   export default getConfig;
 }
+
+export type cssVariable = { [key: string]: String | Number } | undefined;
