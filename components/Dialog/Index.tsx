@@ -70,18 +70,17 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
   const [cssVariable, setCssVariable] = useState<cssVariable>({});
 
   useEffect(() => {
-    console.log({ open, opacityTrigger });
     if (typeof open === 'boolean' && open !== opacityTrigger) {
       setOpacityTrigger(open);
     }
 
     return () => {
       if (typeof change === 'function') {
-        // change(false);
+        change(false);
       }
-      // handleClose();
+      handleClose();
     };
-  }, [open]);
+  }, [open, change]);
 
   useEffect(() => {
     const _cssVariable: cssVariable = {};
@@ -256,6 +255,7 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
 interface DialogContainerProps {
   Container?: ElementType;
   children: ReactNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any; // 允許傳遞額外屬性
 }
 function DialogContainer(props: Readonly<DialogContainerProps>): ReactNode {
@@ -276,6 +276,7 @@ interface DialogTitleProps {
   Title?: ElementType;
   title: string;
   children: ReactNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 function DialogTitle(props: Readonly<DialogTitleProps>): ReactNode {
@@ -295,6 +296,7 @@ function DialogTitle(props: Readonly<DialogTitleProps>): ReactNode {
 interface DialogContentProps {
   Content?: ElementType;
   children: ReactNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 function DialogContent(props: Readonly<DialogContentProps>): ReactNode {
@@ -319,6 +321,7 @@ interface DialogActionProps {
   cancel: () => void;
   cancelLabel: string;
   children: ReactNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 function DialogAction(props: Readonly<DialogActionProps>): ReactNode {
@@ -340,6 +343,7 @@ interface DialogActionCancelProps {
   children: ReactNode;
   cancel: () => void;
   cancelLabel: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 function DialogActionCancel(
@@ -364,6 +368,7 @@ interface DialogActionConfirmProps {
   confirm: () => void;
   confirmLabel: string;
   confirmDisabled: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 function DialogActionConfirm(
