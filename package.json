@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "cross-env NITRO_PORT=3001 next start",
     "lint": "next lint",
-    "create-i18n": "babel-node ./i18n/google-sheet-to-json.mjs"
+    "create-i18n": "babel-node ./i18n/google-sheet-to-json.mjs",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",
@@ -53,6 +54,8 @@
     "eslint-config-next": "15.2.4",
     "eslint-config-prettier": "^10.1.2",
     "flat": "^6.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
     "postcss": "^8.5.3",
     "prettier": "^3.5.3",
     "sass": "^1.86.0",
@@ -60,5 +63,10 @@
     "tailwindcss": "^4.0.17",
     "typescript": "^5",
     "webpack": "^5.99.5"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "yarn lint"
+    ]
   }
 }
