@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface SystemState {
+export interface SystemState {
   systemName: string;
   // 可以添加其他常用的翻譯
 }

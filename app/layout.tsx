@@ -6,12 +6,13 @@ import '@/app/global.scss';
 
 interface RootLayoutProps {
   children: ReactNode;
-  params: {
+  params: Promise<{
     locale: string;
-  };
+  }>;
 }
 
-export async function generateMetadata({ params: { locale } }: RootLayoutProps): Promise<Metadata> {
+export async function generateMetadata({ params }: RootLayoutProps): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'metadata' });
 
   return {

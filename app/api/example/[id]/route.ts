@@ -1,43 +1,91 @@
 /* eslint-disable */
-// eslint-disable @typescript-eslint/no-unused-vars
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+interface RouteParams {
+  params: Promise<{
+    id: string;
+  }>;
+}
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: RouteParams
 ) {
-  const { id } = params;
+  try {
+    const { id } = await params;
 
-  return NextResponse.json({
-    message: `Fetching data for ID: ${id}`,
-    id,
-    timestamp: new Date().toISOString()
-  });
+    if (!id) {
+      return NextResponse.json(
+        { error: 'ID is required' },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json({
+      message: `Fetching data for ID: ${id}`,
+      id,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
 }
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: RouteParams
 ) {
-  const { id } = params;
-  const body = await request.json();
+  try {
+    const { id } = await params;
 
-  return NextResponse.json({
-    message: `Updating data for ID: ${id}`,
-    id,
-    data: body
-  });
+    if (!id) {
+      return NextResponse.json(
+        { error: 'ID is required' },
+        { status: 400 }
+      );
+    }
+
+    const body = await request.json();
+
+    return NextResponse.json({
+      message: `Updating data for ID: ${id}`,
+      id,
+      data: body
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: RouteParams
 ) {
-  const { id } = params;
+  try {
+    const { id } = await params;
 
-  return NextResponse.json({
-    message: `Deleting data for ID: ${id}`,
-    id
-  });
+    if (!id) {
+      return NextResponse.json(
+        { error: 'ID is required' },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json({
+      message: `Deleting data for ID: ${id}`,
+      id
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
 }
