@@ -1,5 +1,5 @@
-export const defaultLang = 'zh';
-export const locales = ['zh', 'en'];
+export const defaultLang = 'zh-tw';
+export const locales = ['zh-tw', 'en'];
 
 export default {
   defaultLocale: defaultLang,

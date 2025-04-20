@@ -1,6 +1,9 @@
 {
-  "system": {
-    "titleTemplate": "Parker 的 Next.js 實驗室"
+  "metadata": {
+    "systemName": "Parker 的 Next.js實驗室",
+    "defaultTitle": "Parker 的 Next.js實驗室",
+    "titleTemplate": "%s | Parker 的 Next.js實驗室",
+    "description": "Parker 的 Next.js實驗室"
   },
   "components": {
     "MuiBreadcrumbs": {

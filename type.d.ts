@@ -1,3 +1,5 @@
+import { CSSProperties } from 'react';
+
 export declare global {
   interface Window {
     fbAsyncInit?: (...args: any[]) => void;
@@ -25,4 +27,6 @@ export declare module 'next/config' {
   export default getConfig;
 }
 
-export type cssVariable = { [key: string]: String | Number } | undefined;
+export type cssVariable =
+  | (CSSProperties & { [key: string]: string | number })
+  | undefined;

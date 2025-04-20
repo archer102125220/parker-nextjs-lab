@@ -15,9 +15,9 @@ export async function getLocalLanguage(defaultLanguag = 'zh-tw') {
     const langArr = _lang.split('-');
     const lang =
       langArr[0] +
-      (langArr.length >= 2 && langArr[0] !== 'en' && langArr[0] !== 'zh'
+      (langArr.length >= 2 && langArr[0] !== 'en' && langArr[0] !== 'zh-tw'
         ? '-' + langArr[1].toLocaleUpperCase()
-        : langArr[0] !== 'zh'
+        : langArr[0] !== 'zh-tw'
           ? '-TW'
           : '');
 

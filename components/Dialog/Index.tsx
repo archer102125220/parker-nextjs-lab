@@ -73,14 +73,15 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
     if (typeof open === 'boolean' && open !== opacityTrigger) {
       setOpacityTrigger(open);
     }
-
+  }, [open]);
+  useEffect(() => {
     return () => {
       if (typeof change === 'function') {
         change(false);
       }
       handleClose();
     };
-  }, [open, change]);
+  }, [change]);
 
   useEffect(() => {
     const _cssVariable: cssVariable = {};

@@ -1,11 +1,22 @@
 import type { ReactNode } from 'react';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { Roboto } from 'next/font/google';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
+// import { LocalizationProvider } from '@mui/x-date-pickers';
+// import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+// import { zhTW, enUS } from 'date-fns/locale';
 
 import { routing } from '@/i18n/routing';
+import { createServerStore } from '@/store/createServerStore';
+import { setSystemName } from '@/store/slices/systemSlice';
+
+import DefaultLayout from '@/layout/default';
+
+import { Providers } from '@/components/Providers';
 import MuiThemeProvider from '@/components/MuiThemeProvider';
+import ReduxInitializer from '@/components/ReduxInitializer';
 
 interface LocaleLayout {
   children: ReactNode;
@@ -27,6 +38,14 @@ export default async function LocaleLayout(props: Readonly<LocaleLayout>) {
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+
+  const t = await getTranslations({ locale, namespace: 'metadata' });
+  const systemName = t('systemName');
+
+  // 在伺服器端創建 store 並設置初始狀態
+  const serverStore = createServerStore();
+  serverStore.dispatch(setSystemName(systemName));
+  const initialState = serverStore.getState();
 
   return (
     <html lang={locale} className={roboto.variable}>
@@ -56,11 +75,27 @@ export default async function LocaleLayout(props: Readonly<LocaleLayout>) {
         />
       </head>
       <body>
-        <NextIntlClientProvider>
-          <AppRouterCacheProvider>
-            <MuiThemeProvider>{children}</MuiThemeProvider>
-          </AppRouterCacheProvider>
-        </NextIntlClientProvider>
+        <Providers initialState={initialState}>
+          <NextIntlClientProvider>
+            <AppRouterCacheProvider>
+              {/* <MuiThemeProvider>
+                <LocalizationProvider
+                  dateAdapter={AdapterDateFns}
+                  adapterLocale={locale === 'zh-tw' ? zhTW : enUS}
+                >
+                  <DefaultLayout>{children}</DefaultLayout>
+                </LocalizationProvider>
+              </MuiThemeProvider> */}
+
+              <MuiThemeProvider>
+                <DefaultLayout>
+                  <ReduxInitializer systemName={systemName} />
+                  {children}
+                </DefaultLayout>
+              </MuiThemeProvider>
+            </AppRouterCacheProvider>
+          </NextIntlClientProvider>
+        </Providers>
       </body>
     </html>
   );

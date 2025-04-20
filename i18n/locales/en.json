@@ -1,5 +1,44 @@
 {
-  "system": {
-    "titleTemplate": "Parker's Next.js lab"
+  "metadata": {
+    "systemName": "Parker's Next.js lab",
+    "defaultTitle": "Parker's Next.js lab",
+    "titleTemplate": "%s | Parker's Next.js lab",
+    "description": "Parker's Next.js Laboratory"
+  },
+  "components": {
+    "MuiBreadcrumbs": {
+      "defaultProps": {
+        "expandText": "Show path"
+      }
+    },
+    "MuiTablePagination": {
+      "defaultProps": {
+        "labelRowsPerPage": "Rows per page:"
+      }
+    },
+    "MuiRating": {
+      "defaultProps": {
+        "emptyLabelText": "Empty"
+      }
+    },
+    "MuiAutocomplete": {
+      "defaultProps": {
+        "clearText": "Clear",
+        "closeText": "Close",
+        "loadingText": "Loading…",
+        "noOptionsText": "No options",
+        "openText": "Open"
+      }
+    },
+    "MuiAlert": {
+      "defaultProps": {
+        "closeText": "Close"
+      }
+    },
+    "MuiPagination": {
+      "defaultProps": {
+        "aria-label": "Pagination navigation"
+      }
+    }
   }
 }
