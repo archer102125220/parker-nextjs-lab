@@ -10,7 +10,7 @@ export default function GlobalNotFound() {
   return (
     <html lang="zh-tw">
       <body>
-        <Error statusCode={404} />;
+        <Error statusCode={404} />
       </body>
     </html>
   );
