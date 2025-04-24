@@ -12,7 +12,7 @@ import {
 
 // 靜態檔案相關設定
 const STATIC_FILE_EXTENSIONS: RegExp =
-  /\.(js|css|svg|jpg|png|ico|gif|webp|txt|json|woff2?|ttf|eot|map)$/;
+  /\.(js|css|svg|jpg|jpeg|png|ico|gif|webp|txt|json|woff2?|ttf|eot|map)$/;
 const STATIC_FILE_PREFIXES: Array<string> = [
   '/_next/static',
   '/favicon.ico',
