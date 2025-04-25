@@ -1,16 +1,25 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import systemReducer from './slices/systemSlice';
 
-// 這裡可以導入你的 slice reducers
-// import systemReducer from './slices/systemSlice';
+import systemReducer from '@/store/slices/systemSlice';
+import type { SystemState } from '@/store/slices/systemSlice';
 
-export const makeStore = () =>
-  configureStore({
+export interface PreloadedState {
+  system: SystemState;
+}
+
+export const makeStore = (preloadedState?: PreloadedState) =>
+  configureStore<PreloadedState>({
     reducer: {
       system: systemReducer
     },
-    devTools: process.env.NODE_ENV !== 'production'
+    preloadedState,
+    devTools: process.env.NODE_ENV !== 'production',
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+        immutableCheck: false
+      })
   });
 
 export type AppStore = ReturnType<typeof makeStore>;

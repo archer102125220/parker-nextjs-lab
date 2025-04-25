@@ -9,14 +9,12 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 // import { zhTW, enUS } from 'date-fns/locale';
 
 import { routing } from '@/i18n/routing';
-import { createServerStore } from '@/store/createServerStore';
-import { setSystemName } from '@/store/slices/systemSlice';
+import { makeStore } from '@/store';
 
 import DefaultLayout from '@/layout/default';
 
 import { Providers } from '@/components/Providers';
 import MuiThemeProvider from '@/components/MuiThemeProvider';
-import ReduxInitializer from '@/components/ReduxInitializer';
 
 interface LocaleLayout {
   children: ReactNode;
@@ -43,8 +41,8 @@ export default async function LocaleLayout(props: Readonly<LocaleLayout>) {
   const systemName = t('systemName');
 
   // 在伺服器端創建 store 並設置初始狀態
-  const serverStore = createServerStore();
-  serverStore.dispatch(setSystemName(systemName));
+  const serverStore = makeStore();
+  serverStore.dispatch({ type: 'system/setSystemName', payload: systemName });
   const initialState = serverStore.getState();
 
   return (
@@ -76,7 +74,7 @@ export default async function LocaleLayout(props: Readonly<LocaleLayout>) {
       </head>
       <body>
         <Providers initialState={initialState}>
-          <NextIntlClientProvider>
+          <NextIntlClientProvider locale={locale}>
             <AppRouterCacheProvider>
               {/* <MuiThemeProvider>
                 <LocalizationProvider
@@ -88,10 +86,7 @@ export default async function LocaleLayout(props: Readonly<LocaleLayout>) {
               </MuiThemeProvider> */}
 
               <MuiThemeProvider>
-                <DefaultLayout>
-                  <ReduxInitializer systemName={systemName} />
-                  {children}
-                </DefaultLayout>
+                <DefaultLayout>{children}</DefaultLayout>
               </MuiThemeProvider>
             </AppRouterCacheProvider>
           </NextIntlClientProvider>
