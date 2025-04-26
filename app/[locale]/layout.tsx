@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { Metadata } from 'next';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -9,11 +10,10 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 // import { zhTW, enUS } from 'date-fns/locale';
 
 import { routing } from '@/i18n/routing';
-import { makeStore } from '@/store';
 
 import DefaultLayout from '@/layout/default';
 
-import { Providers } from '@/components/Providers';
+import { ReduxInit } from '@/components/ReduxInit';
 import MuiThemeProvider from '@/components/MuiThemeProvider';
 
 interface LocaleLayout {
@@ -28,6 +28,47 @@ const roboto = Roboto({
   variable: '--font-roboto'
 });
 
+export async function generateMetadata(props: LocaleLayout): Promise<Metadata> {
+  const { params } = props;
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'metadata' });
+
+  return {
+    applicationName: t('systemName'),
+    title: {
+      default: t('defaultTitle'),
+      template: t('titleTemplate')
+    },
+    description: t('description'),
+    manifest: '/manifest.json',
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: 'default',
+      title: t('defaultTitle')
+    },
+    formatDetection: {
+      telephone: false
+    },
+    openGraph: {
+      type: 'website',
+      siteName: t('systemName'),
+      title: {
+        default: t('defaultTitle'),
+        template: t('titleTemplate')
+      },
+      description: t('description')
+    },
+    twitter: {
+      card: 'summary',
+      title: {
+        default: t('defaultTitle'),
+        template: t('titleTemplate')
+      },
+      description: t('description')
+    }
+  };
+}
+
 export default async function LocaleLayout(props: Readonly<LocaleLayout>) {
   const { children, params } = props;
 
@@ -36,14 +77,6 @@ export default async function LocaleLayout(props: Readonly<LocaleLayout>) {
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
-
-  const t = await getTranslations({ locale, namespace: 'metadata' });
-  const systemName = t('systemName');
-
-  // 在伺服器端創建 store 並設置初始狀態
-  const serverStore = makeStore();
-  serverStore.dispatch({ type: 'system/setSystemName', payload: systemName });
-  const initialState = serverStore.getState();
 
   return (
     <html lang={locale} className={roboto.variable}>
@@ -73,7 +106,7 @@ export default async function LocaleLayout(props: Readonly<LocaleLayout>) {
         />
       </head>
       <body>
-        <Providers initialState={initialState}>
+        <ReduxInit params={params}>
           <NextIntlClientProvider locale={locale}>
             <AppRouterCacheProvider>
               {/* <MuiThemeProvider>
@@ -90,7 +123,7 @@ export default async function LocaleLayout(props: Readonly<LocaleLayout>) {
               </MuiThemeProvider>
             </AppRouterCacheProvider>
           </NextIntlClientProvider>
-        </Providers>
+        </ReduxInit>
       </body>
     </html>
   );

@@ -8,7 +8,7 @@ export interface PreloadedState {
   system: SystemState;
 }
 
-export const makeStore = (preloadedState?: PreloadedState) =>
+export const storeInit = (preloadedState?: PreloadedState) =>
   configureStore<PreloadedState>({
     reducer: {
       system: systemReducer
@@ -22,10 +22,10 @@ export const makeStore = (preloadedState?: PreloadedState) =>
       })
   });
 
-export type AppStore = ReturnType<typeof makeStore>;
+export type AppStore = ReturnType<typeof storeInit>;
 export type RootState = ReturnType<AppStore['getState']>;
 export type AppDispatch = AppStore['dispatch'];
 
-// 使用這些 hooks 來替代普通的 useDispatch 和 useSelector
+// 使用這些 hooks 來替代原本沒有型別的 useDispatch 和 useSelector
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
