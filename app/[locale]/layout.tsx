@@ -4,6 +4,7 @@ import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { Roboto } from 'next/font/google';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 // import { LocalizationProvider } from '@mui/x-date-pickers';
 // import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -114,11 +115,13 @@ export default async function LocaleLayout(props: Readonly<LocaleLayout>) {
                   dateAdapter={AdapterDateFns}
                   adapterLocale={locale === 'zh-tw' ? zhTW : enUS}
                 >
+                  <SpeedInsights />
                   <DefaultLayout>{children}</DefaultLayout>
                 </LocalizationProvider>
               </MuiThemeProvider> */}
 
               <MuiThemeProvider>
+                <SpeedInsights />
                 <DefaultLayout>{children}</DefaultLayout>
               </MuiThemeProvider>
             </AppRouterCacheProvider>
