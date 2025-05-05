@@ -87,6 +87,13 @@ export default async function LocaleLayout(props: Readonly<LocaleLayout>) {
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
         />
+
+        {/*
+            https://www.photoroom.com/zh-tw/tools/background-remover
+            https://remove-white-background.imageonline.co/cn/
+            https://www.freeconvert.com/image-converter
+            https://realfavicongenerator.net/
+        */}
         <link rel="apple-touch-icon" href="/img/ico/apple-touch-icon.png" />
         <link rel="icon" href="/img/ico/favicon.ico" type="image/x-icon" />
         <link

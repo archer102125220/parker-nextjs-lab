@@ -1,21 +1,21 @@
 {
-  "name": "Parker的Next.js實驗室",
-  "short_name": "parker's next.js lab",
-  "description": "Parker的Next.js實驗室",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "name": "Parker Chen 的Next.js實驗室",
+  "short_name": "Parker Chen's next.js lab",
   "icons": [
     {
       "src": "/img/ico/web-app-manifest-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/img/ico/web-app-manifest-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ]
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone"
 }
