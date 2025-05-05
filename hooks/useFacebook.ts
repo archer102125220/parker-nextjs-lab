@@ -37,6 +37,8 @@ export function useFacebook(initFn: (...args: any[]) => void = () => {}) {
       script.crossOrigin = 'anonymous';
       script.setAttribute('crossorigin', 'anonymous');
       document.head.append(script);
+    } else if (typeof window.FB === 'object') {
+      setFacebook(window.FB);
     }
   }, []);
 
