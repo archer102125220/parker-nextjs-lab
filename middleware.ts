@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+import contentSecurityPolicyMiddleware from '@/middleware/contentSecurityPolicy';
 import globalTestMiddleware from '@/middleware/globalTest';
 import i18nMiddleware from '@/middleware/i18n';
 import logMiddleware from '@/middleware/log';
@@ -18,6 +19,10 @@ const STATIC_FILE_PREFIXES: Array<string> = [
   '/favicon.ico',
   '/sitemap.xml',
   '/robots.txt'
+];
+
+const POLICY_MIDDLEWARE_SETTINGS: Array<Function> = [
+  contentSecurityPolicyMiddleware
 ];
 
 const GLOBAL_MIDDLEWARE_SETTINGS: Array<Function> = [
@@ -44,6 +49,13 @@ const MIDDLEWARE_SETTINGS: Array<MiddlewareSetting> = [
 ];
 
 export async function middleware(request: NextRequest) {
+  for (const middlewareHandler of POLICY_MIDDLEWARE_SETTINGS) {
+    const middlewareResponse = await middlewareHandler(request);
+    if (middlewareResponse) {
+      return middlewareResponse; // 確保 CSP相關 Middleware 回傳了 NextResponse 在 return
+    }
+  }
+
   // 排除靜態檔案
   if (
     STATIC_FILE_EXTENSIONS.test(request.nextUrl.pathname) ||

@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest): void {
+export function logMiddleware(request: NextRequest): void {
   console.log('____log start____');
   const headers = request.headers;
   console.log(`user-agent: ${headers.get('user-agent')}`);
@@ -11,4 +11,4 @@ export function middleware(request: NextRequest): void {
   console.log('____log end____');
 }
 
-export default middleware;
+export default logMiddleware;

@@ -1,7 +1,6 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import type { NextRequest, NextResponse } from 'next/server';
 
-export async function middleware(
+export async function globalTestMiddleware(
   request: NextRequest
 ): Promise<NextResponse | void> {
   console.log('____global____');
@@ -17,4 +16,4 @@ export async function middleware(
   return;
 }
 
-export default middleware;
+export default globalTestMiddleware;
