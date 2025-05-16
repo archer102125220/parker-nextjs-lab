@@ -23,14 +23,16 @@ export async function contentSecurityPolicyMiddleware(
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
   const cspHeader = `
     default-src 'self';
+    font-src 'self' https://fonts.gstatic.com;
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'self';
     img-src 'self' data:;
     object-src 'none';
-    script-src 'self' 'unsafe-inline' 'unsafe-eval';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://www.googletagmanager.com;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     connect-src 'self';
+    frame-src 'self' https://www.youtube.com https://www.googletagmanager.com;
     upgrade-insecure-requests;
 `;
   // Replace newline characters and spaces
