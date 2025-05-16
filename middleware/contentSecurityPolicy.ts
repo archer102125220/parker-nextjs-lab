@@ -23,14 +23,16 @@ export async function contentSecurityPolicyMiddleware(
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
   const cspHeader = `
     base-uri 'self';
-    font-src 'self';
+    font-src 'self' https://fonts.gstatic.com;
     form-action 'self';
     frame-ancestors 'self';
-    img-src 'self' data:;
+    img-src 'self' data: https:;
     object-src 'none';
     script-src-attr 'none';
-    script-src 'self' 'none' https: 'unsafe-inline' 'strict-dynamic';
-    style-src 'self' 'none' https: 'unsafe-inline';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https: 'strict-dynamic';
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    connect-src 'self' https:;
+    frame-src 'self' https://www.youtube.com;
     upgrade-insecure-requests;
 `;
   // Replace newline characters and spaces
