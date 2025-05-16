@@ -28,9 +28,9 @@ export async function contentSecurityPolicyMiddleware(
     frame-ancestors 'self';
     img-src 'self' data:;
     object-src 'none';
-    object-src-attr 'none';
-    script-src 'self' 'nonce-${nonce}' https: 'unsafe-inline' 'strict-dynamic';
-    style-src 'self' 'nonce-${nonce}' https: 'unsafe-inline';
+    script-src-attr 'none';
+    script-src 'self' 'none' https: 'unsafe-inline' 'strict-dynamic';
+    style-src 'self' 'none' https: 'unsafe-inline';
     upgrade-insecure-requests;
 `;
   // Replace newline characters and spaces
