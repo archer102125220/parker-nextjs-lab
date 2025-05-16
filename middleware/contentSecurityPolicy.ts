@@ -22,6 +22,7 @@ export async function contentSecurityPolicyMiddleware(
 
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
   const cspHeader = `
+    default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.youtube.com https://connect.facebook.net https://www.googletagmanager.com; // 允許資源來源
     font-src 'self' https://fonts.gstatic.com;
     base-uri 'self';
     form-action 'self';
