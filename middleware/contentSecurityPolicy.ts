@@ -29,7 +29,8 @@ export async function contentSecurityPolicyMiddleware(
     img-src 'self' data: https:;
     object-src 'none';
     script-src-attr 'none';
-    script-src 'self' 'unsafe-inline' 'unsafe-eval' https: 'strict-dynamic' 'nonce-${nonce}';
+    script-src 'self' 'unsafe-eval' https: 'nonce-${nonce}';
+    script-src-elem 'self' 'unsafe-eval' https: 'nonce-${nonce}';
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     connect-src 'self' https:;
     frame-src 'self' https://www.youtube.com;
