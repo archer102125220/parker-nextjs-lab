@@ -29,10 +29,12 @@ export async function contentSecurityPolicyMiddleware(
     img-src 'self' data: https:;
     object-src 'none';
     script-src-attr 'none';
-    script-src 'self' 'unsafe-inline' 'unsafe-eval' https: 'strict-dynamic';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https: 'strict-dynamic' 'nonce-${nonce}';
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     connect-src 'self' https:;
     frame-src 'self' https://www.youtube.com;
+    worker-src 'self' blob:;
+    child-src 'self' blob:;
     upgrade-insecure-requests;
 `;
   // Replace newline characters and spaces
