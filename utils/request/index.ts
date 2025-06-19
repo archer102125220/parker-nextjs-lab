@@ -13,6 +13,7 @@ import type {
   requestInterface,
   requestParams,
   requestArg,
+  errorAdapterType,
   cancelArg,
   requestKey,
   config
@@ -99,8 +100,8 @@ export let ax: AxiosInstance | null = null;
 
 export function axiosInit(
   baseURL: string,
-  errorAdapter: any,
-  defaultExtendOption: any
+  errorAdapter?: errorAdapterType,
+  defaultExtendOption?: { [key: string]: any }
 ) {
   ax = axios.create({
     baseURL,
@@ -184,11 +185,11 @@ export function axiosInit(
 export const request: requestInterface = function (
   _method: string = 'GET',
   url: string,
-  _params: any = {},
-  _extendOption: any = {},
-  errorAdapter: any = true
+  _params: { [key: string]: any } = {},
+  _extendOption: { [key: string]: any } = {},
+  hasErrorAdapter: boolean = true
 ) {
-  const method = _method.toUpperCase();
+  const method: string = _method.toUpperCase();
   const defaultExtendOption = request.defaultExtendOption;
   let params: requestParams = {};
 
@@ -272,7 +273,7 @@ export const request: requestInterface = function (
       return data;
     })
     .catch(async (error) => {
-      if (errorAdapter === true && typeof request.errorAdapter === 'function') {
+      if (hasErrorAdapter === true && typeof request.errorAdapter === 'function') {
         try {
           const headers = extendOption?.headers;
           const response = await request.errorAdapter(

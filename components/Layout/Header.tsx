@@ -37,7 +37,7 @@ export default function Header() {
       <Box>
         <Button
           color="inherit"
-          href="/"
+          href={pathname.replace(/\[zh-tw|en]/i, '') || '/'}
           locale="zh-tw"
           component={Link}
           sx={{
@@ -49,8 +49,8 @@ export default function Header() {
         <Button
           color="inherit"
           component={Link}
-          href="/"
           locale="en"
+          href={pathname.replace(/\[zh-tw|en]/i, '') || '/'}
           sx={{ fontWeight: pathname.startsWith('/en') ? 'bold' : 'normal' }}
         >
           English

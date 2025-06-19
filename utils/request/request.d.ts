@@ -35,6 +35,7 @@ export type requestType = (
 
 export type requestArg = [string, string, any, any];
 export type cancelArg = [string, any];
+export type errorAdapterType = (error: any, headers?: any) => any;
 
 export type expandReques = (...arg: requestArg) => Promise<any>;
 export type expandCancel = (...arg: cancelArg) => void;
@@ -56,8 +57,8 @@ export interface requestInterface extends requestType {
   ax?: AxiosInstance;
   axios?: typeof axios;
   baseURL?: string;
-  errorAdapter?: any; // TODO
-  defaultExtendOption?: any; // TODO
+  errorAdapter?: errorAdapterType | boolean;
+  defaultExtendOption?: { [key: string]: any };
 
   get: expandReques;
   post: expandReques;

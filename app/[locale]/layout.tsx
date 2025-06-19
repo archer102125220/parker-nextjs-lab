@@ -14,6 +14,7 @@ import { routing } from '@/i18n/routing';
 
 import DefaultLayout from '@/layout/default';
 
+import { AxiosInit } from '@/components/AxiosInit';
 import { ReduxInit } from '@/components/ReduxInit';
 import MuiThemeProvider from '@/components/MuiThemeProvider';
 
@@ -115,6 +116,7 @@ export default async function LocaleLayout(props: Readonly<LocaleLayout>) {
       </head>
       <body>
         <ReduxInit params={params}>
+          <AxiosInit />
           <NextIntlClientProvider locale={locale}>
             <AppRouterCacheProvider>
               {/* <MuiThemeProvider>
