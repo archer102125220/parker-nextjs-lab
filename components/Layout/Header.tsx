@@ -26,7 +26,7 @@ export default function Header() {
           }}
         >
           <Image
-            src="img/icon/Next.jsLab.v.01.svg"
+            src="/img/icon/Next.jsLab.v.01.svg"
             alt="Parker's Next.js Lab"
             width={50}
             height={50}
@@ -37,7 +37,7 @@ export default function Header() {
       <Box>
         <Button
           color="inherit"
-          href={pathname.replace(/\[zh-tw|en]/i, '') || '/'}
+          href={pathname.replace(/[zh\-tw]|en/ig, '') || '/'}
           locale="zh-tw"
           component={Link}
           sx={{
@@ -50,7 +50,7 @@ export default function Header() {
           color="inherit"
           component={Link}
           locale="en"
-          href={pathname.replace(/\[zh-tw|en]/i, '') || '/'}
+          href={pathname.replace(/[zh\-tw]|en/ig, '') || '/'}
           sx={{ fontWeight: pathname.startsWith('/en') ? 'bold' : 'normal' }}
         >
           English
