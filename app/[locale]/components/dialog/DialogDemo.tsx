@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Button from '@mui/material/Button';
-import Dialog from '@/components/Dialog/Index';
+import Dialog from '@/components/Dialog';
 
 export default function DialogDemo() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
