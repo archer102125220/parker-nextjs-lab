@@ -17,21 +17,32 @@ import useIsomorphicLayoutEffect from '@/hooks/useIsomorphicLayoutEffect';
 
 import style from '@/components/SwiperJs/swiper_js.module.scss';
 
-type SwiperEvent = ((swiper: Swiper, ...arg: any[]) => void) | undefined;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SwiperEvent = ((swiper: Swiper, ...arg: any[]) => void) | undefined; // 允許傳遞額外屬性
 interface swiperJsPropsType {
   // render相關參數
   className?: string;
-  renderPrevBtn?: ComponentType<any>;
-  renderNextBtn?: ComponentType<any>;
-  slideList: Array<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  renderPrevBtn?: ComponentType<any>; // 允許傳遞額外屬性
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  renderNextBtn?: ComponentType<any>; // 允許傳遞額外屬性
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  slideList: Array<any>; // 允許傳遞額外屬性
   valueKey?: string | number;
-  renderSlideTop?: ComponentType<any>;
-  renderSlideLeft?: ComponentType<any>;
-  renderSlideMiddleTop?: ComponentType<any>;
-  renderSlide?: ComponentType<any>;
-  renderSlideMiddleBottom?: ComponentType<any>;
-  renderSlideRight?: ComponentType<any>;
-  renderSlideBottom?: ComponentType<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  renderSlideTop?: ComponentType<any>; // 允許傳遞額外屬性
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  renderSlideLeft?: ComponentType<any>; // 允許傳遞額外屬性
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  renderSlideMiddleTop?: ComponentType<any>; // 允許傳遞額外屬性
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  renderSlide?: ComponentType<any>; // 允許傳遞額外屬性
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  renderSlideMiddleBottom?: ComponentType<any>; // 允許傳遞額外屬性
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  renderSlideRight?: ComponentType<any>; // 允許傳遞額外屬性
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  renderSlideBottom?: ComponentType<any>; // 允許傳遞額外屬性
 
   // css變數相關參數
   overflow?: boolean;
@@ -56,7 +67,10 @@ interface swiperJsPropsType {
   hasScrollbar?: boolean | null;
 
   // 原生Swiper.js相關事件參數
-  change: Function | null;
+  change: (
+    slideValue: number | string | object,
+    activeIndex: number
+  ) => void | null;
   beforeInit?: SwiperEvent;
   init?: SwiperEvent;
   afterInit?: SwiperEvent;
@@ -74,7 +88,8 @@ interface swiperJsPropsType {
   realIndexChange?: SwiperEvent;
 }
 interface cssVariableType extends CSSProperties {
-  [key: string | number | symbol]: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string | number | symbol]: any; // 允許傳遞額外屬性
 }
 
 export function SwiperJs(props: swiperJsPropsType) {
@@ -161,7 +176,7 @@ export function SwiperJs(props: swiperJsPropsType) {
   }, []);
 
   const syncSlide = useCallback(
-    (value: any, swiper: Swiper | null) => {
+    (value: swiperJsPropsType['value'], swiper: Swiper | null) => {
       if (
         typeof swiper?.slideTo !== 'function' ||
         Array.isArray(slideList) === false ||
@@ -180,20 +195,24 @@ export function SwiperJs(props: swiperJsPropsType) {
       const slideIndex =
         typeof _slideIndex === 'number' && _slideIndex > -1
           ? _slideIndex
-          : value;
+          : typeof value === 'number' || typeof value === 'string'
+            ? value
+            : 0;
 
       if (Number(slideIndex) !== swiper.realIndex) {
         if (loop === true) {
-          swiper.slideToLoop(slideIndex || 0);
+          swiper.slideToLoop(Number(slideIndex));
         } else {
-          swiper.slideTo(slideIndex || 0);
+          swiper.slideTo(Number(slideIndex));
         }
       }
     },
     [slideList, loop, valueKey]
   );
   const syncSlideList = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (newSlideList: any[] = [], swiper: Swiper | null) => {
+      // 允許傳遞額外屬性
       if (
         typeof swiper?.slideTo !== 'function' ||
         Array.isArray(newSlideList) === false ||
@@ -207,10 +226,17 @@ export function SwiperJs(props: swiperJsPropsType) {
       const slideIndex =
         typeof _slideIndex === 'number' && _slideIndex > -1
           ? _slideIndex
-          : value;
+          : typeof value === 'number' || typeof value === 'string'
+            ? value
+            : 0;
 
-      // @ts-ignore
-      swiper.slideTo(slideIndex || 0);
+      if (Number(slideIndex) !== swiper.realIndex) {
+        if (loop === true) {
+          swiper.slideToLoop(Number(slideIndex));
+        } else {
+          swiper.slideTo(Number(slideIndex));
+        }
+      }
     },
     [valueKey, value]
   );
@@ -235,7 +261,9 @@ export function SwiperJs(props: swiperJsPropsType) {
     [change]
   );
   const handleSlideChange = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (swiper: Swiper, ...arg: any[]) => {
+      // 允許傳遞額外屬性
       if (loop === true) {
         const slideValueEl = swiper.slides[swiper.activeIndex];
         const slideValue = slideValueEl?.getAttribute('swiper-loop-value');
@@ -263,7 +291,9 @@ export function SwiperJs(props: swiperJsPropsType) {
     [loop, changeDebounce, slideList, valueKey, value, slideChange]
   );
   const handleSliderMove = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (swiper: Swiper, ...arg: any[]) => {
+      // 允許傳遞額外屬性
       if (typeof sliderMove === 'function') {
         sliderMove(swiper, ...arg);
       }
@@ -299,6 +329,7 @@ export function SwiperJs(props: swiperJsPropsType) {
       }
     };
     if (hasNavigation === true) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore TODO
       _params.modules = [..._params.modules, Navigation];
       _params.navigation = {
@@ -387,6 +418,7 @@ export function SwiperJs(props: swiperJsPropsType) {
           longSwipesRatio: newProps.longSwipesRatio
         };
         if (newProps.hasNavigation === true) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore TODO
           _params.modules = [..._params.modules, Navigation];
           _params.navigation = {
@@ -440,7 +472,9 @@ export function SwiperJs(props: swiperJsPropsType) {
   );
 
   useIsomorphicLayoutEffect(() => {
-    console.log('useIsomorphicLayoutEffect overflow, shouldFillHeight, swiperHeight');
+    console.log(
+      'useIsomorphicLayoutEffect overflow, shouldFillHeight, swiperHeight'
+    );
     const _cssVariable: cssVariableType = {};
 
     if (typeof overflow === 'boolean' && overflow === true) {
@@ -474,7 +508,8 @@ export function SwiperJs(props: swiperJsPropsType) {
 
   useEffect(() => {
     console.log('useEffect props');
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore TODO
     if (typeof swiperRef.current?.swiper === 'undefined') return;
     console.log('props');
     // handleSwiperUpdata(props);
@@ -493,7 +528,8 @@ export function SwiperJs(props: swiperJsPropsType) {
   }, [props]);
   useEffect(() => {
     console.log('useEffect handleSwiperInit');
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore TODO
     if (typeof swiperRef.current?.swiper !== 'undefined') return;
     console.log('handleSwiperInit');
     // handleSwiperInit();
@@ -552,7 +588,9 @@ export function SwiperJs(props: swiperJsPropsType) {
           ].join(' ')}
         >
           {/* Slides */}
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {slideList.map((slide: any, index: number) => (
+            // 允許傳遞額外屬性 
             <div
               key={slide[valueKey] || slide.value || index}
               swiper-loop-value={slide[valueKey] || slide.value || index}
