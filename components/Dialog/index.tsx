@@ -69,11 +69,21 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
   const [opacityTrigger, setOpacityTrigger] = useState<boolean>(false);
   const [cssVariable, setCssVariable] = useState<cssVariable>({});
 
+  const handleClose: handleCloseType = (e?: MouseEvent) => {
+    if (e?.target !== e?.currentTarget) {
+      return;
+    }
+    if (typeof cancel === 'function') {
+      cancel();
+    }
+    setOpacityTrigger(false);
+  };
+
   useEffect(() => {
     if (typeof open === 'boolean' && open !== opacityTrigger) {
       setOpacityTrigger(open);
     }
-  }, [open]);
+  }, [open, opacityTrigger]);
   useEffect(() => {
     return () => {
       if (typeof change === 'function') {
@@ -81,7 +91,7 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
       }
       handleClose();
     };
-  }, [change]);
+  }, [change, handleClose]);
 
   useEffect(() => {
     const _cssVariable: cssVariable = {};
@@ -144,16 +154,6 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
     position,
     rootPosition
   ]);
-
-  const handleClose: handleCloseType = (e?: MouseEvent) => {
-    if (e?.target !== e?.currentTarget) {
-      return;
-    }
-    if (typeof cancel === 'function') {
-      cancel();
-    }
-    setOpacityTrigger(false);
-  };
 
   const handleConfirm: handleCloseType = (e?: MouseEvent) => {
     if (e?.target !== e?.currentTarget) {

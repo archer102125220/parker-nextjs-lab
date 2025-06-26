@@ -67,10 +67,10 @@ interface swiperJsPropsType {
   hasScrollbar?: boolean | null;
 
   // 原生Swiper.js相關事件參數
-  change: (
-    slideValue: number | string | object,
-    activeIndex: number
-  ) => void | null;
+  change:
+    | ((slideValue: number | string | object, activeIndex: number) => void)
+    | ((slideValue: number | string | object) => void)
+    | null;
   beforeInit?: SwiperEvent;
   init?: SwiperEvent;
   afterInit?: SwiperEvent;
@@ -238,7 +238,7 @@ export function SwiperJs(props: swiperJsPropsType) {
         }
       }
     },
-    [valueKey, value]
+    [valueKey, value, loop]
   );
 
   const handleAfterInit = useCallback(
@@ -382,7 +382,7 @@ export function SwiperJs(props: swiperJsPropsType) {
     destroy,
     beforeSlideChangeStart,
     handleSlideChange,
-    sliderMove,
+    handleSliderMove,
     reachBeginning,
     reachEnd,
     fromEdge,
@@ -461,14 +461,14 @@ export function SwiperJs(props: swiperJsPropsType) {
 
         // 校正 slide 位置
         swiperObj.off('slideChange', handleSlideChange);
-        swiperObj.slideTo(props.slideList.length - 1, 0, false);
+        swiperObj.slideTo(newProps.slideList.length - 1, 0, false);
         setTimeout(() => {
           swiperObj.on('slideChange', handleSlideChange);
           syncSlide(value, swiperObj);
         }, 300);
       }
     },
-    [swiperObj, value]
+    [swiperObj, value, params, handleSlideChange, syncSlide]
   );
 
   useIsomorphicLayoutEffect(() => {
@@ -525,7 +525,7 @@ export function SwiperJs(props: swiperJsPropsType) {
         }),
       1500
     );
-  }, [props]);
+  }, [props, swiperObj, handleSwiperUpdata, syncSlide, syncSlideList]);
   useEffect(() => {
     console.log('useEffect handleSwiperInit');
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -538,7 +538,7 @@ export function SwiperJs(props: swiperJsPropsType) {
   useEffect(() => {
     console.log('useEffect swiperObj, style, className');
     console.log({ swiperObj, style, className });
-  }, [swiperObj, style, className]);
+  }, [swiperObj, className]);
 
   return (
     <div
@@ -590,7 +590,7 @@ export function SwiperJs(props: swiperJsPropsType) {
           {/* Slides */}
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {slideList.map((slide: any, index: number) => (
-            // 允許傳遞額外屬性 
+            // 允許傳遞額外屬性
             <div
               key={slide[valueKey] || slide.value || index}
               swiper-loop-value={slide[valueKey] || slide.value || index}
