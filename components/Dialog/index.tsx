@@ -9,7 +9,7 @@ import { Button } from '@mui/material';
 
 import type { cssVariable } from '@/type';
 
-import styles from './dialog.module.scss';
+import styles from '@/components/Dialog/dialog.module.scss';
 
 // https://stackoverflow.com/questions/41385059/possible-to-extend-types-in-typescript
 type handleCloseType = MouseEventHandler & ((e?: MouseEvent) => void);

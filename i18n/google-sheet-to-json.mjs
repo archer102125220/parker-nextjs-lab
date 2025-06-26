@@ -36,6 +36,8 @@ const sheetsToExtract = [
 
 async function googleSheetToJson() {
   const en = {
+    en: 'English',
+    ['zh-tw']: 'Chinese',
     metadata: {
       systemName: "Parker's Next.js lab",
       defaultTitle: "Parker's Next.js lab",
@@ -113,6 +115,8 @@ async function googleSheetToJson() {
     ...muiEnUS
   };
   const zhTw = {
+    en: '英文',
+    ['zh-tw']: '繁體中文',
     metadata: {
       systemName: "Parker 的 Next.js實驗室",
       defaultTitle: "Parker 的 Next.js實驗室",

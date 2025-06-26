@@ -1,21 +1,26 @@
-'use client';
-
 import Image from 'next/image';
-import { Toolbar, Typography, Button, Box } from '@mui/material';
-import { usePathname } from 'next/navigation';
+
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+// import List from '@mui/material/List';
+// import ListItem from '@mui/material/ListItem';
+// import ListItemText from '@mui/material/ListItemText';
+
 import { useAppSelector } from '@/store';
-import { Link } from '@/i18n/navigation';
+
+import I18nList from '@/components/Layout/I18nList';
+import LinkBox from '@/components/Link/Box';
+import GoBack from '@/components/GoBack';
+// import LinkListItemButton from '@/components/Link/ListItemButton';
 
 export default function Header() {
-  const pathname = usePathname();
   const systemName = useAppSelector((state) => state.system.systemName);
 
-  console.log({ pathname });
   return (
     <Toolbar>
+      <GoBack />
       <Typography variant="h6" component="div" sx={{ flex: 1 }}>
-        <Box
-          component={Link}
+        <LinkBox
           href="/"
           sx={{
             color: 'inherit',
@@ -32,30 +37,35 @@ export default function Header() {
             height={50}
           />
           <p>{systemName}</p>
-        </Box>
+        </LinkBox>
       </Typography>
-      <Box>
-        <Button
-          color="inherit"
-          href={pathname.replace(/[zh\-tw]|en/ig, '') || '/'}
-          locale="zh-tw"
-          component={Link}
-          sx={{
-            fontWeight: pathname.startsWith('/zh-tw') ? 'bold' : 'normal'
-          }}
-        >
-          中文
-        </Button>
-        <Button
-          color="inherit"
-          component={Link}
-          locale="en"
-          href={pathname.replace(/[zh\-tw]|en/ig, '') || '/'}
-          sx={{ fontWeight: pathname.startsWith('/en') ? 'bold' : 'normal' }}
-        >
-          English
-        </Button>
-      </Box>
+
+      {/* <List>
+        <ListItem disablePadding>
+          <LinkListItemButton
+            color="inherit"
+            href={pathname.replace(/^\/zh-tw|^\/en/gi, '') || '/'}
+            locale="zh-tw"
+            sx={{
+              fontWeight: pathname.startsWith('/zh-tw') ? 'bold' : 'normal'
+            }}
+          >
+            <ListItemText primary="中文" />
+          </LinkListItemButton>
+        </ListItem>
+
+        <ListItem disablePadding>
+          <LinkListItemButton
+            color="inherit"
+            locale="en"
+            href={pathname.replace(/^\/zh-tw|^\/en/gi, '') || '/'}
+            sx={{ fontWeight: pathname.startsWith('/en') ? 'bold' : 'normal' }}
+          >
+            <ListItemText primary="English" />
+          </LinkListItemButton>
+        </ListItem>
+      </List> */}
+      <I18nList />
     </Toolbar>
   );
 }

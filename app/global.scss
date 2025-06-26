@@ -139,31 +139,3 @@ img[src='img/expand.svg'] {
   min-width: 52px;
   min-height: 52px;
 }
-
-// element-ui
-.el-tabs__content {
-  width: 100%;
-  // height: 100%;
-  height: 90%;
-
-  @include mobile {
-    height: 70%;
-  }
-}
-
-.el-tabs--border-card > .el-tabs__header {
-  background-color: #f2e7fe;
-}
-
-.el-picker-panel.el-date-range-picker.el-popper.has-time {
-  @include mobile {
-    max-width: 100vw;
-    overflow-x: auto;
-  }
-
-  .el-picker-panel__footer {
-    @include mobile {
-      border-top: 0px;
-    }
-  }
-}

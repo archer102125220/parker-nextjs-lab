@@ -1,9 +1,9 @@
 'use client';
 
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, BoxProps } from '@mui/material';
 import { useAppSelector } from '@/store';
 
-export default function Footer() {
+export default function Footer(props: BoxProps) {
   const systemName = useAppSelector((state) => state.system.systemName);
 
   return (
@@ -18,10 +18,11 @@ export default function Footer() {
             ? theme.palette.grey[200]
             : theme.palette.grey[800]
       }}
+      {...props}
     >
       <Typography variant="body2" color="text.secondary" align="center">
         © {new Date().getFullYear()} {systemName}
       </Typography>
     </Box>
   );
-} 
+}

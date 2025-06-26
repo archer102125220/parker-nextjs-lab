@@ -1,4 +1,6 @@
 {
+  "en": "英文",
+  "zh-tw": "繁體中文",
   "metadata": {
     "systemName": "Parker 的 Next.js實驗室",
     "defaultTitle": "Parker 的 Next.js實驗室",

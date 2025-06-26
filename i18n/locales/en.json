@@ -1,4 +1,6 @@
 {
+  "en": "English",
+  "zh-tw": "Chinese",
   "metadata": {
     "systemName": "Parker's Next.js lab",
     "defaultTitle": "Parker's Next.js lab",

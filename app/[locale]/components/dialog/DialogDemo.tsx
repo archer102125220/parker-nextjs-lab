@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Button from '@mui/material/Button';
+
 import Dialog from '@/components/Dialog';
 
 export default function DialogDemo() {
@@ -44,4 +45,4 @@ export default function DialogDemo() {
       </Dialog>
     </main>
   );
-} 
+}

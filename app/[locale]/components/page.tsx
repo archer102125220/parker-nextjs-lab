@@ -1,16 +1,19 @@
-import { Link } from '@/i18n/navigation';
+import Box from '@mui/material/Box';
+
+import LinkButton from '@/components/Link/Button';
 
 export default function ComponentsPage() {
   return (
-    <div>
-      <h1>元件展示頁面</h1>
-      <ul>
-        <li>
-          {/* 假設 Dialog 元件的展示頁路徑為 /components/dialog */}
-          <Link href="/components/dialog">Dialog 元件</Link>
-        </li>
-        {/* 如果有其他元件，可以在這裡繼續添加連結 */}
-      </ul>
-    </div>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        alignItems: 'center'
+      }}
+    >
+      <LinkButton href="/components/dialog">Dialog 元件</LinkButton>
+      <LinkButton href="/components/swiper-js">SwiperJs 元件</LinkButton>
+    </Box>
   );
 }
