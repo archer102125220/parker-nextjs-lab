@@ -118,7 +118,7 @@ export function SwiperJs(props: swiperJsPropsType) {
     // 原生Swiper.js相關參數
     centeredSlides,
     slidesPerView = 1,
-    spaceBetween,
+    spaceBetween = 0,
     longSwipesRatio = 0.2,
     loop = false,
     autoplayDelay = null,
@@ -186,6 +186,7 @@ export function SwiperJs(props: swiperJsPropsType) {
       ) {
         return;
       }
+
       const _slideIndex = slideList.findIndex(
         (slide) =>
           (loop === true &&
@@ -222,6 +223,7 @@ export function SwiperJs(props: swiperJsPropsType) {
       ) {
         return;
       }
+
       const _slideIndex = newSlideList.findIndex(
         (slide) => slide?.[valueKey] === value || slide?.value === value
       );
@@ -369,7 +371,8 @@ export function SwiperJs(props: swiperJsPropsType) {
       _params.loop = loop;
     }
 
-    setSwiperObj(new Swiper(swiperRef.current, _params));
+    const _swiperObj = new Swiper(swiperRef.current, _params);
+    setSwiperObj(_swiperObj);
     setParams(_params);
   }, [
     centeredSlides,
@@ -411,6 +414,7 @@ export function SwiperJs(props: swiperJsPropsType) {
         Array.isArray(newProps.slideList) &&
         newProps.slideList.length > 0
       ) {
+
         const _params: SwiperOptions = {
           ...(params || {}),
           modules: [],
@@ -474,9 +478,6 @@ export function SwiperJs(props: swiperJsPropsType) {
   );
 
   useIsomorphicLayoutEffect(() => {
-    console.log(
-      'useIsomorphicLayoutEffect overflow, shouldFillHeight, swiperHeight'
-    );
     const _cssVariable: cssVariableType = {};
 
     if (typeof overflow === 'boolean' && overflow === true) {
@@ -509,38 +510,25 @@ export function SwiperJs(props: swiperJsPropsType) {
   }, [overflow, shouldFillHeight, swiperHeight]);
 
   useEffect(() => {
-    console.log('useEffect props');
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore TODO
     if (typeof swiperRef.current?.swiper === 'undefined') return;
-    console.log('props');
-    // handleSwiperUpdata(props);
 
-    setTimeout(
-      () =>
-        window.requestAnimationFrame(() => {
-          handleSwiperUpdata(props);
-          syncSlideList(props.slideList, swiperObj);
+    window.requestAnimationFrame(() => {
+      handleSwiperUpdata(props);
+      syncSlideList(props.slideList, swiperObj);
 
-          const newValue = props.loop === true ? `${props.value}` : props.value;
-          syncSlide(newValue, swiperObj);
-        }),
-      1500
-    );
-  }, [props, swiperObj, handleSwiperUpdata, syncSlide, syncSlideList]);
+      const newValue = props.loop === true ? `${props.value}` : props.value;
+      syncSlide(newValue, swiperObj);
+    });
+  }, [props, swiperObj]);
   useEffect(() => {
-    console.log('useEffect handleSwiperInit');
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore TODO
     if (typeof swiperRef.current?.swiper !== 'undefined') return;
-    console.log('handleSwiperInit');
-    // handleSwiperInit();
-    setTimeout(() => window.requestAnimationFrame(handleSwiperInit), 1500);
+
+    handleSwiperInit();
   }, [handleSwiperInit]);
-  useEffect(() => {
-    console.log('useEffect swiperObj, style, className');
-    console.log({ swiperObj, style, className });
-  }, [swiperObj, className]);
 
   return (
     <div
