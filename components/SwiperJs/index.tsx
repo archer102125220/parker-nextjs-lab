@@ -19,9 +19,10 @@ import style from '@/components/SwiperJs/swiper_js.module.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type swiperEvent = ((swiper: Swiper, ...arg: any[]) => void) | undefined; // 允許傳遞額外屬性
-export type swiperChange =
-  | ((slideValue: number | string | object, activeIndex: number) => void)
-  | ((slideValue: number | string | object) => void);
+export type swiperChange = (
+  slideValue: number | string | object,
+  activeIndex?: number
+) => void;
 interface swiperJsPropsType {
   // render相關參數
   className?: string;
@@ -177,7 +178,7 @@ export function SwiperJs(props: swiperJsPropsType) {
   }, []);
 
   const syncSlide = useCallback(
-    (value: swiperJsPropsType['value'], swiper: Swiper | null) => {
+    (value: swiperValue, swiper: Swiper | null) => {
       if (
         typeof swiper?.slideTo !== 'function' ||
         Array.isArray(slideList) === false ||
