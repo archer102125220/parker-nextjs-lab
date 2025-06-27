@@ -3,6 +3,7 @@
 import { useCallback, useState } from 'react';
 
 import SwiperJs from '@/components/SwiperJs';
+import type { swiperChange, swiperValue } from '@/components/SwiperJs';
 
 import pageStyles from '@/app/[locale]/components/swiper-js/page.module.scss';
 
@@ -18,12 +19,15 @@ for (let i = 0; i <= 100; i++) {
 }
 
 export default function SwiperJsDemo() {
-  const [slideValue, setSlideValue] = useState(0);
+  const [slideValue, setSlideValue] = useState<swiperValue>(0);
 
-  const handleSwiperJsChange = useCallback((newValue: number) => {
-    console.log({ newValue });
-    setSlideValue(newValue);
-  }, []);
+  const handleSwiperJsChange = useCallback<swiperChange>(
+    (newValue, newIndex) => {
+      console.log({ newValue });
+      setSlideValue(newValue);
+    },
+    []
+  );
 
   return (
     <main className={pageStyles['swiper_js_page']}>

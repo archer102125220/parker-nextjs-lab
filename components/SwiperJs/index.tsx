@@ -18,7 +18,10 @@ import useIsomorphicLayoutEffect from '@/hooks/useIsomorphicLayoutEffect';
 import style from '@/components/SwiperJs/swiper_js.module.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type SwiperEvent = ((swiper: Swiper, ...arg: any[]) => void) | undefined; // 允許傳遞額外屬性
+export type swiperEvent = ((swiper: Swiper, ...arg: any[]) => void) | undefined; // 允許傳遞額外屬性
+export type swiperChange =
+  | ((slideValue: number | string | object, activeIndex: number) => void)
+  | ((slideValue: number | string | object) => void);
 interface swiperJsPropsType {
   // render相關參數
   className?: string;
@@ -67,26 +70,24 @@ interface swiperJsPropsType {
   hasScrollbar?: boolean | null;
 
   // 原生Swiper.js相關事件參數
-  change:
-    | ((slideValue: number | string | object, activeIndex: number) => void)
-    | ((slideValue: number | string | object) => void)
-    | null;
-  beforeInit?: SwiperEvent;
-  init?: SwiperEvent;
-  afterInit?: SwiperEvent;
-  beforeDestroy?: SwiperEvent;
-  destroy?: SwiperEvent;
-  beforeSlideChangeStart?: SwiperEvent;
-  slideChange?: SwiperEvent;
-  slideChangeTransitionEnd?: SwiperEvent;
-  sliderMove?: SwiperEvent;
-  reachBeginning?: SwiperEvent;
-  reachEnd?: SwiperEvent;
-  fromEdge?: SwiperEvent;
-  activeIndexChange?: SwiperEvent;
-  beforeTransitionStart?: SwiperEvent;
-  realIndexChange?: SwiperEvent;
+  change: swiperChange;
+  beforeInit?: swiperEvent;
+  init?: swiperEvent;
+  afterInit?: swiperEvent;
+  beforeDestroy?: swiperEvent;
+  destroy?: swiperEvent;
+  beforeSlideChangeStart?: swiperEvent;
+  slideChange?: swiperEvent;
+  slideChangeTransitionEnd?: swiperEvent;
+  sliderMove?: swiperEvent;
+  reachBeginning?: swiperEvent;
+  reachEnd?: swiperEvent;
+  fromEdge?: swiperEvent;
+  activeIndexChange?: swiperEvent;
+  beforeTransitionStart?: swiperEvent;
+  realIndexChange?: swiperEvent;
 }
+export type swiperValue = swiperJsPropsType['value'];
 interface cssVariableType extends CSSProperties {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string | number | symbol]: any; // 允許傳遞額外屬性
