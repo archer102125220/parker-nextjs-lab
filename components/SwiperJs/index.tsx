@@ -324,16 +324,16 @@ export function SwiperJs(props: swiperJsPropsType) {
       }
     };
     if (hasNavigation === true) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore TODO
-      _params.modules = [..._params.modules, Navigation];
+      const _modules = _params.modules || [];
+      _params.modules = [..._modules, Navigation];
       _params.navigation = {
         nextEl: nextRef.current,
         prevEl: prevRef.current
       };
     }
     if (hasPagination === true) {
-      _params.modules = [..._params.modules, Pagination];
+      const _modules = _params.modules || [];
+      _params.modules = [..._modules, Pagination];
       _params.pagination = {
         el: paginationRef.current,
         clickable: paginationClickable,
@@ -341,7 +341,8 @@ export function SwiperJs(props: swiperJsPropsType) {
       };
     }
     if (hasScrollbar === true) {
-      _params.modules = [..._params.modules, Scrollbar];
+      const _modules = _params.modules || [];
+      _params.modules = [..._modules, Scrollbar];
       _params.scrollbar = {
         el: scrollbarRef.current
       };
@@ -352,7 +353,8 @@ export function SwiperJs(props: swiperJsPropsType) {
       autoplayDelay !== undefined &&
       isNaN(autoplayDelay) === false
     ) {
-      _params.modules = [..._params.modules, Autoplay];
+      const _modules = _params.modules || [];
+      _params.modules = [..._modules, Autoplay];
       _params.autoplay = {
         delay: autoplayDelay,
         disableOnInteraction: autoplayDisableOnInteraction
@@ -414,16 +416,16 @@ export function SwiperJs(props: swiperJsPropsType) {
           longSwipesRatio: newProps.longSwipesRatio
         };
         if (newProps.hasNavigation === true) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore TODO
-          _params.modules = [..._params.modules, Navigation];
+          const _modules = _params.modules || [];
+          _params.modules = [..._modules, Navigation];
           _params.navigation = {
             nextEl: nextRef.current,
             prevEl: prevRef.current
           };
         }
         if (newProps.hasPagination === true) {
-          _params.modules = [..._params.modules, Pagination];
+          const _modules = _params.modules || [];
+          _params.modules = [..._modules, Pagination];
           _params.pagination = {
             el: paginationRef.current,
             clickable: newProps.paginationClickable,
@@ -431,7 +433,8 @@ export function SwiperJs(props: swiperJsPropsType) {
           };
         }
         if (newProps.hasScrollbar === true) {
-          _params.modules = [..._params.modules, Scrollbar];
+          const _modules = _params.modules || [];
+          _params.modules = [..._modules, Scrollbar];
           _params.scrollbar = {
             el: scrollbarRef.current
           };
@@ -442,7 +445,8 @@ export function SwiperJs(props: swiperJsPropsType) {
           newProps.autoplayDelay !== undefined &&
           isNaN(newProps.autoplayDelay) === false
         ) {
-          _params.modules = [..._params.modules, Autoplay];
+          const _modules = _params.modules || [];
+          _params.modules = [..._modules, Autoplay];
           _params.autoplay = {
             delay: newProps.autoplayDelay,
             disableOnInteraction: newProps.autoplayDisableOnInteraction
@@ -565,18 +569,22 @@ export function SwiperJs(props: swiperJsPropsType) {
           ].join(' ')}
         >
           {/* Slides */}
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-          {slideList.map((slide: any, index: number) => (
-            // 允許傳遞額外屬性
-            <div
-              key={slide[valueKey] || slide.value || index}
-              swiper-loop-value={slide[valueKey] || slide.value || index}
-              className={[
-                style['swiper_js-content-wrapper-slide'],
-                'swiper-slide'
-              ].join(' ')}
-            >
-              {/* <slot
+          {slideList.map(
+            (
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              slide: { [key: string | number | symbol]: any },
+              index: number
+            ) => (
+              // 允許傳遞額外屬性
+              <div
+                key={slide[valueKey] || slide.value || index}
+                swiper-loop-value={slide[valueKey] || slide.value || index}
+                className={[
+                  style['swiper_js-content-wrapper-slide'],
+                  'swiper-slide'
+                ].join(' ')}
+              >
+                {/* <slot
                 v-if="slotNameIsDefault === false"
                 name="`${slide[slotNameKey] || slide.slotName || index}-top`"
                 item="slide"
@@ -590,18 +598,20 @@ export function SwiperJs(props: swiperJsPropsType) {
                 index="index"
                 is-slider-moveing="isSliderMoveing"
               /> */}
-              {typeof RenderSlideTop === 'function' ? (
-                <RenderSlideTop
-                  item={slide}
-                  index={index}
-                  isSliderMoveing={isSliderMoveing}
-                />
-              ) : (
-                ''
-              )}
+                {typeof RenderSlideTop === 'function' ? (
+                  <RenderSlideTop
+                    item={slide}
+                    index={index}
+                    isSliderMoveing={isSliderMoveing}
+                  />
+                ) : (
+                  ''
+                )}
 
-              <div className={style['swiper_js-content-wrapper-slide-center']}>
-                {/* <slot
+                <div
+                  className={style['swiper_js-content-wrapper-slide-center']}
+                >
+                  {/* <slot
                   v-if="slotNameIsDefault === false"
                   name="`${slide[slotNameKey] || slide.slotName || index}-left`"
                   item="slide"
@@ -615,22 +625,22 @@ export function SwiperJs(props: swiperJsPropsType) {
                   index="index"
                   is-slider-moveing="isSliderMoveing"
                 /> */}
-                {typeof RenderSlideLeft === 'function' ? (
-                  <RenderSlideLeft
-                    item={slide}
-                    index={index}
-                    isSliderMoveing={isSliderMoveing}
-                  />
-                ) : (
-                  ''
-                )}
+                  {typeof RenderSlideLeft === 'function' ? (
+                    <RenderSlideLeft
+                      item={slide}
+                      index={index}
+                      isSliderMoveing={isSliderMoveing}
+                    />
+                  ) : (
+                    ''
+                  )}
 
-                <div
-                  className={
-                    style['swiper_js-content-wrapper-slide-center-middle']
-                  }
-                >
-                  {/* <slot
+                  <div
+                    className={
+                      style['swiper_js-content-wrapper-slide-center-middle']
+                    }
+                  >
+                    {/* <slot
                     v-if="slotNameIsDefault === false"
                     name="`${
                     slide[slotNameKey] || slide.slotName || index
@@ -646,17 +656,17 @@ export function SwiperJs(props: swiperJsPropsType) {
                     index="index"
                     is-slider-moveing="isSliderMoveing"
                   /> */}
-                  {typeof RenderSlideMiddleTop === 'function' ? (
-                    <RenderSlideMiddleTop
-                      item={slide}
-                      index={index}
-                      isSliderMoveing={isSliderMoveing}
-                    />
-                  ) : (
-                    ''
-                  )}
+                    {typeof RenderSlideMiddleTop === 'function' ? (
+                      <RenderSlideMiddleTop
+                        item={slide}
+                        index={index}
+                        isSliderMoveing={isSliderMoveing}
+                      />
+                    ) : (
+                      ''
+                    )}
 
-                  {/* <slot
+                    {/* <slot
                     v-if="slotNameIsDefault === false"
                     name="slide[slotNameKey] || slide.slotName || index"
                     item="slide"
@@ -673,17 +683,17 @@ export function SwiperJs(props: swiperJsPropsType) {
                   >
                     <p> {slide.content || slide}</p>
                   </slot> */}
-                  {typeof RenderSlide === 'function' ? (
-                    <RenderSlide
-                      item={slide}
-                      index={index}
-                      isSliderMoveing={isSliderMoveing}
-                    />
-                  ) : (
-                    <p>{slide.content || slide}</p>
-                  )}
+                    {typeof RenderSlide === 'function' ? (
+                      <RenderSlide
+                        item={slide}
+                        index={index}
+                        isSliderMoveing={isSliderMoveing}
+                      />
+                    ) : (
+                      <p>{slide.content || slide}</p>
+                    )}
 
-                  {/* <slot
+                    {/* <slot
                     v-if="slotNameIsDefault === false"
                     name="`${
                     slide[slotNameKey] || slide.slotName || index
@@ -699,18 +709,18 @@ export function SwiperJs(props: swiperJsPropsType) {
                     index="index"
                     is-slider-moveing="isSliderMoveing"
                   /> */}
-                  {typeof RenderSlideMiddleBottom === 'function' ? (
-                    <RenderSlideMiddleBottom
-                      item={slide}
-                      index={index}
-                      isSliderMoveing={isSliderMoveing}
-                    />
-                  ) : (
-                    ''
-                  )}
-                </div>
+                    {typeof RenderSlideMiddleBottom === 'function' ? (
+                      <RenderSlideMiddleBottom
+                        item={slide}
+                        index={index}
+                        isSliderMoveing={isSliderMoveing}
+                      />
+                    ) : (
+                      ''
+                    )}
+                  </div>
 
-                {/* <slot
+                  {/* <slot
                   v-if="slotNameIsDefault === false"
                   name="`${slide[slotNameKey] || slide.slotName || index}-right`"
                   item="slide"
@@ -724,18 +734,18 @@ export function SwiperJs(props: swiperJsPropsType) {
                   index="index"
                   is-slider-moveing="isSliderMoveing"
                 /> */}
-                {typeof RenderSlideRight === 'function' ? (
-                  <RenderSlideRight
-                    item={slide}
-                    index={index}
-                    isSliderMoveing={isSliderMoveing}
-                  />
-                ) : (
-                  ''
-                )}
-              </div>
+                  {typeof RenderSlideRight === 'function' ? (
+                    <RenderSlideRight
+                      item={slide}
+                      index={index}
+                      isSliderMoveing={isSliderMoveing}
+                    />
+                  ) : (
+                    ''
+                  )}
+                </div>
 
-              {/* <slot
+                {/* <slot
                 v-if="slotNameIsDefault === false"
                 name="`${slide[slotNameKey] || slide.slotName || index}-bottom`"
                 item="slide"
@@ -749,17 +759,18 @@ export function SwiperJs(props: swiperJsPropsType) {
                 index="index"
                 is-slider-moveing="isSliderMoveing"
               /> */}
-              {typeof RenderSlideBottom === 'function' ? (
-                <RenderSlideBottom
-                  item={slide}
-                  index={index}
-                  isSliderMoveing={isSliderMoveing}
-                />
-              ) : (
-                ''
-              )}
-            </div>
-          ))}
+                {typeof RenderSlideBottom === 'function' ? (
+                  <RenderSlideBottom
+                    item={slide}
+                    index={index}
+                    isSliderMoveing={isSliderMoveing}
+                  />
+                ) : (
+                  ''
+                )}
+              </div>
+            )
+          )}
         </div>
       </div>
 
