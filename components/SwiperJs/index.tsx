@@ -1,7 +1,8 @@
 'use client';
 import { useState, useRef, useCallback, useEffect } from 'react';
-import type { ComponentType, CSSProperties } from 'react';
+import type { ElementType, CSSProperties } from 'react';
 import _debounce from 'lodash/debounce';
+import type { DebouncedFunc } from 'lodash';
 
 // Import Swiper and modules
 import Swiper from 'swiper';
@@ -17,8 +18,7 @@ import useIsomorphicLayoutEffect from '@/hooks/useIsomorphicLayoutEffect';
 
 import style from '@/components/SwiperJs/swiper_js.module.scss';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type swiperEvent = ((swiper: Swiper, ...arg: any[]) => void) | undefined; // 允許傳遞額外屬性
+export type swiperEvent = (swiper: Swiper) => void; // 允許傳遞額外屬性
 export type swiperChange = (
   slideValue: number | string | object,
   activeIndex?: number
@@ -26,27 +26,18 @@ export type swiperChange = (
 interface swiperJsPropsType {
   // render相關參數
   className?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  renderPrevBtn?: ComponentType<any>; // 允許傳遞額外屬性
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  renderNextBtn?: ComponentType<any>; // 允許傳遞額外屬性
+  renderPrevBtn?: ElementType;
+  renderNextBtn?: ElementType; // 允許傳遞額外屬性
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   slideList: Array<any>; // 允許傳遞額外屬性
   valueKey?: string | number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  renderSlideTop?: ComponentType<any>; // 允許傳遞額外屬性
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  renderSlideLeft?: ComponentType<any>; // 允許傳遞額外屬性
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  renderSlideMiddleTop?: ComponentType<any>; // 允許傳遞額外屬性
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  renderSlide?: ComponentType<any>; // 允許傳遞額外屬性
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  renderSlideMiddleBottom?: ComponentType<any>; // 允許傳遞額外屬性
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  renderSlideRight?: ComponentType<any>; // 允許傳遞額外屬性
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  renderSlideBottom?: ComponentType<any>; // 允許傳遞額外屬性
+  renderSlideTop?: ElementType;
+  renderSlideLeft?: ElementType;
+  renderSlideMiddleTop?: ElementType;
+  renderSlide?: ElementType;
+  renderSlideMiddleBottom?: ElementType;
+  renderSlideRight?: ElementType;
+  renderSlideBottom?: ElementType;
 
   // css變數相關參數
   overflow?: boolean;
@@ -65,7 +56,8 @@ interface swiperJsPropsType {
   dynamicBullets?: boolean | undefined;
 
   // 與原生Swiper.js磨合相關參數;
-  value: number | string | object;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value: number | string | { [key: string | number | symbol]: any };
   hasNavigation?: boolean | null;
   hasPagination?: boolean | null;
   hasScrollbar?: boolean | null;
@@ -90,8 +82,16 @@ interface swiperJsPropsType {
 }
 export type swiperValue = swiperJsPropsType['value'];
 interface cssVariableType extends CSSProperties {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string | number | symbol]: any; // 允許傳遞額外屬性
+  '--slide_height'?: string;
+  '--content_wrapper_slide_height'?: string;
+  '--slide_overflow_y'?: string;
+  '--slide_overflow_x'?: string;
+  '--slide_display'?: string;
+  '--slide_flex_direction'?: string;
+  '--center_flex'?: number;
+}
+interface SwiperDivElement extends HTMLDivElement {
+  swiper?: Swiper;
 }
 
 export function SwiperJs(props: swiperJsPropsType) {
@@ -116,7 +116,7 @@ export function SwiperJs(props: swiperJsPropsType) {
     swiperHeight = '',
 
     // 原生Swiper.js相關參數
-    centeredSlides,
+    centeredSlides = false,
     slidesPerView = 1,
     spaceBetween = 0,
     longSwipesRatio = 0.2,
@@ -154,7 +154,7 @@ export function SwiperJs(props: swiperJsPropsType) {
   const swiperJsRootRef = useRef<HTMLDivElement>(null);
   const prevRef = useRef<HTMLDivElement>(null);
   const nextRef = useRef<HTMLDivElement>(null);
-  const swiperRef = useRef<HTMLDivElement>(null);
+  const swiperRef = useRef<SwiperDivElement>(null);
   const paginationRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<HTMLDivElement>(null);
 
@@ -164,10 +164,10 @@ export function SwiperJs(props: swiperJsPropsType) {
 
   const [cssVariable, setCssVariable] = useState<cssVariableType>({});
 
-  const resetMoveingStatus = useCallback(() => {
+  const resetMoveingStatus = useCallback<() => void>(() => {
     setIsSliderMoveing(false);
   }, []);
-  const resetSwiperScroll = useCallback(() => {
+  const resetSwiperScroll = useCallback<() => void>(() => {
     // 校正 slide 位置，避免有任何scroll事件影響swiper位置
     if (
       typeof swiperJsRootRef.current?.scrollWidth === 'number' &&
@@ -245,32 +245,24 @@ export function SwiperJs(props: swiperJsPropsType) {
     [valueKey, value, loop]
   );
 
-  const handleAfterInit = useCallback(
-    (swiper: Swiper) => {
-      if (typeof afterInit === 'function') {
-        afterInit(swiper);
-      }
-    },
-    [afterInit]
-  );
-  const changeDebounce = useCallback(
-    _debounce((slideValue, activeIndex: number) => {
+  const changeDebounce = useCallback<DebouncedFunc<swiperChange>>(
+    _debounce((slideValue: number | string, activeIndex: number) => {
       if (typeof change === 'function') {
         change(
-          isNaN(slideValue) ? slideValue : Number(slideValue),
+          isNaN(Number(slideValue)) ? slideValue : Number(slideValue),
           activeIndex
         );
       }
     }, 200),
     [change]
   );
-  const handleSlideChange = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (swiper: Swiper, ...arg: any[]) => {
+  const handleSlideChange = useCallback<swiperEvent>(
+    (swiper: Swiper) => {
       // 允許傳遞額外屬性
       if (loop === true) {
         const slideValueEl = swiper.slides[swiper.activeIndex];
-        const slideValue = slideValueEl?.getAttribute('swiper-loop-value');
+        const slideValue =
+          slideValueEl?.getAttribute('swiper-loop-value') || '';
 
         if (`${value}` !== slideValue) {
           changeDebounce(slideValue, swiper.activeIndex);
@@ -289,23 +281,22 @@ export function SwiperJs(props: swiperJsPropsType) {
       }
 
       if (typeof slideChange === 'function') {
-        slideChange(swiper, ...arg);
+        slideChange(swiper);
       }
     },
     [loop, changeDebounce, slideList, valueKey, value, slideChange]
   );
-  const handleSliderMove = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (swiper: Swiper, ...arg: any[]) => {
+  const handleSliderMove = useCallback<swiperEvent>(
+    (swiper: Swiper) => {
       // 允許傳遞額外屬性
       if (typeof sliderMove === 'function') {
-        sliderMove(swiper, ...arg);
+        sliderMove(swiper);
       }
       setIsSliderMoveing(true);
     },
     [sliderMove]
   );
-  const handleSwiperInit = useCallback(() => {
+  const handleSwiperInit = useCallback<() => void>(() => {
     if (swiperRef.current === null) return;
 
     const _params: SwiperOptions = {
@@ -317,7 +308,7 @@ export function SwiperJs(props: swiperJsPropsType) {
       on: {
         beforeInit,
         init,
-        afterInit: handleAfterInit,
+        afterInit,
         beforeDestroy,
         destroy,
         beforeSlideChangeStart,
@@ -382,7 +373,7 @@ export function SwiperJs(props: swiperJsPropsType) {
 
     beforeInit,
     init,
-    handleAfterInit,
+    afterInit,
     beforeDestroy,
     destroy,
     beforeSlideChangeStart,
@@ -414,7 +405,6 @@ export function SwiperJs(props: swiperJsPropsType) {
         Array.isArray(newProps.slideList) &&
         newProps.slideList.length > 0
       ) {
-
         const _params: SwiperOptions = {
           ...(params || {}),
           modules: [],
@@ -510,8 +500,6 @@ export function SwiperJs(props: swiperJsPropsType) {
   }, [overflow, shouldFillHeight, swiperHeight]);
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore TODO
     if (typeof swiperRef.current?.swiper === 'undefined') return;
 
     window.requestAnimationFrame(() => {
@@ -521,10 +509,9 @@ export function SwiperJs(props: swiperJsPropsType) {
       const newValue = props.loop === true ? `${props.value}` : props.value;
       syncSlide(newValue, swiperObj);
     });
-  }, [props, swiperObj]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props, swiperObj]); // 不依照 lint 規則，否則會導致多餘觸發
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore TODO
     if (typeof swiperRef.current?.swiper !== 'undefined') return;
 
     handleSwiperInit();

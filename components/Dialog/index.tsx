@@ -4,7 +4,7 @@ import type {
   ReactNode,
   ElementType
 } from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Button } from '@mui/material';
 
 import type { cssVariable } from '@/type';
@@ -69,15 +69,18 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
   const [opacityTrigger, setOpacityTrigger] = useState<boolean>(false);
   const [cssVariable, setCssVariable] = useState<cssVariable>({});
 
-  const handleClose: handleCloseType = (e?: MouseEvent) => {
-    if (e?.target !== e?.currentTarget) {
-      return;
-    }
-    if (typeof cancel === 'function') {
-      cancel();
-    }
-    setOpacityTrigger(false);
-  };
+  const handleClose = useCallback<handleCloseType>(
+    (e?: MouseEvent) => {
+      if (e?.target !== e?.currentTarget) {
+        return;
+      }
+      if (typeof cancel === 'function') {
+        cancel();
+      }
+      setOpacityTrigger(false);
+    },
+    [cancel]
+  );
 
   useEffect(() => {
     if (typeof open === 'boolean' && open !== opacityTrigger) {
