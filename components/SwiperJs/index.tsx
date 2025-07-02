@@ -472,6 +472,14 @@ export function SwiperJs(props: swiperJsPropsType) {
   );
 
   useIsomorphicLayoutEffect(() => {
+    window.addEventListener('mouseup', resetMoveingStatus, { passive: true });
+    window.addEventListener('touchend', resetMoveingStatus, { passive: true });
+    return () => {
+      window.removeEventListener('mouseup', resetMoveingStatus);
+      window.removeEventListener('touchend', resetMoveingStatus);
+    };
+  }, [resetMoveingStatus]);
+  useIsomorphicLayoutEffect(() => {
     const _cssVariable: cssVariableType = {};
 
     if (typeof overflow === 'boolean' && overflow === true) {
@@ -526,8 +534,6 @@ export function SwiperJs(props: swiperJsPropsType) {
       ref={swiperJsRootRef}
       className={[style['swiper_js'], className].join(' ')}
       style={cssVariable}
-      onMouseUp={resetMoveingStatus}
-      onTouchEnd={resetMoveingStatus}
       onScroll={resetSwiperScroll}
     >
       {/* If we need navigation buttons */}
