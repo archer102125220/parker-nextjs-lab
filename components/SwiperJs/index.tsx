@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useRef, useState, useMemo, useCallback, useEffect } from 'react';
 import type { ElementType, CSSProperties } from 'react';
 import _debounce from 'lodash/debounce';
 import type { DebouncedFunc } from 'lodash';
@@ -18,7 +18,7 @@ import useIsomorphicLayoutEffect from '@/hooks/useIsomorphicLayoutEffect';
 
 import style from '@/components/SwiperJs/swiper_js.module.scss';
 
-export type swiperEvent = (swiper: Swiper) => void; // 允許傳遞額外屬性
+export type swiperEvent = (swiper: Swiper) => void;
 export type swiperChange = (
   slideValue: number | string | object,
   activeIndex?: number
@@ -31,7 +31,7 @@ interface swiperJsPropsType {
   // render相關參數
   className?: string;
   renderPrevBtn?: ElementType;
-  renderNextBtn?: ElementType; // 允許傳遞額外屬性
+  renderNextBtn?: ElementType;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   slideList: Array<any>; // 允許傳遞額外屬性
   valueKey?: string | number;
@@ -86,7 +86,7 @@ interface swiperJsPropsType {
   touchEnd?: swiperElementEvent;
 }
 export type swiperValue = swiperJsPropsType['value'];
-interface cssVariableType extends CSSProperties {
+interface swiperJsCssVariableType extends CSSProperties {
   '--slide_height'?: string;
   '--content_wrapper_slide_height'?: string;
   '--slide_overflow_y'?: string;
@@ -168,7 +168,37 @@ export function SwiperJs(props: swiperJsPropsType) {
   const [params, setParams] = useState<SwiperOptions | null>(null);
   const [isSliderMoveing, setIsSliderMoveing] = useState(false);
 
-  const [cssVariable, setCssVariable] = useState<cssVariableType>({});
+  const cssVariable = useMemo<swiperJsCssVariableType>(() => {
+    const _cssVariable: swiperJsCssVariableType = {};
+
+    if (typeof overflow === 'boolean' && overflow === true) {
+      _cssVariable['--content_wrapper_slide_height'] = '100%';
+      _cssVariable['--slide_height'] = '100%';
+      _cssVariable['--slide_overflow_y'] = 'auto';
+      _cssVariable['--slide_overflow_x'] = 'hidden';
+    }
+
+    if (typeof shouldFillHeight === 'boolean' && shouldFillHeight === true) {
+      _cssVariable['--content_wrapper_slide_height'] = '100%';
+      _cssVariable['--slide_height'] = '100%';
+      _cssVariable['--slide_display'] = 'flex';
+      _cssVariable['--slide_flex_direction'] = 'column';
+      _cssVariable['--center_flex'] = 1;
+    }
+
+    if (typeof swiperHeight === 'string' && swiperHeight !== '') {
+      _cssVariable['--content_wrapper_slide_height'] = swiperHeight;
+      _cssVariable['--slide_height'] = swiperHeight;
+    } else if (swiperHeight !== '' && isNaN(Number(swiperHeight)) === false) {
+      _cssVariable['--content_wrapper_slide_height'] = `${swiperHeight}px`;
+      _cssVariable['--slide_height'] = `${swiperHeight}px`;
+    } else {
+      // _cssVariable["--content_wrapper_slide_height"] = "";
+      _cssVariable['--slide_height'] = '';
+    }
+
+    return _cssVariable;
+  }, [overflow, shouldFillHeight, swiperHeight]);
 
   const resetMoveingStatus = useCallback<() => void>(() => {
     setIsSliderMoveing(false);
@@ -264,7 +294,6 @@ export function SwiperJs(props: swiperJsPropsType) {
   );
   const handleSlideChange = useCallback<swiperEvent>(
     (swiper: Swiper) => {
-      // 允許傳遞額外屬性
       if (loop === true) {
         const slideValueEl = swiper.slides[swiper.activeIndex];
         const slideValue =
@@ -503,37 +532,6 @@ export function SwiperJs(props: swiperJsPropsType) {
       window.removeEventListener('touchend', resetMoveingStatus);
     };
   }, [resetMoveingStatus]);
-  useIsomorphicLayoutEffect(() => {
-    const _cssVariable: cssVariableType = {};
-
-    if (typeof overflow === 'boolean' && overflow === true) {
-      _cssVariable['--content_wrapper_slide_height'] = '100%';
-      _cssVariable['--slide_height'] = '100%';
-      _cssVariable['--slide_overflow_y'] = 'auto';
-      _cssVariable['--slide_overflow_x'] = 'hidden';
-    }
-
-    if (typeof shouldFillHeight === 'boolean' && shouldFillHeight === true) {
-      _cssVariable['--content_wrapper_slide_height'] = '100%';
-      _cssVariable['--slide_height'] = '100%';
-      _cssVariable['--slide_display'] = 'flex';
-      _cssVariable['--slide_flex_direction'] = 'column';
-      _cssVariable['--center_flex'] = 1;
-    }
-
-    if (typeof swiperHeight === 'string' && swiperHeight !== '') {
-      _cssVariable['--content_wrapper_slide_height'] = swiperHeight;
-      _cssVariable['--slide_height'] = swiperHeight;
-    } else if (swiperHeight !== '' && isNaN(Number(swiperHeight)) === false) {
-      _cssVariable['--content_wrapper_slide_height'] = `${swiperHeight}px`;
-      _cssVariable['--slide_height'] = `${swiperHeight}px`;
-    } else {
-      // _cssVariable["--content_wrapper_slide_height"] = "";
-      _cssVariable['--slide_height'] = '';
-    }
-
-    setCssVariable(_cssVariable);
-  }, [overflow, shouldFillHeight, swiperHeight]);
 
   useEffect(() => {
     if (typeof swiperRef.current?.swiper === 'undefined') return;
@@ -603,9 +601,9 @@ export function SwiperJs(props: swiperJsPropsType) {
             (
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               slide: { [key: string | number | symbol]: any },
+              // 允許傳遞額外屬性
               index: number
             ) => (
-              // 允許傳遞額外屬性
               <div
                 key={slide[valueKey] || slide.value || index}
                 swiper-loop-value={slide[valueKey] || slide.value || index}

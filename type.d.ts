@@ -26,7 +26,3 @@ export declare module 'next/config' {
   function getConfig(): NextConfig;
   export default getConfig;
 }
-
-export type cssVariable =
-  | (CSSProperties & { [key: string]: string | number })
-  | undefined;
