@@ -23,6 +23,10 @@ export type swiperChange = (
   slideValue: number | string | object,
   activeIndex?: number
 ) => void;
+export type swiperElementEvent = (
+  swiper: Swiper,
+  event: MouseEvent | TouchEvent | PointerEvent
+) => void;
 interface swiperJsPropsType {
   // render相關參數
   className?: string;
@@ -79,6 +83,7 @@ interface swiperJsPropsType {
   activeIndexChange?: swiperEvent;
   beforeTransitionStart?: swiperEvent;
   realIndexChange?: swiperEvent;
+  touchEnd?: swiperElementEvent;
 }
 export type swiperValue = swiperJsPropsType['value'];
 interface cssVariableType extends CSSProperties {
@@ -148,7 +153,8 @@ export function SwiperJs(props: swiperJsPropsType) {
     fromEdge,
     activeIndexChange,
     beforeTransitionStart,
-    realIndexChange
+    realIndexChange,
+    touchEnd
   } = props;
 
   const swiperJsRootRef = useRef<HTMLDivElement>(null);
@@ -288,13 +294,30 @@ export function SwiperJs(props: swiperJsPropsType) {
   );
   const handleSliderMove = useCallback<swiperEvent>(
     (swiper: Swiper) => {
-      // 允許傳遞額外屬性
       if (typeof sliderMove === 'function') {
         sliderMove(swiper);
       }
       setIsSliderMoveing(true);
     },
     [sliderMove]
+  );
+  const handleSlideChangeTransitionEnd = useCallback<swiperEvent>(
+    (swiper: Swiper) => {
+      if (typeof slideChangeTransitionEnd === 'function') {
+        slideChangeTransitionEnd(swiper);
+      }
+      setIsSliderMoveing(false);
+    },
+    [slideChangeTransitionEnd]
+  );
+  const handleTouchEnd = useCallback<swiperElementEvent>(
+    (swiper: Swiper, event: MouseEvent | TouchEvent | PointerEvent) => {
+      if (typeof touchEnd === 'function') {
+        touchEnd(swiper, event);
+      }
+      setIsSliderMoveing(false);
+    },
+    [touchEnd]
   );
   const handleSwiperInit = useCallback<() => void>(() => {
     if (swiperRef.current === null) return;
@@ -320,7 +343,8 @@ export function SwiperJs(props: swiperJsPropsType) {
         activeIndexChange,
         beforeTransitionStart,
         realIndexChange,
-        slideChangeTransitionEnd
+        slideChangeTransitionEnd: handleSlideChangeTransitionEnd,
+        touchEnd: handleTouchEnd
       }
     };
     if (hasNavigation === true) {
@@ -387,7 +411,7 @@ export function SwiperJs(props: swiperJsPropsType) {
     activeIndexChange,
     beforeTransitionStart,
     realIndexChange,
-    slideChangeTransitionEnd,
+    handleSlideChangeTransitionEnd,
 
     hasNavigation,
 
