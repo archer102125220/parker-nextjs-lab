@@ -95,6 +95,19 @@ export class cancelRequest implements cancelRequestInterface {
 // eslint-disable-next-line new-cap
 export const CancelRequest: cancelRequestInterface = new cancelRequest();
 
+export function getCache(requestKey: requestKey = '') {
+  return cacheCfg.get(requestKey);
+}
+export function setCache(requestKey: requestKey = '', response: any) {
+  return cacheCfg.set(requestKey, response);
+}
+export function deleteCache(requestKey: requestKey = '') {
+  return cacheCfg.delete(requestKey);
+}
+export function removeCache() {
+  return cacheCfg.clear();
+}
+
 // eslint-disable-next-line import/no-mutable-exports
 export let ax: AxiosInstance | null = null;
 
@@ -109,13 +122,9 @@ export function axiosInit(
       {
         enabledByDefault: false,
         cacheFlag: 'useCache',
-        getCache: (requestKey: requestKey = '') => cacheCfg.get(requestKey),
-        setCache: (requestKey: requestKey = '', response: any) => {
-          return cacheCfg.set(requestKey, response);
-        },
-        deleteCache: (requestKey: requestKey = '') => {
-          return cacheCfg.delete(requestKey);
-        }
+        getCache,
+        setCache,
+        deleteCache
       },
       function defaultAdapter(config: config) {
         delete config.adapter;
@@ -273,7 +282,10 @@ export const request: requestInterface = function (
       return data;
     })
     .catch(async (error) => {
-      if (hasErrorAdapter === true && typeof request.errorAdapter === 'function') {
+      if (
+        hasErrorAdapter === true &&
+        typeof request.errorAdapter === 'function'
+      ) {
         try {
           const headers = extendOption?.headers;
           const response = await request.errorAdapter(
