@@ -16,6 +16,18 @@ export interface requestInit {
   reinitialize: Function;
 }
 
+/**
+ * 初始化axios
+ * @param {string} apiBase - axios的baseURL
+ * @param {function} errorAdapter - 錯誤處理函式
+ * @param {object} defaultExtendOption - 呼叫api時預設的extendOption
+ * @returns {requestInit} - 包含以下屬性的物件：
+ * - request: 呼叫api的函式
+ * - isInitialized: 是否已經初始化
+ * - isLoading: 是否正在初始化
+ * - error: 初始化錯誤訊息
+ * - reinitialize: 重新初始化axios
+ */
 export function useRequestInit(
   apiBase: string = '',
   errorAdapter?: errorAdapterType,
