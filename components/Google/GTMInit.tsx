@@ -1,5 +1,6 @@
 'use client';
 import type { ReactNode } from 'react';
+import { useEffect } from 'react';
 import _debounce from 'lodash/debounce';
 
 import { googleGTMInit } from '@/utils/third-party/gtm';
@@ -12,13 +13,12 @@ interface GTMInitProps {
 }
 
 const isDev = process.env.NODE_ENV === 'development';
-const debounceGoogleGTMInit = _debounce(googleGTMInit, 100);
 
 export function GTMInit({ children, gtmId, log }: GTMInitProps) {
   useIsomorphicLayoutEffect(() => {
     const _log = typeof log === 'boolean' ? log : isDev;
 
-    debounceGoogleGTMInit(gtmId, _log);
+    googleGTMInit(gtmId, _log);
   }, [gtmId, log]);
 
   return (

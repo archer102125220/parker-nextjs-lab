@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Button from '@mui/material/Button';
 
+import GTMScnOpen from '@/components/Google/GTMScnOpen';
 import Dialog from '@/components/Dialog';
 
 export default function DialogDemo() {
@@ -25,6 +26,7 @@ export default function DialogDemo() {
 
   return (
     <main>
+      <GTMScnOpen />
       <h1>Dialog 元件演示</h1>
       <Button variant="contained" onClick={handleOpenDialog}>
         打開對話框

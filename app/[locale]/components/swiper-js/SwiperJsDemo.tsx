@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react';
 
 import SwiperJs from '@/components/SwiperJs';
 import type { swiperChange, swiperValue } from '@/components/SwiperJs';
+import GTMScnOpen from '@/components/Google/GTMScnOpen';
 
 import pageStyles from '@/app/[locale]/components/swiper-js/page.module.scss';
 
@@ -28,6 +29,7 @@ export default function SwiperJsDemo() {
 
   return (
     <main className={pageStyles['swiper_js_page']}>
+      <GTMScnOpen />
       <h1>SwiperJs 元件演示</h1>
 
       <SwiperJs
