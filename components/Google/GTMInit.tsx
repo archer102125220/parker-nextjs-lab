@@ -1,7 +1,5 @@
 'use client';
 import type { ReactNode } from 'react';
-import { useEffect } from 'react';
-import _debounce from 'lodash/debounce';
 
 import { googleGTMInit } from '@/utils/third-party/gtm';
 import useIsomorphicLayoutEffect from '@/hooks/useIsomorphicLayoutEffect';
