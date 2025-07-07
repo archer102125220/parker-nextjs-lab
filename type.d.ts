@@ -4,6 +4,9 @@ export declare global {
   interface Window {
     fbAsyncInit?: (...args: any[]) => void;
     FB?: any;
+
+    gtag: Function;
+    gtm: Function;
     dataLayer: Array<Record<string, any>>;
 
     YT: {
@@ -12,7 +15,6 @@ export declare global {
     };
     onYouTubeIframeAPIReady: () => void;
     youTubeIsCreated?: boolean;
-    gtag: Function;
   }
 }
 

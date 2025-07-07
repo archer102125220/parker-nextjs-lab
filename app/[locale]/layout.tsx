@@ -16,6 +16,8 @@ import DefaultLayout from '@/layout/default';
 
 import { AxiosInit } from '@/components/AxiosInit';
 import { ReduxInit } from '@/components/ReduxInit';
+import { GAInit } from '@/components/Google/GAInit';
+import { GTMInit } from '@/components/Google/GTMInit';
 import MuiThemeProvider from '@/components/MuiThemeProvider';
 
 interface LocaleLayout {
@@ -115,6 +117,9 @@ export default async function LocaleLayout(props: Readonly<LocaleLayout>) {
         />
       </head>
       <body>
+        <GAInit gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
+        <GTMInit gtmId={process.env.NEXT_PUBLIC_GTM_ID || ''} />
+
         <ReduxInit params={params}>
           <AxiosInit />
           <NextIntlClientProvider locale={locale}>
