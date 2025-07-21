@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
-import DialogDemo from './DialogDemo';
+import dynamic from 'next/dynamic';
+
+const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
+const DialogDemo = dynamic(() => import('./DialogDemo'));
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -9,5 +12,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function DialogDemoPage() {
-  return <DialogDemo />;
+  return (
+    <main>
+      <GTMScnOpen />
+      <h1>Dialog 元件演示</h1>
+      <DialogDemo />
+    </main>
+  );
 }
