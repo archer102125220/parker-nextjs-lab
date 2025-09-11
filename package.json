@@ -28,6 +28,8 @@
     "axios-mock-adapter": "^2.1.0",
     "date-fns": "^4.1.0",
     "fido2-lib": "^3.5.3",
+    "firebase": "^12.2.1",
+    "firebase-admin": "^13.5.0",
     "flag-icons": "^7.3.2",
     "google-libphonenumber": "^3.2.40",
     "lodash": "^4.17.21",
