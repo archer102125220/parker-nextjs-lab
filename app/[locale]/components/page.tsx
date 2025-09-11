@@ -27,6 +27,7 @@ function ComponentsPage(): ReactNode {
       <GTMScnOpen />
       <LinkButton href="/components/dialog">Dialog 元件</LinkButton>
       <LinkButton href="/components/swiper-js">SwiperJs 元件</LinkButton>
+      <LinkButton href="/components/drawer">Drawer 元件</LinkButton>
     </Box>
   );
 }

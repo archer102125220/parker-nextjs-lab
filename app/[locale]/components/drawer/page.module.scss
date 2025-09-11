@@ -1,0 +1,25 @@
+.drawer_page {
+  &-container {
+    padding: 20px;
+
+    &-input_field {
+      margin-bottom: 20px;
+
+      &-selector {
+        margin-left: 10px;
+      }
+    }
+
+    &-trigger {
+      margin-bottom: 20px;
+    }
+
+    &-drawer_container {
+      padding: 20px;
+
+      &-close {
+        margin-top: 20px;
+      }
+    }
+  }
+}

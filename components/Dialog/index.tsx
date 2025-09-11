@@ -34,8 +34,8 @@ interface DialogProps {
   Action?: ElementType;
   Cancel?: ElementType;
   Confirm?: ElementType;
-
   children: ReactNode;
+
   change: (isOpen: boolean) => void;
   confirm: () => void;
   cancel: () => void;
@@ -68,6 +68,7 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
     confirmLabel = '確定',
     confirmDisabled = false,
     children,
+
     Container,
     Title,
     Content,
@@ -153,10 +154,10 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
   );
 
   useEffect(() => {
-    console.log({ open, opacityTrigger });
     if (typeof open === 'boolean' && open !== opacityTrigger) {
       setOpacityTrigger(open);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
   useEffect(() => {
     return () => {
@@ -165,6 +166,7 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
       }
       handleClose();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleConfirm: handleCloseType = (e?: MouseEvent) => {
