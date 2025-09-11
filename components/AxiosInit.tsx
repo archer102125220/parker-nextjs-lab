@@ -9,8 +9,10 @@ type AxiosInitProps = {
   children?: ReactNode;
 };
 
-export function AxiosInit({ apiBase, children }: AxiosInitProps) {
+export function AxiosInit({ apiBase, children }: AxiosInitProps): ReactNode {
   useRequestInit(apiBase || process.env.NEXT_PUBLIC_API_BASE);
 
   return children;
 }
+
+export default AxiosInit;

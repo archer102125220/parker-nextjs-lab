@@ -44,3 +44,5 @@ export function useFacebook(initFn: (...args: any[]) => void = () => {}) {
 
   return facebook;
 }
+
+export default useFacebook;

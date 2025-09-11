@@ -73,7 +73,7 @@ export async function generateMetadata(props: LocaleLayout): Promise<Metadata> {
   };
 }
 
-export default async function LocaleLayout(props: Readonly<LocaleLayout>) {
+export default async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
   const { children, params } = props;
 
   // Ensure that the incoming `locale` is valid

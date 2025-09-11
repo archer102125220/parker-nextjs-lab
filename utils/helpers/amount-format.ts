@@ -1,6 +1,6 @@
 export default function amountFormat(
   amount: number,
-  formater: string[] | RegExp = ['\\B(?<!\\.\\d*)(?=(\\d{3})+(?!\\d))', 'g'],
+  formater: Array<string> | RegExp = ['\\B(?<!\\.\\d*)(?=(\\d{3})+(?!\\d))', 'g'],
   replaceString: string = ',',
   handleError: Function = handleSafari
 ): void | string | number {
@@ -25,7 +25,7 @@ export default function amountFormat(
 
 function handleSafari(amount: number, replaceString: string = ','): string {
   let output: string = '';
-  const amountArray: string[] = `${amount}`.replaceAll(',', '').split('.');
+  const amountArray: Array<string> = `${amount}`.replaceAll(',', '').split('.');
   const _amount: string = amountArray[0];
 
   for (let i: number = _amount.length - 1; i >= 0; i--) {

@@ -189,3 +189,5 @@ export function useYoutube(
     youtubeApi: typeof window === 'object' ? window.YT : null
   };
 }
+
+export default useYoutube;

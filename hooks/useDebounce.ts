@@ -21,3 +21,5 @@ export function useDebounce(value: Function, delay: number = 0) {
   );
   return debouncedValue;
 }
+
+export default useDebounce;

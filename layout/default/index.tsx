@@ -1,10 +1,38 @@
 import type { ReactNode } from 'react';
-import DefaultLayoutClient from './DefaultLayoutClient';
+import { Box, Container, CssBaseline } from '@mui/material';
+
+import Header from '@/components/Layout/Header';
+import Footer from '@/components/Layout/Footer';
 
 interface DefaultLayoutProps {
   children: ReactNode;
 }
 
-export default async function DefaultLayout({ children }: DefaultLayoutProps) {
-  return <DefaultLayoutClient>{children}</DefaultLayoutClient>;
+export default function DefaultLayout(props: DefaultLayoutProps): ReactNode {
+  const { children } = props;
+
+  return (
+    <>
+      <CssBaseline />
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100dvh'
+        }}
+      >
+        <Header />
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            py: 3
+          }}
+        >
+          <Container maxWidth="lg">{children}</Container>
+        </Box>
+        <Footer />
+      </Box>
+    </>
+  );
 }

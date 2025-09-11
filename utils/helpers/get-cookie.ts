@@ -1,7 +1,7 @@
 export function getCookie(cname: string = '', cookie: string): string {
   const name: string = cname + '=';
   const decodedCookie: string = decodeURIComponent(cookie);
-  const ca: string[] = decodedCookie.split(';');
+  const ca: Array<string> = decodedCookie.split(';');
 
   for (let i: number = 0; i < ca.length; i++) {
     let c: string = ca[i];
@@ -32,7 +32,7 @@ export function getJsonCookie(cookieString: string): CookieInterface {
 }
 
 export function asciiToText(text: string): string {
-  const strings: string[] = text.split('\\');
+  const strings: Array<string> = text.split('\\');
 
   const result: string = strings.reduce(
     (result: string, string: string, index: number): string => {

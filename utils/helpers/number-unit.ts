@@ -2,7 +2,7 @@ export function numberUnit(
   input: number = 0,
   unitIndex: number = 0,
   step: number = 10000,
-  unit: string[]
+  unit: Array<string>
 ): number | string {
   let _input: number = Number(input);
 
@@ -22,7 +22,7 @@ export function numberUnit(
 
   // ['万', '十万', '百万', '千万', '亿', '兆', '京'];
   // ['萬', '十萬', '百萬', '千萬', '億', '兆', '京'];
-  const _unit: string[] = unit || [
+  const _unit: Array<string> = unit || [
     '万',
     '十万',
     '百万',

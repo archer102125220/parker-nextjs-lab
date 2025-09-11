@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 export interface SystemState {
   systemName: string;
@@ -6,17 +7,21 @@ export interface SystemState {
 }
 
 const initialState: SystemState = {
-  systemName: '',
+  systemName: ''
 };
 
+// https://redux-toolkit.js.org/api/createslice#createasyncthunk
 const systemSlice = createSlice({
   name: 'system',
   initialState,
-  reducers: {
-    setSystemName: (state, action: PayloadAction<string>) => {
+  reducers: (create) => ({
+    setSystemName: create.reducer((state, action: PayloadAction<string>) => {
       state.systemName = action.payload;
-    },
-  },
+    }),
+  }),
+  selectors: {
+    systemNameUpperCase: (sliceState) => sliceState.systemName.toUpperCase()
+  }
 });
 
 export const { setSystemName } = systemSlice.actions;

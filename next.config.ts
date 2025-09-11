@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import type { CacheKeyWillBeUsedCallbackParam } from 'workbox-core';
 import createNextIntlPlugin from 'next-intl/plugin';
 import withPWAInit from '@ducanh2912/next-pwa';
 
@@ -122,7 +123,7 @@ const withPWA = withPWAInit({
           },
           plugins: [
             {
-              cacheKeyWillBeUsed: async function (cacheKeyResponse) {
+              async cacheKeyWillBeUsed(cacheKeyResponse: CacheKeyWillBeUsedCallbackParam) {
                 const request = cacheKeyResponse.request;
                 if (
                   cacheKeyResponse.mode === 'write' ||

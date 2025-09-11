@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 
 import { getMessages } from 'next-intl/server';
-import { useMessages } from 'next-intl';
 import type { Messages } from 'next-intl';
+import { useMessages } from 'next-intl';
 import { ThemeProvider } from '@mui/material/styles';
 
 import { theme as defaultTheme, createTheme } from '@/styles/theme';
@@ -10,7 +10,7 @@ import { theme as defaultTheme, createTheme } from '@/styles/theme';
 interface MuiThemeProviderProps {
   children: ReactNode;
 }
-export default async function MuiThemeProvider(props: MuiThemeProviderProps) {
+export async function MuiThemeProvider(props: MuiThemeProviderProps): Promise<ReactNode> {
   const { children } = props;
 
   const messages: Messages =
@@ -21,3 +21,5 @@ export default async function MuiThemeProvider(props: MuiThemeProviderProps) {
 
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 }
+
+export default MuiThemeProvider;

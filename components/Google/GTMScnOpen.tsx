@@ -9,7 +9,7 @@ interface GTMInitProps {
   children?: ReactNode;
 }
 
-export function GTMScnOpen({ children }: GTMInitProps) {
+export function GTMScnOpen({ children }: GTMInitProps): ReactNode {
   const pathname = usePathname();
   useGTMTrack({ event: 'scnOpen', url: pathname });
 

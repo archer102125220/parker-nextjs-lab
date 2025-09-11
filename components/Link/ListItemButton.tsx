@@ -1,5 +1,6 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import ListItemButton, {
   ListItemButtonProps
 } from '@mui/material/ListItemButton';
@@ -11,7 +12,7 @@ export type LinkListItemButtonProps = Omit<
   'component'
 >;
 
-export function LinkListItemButton(props: LinkListItemButtonProps) {
+export function LinkListItemButton(props: LinkListItemButtonProps): ReactNode {
   return <ListItemButton component={Link} {...props} />;
 }
 

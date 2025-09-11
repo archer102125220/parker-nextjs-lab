@@ -1,9 +1,9 @@
 'use client';
-
+import type { ReactNode } from 'react';
 import { Box, Typography, BoxProps } from '@mui/material';
 import { useAppSelector } from '@/store';
 
-export default function Footer(props: BoxProps) {
+export function Footer(props: BoxProps): ReactNode {
   const systemName = useAppSelector((state) => state.system.systemName);
 
   return (
@@ -26,3 +26,4 @@ export default function Footer(props: BoxProps) {
     </Box>
   );
 }
+export default Footer;

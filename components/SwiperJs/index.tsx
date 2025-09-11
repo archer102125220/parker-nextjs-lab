@@ -1,12 +1,12 @@
 'use client';
+import type { ReactNode, ElementType, CSSProperties } from 'react';
 import { useRef, useState, useMemo, useCallback, useEffect } from 'react';
-import type { ElementType, CSSProperties } from 'react';
-import _debounce from 'lodash/debounce';
 import type { DebouncedFunc } from 'lodash';
+import _debounce from 'lodash/debounce';
 
 // Import Swiper and modules
-import Swiper from 'swiper';
 import type { SwiperOptions } from 'swiper/types';
+import Swiper from 'swiper';
 import { Navigation, Pagination, Scrollbar, Autoplay } from 'swiper/modules';
 
 import 'swiper/css';
@@ -27,6 +27,12 @@ export type swiperElementEvent = (
   swiper: Swiper,
   event: MouseEvent | TouchEvent | PointerEvent
 ) => void;
+export type SlideProps = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  item: any;
+  index: number;
+  isSliderMoveing: boolean;
+};
 interface swiperJsPropsType {
   // render相關參數
   className?: string;
@@ -99,7 +105,7 @@ interface SwiperDivElement extends HTMLDivElement {
   swiper?: Swiper;
 }
 
-export function SwiperJs(props: swiperJsPropsType) {
+export function SwiperJs(props: swiperJsPropsType): ReactNode {
   const {
     // render相關參數
     className = '',

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 
@@ -5,7 +6,7 @@ interface PageLoadingProps {
   loading: boolean;
 }
 
-function PageLoading(props: Readonly<PageLoadingProps>) {
+export function PageLoading(props: Readonly<PageLoadingProps>): ReactNode {
   const { loading = false } = props;
 
   return loading === true ? (

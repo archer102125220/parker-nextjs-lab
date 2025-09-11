@@ -1,19 +1,16 @@
+'use client';
+import type { ReactNode } from 'react';
 import Image from 'next/image';
-
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-// import List from '@mui/material/List';
-// import ListItem from '@mui/material/ListItem';
-// import ListItemText from '@mui/material/ListItemText';
 
 import { useAppSelector } from '@/store';
 
 import I18nList from '@/components/Layout/I18nList';
 import LinkBox from '@/components/Link/Box';
 import GoBack from '@/components/GoBack';
-// import LinkListItemButton from '@/components/Link/ListItemButton';
 
-export default function Header() {
+export function Header(): ReactNode {
   const systemName = useAppSelector((state) => state.system.systemName);
 
   return (
@@ -40,32 +37,8 @@ export default function Header() {
         </LinkBox>
       </Typography>
 
-      {/* <List>
-        <ListItem disablePadding>
-          <LinkListItemButton
-            color="inherit"
-            href={pathname.replace(/^\/zh-tw|^\/en/gi, '') || '/'}
-            locale="zh-tw"
-            sx={{
-              fontWeight: pathname.startsWith('/zh-tw') ? 'bold' : 'normal'
-            }}
-          >
-            <ListItemText primary="中文" />
-          </LinkListItemButton>
-        </ListItem>
-
-        <ListItem disablePadding>
-          <LinkListItemButton
-            color="inherit"
-            locale="en"
-            href={pathname.replace(/^\/zh-tw|^\/en/gi, '') || '/'}
-            sx={{ fontWeight: pathname.startsWith('/en') ? 'bold' : 'normal' }}
-          >
-            <ListItemText primary="English" />
-          </LinkListItemButton>
-        </ListItem>
-      </List> */}
       <I18nList />
     </Toolbar>
   );
 }
+export default Header;

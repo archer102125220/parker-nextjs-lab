@@ -13,7 +13,7 @@ interface GAInitProps {
 
 const isDev = process.env.NODE_ENV === 'development';
 
-export function GAInit({ children, gaId, debug, log }: GAInitProps) {
+export function GAInit({ children, gaId, debug, log }: GAInitProps): ReactNode {
   useIsomorphicLayoutEffect(() => {
     const _debug = typeof debug === 'boolean' ? debug : isDev;
     const _log = typeof log === 'boolean' ? log : isDev;

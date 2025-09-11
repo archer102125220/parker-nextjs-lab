@@ -6,7 +6,7 @@ type TrackData = {
   [key: string]: any;
 };
 
-function handleGtmTrack(trackData: TrackData) {
+function handleGtmTrack(trackData: TrackData): void | NodeJS.Timeout {
   try {
     if (typeof window !== 'object') return;
 
@@ -22,7 +22,8 @@ function handleGtmTrack(trackData: TrackData) {
     console.log(error);
   }
 }
-export function useGTMTrack(trackData: TrackData) {
+
+export function useGTMTrack(trackData: TrackData): void {
   useEffect(() => {
     handleGtmTrack(trackData);
   }, []);

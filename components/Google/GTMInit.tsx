@@ -12,7 +12,7 @@ interface GTMInitProps {
 
 const isDev = process.env.NODE_ENV === 'development';
 
-export function GTMInit({ children, gtmId, log }: GTMInitProps) {
+export function GTMInit({ children, gtmId, log }: GTMInitProps): ReactNode {
   useIsomorphicLayoutEffect(() => {
     const _log = typeof log === 'boolean' ? log : isDev;
 
