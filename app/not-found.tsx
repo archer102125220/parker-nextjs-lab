@@ -6,7 +6,7 @@ import Error from 'next/error';
 // In this case, the layout at `app/[locale]/layout.tsx` receives
 // an invalid value as the `[locale]` param and calls `notFound()`.
 
-export function GlobalNotFound(): ReactNode {
+function GlobalNotFound(): ReactNode {
   return (
     <html lang="zh-tw">
       <body>

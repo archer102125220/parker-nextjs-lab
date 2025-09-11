@@ -1,12 +1,11 @@
 'use client';
-
 import { useEffect, useRef, useState, useCallback } from 'react';
 
-import { axiosInit, request as axiosRequest } from '@/utils/request';
 import type {
   errorAdapterType,
   requestInterface
 } from '@/utils/request/request.d.ts';
+import { axiosInit, request as axiosRequest } from '@/utils/request';
 
 export interface requestInit {
   request: requestInterface;

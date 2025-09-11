@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export function SwiperJsDemoPage(): ReactNode {
+function SwiperJsDemoPage(): ReactNode {
   return (
     <main className={pageStyles['swiper_js_page']}>
       <GTMScnOpen />

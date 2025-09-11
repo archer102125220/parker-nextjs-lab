@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 
 import Dialog from '@/components/Dialog';
 
-export function DialogDemo(): ReactNode {
+function DialogDemo(): ReactNode {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleOpenDialog = () => {

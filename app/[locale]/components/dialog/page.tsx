@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export function DialogDemoPage(): ReactNode {
+function DialogDemoPage(): ReactNode {
   return (
     <main>
       <GTMScnOpen />

@@ -5,7 +5,7 @@ import { LinkButton } from '@/components/Link/Button';
 
 import GTMScnOpen from '@/components/Google/GTMScnOpen';
 
-export function Locale(): ReactNode {
+function Locale(): ReactNode {
   return (
     <Box
       sx={{

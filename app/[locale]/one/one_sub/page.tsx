@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-export function One(): ReactNode {
+function One(): ReactNode {
   return (
     <div>
       <main>

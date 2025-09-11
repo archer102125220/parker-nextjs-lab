@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export function ComponentsPage(): ReactNode {
+function ComponentsPage(): ReactNode {
   return (
     <Box
       sx={{
