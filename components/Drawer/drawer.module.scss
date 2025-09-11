@@ -32,9 +32,9 @@
 }
 @keyframes drawer_content_anchor_right {
   from {
+    transform: translate(200vh, 0px);
   }
   to {
-    transform: translate(200vh, 0px);
     transform: translate(0px, 0px);
   }
 }

@@ -2,7 +2,7 @@
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 import Button from '@mui/material/Button';
-import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 
 import Drawer from '@/components/Drawer';
@@ -31,17 +31,20 @@ function DrawerDemo(): ReactNode {
   return (
     <div className={style['drawer_page-container']}>
       <div className={style['drawer_page-container-input_field']}>
-        <Select
+        <TextField
+          select
           label="錨點位置:"
           value={anchor}
-          onChange={(e) => setAnchor(e.target.value as anchorType)}
           className={style['drawer_page-container-input_field-selector']}
+          onChange={(e) => {
+            setAnchor(e.target.value as anchorType);
+          }}
         >
           <MenuItem value="left">左側</MenuItem>
           <MenuItem value="right">右側</MenuItem>
           <MenuItem value="top">頂部</MenuItem>
           <MenuItem value="bottom">底部</MenuItem>
-        </Select>
+        </TextField>
       </div>
 
       <div className={style['drawer_page-container-trigger']}>
@@ -64,25 +67,26 @@ function DrawerDemo(): ReactNode {
             自定義打開按鈕
           </Button>
         )}
+        Container={({ onClose }) => (
+          <div className={style['drawer_page-container-drawer_container']}>
+            <h3>抽屜內容</h3>
+            <p>這是一個從 {anchor} 方向滑出的抽屜組件。</p>
+            <p>支持拖拽關閉功能。</p>
+            <p>可以自定義內容和樣式。</p>
+
+            <div
+              className={style['drawer_page-container-drawer_container-close']}
+            >
+              <Button variant="contained" onClick={onClose}>
+                關閉抽屜
+              </Button>
+            </div>
+          </div>
+        )}
         onChange={handleChange}
         onOpen={handleOpen}
         onClose={handleClose}
-      >
-        <div className={style['drawer_page-container-drawer_container']}>
-          <h3>抽屜內容</h3>
-          <p>這是一個從 {anchor} 方向滑出的抽屜組件。</p>
-          <p>支持拖拽關閉功能。</p>
-          <p>可以自定義內容和樣式。</p>
-
-          <div
-            className={style['drawer_page-container-drawer_container-close']}
-          >
-            <Button variant="contained" onClick={() => setIsOpen(false)}>
-              關閉抽屜
-            </Button>
-          </div>
-        </div>
-      </Drawer>
+      />
     </div>
   );
 }

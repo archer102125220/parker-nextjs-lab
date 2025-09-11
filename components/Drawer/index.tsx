@@ -353,9 +353,9 @@ function Drawer(props: DrawerProps): ReactNode {
   }, [onOpen]);
 
   const handleClose = useCallback(() => {
-    if (typeof onClose === 'function') {
-      onClose();
-    }
+    // if (typeof onClose === 'function') {
+    //   onClose();
+    // }
 
     if (typeof document?.querySelector === 'function') {
       document.querySelector('html')?.classList.remove('drawer_open');
@@ -553,7 +553,7 @@ function Drawer(props: DrawerProps): ReactNode {
   }, [handleWindowClose, onChange, handleClose]);
 
   return (
-    <div className={styles.drawer_root} style={cssVariable}>
+    <div className={`drawer_root ${styles.drawer_root}`} style={cssVariable}>
       <DrawerBtn
         Element={OpenBtn}
         anchor={anchor}
