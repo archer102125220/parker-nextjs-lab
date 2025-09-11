@@ -1,5 +1,4 @@
 'use client';
-
 import type { ReactNode } from 'react';
 import { useCallback, useState } from 'react';
 
@@ -23,7 +22,7 @@ for (let i: number = 0; i <= 100; i++) {
   slideList.push(slide);
 }
 
-export default function SwiperJsDemo(): ReactNode {
+export function SwiperJsDemo(): ReactNode {
   const [slideValue, setSlideValue] = useState<swiperValue>(0);
 
   const handleSwiperJsChange = useCallback<swiperChange>((newValue) => {
@@ -54,3 +53,5 @@ export default function SwiperJsDemo(): ReactNode {
     </>
   );
 }
+
+export default SwiperJsDemo;

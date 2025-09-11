@@ -14,8 +14,10 @@ export const viewport: Viewport = {
   themeColor: '#FFFFFF'
 };
 
-export default function RootLayout(props: Readonly<RootLayoutProps>) {
+export function RootLayout(props: Readonly<RootLayoutProps>): ReactNode {
   const { children } = props;
 
   return children;
 }
+
+export default RootLayout;

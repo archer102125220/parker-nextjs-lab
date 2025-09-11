@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 
 import Box from '@mui/material/Box';
@@ -13,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function ComponentsPage() {
+export function ComponentsPage(): ReactNode {
   return (
     <Box
       sx={{
@@ -29,3 +30,5 @@ export default function ComponentsPage() {
     </Box>
   );
 }
+
+export default ComponentsPage;

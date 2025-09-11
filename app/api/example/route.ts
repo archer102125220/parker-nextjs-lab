@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 // 定義 API 路由的處理函數
 export async function GET(request: NextRequest) {

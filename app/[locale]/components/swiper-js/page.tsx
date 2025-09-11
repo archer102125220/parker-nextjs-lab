@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 
@@ -13,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function SwiperJsDemoPage() {
+export function SwiperJsDemoPage(): ReactNode {
   return (
     <main className={pageStyles['swiper_js_page']}>
       <GTMScnOpen />
@@ -22,3 +23,5 @@ export default function SwiperJsDemoPage() {
     </main>
   );
 }
+
+export default SwiperJsDemoPage;

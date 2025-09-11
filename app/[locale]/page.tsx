@@ -1,10 +1,11 @@
+import type { ReactNode } from 'react';
 import Box from '@mui/material/Box';
 
 import { LinkButton } from '@/components/Link/Button';
 
 import GTMScnOpen from '@/components/Google/GTMScnOpen';
 
-export default function Locale() {
+export function Locale(): ReactNode {
   return (
     <Box
       sx={{
@@ -19,3 +20,5 @@ export default function Locale() {
     </Box>
   );
 }
+
+export default Locale;

@@ -1,11 +1,11 @@
 'use client';
-
+import type { ReactNode } from 'react';
 import { useState } from 'react';
 import Button from '@mui/material/Button';
 
 import Dialog from '@/components/Dialog';
 
-export default function DialogDemo() {
+export function DialogDemo(): ReactNode {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleOpenDialog = () => {
@@ -45,3 +45,5 @@ export default function DialogDemo() {
     </>
   );
 }
+
+export default DialogDemo;

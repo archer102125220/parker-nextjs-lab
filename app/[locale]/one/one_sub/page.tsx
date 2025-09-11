@@ -1,4 +1,6 @@
-export default function One() {
+import type { ReactNode } from 'react';
+
+export function One(): ReactNode {
   return (
     <div>
       <main>
@@ -7,3 +9,5 @@ export default function One() {
     </div>
   );
 }
+
+export default One;

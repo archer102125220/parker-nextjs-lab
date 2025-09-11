@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 
@@ -11,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function DialogDemoPage() {
+export function DialogDemoPage(): ReactNode {
   return (
     <main>
       <GTMScnOpen />
@@ -20,3 +21,5 @@ export default function DialogDemoPage() {
     </main>
   );
 }
+
+export default DialogDemoPage;
