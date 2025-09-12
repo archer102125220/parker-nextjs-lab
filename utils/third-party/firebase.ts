@@ -1,17 +1,20 @@
-import type { FirebaseOptions, FirebaseApp } from 'firebase/app';
+import type {
+  FirebaseOptions as _FirebaseOptions,
+  FirebaseApp as _FirebaseApp
+} from 'firebase/app';
 import { initializeApp, initializeServerApp } from 'firebase/app';
-import type { Analytics } from 'firebase/analytics';
+import type { Analytics as _Analytics } from 'firebase/analytics';
 import {
   getAnalytics,
   logEvent,
   isSupported as analyticsIsSupported
 } from 'firebase/analytics';
-import type { Firestore } from 'firebase/firestore/lite';
+import type { Firestore as _Firestore } from 'firebase/firestore/lite';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getFirestore } from 'firebase/firestore/lite';
 // import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
-import type { Messaging } from 'firebase/messaging';
+import type { Messaging as _Messaging } from 'firebase/messaging';
 import {
   getMessaging,
   getToken,
@@ -34,6 +37,14 @@ export const FIREBASE_CONFIG: FirebaseOptions = {
   appId: process.env.NEXT_PUBLIC_APP_ID,
   measurementId: process.env.NEXT_PUBLIC_GA_ID
 };
+export type FirebaseOptions = _FirebaseOptions;
+export type FirebaseApp = _FirebaseApp;
+export type Analytics = _Analytics;
+export type Firestore = _Firestore;
+export type Messaging = _Messaging;
+
+export type firebaseConfig = _FirebaseOptions;
+export type firebaseCroe = _FirebaseApp;
 
 export class firebase {
   constructor(config = FIREBASE_CONFIG) {

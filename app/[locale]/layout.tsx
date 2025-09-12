@@ -18,6 +18,7 @@ import { AxiosInit } from '@/components/AxiosInit';
 import { ReduxInit } from '@/components/ReduxInit';
 import { GAInit } from '@/components/Google/GAInit';
 import { GTMInit } from '@/components/Google/GTMInit';
+import { FirebaseInit } from '@/components/FirebaseInit';
 import MuiThemeProvider from '@/components/MuiThemeProvider';
 
 interface LocaleLayout {
@@ -119,6 +120,12 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
       <body>
         <GAInit gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
         <GTMInit gtmId={process.env.NEXT_PUBLIC_GTM_ID || ''} />
+        <FirebaseInit
+          apiKey={process.env.NEXT_PUBLIC_FIREBASE_API_KEY || ''}
+          messagingSenderId={process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID || ''}
+          appId={process.env.NEXT_PUBLIC_APP_ID || ''}
+          measurementId={process.env.NEXT_PUBLIC_GA_ID || ''}
+        />
 
         <ReduxInit params={params}>
           <AxiosInit />

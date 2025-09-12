@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import Box from '@mui/material/Box';
 
 import { LinkButton } from '@/components/Link/Button';
-
 import GTMScnOpen from '@/components/Google/GTMScnOpen';
 
 function Locale(): ReactNode {

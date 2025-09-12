@@ -4,7 +4,6 @@ import type { Metadata } from 'next';
 import Box from '@mui/material/Box';
 
 import LinkButton from '@/components/Link/Button';
-
 import GTMScnOpen from '@/components/Google/GTMScnOpen';
 
 export async function generateMetadata(): Promise<Metadata> {
