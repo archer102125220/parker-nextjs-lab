@@ -474,7 +474,7 @@ function Drawer(props: DrawerProps): ReactNode {
             drawerRect.left + move <= drawerWrapperRect.left) ||
           (anchor === 'top' && drawerRect.top + move <= drawerWrapperRect.top)
         ) {
-          setDragMoveDistance(move);
+          window.requestAnimationFrame(() => setDragMoveDistance(move));
         } else {
           setDragMoveDistance(0);
         }
@@ -495,33 +495,36 @@ function Drawer(props: DrawerProps): ReactNode {
     ]
   );
 
-  const handleDragEnd = useCallback(
-    () => {
-      setIsDragStart(false);
-      setDragStartY(0);
-      setDragStartX(0);
+  const handleDragEnd = useCallback(() => {
+    setIsDragStart(false);
+    setDragStartY(0);
+    setDragStartX(0);
 
-      let triggerNumber = 0;
-      if (isVertical === true) {
-        triggerNumber =
-          (drawerWrappingRef.current?.offsetHeight || 0) *
-          Number(triggerPercentage);
-      } else if (isHorizontal === true) {
-        triggerNumber =
-          (drawerWrappingRef.current?.offsetWidth || 0) *
-          Number(triggerPercentage);
-      }
+    let triggerNumber = 0;
+    if (isVertical === true) {
+      triggerNumber =
+        (drawerWrappingRef.current?.offsetHeight || 0) *
+        Number(triggerPercentage);
+    } else if (isHorizontal === true) {
+      triggerNumber =
+        (drawerWrappingRef.current?.offsetWidth || 0) *
+        Number(triggerPercentage);
+    }
 
-      const _dragMoveDistance = Math.abs(dragMoveDistance);
-      if (_dragMoveDistance >= triggerNumber) {
-        handleClose();
-      } else {
-        setDragDuration(300);
-        setDragMoveDistance(0);
-      }
-    },
-    [isVertical, isHorizontal, triggerPercentage, dragMoveDistance, handleClose]
-  );
+    const _dragMoveDistance = Math.abs(dragMoveDistance);
+    if (_dragMoveDistance >= triggerNumber) {
+      handleClose();
+    } else {
+      setDragDuration(300);
+      setDragMoveDistance(0);
+    }
+  }, [
+    isVertical,
+    isHorizontal,
+    triggerPercentage,
+    dragMoveDistance,
+    handleClose
+  ]);
 
   // Effects
   useEffect(() => {
