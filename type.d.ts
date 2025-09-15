@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 
 export declare global {
   interface Window {
@@ -27,4 +27,16 @@ export declare module 'next/config' {
   }
   function getConfig(): NextConfig;
   export default getConfig;
+}
+
+export declare module 'fido2-lib' {
+  export function parseAuthenticatorData(
+    authnrDataArrayBuffer: any
+  ): Promise<Map<any, any>>;
+  export function parseAttestationObject(
+    attestationObject: any
+  ): Promise<Map<any, any>>;
+  export function parseAuthenticatorData(
+    authnrDataArrayBuffer: any
+  ): Promise<Map<any, any>>;
 }

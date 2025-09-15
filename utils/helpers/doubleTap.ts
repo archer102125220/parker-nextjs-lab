@@ -34,6 +34,7 @@ export function customDoubleTap(
     const tapLength = currentTime - lastTap;
 
     if (0 < tapLength && tapLength < doubleTapMs) {
+      // TODO
       // @ts-ignore
       func.apply(this, args);
     } else {
@@ -42,6 +43,7 @@ export function customDoubleTap(
     lastTap = currentTime;
 
     if (typeof defaultFunc === 'function') {
+      // TODO
       // @ts-ignore
       defaultFunc.apply(this, args);
     }

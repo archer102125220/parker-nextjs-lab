@@ -10,6 +10,7 @@ export async function getLocalLanguage(defaultLanguag = 'zh-tw') {
     }
   }
   if (typeof window?.navigator?.languages === 'object') {
+    // TODO
     // @ts-ignore
     const _lang = window.navigator.userLanguage || window.navigator.language;
     const langArr = _lang.split('-');

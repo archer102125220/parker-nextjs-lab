@@ -8,18 +8,12 @@ interface RouteParams {
   }>;
 }
 
-export async function GET(
-  request: NextRequest,
-  { params }: RouteParams
-) {
+export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'ID is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'ID is required' }, { status: 400 });
     }
 
     return NextResponse.json({
@@ -35,18 +29,12 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: RouteParams
-) {
+export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'ID is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'ID is required' }, { status: 400 });
     }
 
     const body = await request.json();
@@ -64,18 +52,12 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: RouteParams
-) {
+export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'ID is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'ID is required' }, { status: 400 });
     }
 
     return NextResponse.json({

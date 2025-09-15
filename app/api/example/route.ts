@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({
     message: 'Hello from API!',
     query,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 }
 
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     // 處理請求
     return NextResponse.json({
       message: 'Data received successfully',
-      data: body,
+      data: body
     });
   } catch (error) {
     return NextResponse.json(
@@ -45,4 +45,4 @@ export async function PUT(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   // 實現 DELETE 請求的邏輯
   return NextResponse.json({ message: 'DELETE request handled' });
-} 
+}

@@ -1,0 +1,52 @@
+import type { Sequelize as SequelizeType } from 'sequelize';
+import { Sequelize as _Sequelize, DataTypes } from 'sequelize';
+import process from 'process';
+
+import databaseConfig from '@/models/config/database';
+import createFirebaseMessaging from '@/models/firebasemessaging';
+
+const pluginBatabases = {
+  FirebaseMessaging: createFirebaseMessaging
+};
+
+const env = process.env.NODE_ENV || 'development';
+// TODO
+// @ts-ignore
+const config = databaseConfig[env] || {};
+
+let _sequelize: SequelizeType | null = null;
+if (config.use_env_variable) {
+  // TODO
+  // @ts-ignore
+  _sequelize = new _Sequelize(process.env[config.use_env_variable], config);
+} else {
+  _sequelize = new _Sequelize(
+    config.database,
+    config.username,
+    config.password,
+    config
+  );
+}
+
+type selfeDatabasesType = {
+  sequelize?: SequelizeType;
+  Sequelize?: typeof _Sequelize;
+};
+const selfeDatabases: selfeDatabasesType = {};
+
+Object.keys(pluginBatabases).forEach((modelName) => {
+  selfeDatabases[modelName] = pluginBatabases[modelName](_sequelize, DataTypes);
+  if (selfeDatabases[modelName].associate) {
+    selfeDatabases[modelName].associate(selfeDatabases);
+  }
+});
+
+selfeDatabases.sequelize = _sequelize;
+selfeDatabases.Sequelize = _Sequelize;
+
+export const FirebaseMessaging = selfeDatabases.FirebaseMessaging;
+export const sequelize = selfeDatabases.sequelize;
+export const Sequelize = selfeDatabases.Sequelize;
+
+export const database = selfeDatabases;
+export default database;

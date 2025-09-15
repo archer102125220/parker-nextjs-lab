@@ -1,6 +1,9 @@
 export default function amountFormat(
   amount: number,
-  formater: Array<string> | RegExp = ['\\B(?<!\\.\\d*)(?=(\\d{3})+(?!\\d))', 'g'],
+  formater: Array<string> | RegExp = [
+    '\\B(?<!\\.\\d*)(?=(\\d{3})+(?!\\d))',
+    'g'
+  ],
   replaceString: string = ',',
   handleError: Function = handleSafari
 ): void | string | number {
@@ -9,6 +12,7 @@ export default function amountFormat(
     if (Array.isArray(formater) && formater.length > 0) {
       _formater = new RegExp(formater[0], formater[1]);
     } else {
+      // TODO
       // @ts-ignore
       _formater = formater;
     }

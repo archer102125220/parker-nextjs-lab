@@ -4,15 +4,17 @@ import firebaseAdmin from 'firebase-admin';
 // https://firebase.google.com/docs/cloud-messaging/js/client?hl=zh-tw#web
 // https://firebase.google.com/docs/cloud-messaging/js/client?hl=zh-tw#web_2
 
+export type firebaseAdminAppType = firebaseAdmin.app.App;
+
 export const CREDENTIAL = process.env.NEXT_PUBLIC_FIREBASE_CREDENTIAL || '{}';
 
 export const FIREBASE_ADMIN_CONFIG = {
-  authDomain: 'parker-nuxt-lab.firebaseapp.com',
-  projectId: 'parker-nuxt-lab',
-  storageBucket: 'parker-nuxt-lab.firebasestorage.app'
+  authDomain: 'parker-nextjs-lab.firebaseapp.com',
+  projectId: 'parker-nextjs-lab',
+  storageBucket: 'parker-nextjs-lab.firebasestorage.app'
 };
 
-export let firebaseAdminWeb: firebaseAdmin.app.App | null = null;
+export let firebaseAdminWeb: firebaseAdminAppType | null = null;
 export function getFirebaseAdminWeb() {
   return firebaseAdminWeb;
 }
@@ -25,7 +27,7 @@ export const ANDROID_FIREBASE_ADMIN_CONFIG = {
   projectId: 'httpsbibiancojp',
   storageBucket: 'httpsbibiancojp.appspot.com'
 };
-export let firebaseAdminAndroid: firebaseAdmin.app.App | null = null;
+export let firebaseAdminAndroid: firebaseAdminAppType | null = null;
 export function getFirebaseAdminAndroid() {
   return firebaseAdminAndroid;
 }
@@ -38,14 +40,14 @@ export const IOS_FIREBASE_ADMIN_CONFIG = {
   projectId: 'httpsbibiancojp',
   storageBucket: 'httpsbibiancojp.appspot.com'
 };
-export let firebaseAdminIos: firebaseAdmin.app.App | null = null;
+export let firebaseAdminIos: firebaseAdminAppType | null = null;
 export function getFirebaseAdminIos() {
   return firebaseAdminIos;
 }
 
 export function getFirebaseAdmin(
   name = '[DEFAULT]'
-): firebaseAdmin.app.App | null {
+): firebaseAdminAppType | null {
   let firebaseAdminApp = null;
   try {
     firebaseAdminApp = firebaseAdmin.app(name);
