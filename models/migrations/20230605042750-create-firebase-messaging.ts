@@ -1,7 +1,9 @@
 'use strict';
+import { QueryInterface, DataTypes } from 'sequelize';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface: QueryInterface, Sequelize: typeof DataTypes) {
     await queryInterface.createTable('FirebaseMessagings', {
       id: {
         allowNull: false,
@@ -25,8 +27,10 @@ module.exports = {
       }
     });
   },
-  // eslint-disable-next-line no-unused-vars
-  async down(queryInterface, _Sequelize) {
+  async down(
+    queryInterface: QueryInterface
+    // Sequelize: typeof DataTypes
+  ) {
     await queryInterface.dropTable('FirebaseMessagings');
   }
 };

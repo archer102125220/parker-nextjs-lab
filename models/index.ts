@@ -3,7 +3,10 @@ import { Sequelize as _Sequelize, DataTypes } from 'sequelize';
 import process from 'process';
 
 import databaseConfig from '@/models/config/database';
-import createFirebaseMessaging from '@/models/firebasemessaging';
+import {
+  createFirebaseMessaging,
+  FirebaseMessagingAbstract
+} from '@/models/firebasemessaging';
 
 const pluginBatabases = {
   FirebaseMessaging: createFirebaseMessaging
@@ -31,13 +34,19 @@ if (config.use_env_variable) {
 type selfeDatabasesType = {
   sequelize?: SequelizeType;
   Sequelize?: typeof _Sequelize;
+  FirebaseMessaging?: typeof FirebaseMessagingAbstract;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
 };
-const selfeDatabases: selfeDatabasesType = {};
 
-Object.keys(pluginBatabases).forEach((modelName) => {
-  selfeDatabases[modelName] = pluginBatabases[modelName](_sequelize, DataTypes);
-  if (selfeDatabases[modelName].associate) {
-    selfeDatabases[modelName].associate(selfeDatabases);
+const selfeDatabases: selfeDatabasesType = {
+  FirebaseMessaging: pluginBatabases.FirebaseMessaging(_sequelize, DataTypes)
+};
+
+Object.keys(selfeDatabases).forEach((modelName: string) => {
+  const model = selfeDatabases[modelName];
+  if (typeof model?.associate === 'function') {
+    model.associate(selfeDatabases);
   }
 });
 

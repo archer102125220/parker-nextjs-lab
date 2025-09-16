@@ -1,0 +1,12 @@
+require('@babel/register');
+
+require('dotenv').config();
+const path = require('path');
+
+module.exports = {
+  env: process.env.NODE_ENV || 'development',
+  config: path.resolve(__dirname, 'models', 'config', 'database.ts'),
+  'migrations-path': path.resolve(__dirname, 'models', 'migrations'),
+  'models-path': path.resolve(__dirname, 'models'),
+  'seeders-path': path.resolve(__dirname, 'models', 'seeders')
+};
