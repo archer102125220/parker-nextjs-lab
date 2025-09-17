@@ -1,9 +1,13 @@
 'use strict';
-import { QueryInterface } from 'sequelize';
+// sequelize-cli 目前版本都有typescript支援問題
+// https://github.com/sequelize/cli/issues/1099 最後的留言甚至表明尚不支援typescript
+
+// import { QueryInterface } from 'sequelize';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 module.exports = {
-  up: (queryInterface: QueryInterface) => {
+  // up(queryInterface: QueryInterface) {
+  up(queryInterface) {
     // TODO
     // @ts-ignore
     const { database, dialectOptions, dialect } =
@@ -20,5 +24,5 @@ module.exports = {
 
     return queryInterface.sequelize.query(dialect === 'msSql' ? mySql : msSql);
   }
-  // down: (queryInterface, Sequelize) => { }
+  // down (queryInterface, Sequelize) { }
 };

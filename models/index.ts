@@ -8,6 +8,8 @@ import {
   FirebaseMessagingAbstract
 } from '@/models/firebasemessaging';
 
+// const databaseConfig = require('@/models/config/database');
+
 const pluginBatabases = {
   FirebaseMessaging: createFirebaseMessaging
 };
@@ -33,8 +35,17 @@ if (config.use_env_variable) {
 
 type selfeDatabasesType = {
   sequelize?: SequelizeType;
-  Sequelize?: typeof _Sequelize;
+
+  // TODO
+  // Sequelize?: typeof _Sequelize;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Sequelize?: any;
+
+  // TODO
+  // FirebaseMessaging?: typeof FirebaseMessagingAbstract;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   FirebaseMessaging?: typeof FirebaseMessagingAbstract;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 };

@@ -33,7 +33,7 @@ export type requestType = (
   errorAdapter: boolean
 ) => Promise<any>;
 
-export type requestArg = [string, string, any, any];
+export type requestArg = [string, any?, any?, any?];
 export type cancelArg = [string, any];
 export type errorAdapterType = (error: any, headers?: any) => any;
 
