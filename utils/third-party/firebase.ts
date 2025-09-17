@@ -22,7 +22,7 @@ import {
   isSupported as messagingIsSupported
 } from 'firebase/messaging';
 
-// import { POST_registerMessageToken } from '@/services/client/firebase-admin';
+import { POST_registerMessageToken } from '@/services/client/firebase-admin';
 
 // https://firebase.google.com/docs/cloud-messaging/js/receive?hl=zh-cn#web-version-9_2
 
@@ -35,8 +35,18 @@ export const FIREBASE_CONFIG: FirebaseOptions = {
   storageBucket: 'parker-nextjs-lab.firebasestorage.app',
   messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_GA_ID
+  measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID
 };
+/*
+
+  apiKey: "AIzaSyCCRD00hXKCKGp3MUvURbxxrEFM1LmBXz0",
+  authDomain: "parker-nextjs-lab.firebaseapp.com",
+  projectId: "parker-nextjs-lab",
+  storageBucket: "parker-nextjs-lab.firebasestorage.app",
+  messagingSenderId: "893128526421",
+  appId: "1:893128526421:web:63f5e75cb024a2371b22dc",
+  measurementId: "G-8405EQQGMM"
+*/
 export type FirebaseOptions = _FirebaseOptions;
 export type FirebaseApp = _FirebaseApp;
 export type Analytics = _Analytics;
@@ -378,7 +388,7 @@ export class firebase {
   }
   async defaultSaveToken(token: string | null) {
     console.log({ token });
-    return;
+    return await POST_registerMessageToken({ token, os: 'web' });
   }
   async messagingInit(
     currentFirebaseCroe = this.croe,
