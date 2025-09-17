@@ -55,7 +55,6 @@
     "react-redux": "^9.2.0",
     "read-excel-file": "^5.8.7",
     "sequelize": "^6.37.7",
-    "sequelize-typescript": "^2.1.6",
     "swiper": "^11.2.8"
   },
   "devDependencies": {
