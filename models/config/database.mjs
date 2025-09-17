@@ -2,11 +2,11 @@
 // sequelize-cli 目前版本都有typescript支援問題
 // https://github.com/sequelize/cli/issues/1099 最後的留言甚至表明尚不支援typescript
 
-// import pg from 'pg';
+import pg from 'pg';
 
-const pg = require('pg');
+// const pg = require('pg');
 
-const nodeEnv = process.env.NODE_ENV || 'development';
+// const nodeEnv = process.env.NODE_ENV || 'development';
 
 //https://github.com/sequelize/cli/issues/766
 
@@ -36,22 +36,22 @@ const envConfig = {
   }
 };
 
-const env = {
-  development: envConfig,
-  production: envConfig
-};
-module.exports = {
-  ...env,
-  env,
-  default: env,
-  [nodeEnv]: envConfig
-};
-
-// export const development = envConfig;
-// export const production = envConfig;
-
-// export const env = {
-//   development,
-//   production
+// const env = {
+//   development: envConfig,
+//   production: envConfig
 // };
-// export default env;
+// module.exports = {
+//   ...env,
+//   env,
+//   default: env,
+//   [nodeEnv]: envConfig
+// };
+
+export const development = envConfig;
+export const production = envConfig;
+
+export const env = {
+  development,
+  production
+};
+export default env;

@@ -2,8 +2,8 @@ import type { Sequelize as SequelizeType } from 'sequelize';
 import { Sequelize as _Sequelize, DataTypes } from 'sequelize';
 import process from 'process';
 
-import databaseConfig from '@/models/config/database';
-import type { FirebaseMessaging as FirebaseMessagingType } from '@/models/firebasemessaging';
+import databaseConfig from '@/models/config/database.mjs';
+// import type { FirebaseMessaging as FirebaseMessagingType } from '@/models/firebasemessaging';
 import { createFirebaseMessaging } from '@/models/firebasemessaging';
 
 // const databaseConfig = require('@/models/config/database');
