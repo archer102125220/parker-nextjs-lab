@@ -1,7 +1,13 @@
 import { FirebaseMessaging, Sequelize } from '@/models';
 const { Op } = Sequelize;
 
-export async function messagingAddToken(payload = { token: '', os: '' }) {
+type addTokenPayloadType = {
+  token?: String;
+  os?: String;
+};
+export async function messagingAddToken(
+  payload: addTokenPayloadType = { token: '', os: '' }
+) {
   const response = await FirebaseMessaging.findOrCreate({
     where: {
       [Op.and]: [
@@ -28,8 +34,14 @@ export async function messagingFindToken(token = '') {
   return response;
 }
 
-export async function messagingFindAllToken(payload = {}) {
-  const where = {};
+type findAllTokenWhereType = {
+  token?: String;
+  os?: String;
+};
+export async function messagingFindAllToken(
+  payload: findAllTokenWhereType = { token: '', os: '' }
+) {
+  const where: findAllTokenWhereType = {};
   if (typeof payload.os === 'string' && payload.os !== '') {
     where.os = payload.os;
   }

@@ -13,6 +13,7 @@ export default function amountFormat(
       _formater = new RegExp(formater[0], formater[1]);
     } else {
       // TODO
+      // eslint-disable-next-line
       // @ts-ignore
       _formater = formater;
     }

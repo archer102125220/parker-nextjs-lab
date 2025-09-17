@@ -3,10 +3,8 @@ import { Sequelize as _Sequelize, DataTypes } from 'sequelize';
 import process from 'process';
 
 import databaseConfig from '@/models/config/database';
-import {
-  createFirebaseMessaging,
-  FirebaseMessagingAbstract
-} from '@/models/firebasemessaging';
+import type { FirebaseMessaging as FirebaseMessagingType } from '@/models/firebasemessaging';
+import { createFirebaseMessaging } from '@/models/firebasemessaging';
 
 // const databaseConfig = require('@/models/config/database');
 
@@ -16,12 +14,14 @@ const pluginBatabases = {
 
 const env = process.env.NODE_ENV || 'development';
 // TODO
+// eslint-disable-next-line
 // @ts-ignore
 const config = databaseConfig[env] || {};
 
 let _sequelize: SequelizeType | null = null;
 if (config.use_env_variable) {
   // TODO
+  // eslint-disable-next-line
   // @ts-ignore
   _sequelize = new _Sequelize(process.env[config.use_env_variable], config);
 } else {
@@ -42,9 +42,9 @@ type selfeDatabasesType = {
   Sequelize?: any;
 
   // TODO
-  // FirebaseMessaging?: typeof FirebaseMessagingAbstract;
+  // FirebaseMessaging?: typeof FirebaseMessagingType;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  FirebaseMessaging?: typeof FirebaseMessagingAbstract;
+  FirebaseMessaging?: any;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;

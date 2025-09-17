@@ -53,28 +53,29 @@ export async function POST(request: NextRequest) {
   let attestationResult: any = {};
 
   try {
-    const _attestationResult = await f2l.attestationResult(
-      {
-        ...payload.credential,
-        rawId: base64Js.toUint8Array(payload.credential.rawId).buffer,
-        response: {
-          ...payload.credential.response,
-          attestationObject: base64Js.toUint8Array(
-            payload.credential.response.attestationObject
-          ).buffer,
-          authenticatorData: base64Js.toUint8Array(
-            payload.credential.response.authenticatorData
-          ).buffer,
-          clientDataJSON: base64Js.toUint8Array(
-            payload.credential.response.clientDataJSON
-          ).buffer,
-          publicKey: base64Js.toUint8Array(
-            payload.credential.response.publicKey
-          ).buffer
-        }
-      },
-      expected
-    );
+    const _attestationResult: Fido2AttestationResult =
+      await f2l.attestationResult(
+        {
+          ...payload.credential,
+          rawId: base64Js.toUint8Array(payload.credential.rawId).buffer,
+          response: {
+            ...payload.credential.response,
+            attestationObject: base64Js.toUint8Array(
+              payload.credential.response.attestationObject
+            ).buffer,
+            authenticatorData: base64Js.toUint8Array(
+              payload.credential.response.authenticatorData
+            ).buffer,
+            clientDataJSON: base64Js.toUint8Array(
+              payload.credential.response.clientDataJSON
+            ).buffer,
+            publicKey: base64Js.toUint8Array(
+              payload.credential.response.publicKey
+            ).buffer
+          }
+        },
+        expected
+      );
     attestationResult = _attestationResult;
     console.log({ attestationResult });
 

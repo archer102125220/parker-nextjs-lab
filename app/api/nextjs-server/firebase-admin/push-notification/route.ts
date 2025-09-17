@@ -9,7 +9,7 @@ import {
   getFirebaseAdminAndroid,
   getFirebaseAdminIos
 } from '@/utils/third-party/firebase-admin';
-// TODO
+
 import { messagingFindAllToken } from '@/services/server/firebase-messaging';
 
 export async function POST(request: NextRequest) {
@@ -42,6 +42,10 @@ export async function POST(request: NextRequest) {
           .messaging(firebaseAdminWeb)
           .sendEachForMulticast({
             data: { msg: body.data, title: body.title, img: body.img },
+
+            // TODO
+            // eslint-disable-next-line
+            // @ts-ignore
             tokens: webTokens.map(({ token }) => token)
           })
           .catch((error) =>
@@ -55,6 +59,10 @@ export async function POST(request: NextRequest) {
           .messaging(firebaseAdminAndroid)
           .sendEachForMulticast({
             data: { msg: body.data, title: body.title, img: body.img },
+
+            // TODO
+            // eslint-disable-next-line
+            // @ts-ignore
             tokens: androidTokens.map(({ token }) => token)
           })
           .catch((error) =>
@@ -68,6 +76,9 @@ export async function POST(request: NextRequest) {
           .messaging(firebaseAdminIos)
           .sendEachForMulticast({
             data: { msg: body.data, title: body.title, img: body.img },
+            // TODO
+            // eslint-disable-next-line
+            // @ts-ignore
             tokens: iosTokens.map(({ token }) => token)
           })
           .catch((error) =>
@@ -80,9 +91,21 @@ export async function POST(request: NextRequest) {
 
     const response = { failureCount: 0, successCount: 0, responses: [] };
     responseArray.forEach((_response) => {
+      // TODO
+      // eslint-disable-next-line
+      // @ts-ignore
       response.failureCount += _response.failureCount;
+
+      // TODO
+      // eslint-disable-next-line
+      // @ts-ignore
       response.successCount += _response.successCount;
+
       const responses = [...response.responses];
+
+      // TODO
+      // eslint-disable-next-line
+      // @ts-ignore
       response.responses = responses.concat(_response.responses);
     });
 

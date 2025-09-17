@@ -1,20 +1,10 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { Base64 as base64Js } from 'js-base64';
-import type { Factor, ExpectedAssertionResult } from 'fido2-lib';
+import type { ExpectedAssertionResult } from 'fido2-lib';
 import { Fido2Lib } from 'fido2-lib';
 
 // https://webauthn-open-source.github.io/fido2-lib/index.html
-
-type expectedType = {
-  type: string;
-  origin: string;
-  challenge: string;
-  publicKey: string;
-  factor: Factor;
-  prevCounter: any;
-  userHandle: Uint8Array;
-};
 
 export async function POST(request: NextRequest) {
   const payload = await request.json();

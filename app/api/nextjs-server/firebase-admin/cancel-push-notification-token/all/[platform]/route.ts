@@ -1,8 +1,6 @@
-/* eslint-disable */
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-// TODO
 import {
   messagingRemoveToken,
   messagingFindAllToken
@@ -37,7 +35,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ success: true, platform });
   } catch (error) {
     return NextResponse.json(
-      { error: 'Internal Server Error' },
+      { error: 'Internal Server Error', errorMsg: error },
       { status: 500 }
     );
   }

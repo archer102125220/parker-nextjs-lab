@@ -1,9 +1,7 @@
-/* eslint-disable */
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-// TODO
-// import { messagingRemoveToken } from '@/services/server/firebase-messaging';
+import { messagingRemoveToken } from '@/services/server/firebase-messaging';
 
 interface RouteParams {
   params: Promise<{
@@ -19,13 +17,13 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'Token is required' }, { status: 400 });
     }
 
-    // const response = await messagingRemoveToken(token);
-    // console.log(response);
+    const response = await messagingRemoveToken(token);
+    console.log(response);
 
     return NextResponse.json({ success: true, token });
   } catch (error) {
     return NextResponse.json(
-      { error: 'Internal Server Error' },
+      { error: 'Internal Server Error', errorMsg: error },
       { status: 500 }
     );
   }
