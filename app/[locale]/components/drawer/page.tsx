@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import style from '@/app/[locale]/components/drawer/page.module.scss';
 
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
-const DrawerDemo = dynamic(() => import('./DrawerDemo'));
+const DemoDrawer = dynamic(() => import('@/components/Demo/Drawer'));
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -19,7 +19,7 @@ function DialogDemoPage(): ReactNode {
     <main className={style.drawer_page}>
       <GTMScnOpen />
       <h1>Drawer 元件演示</h1>
-      <DrawerDemo />
+      <DemoDrawer />
     </main>
   );
 }

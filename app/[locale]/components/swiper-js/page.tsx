@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import pageStyles from '@/app/[locale]/components/swiper-js/page.module.scss';
 
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
-const SwiperJsDemo = dynamic(() => import('./SwiperJsDemo'));
+const DemoSwiperJs = dynamic(() => import('@/components/Demo/SwiperJs'));
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -19,7 +19,7 @@ function SwiperJsDemoPage(): ReactNode {
     <main className={pageStyles['swiper_js_page']}>
       <GTMScnOpen />
       <h1>SwiperJs 元件演示</h1>
-      <SwiperJsDemo />
+      <DemoSwiperJs />
     </main>
   );
 }
