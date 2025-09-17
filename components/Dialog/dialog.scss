@@ -1,0 +1,7 @@
+.dialog_open {
+  overflow: hidden;
+
+  *:not(.dialog_root):not(.dialog_root *) {
+    overflow: hidden;
+  }
+}

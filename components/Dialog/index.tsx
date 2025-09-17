@@ -8,6 +8,7 @@ import type {
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { Button } from '@mui/material';
 
+import '@/components/Dialog/dialog.scss';
 import styles from '@/components/Dialog/dialog.module.scss';
 
 // https://stackoverflow.com/questions/41385059/possible-to-extend-types-in-typescript
@@ -156,6 +157,17 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
   useEffect(() => {
     if (typeof open === 'boolean' && open !== opacityTrigger) {
       setOpacityTrigger(open);
+    }
+
+    if (typeof document?.querySelector === 'function') {
+      const htmlElement = document.querySelector('html');
+      if (htmlElement !== null) {
+        if (open === false) {
+          htmlElement.classList.remove('dialog_open');
+        } else {
+          htmlElement.classList.add('dialog_open');
+        }
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
