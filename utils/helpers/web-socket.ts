@@ -46,6 +46,8 @@ export function createWebSocket(
   socket.send = function (event: any, data: any) {
     const payload = { event, data };
     console.log(payload);
+    // TODO
+    // eslint-disable-next-line
     // @ts-ignore
     this._send(JSON.stringify(payload));
   };

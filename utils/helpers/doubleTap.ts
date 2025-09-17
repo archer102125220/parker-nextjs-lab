@@ -34,6 +34,8 @@ export function customDoubleTap(
     const tapLength = currentTime - lastTap;
 
     if (0 < tapLength && tapLength < doubleTapMs) {
+      // TODO
+      // eslint-disable-next-line
       // @ts-ignore
       func.apply(this, args);
     } else {
@@ -42,6 +44,8 @@ export function customDoubleTap(
     lastTap = currentTime;
 
     if (typeof defaultFunc === 'function') {
+      // TODO
+      // eslint-disable-next-line
       // @ts-ignore
       defaultFunc.apply(this, args);
     }

@@ -19,6 +19,9 @@ import type {
   config
 } from '@/utils/request/request.d.ts';
 
+const HAS_INIT = typeof window !== 'object';
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || '';
+
 // https://www.hai-fe.com/docs/nuxt/apiCache.html
 // https://www.npmjs.com/package/lru-cache
 // api資料快取儲存物件
@@ -362,5 +365,9 @@ request.patchCancel = function (...arg: cancelArg): void {
   return CancelRequest.handlerCancel('patch', ...arg);
 };
 request.cancelAll = CancelRequest.handlerCancelAll;
+
+if (HAS_INIT === true && typeof API_BASE === 'string' && API_BASE !== '') {
+  axiosInit(API_BASE);
+}
 
 export default axiosInit;

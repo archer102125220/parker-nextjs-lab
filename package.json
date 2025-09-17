@@ -3,12 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "sequelize": "./node_modules/.bin/sequelize",
+    "sequelize:ts": "ts-node ./node_modules/.bin/sequelize",
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev --turbopack  -H 0.0.0.0 -p 3001",
     "dev-https": "cross-env NODE_OPTIONS='--inspect' next dev --turbopack --experimental-https -H 0.0.0.0 -p 3000",
     "build": "next build",
     "start": "cross-env NITRO_PORT=3001 next start",
     "lint": "next lint",
     "create-i18n": "babel-node ./i18n/google-sheet-to-json.mjs",
+    "stress": "ts-node ./stress-testing.ts",
+    "initDB": "yarn sequelize:ts db:drop && yarn sequelize:ts db:create && yarn sequelize:ts db:migrate && yarn sequelize:ts db:seed:all",
+    "createDB": "yarn sequelize:ts db:create",
+    "dropDB": "yarn sequelize:ts db:drop",
+    "migrate": "yarn sequelize:ts db:migrate",
+    "migrate:undo": "yarn sequelize:ts db:migrate:undo",
+    "seed": "yarn sequelize:ts db:seed",
+    "seedAll": "yarn sequelize:ts db:seed:all",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -22,6 +32,7 @@
     "@mui/material-nextjs": "^7.0.0",
     "@mui/x-date-pickers": "^8.0.0",
     "@reduxjs/toolkit": "^2.7.0",
+    "@types/pg": "^8.15.5",
     "@vercel/speed-insights": "^1.2.0",
     "animejs": "^4.0.0",
     "axios": "^1.8.4",
@@ -32,15 +43,18 @@
     "firebase-admin": "^13.5.0",
     "flag-icons": "^7.3.2",
     "google-libphonenumber": "^3.2.40",
+    "js-base64": "^3.7.8",
     "lodash": "^4.17.21",
     "lru-cache": "^11.1.0",
     "next": "15.2.4",
     "next-intl": "^4.0.2",
+    "pg": "^8.16.3",
     "qs": "^6.14.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",
     "read-excel-file": "^5.8.7",
+    "sequelize": "^6.37.7",
     "swiper": "^11.2.8"
   },
   "devDependencies": {
@@ -50,6 +64,7 @@
     "@eslint/eslintrc": "^3",
     "@next/eslint-plugin-next": "^15.3.0",
     "@tailwindcss/postcss": "^4.0.17",
+    "@types/autocannon": "^7.12.7",
     "@types/google-libphonenumber": "^7.4.30",
     "@types/lodash": "^4.17.16",
     "@types/next-pwa": "^5.6.9",
@@ -57,7 +72,10 @@
     "@types/qs": "^6.9.18",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "autocannon": "^8.0.0",
     "cross-env": "^7.0.3",
+    "dotenv": "^17.2.2",
+    "dotenv-cli": "^10.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
     "eslint-config-prettier": "^10.1.2",
@@ -67,13 +85,15 @@
     "postcss": "^8.5.3",
     "prettier": "^3.5.3",
     "sass": "^1.86.0",
+    "sequelize-cli": "^6.6.3",
     "spreadsheet-to-json": "^2.0.0",
     "tailwindcss": "^4.0.17",
+    "ts-node": "^10.9.2",
     "typescript": "^5",
     "webpack": "^5.99.5"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}": [
       "yarn lint"
     ]
   },

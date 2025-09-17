@@ -30,9 +30,9 @@ import {
 // For Firebase JS SDK v11.10.0 and later, measurementId is optional
 export const FIREBASE_CONFIG: FirebaseOptions = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: 'parker-nuxt-lab.firebaseapp.com',
-  projectId: 'parker-nuxt-lab',
-  storageBucket: 'parker-nuxt-lab.firebasestorage.app',
+  authDomain: 'parker-nextjs-lab.firebaseapp.com',
+  projectId: 'parker-nextjs-lab',
+  storageBucket: 'parker-nextjs-lab.firebasestorage.app',
   messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_APP_ID,
   measurementId: process.env.NEXT_PUBLIC_GA_ID
