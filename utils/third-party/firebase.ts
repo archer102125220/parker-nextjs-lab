@@ -37,16 +37,6 @@ export const FIREBASE_CONFIG: FirebaseOptions = {
   appId: process.env.NEXT_PUBLIC_APP_ID,
   measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID
 };
-/*
-
-  apiKey: "AIzaSyCCRD00hXKCKGp3MUvURbxxrEFM1LmBXz0",
-  authDomain: "parker-nextjs-lab.firebaseapp.com",
-  projectId: "parker-nextjs-lab",
-  storageBucket: "parker-nextjs-lab.firebasestorage.app",
-  messagingSenderId: "893128526421",
-  appId: "1:893128526421:web:63f5e75cb024a2371b22dc",
-  measurementId: "G-8405EQQGMM"
-*/
 export type FirebaseOptions = _FirebaseOptions;
 export type FirebaseApp = _FirebaseApp;
 export type Analytics = _Analytics;
