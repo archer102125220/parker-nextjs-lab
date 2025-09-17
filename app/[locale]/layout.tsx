@@ -127,9 +127,9 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
           measurementId={process.env.NEXT_PUBLIC_GA_ID || ''}
         />
 
-        <ReduxInit params={params}>
-          <AxiosInit />
-          <NextIntlClientProvider locale={locale}>
+        <NextIntlClientProvider locale={locale}>
+          <ReduxInit params={params}>
+            <AxiosInit />
             <AppRouterCacheProvider>
               {/* <MuiThemeProvider>
                 <LocalizationProvider
@@ -146,8 +146,8 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
                 <DefaultLayout>{children}</DefaultLayout>
               </MuiThemeProvider>
             </AppRouterCacheProvider>
-          </NextIntlClientProvider>
-        </ReduxInit>
+          </ReduxInit>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

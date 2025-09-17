@@ -38,6 +38,7 @@
     "axios": "^1.8.4",
     "axios-mock-adapter": "^2.1.0",
     "date-fns": "^4.1.0",
+    "dayjs": "^1.11.18",
     "fido2-lib": "^3.5.3",
     "firebase": "^12.2.1",
     "firebase-admin": "^13.5.0",

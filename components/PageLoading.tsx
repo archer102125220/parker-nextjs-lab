@@ -13,9 +13,10 @@ export function PageLoading(props: Readonly<PageLoadingProps>): ReactNode {
     <Box
       sx={{
         position: 'absolute',
-        width: '100vw',
+        minWidth: '100vw',
         top: '0',
         left: '0',
+        right: '0',
         zIndex: 100
       }}
     >
