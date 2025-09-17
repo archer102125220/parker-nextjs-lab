@@ -4,6 +4,7 @@ import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { Roboto } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 // import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -129,19 +130,21 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
 
         <NextIntlClientProvider locale={locale}>
           <ReduxInit params={params}>
-            <AxiosInit />
+            <AxiosInit apiBase={process.env.NEXT_PUBLIC_API_BASE} />
             <AppRouterCacheProvider>
               {/* <MuiThemeProvider>
                 <LocalizationProvider
                   dateAdapter={AdapterDateFns}
                   adapterLocale={locale === 'zh-tw' ? zhTW : enUS}
                 >
+                  <Analytics />
                   <SpeedInsights />
                   <DefaultLayout>{children}</DefaultLayout>
                 </LocalizationProvider>
               </MuiThemeProvider> */}
 
               <MuiThemeProvider>
+                <Analytics />
                 <SpeedInsights />
                 <DefaultLayout>{children}</DefaultLayout>
               </MuiThemeProvider>
