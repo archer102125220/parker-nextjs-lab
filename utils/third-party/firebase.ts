@@ -10,7 +10,6 @@ import {
   isSupported as analyticsIsSupported
 } from 'firebase/analytics';
 import type { Firestore as _Firestore } from 'firebase/firestore/lite';
-// TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getFirestore } from 'firebase/firestore/lite';
 // import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
@@ -48,7 +47,7 @@ export type firebaseCroe = _FirebaseApp;
 
 export class firebase {
   constructor(config = FIREBASE_CONFIG) {
-    this.#_firebaseConfig =
+    this._firebaseConfig =
       (typeof config === 'object' ? config : FIREBASE_CONFIG) ||
       FIREBASE_CONFIG;
 
@@ -70,75 +69,94 @@ export class firebase {
     this.defaultSaveToken = this.defaultSaveToken.bind(this);
     this.messagingInit = this.messagingInit.bind(this);
   }
-  #_vapidKey = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
-  #_firebaseConfig: FirebaseOptions | null = null;
-  #_serviceWorkerScope = '/';
-  #_serviceWorkerPath = '/service-worker.js';
-  #_serviceWorker: ServiceWorkerRegistration | null = null;
-  #_croe: FirebaseApp | null = null;
-  #_croeInited = false;
-  #_store: Firestore | null = null;
-  #_storeInited = false;
-  #_token: string | null = null;
-  #_messaging: Messaging | null = null;
-  #_messagingInited = false;
-  #_analytics: Analytics | null = null;
-  #_analyticsInited = false;
+  private _MAX_INIT_TIME = 10;
+  private _vapidKey = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
+  private _firebaseConfig: FirebaseOptions | null = null;
+  private _serviceWorkerScope = '/';
+  private _serviceWorkerPath = '/service-worker.js';
+  private _serviceWorker: ServiceWorkerRegistration | null = null;
+  private _croe: FirebaseApp | null = null;
+  private _croeInited = false;
+  private _store: Firestore | null = null;
+  private _storeInited = false;
+  private _token: string | null = null;
+  private _messaging: Messaging | null = null;
+  private _messagingInited = false;
+  private _analytics: Analytics | null = null;
+  private _analyticsInited = false;
 
-  get firebaseConfig(): FirebaseOptions | null {
-    return this.#_firebaseConfig;
+  public get firebaseConfig(): FirebaseOptions | null {
+    return this._firebaseConfig;
   }
-  get serviceWorkerScope() {
-    return this.#_serviceWorkerScope;
+  public get serviceWorkerScope() {
+    return this._serviceWorkerScope;
   }
-  get serviceWorkerPath() {
-    return this.#_serviceWorkerPath;
+  public get serviceWorkerPath() {
+    return this._serviceWorkerPath;
   }
-  get serviceWorker() {
-    return this.#_serviceWorker;
+  public get serviceWorker() {
+    return this._serviceWorker;
   }
-  get croe(): FirebaseApp | null {
-    return this.#_croe;
+  public get serviceWorkerInstalling() {
+    return (
+      typeof this._serviceWorker?.installing === 'object' &&
+      this._serviceWorker?.installing !== null
+    );
   }
-  get croeInited() {
-    return this.#_croeInited;
+  public get serviceWorkerActived() {
+    return (
+      typeof this._serviceWorker?.active === 'object' &&
+      this._serviceWorker?.active !== null
+    );
   }
-  get store(): Firestore | null {
-    return this.#_store;
+  public get serviceWorkerWaiting() {
+    return (
+      typeof this._serviceWorker?.waiting === 'object' &&
+      this._serviceWorker?.waiting !== null
+    );
   }
-  get storeInited() {
-    return this.#_storeInited;
+  public get croe(): FirebaseApp | null {
+    return this._croe;
   }
-  get token() {
-    return this.#_token;
+  public get croeInited() {
+    return this._croeInited;
   }
-  get messaging(): Messaging | null {
-    return this.#_messaging;
+  public get store(): Firestore | null {
+    return this._store;
   }
-  get messagingInited() {
-    return this.#_messagingInited;
+  public get storeInited() {
+    return this._storeInited;
   }
-  get analytics() {
+  public get token() {
+    return this._token;
+  }
+  public get messaging(): Messaging | null {
+    return this._messaging;
+  }
+  public get messagingInited() {
+    return this._messagingInited;
+  }
+  public get analytics() {
     return {
-      app: this.#_analytics,
+      app: this._analytics,
       log: this.logEvent
     };
   }
-  get analyticsInited() {
-    return this.#_analyticsInited;
+  public get analyticsInited() {
+    return this._analyticsInited;
   }
 
-  initializeApp = initializeApp;
-  initializeServerApp = initializeServerApp;
-  analyticsIsSupported = analyticsIsSupported;
-  messagingIsSupported = messagingIsSupported;
-  getFirestore = getFirestore;
-  getAnalytics = getAnalytics;
-  getToken = getToken;
-  getMessaging = getMessaging;
-  onMessage = onMessage;
+  public initializeApp = initializeApp;
+  public initializeServerApp = initializeServerApp;
+  public analyticsIsSupported = analyticsIsSupported;
+  public messagingIsSupported = messagingIsSupported;
+  public getFirestore = getFirestore;
+  public getAnalytics = getAnalytics;
+  public getToken = getToken;
+  public getMessaging = getMessaging;
+  public onMessage = onMessage;
 
-  logEvent(
+  public logEvent(
     analyticsApp = this.analytics?.app,
     eventName: string,
     eventParams?: {
@@ -151,7 +169,7 @@ export class firebase {
     }
     return logEvent(analyticsApp, eventName, eventParams);
   }
-  analyticsLog(
+  public analyticsLog(
     eventName: string,
     eventParams?: {
       [key: string]: any;
@@ -159,18 +177,18 @@ export class firebase {
   ) {
     if (
       this.analyticsInited !== true &&
-      (typeof this.#_analytics !== 'object' || this.#_analytics === null)
+      (typeof this._analytics !== 'object' || this._analytics === null)
     ) {
       console.warn('firebase analytics missing');
       return;
     }
     return this.logEvent(this.analytics?.app, eventName, eventParams);
   }
-  async configUpdate(newConfig = null, reInit = true) {
+  public async configUpdate(newConfig = null, reInit = true) {
     if (typeof newConfig !== 'object' || newConfig === null) {
       throw new Error('invalid config');
     }
-    this.#_firebaseConfig = newConfig;
+    this._firebaseConfig = newConfig;
 
     if (reInit === true) {
       this.croeInit();
@@ -178,42 +196,82 @@ export class firebase {
     }
   }
 
+  public async initializeWithServiceWorker(
+    scope: string = this.serviceWorkerScope,
+    serviceWorkerPath: string | null = null,
+    firebaseConfig = this.firebaseConfig
+  ): Promise<void> {
+    if (typeof serviceWorkerPath === 'string' && serviceWorkerPath !== '') {
+      await this.registerServiceWorker(scope, serviceWorkerPath);
+    } else {
+      await this.getServiceWorker(scope);
+    }
+
+    this._waitForServiceWorkerAndInitFirebase(firebaseConfig);
+  }
+  private async _waitForServiceWorkerAndInitFirebase(
+    firebaseConfig = this.firebaseConfig,
+    count = 0
+  ): Promise<void> {
+    if (count > this._MAX_INIT_TIME) {
+      if (this.serviceWorkerInstalling === true) {
+        this.serviceWorker?.addEventListener('activate', () =>
+          this._waitForServiceWorkerAndInitFirebase(firebaseConfig)
+        );
+      } else {
+        console.error('firebase init fail');
+      }
+      return;
+    }
+
+    if (this.serviceWorkerActived !== true) {
+      setTimeout(
+        () =>
+          this._waitForServiceWorkerAndInitFirebase(firebaseConfig, count++),
+        200
+      );
+      return;
+    }
+    const { firebaseCroe: croe } = this.croeInit(firebaseConfig);
+    await this.appInit(croe);
+  }
+
   // Initialize server Firebase
-  croeServerInit(firebaseConfig = this.firebaseConfig) {
+  public croeServerInit(firebaseConfig = this.firebaseConfig) {
     if (typeof window === 'object') return { firebaseCroe: this.croe };
-    this.#_croeInited = false;
+    this._croeInited = false;
 
     try {
       if (firebaseConfig === null) throw new Error('firebaseConfig error');
       const newFirebaseCroe = this.initializeServerApp(firebaseConfig);
-      this.#_croe = newFirebaseCroe;
+      this._croe = newFirebaseCroe;
     } catch (error) {
       console.error(error);
     }
 
-    this.#_croeInited = true;
+    this._croeInited = true;
     return { firebaseCroe: this.croe };
   }
 
   // Initialize client Firebase
-  croeClientInit(firebaseConfig = this.firebaseConfig) {
+  public croeClientInit(firebaseConfig = this.firebaseConfig) {
     if (typeof window === 'undefined') return { firebaseCroe: this.croe };
-    this.#_croeInited = false;
+    this._croeInited = false;
 
     try {
       if (firebaseConfig === null) throw new Error('firebaseConfig error');
       const newFirebaseCroe = this.initializeApp(firebaseConfig);
-      this.#_croe = newFirebaseCroe;
+      this._croe = newFirebaseCroe;
     } catch (error) {
       console.error(error);
     }
 
-    this.#_croeInited = true;
+    this._croeInited = true;
     return { firebaseCroe: this.croe };
   }
 
   // Initialize Firebase
-  croeInit(firebaseConfig = this.firebaseConfig) {
+  public croeInit(firebaseConfig = this.firebaseConfig) {
     if (typeof window === 'undefined') {
       return this.croeServerInit(firebaseConfig);
     } else {
@@ -222,7 +280,7 @@ export class firebase {
   }
 
   // Initialize Firebase App
-  async appInit(currentFirebaseCroe = this.croe) {
+  public async appInit(currentFirebaseCroe = this.croe) {
     if (typeof window === 'undefined') {
       return await this.appServerInit(currentFirebaseCroe);
     } else {
@@ -230,13 +288,13 @@ export class firebase {
     }
   }
 
-  appServerInit(currentFirebaseCroe = this.croe) {
+  public appServerInit(currentFirebaseCroe = this.croe) {
     this.firestoreInit(currentFirebaseCroe);
 
     return { firebaseCroe: currentFirebaseCroe, store: this.store };
   }
 
-  async appClientInit(currentFirebaseCroe = this.croe) {
+  public async appClientInit(currentFirebaseCroe = this.croe) {
     await Promise.all([
       this.analyticsInit(currentFirebaseCroe),
       this.messagingInit(currentFirebaseCroe)
@@ -247,29 +305,29 @@ export class firebase {
     return {
       firebaseCroe: currentFirebaseCroe,
       firebaseAnalytics: this.analytics,
-      firestore: this.#_store
+      firestore: this._store
     };
   }
 
-  firestoreInit(currentFirebaseCroe = this.croe) {
-    this.#_storeInited = false;
+  public firestoreInit(currentFirebaseCroe = this.croe) {
+    this._storeInited = false;
 
     try {
       if (currentFirebaseCroe === null) throw new Error('firebaseCroe missing');
       const newFirebaseDB = this.getFirestore(currentFirebaseCroe);
-      this.#_store = newFirebaseDB;
+      this._store = newFirebaseDB;
     } catch (error) {
       console.error(error);
     }
 
-    this.#_storeInited = true;
-    return this.#_store;
+    this._storeInited = true;
+    return this._store;
   }
 
-  async analyticsInit(currentFirebaseCroe = this.croe) {
+  public async analyticsInit(currentFirebaseCroe = this.croe) {
     if (typeof window === 'undefined') return this.analytics;
 
-    this.#_analyticsInited = false;
+    this._analyticsInited = false;
 
     const isAnalyticsSupport = await this.analyticsIsSupported();
 
@@ -282,17 +340,17 @@ export class firebase {
           throw new Error('firebaseCroe missing');
         }
         const newFirebaseAnalytics = this.getAnalytics(currentFirebaseCroe);
-        this.#_analytics = newFirebaseAnalytics;
+        this._analytics = newFirebaseAnalytics;
       }
 
-      this.#_analyticsInited = true;
+      this._analyticsInited = true;
     } catch (error) {
       console.error(error);
     }
 
     return this.analytics;
   }
-  getNotificationPermission() {
+  public getNotificationPermission() {
     if (
       typeof window === 'undefined' ||
       typeof window?.Notification === 'undefined'
@@ -301,7 +359,7 @@ export class firebase {
     }
     return Notification.permission === 'granted';
   }
-  async requestNotificationPermission() {
+  public async requestNotificationPermission() {
     try {
       const isMessagingSupport = await this.messagingIsSupported();
 
@@ -328,7 +386,7 @@ export class firebase {
     }
     return false;
   }
-  async getServiceWorker(scope = this.serviceWorkerScope) {
+  public async getServiceWorker(scope = this.serviceWorkerScope) {
     if (
       'serviceWorker' in navigator &&
       typeof window.navigator.serviceWorker !== 'undefined'
@@ -336,8 +394,8 @@ export class firebase {
       const serviceWorker =
         await window.navigator.serviceWorker.getRegistration(scope);
       if (serviceWorker) {
-        this.#_serviceWorkerScope = scope;
-        this.#_serviceWorker = serviceWorker;
+        this._serviceWorkerScope = scope;
+        this._serviceWorker = serviceWorker;
 
         return serviceWorker;
       }
@@ -346,7 +404,7 @@ export class firebase {
 
     return null;
   }
-  async registerServiceWorker(
+  public async registerServiceWorker(
     scope = this.serviceWorkerScope,
     serviceWorkerPath = this.serviceWorkerPath
   ) {
@@ -361,8 +419,8 @@ export class firebase {
         }
       );
 
-      this.#_serviceWorkerScope = scope;
-      this.#_serviceWorker = serviceWorker;
+      this._serviceWorkerScope = scope;
+      this._serviceWorker = serviceWorker;
 
       return serviceWorker;
     }
@@ -370,17 +428,17 @@ export class firebase {
 
     return null;
   }
-  async getOrRegisterServiceWorker(scope = this.serviceWorkerScope) {
+  public async getOrRegisterServiceWorker(scope = this.serviceWorkerScope) {
     const serviceWorker = await this.getServiceWorker(scope);
     if (serviceWorker) return serviceWorker;
 
     return await this.registerServiceWorker(scope);
   }
-  async defaultSaveToken(token: string | null) {
+  public async defaultSaveToken(token: string | null) {
     console.log({ token });
     return await POST_registerMessageToken({ token, os: 'web' });
   }
-  async messagingInit(
+  public async messagingInit(
     currentFirebaseCroe = this.croe,
     saveToken = this.defaultSaveToken
   ) {
@@ -394,7 +452,7 @@ export class firebase {
       console.warn('firebaseMessagingInit: Notification Permissio.');
 
     if (isMessagingSupport === true && permission === true) {
-      this.#_messagingInited = false;
+      this._messagingInited = false;
 
       try {
         const serviceWorkerRegistration = await this.getServiceWorker();
@@ -410,13 +468,13 @@ export class firebase {
           throw new Error('firebaseCroe missing');
         }
         const newFirebaseMessaging = this.getMessaging(currentFirebaseCroe);
-        this.#_messaging = newFirebaseMessaging;
+        this._messaging = newFirebaseMessaging;
 
         const token = await this.getToken(newFirebaseMessaging, {
-          vapidKey: this.#_vapidKey,
+          vapidKey: this._vapidKey,
           serviceWorkerRegistration
         });
-        this.#_token = token;
+        this._token = token;
 
         await saveToken(token);
 
@@ -466,7 +524,7 @@ export class firebase {
           }
         });
 
-        this.#_messagingInited = true;
+        this._messagingInited = true;
 
         return newFirebaseMessaging;
       } catch (error) {

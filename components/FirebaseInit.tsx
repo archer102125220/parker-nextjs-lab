@@ -2,16 +2,17 @@
 import type { ReactNode } from 'react';
 
 import type { firebaseConfig } from '@/utils/third-party/firebase';
-import useFirebase from '@/hooks/useFirebase';
-
+import { useFirebaseInit } from '@/hooks/useFirebase';
 export interface FirebaseInitProps extends firebaseConfig {
   children?: ReactNode;
 }
 
-export function FirebaseInit(props: FirebaseInitProps): ReactNode {
+export async function FirebaseInit(
+  props: FirebaseInitProps
+): Promise<ReactNode> {
   const { children, ...firebaseConfig } = props;
 
-  useFirebase(firebaseConfig);
+  useFirebaseInit(firebaseConfig, '/');
 
   return children;
 }
