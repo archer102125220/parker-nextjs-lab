@@ -12,6 +12,12 @@ export const i18nMiddleware = createMiddleware(routing);
 const EXCEPT_PREFIXES: Array<string> = ['/api', '/trpc', '/_next', '/_vercel'];
 
 export function middleware(request: NextRequest): NextResponse {
+  console.log({
+    EXCEPT_PREFIXES,
+    ['request.nextUrl.pathname']: request.nextUrl.pathname,
+    ["request.nextUrl.pathname.startsWith('/api')"]:
+      request.nextUrl.pathname.startsWith('/api')
+  });
   if (
     EXCEPT_PREFIXES.some((prefix) =>
       request.nextUrl.pathname.startsWith(prefix)

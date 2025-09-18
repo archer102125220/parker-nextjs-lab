@@ -71,9 +71,10 @@ export class firebase {
   }
   private _MAX_INIT_TIME = 10;
   private _vapidKey = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
+  private _initing = false;
   private _firebaseConfig: FirebaseOptions | null = null;
   private _serviceWorkerScope = '/';
-  private _serviceWorkerPath = '/service-worker.js';
+  private _serviceWorkerPath = '/sw.js';
   private _serviceWorker: ServiceWorkerRegistration | null = null;
   private _croe: FirebaseApp | null = null;
   private _croeInited = false;
@@ -85,6 +86,9 @@ export class firebase {
   private _analytics: Analytics | null = null;
   private _analyticsInited = false;
 
+  public get initing(): boolean {
+    return this._initing;
+  }
   public get firebaseConfig(): FirebaseOptions | null {
     return this._firebaseConfig;
   }
@@ -199,24 +203,70 @@ export class firebase {
   public async initializeWithServiceWorker(
     scope: string = this.serviceWorkerScope,
     serviceWorkerPath: string | null = null,
-    firebaseConfig = this.firebaseConfig
+    firebaseConfig = this.firebaseConfig,
+    callback?: (firebase?: firebase) => void
   ): Promise<void> {
+    if (this.initing === true) return;
+    this._initing = true;
+
+    console.log('initializeWithServiceWorker');
+
+    const safeFirebaseConfig =
+      typeof firebaseConfig === 'object' && firebaseConfig !== null
+        ? firebaseConfig
+        : this.firebaseConfig;
+
+    if (typeof window === 'undefined') {
+      const { firebaseCroe: croe } = this.croeInit(safeFirebaseConfig);
+      await this.appInit(croe);
+
+      if (typeof callback === 'function') {
+        console.log('initializeWithServiceWorker/callback');
+
+        callback(this);
+      }
+
+      this._initing = false;
+
+      return;
+    }
+
     if (typeof serviceWorkerPath === 'string' && serviceWorkerPath !== '') {
       await this.registerServiceWorker(scope, serviceWorkerPath);
     } else {
-      await this.getServiceWorker(scope);
+      const serviceWorker = await this.getServiceWorker(scope);
+
+      if (serviceWorker === null) {
+        const safeServiceWorkerPath =
+          typeof serviceWorkerPath === 'string' && serviceWorkerPath !== ''
+            ? serviceWorkerPath
+            : this.serviceWorkerPath;
+        await this.registerServiceWorker(scope, safeServiceWorkerPath);
+      }
     }
 
-    this._waitForServiceWorkerAndInitFirebase(firebaseConfig);
+    this._waitForServiceWorkerAndInitFirebase(safeFirebaseConfig, 0, callback);
   }
   private async _waitForServiceWorkerAndInitFirebase(
     firebaseConfig = this.firebaseConfig,
-    count = 0
+    count = 0,
+    callback?: (firebase?: firebase) => void
   ): Promise<void> {
+    console.log('_waitForServiceWorkerAndInitFirebase');
+
+    const safeFirebaseConfig =
+      typeof firebaseConfig === 'object' && firebaseConfig !== null
+        ? firebaseConfig
+        : this.firebaseConfig;
+
     if (count > this._MAX_INIT_TIME) {
       if (this.serviceWorkerInstalling === true) {
         this.serviceWorker?.addEventListener('activate', () =>
-          this._waitForServiceWorkerAndInitFirebase(firebaseConfig)
+          this._waitForServiceWorkerAndInitFirebase(
+            safeFirebaseConfig,
+            0,
+            callback
+          )
         );
       } else {
         console.error('firebase init fail');
@@ -227,13 +277,25 @@ export class firebase {
     if (this.serviceWorkerActived !== true) {
       setTimeout(
         () =>
-          this._waitForServiceWorkerAndInitFirebase(firebaseConfig, count++),
+          this._waitForServiceWorkerAndInitFirebase(
+            safeFirebaseConfig,
+            count + 1,
+            callback
+          ),
         200
       );
       return;
     }
-    const { firebaseCroe: croe } = this.croeInit(firebaseConfig);
+    const { firebaseCroe: croe } = this.croeInit(safeFirebaseConfig);
     await this.appInit(croe);
+
+    if (typeof callback === 'function') {
+      console.log('_waitForServiceWorkerAndInitFirebase/callback');
+
+      callback(this);
+    }
+
+    this._initing = false;
   }
 
   // Initialize server Firebase
@@ -388,7 +450,8 @@ export class firebase {
   }
   public async getServiceWorker(scope = this.serviceWorkerScope) {
     if (
-      'serviceWorker' in navigator &&
+      typeof window === 'object' &&
+      'serviceWorker' in window.navigator &&
       typeof window.navigator.serviceWorker !== 'undefined'
     ) {
       const serviceWorker =
@@ -409,7 +472,8 @@ export class firebase {
     serviceWorkerPath = this.serviceWorkerPath
   ) {
     if (
-      'serviceWorker' in navigator &&
+      typeof window === 'object' &&
+      'serviceWorker' in window.navigator &&
       typeof window.navigator.serviceWorker !== 'undefined'
     ) {
       const serviceWorker = await window.navigator.serviceWorker.register(

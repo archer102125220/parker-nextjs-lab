@@ -7,17 +7,24 @@ export type useFirebaseType = firebase | Firestore | null | undefined;
 
 export function useFirebaseInit(
   config: firebaseConfig,
-  scope: string = '/'
+  scope: string = '/',
+  callback?: (firebase?: firebase) => void
 ): useFirebaseType {
   subscribeFirebase.Firebase = new firebase(config);
 
-  subscribeFirebase.Firebase.initializeWithServiceWorker(scope);
+  subscribeFirebase.Firebase.initializeWithServiceWorker(
+    scope,
+    null,
+    null,
+    callback
+  );
 
-  return useFirebase(config, scope);
+  return useFirebase(config, scope, callback);
 }
 export function useFirebase(
   config?: firebaseConfig,
-  scope: string = '/'
+  scope: string = '/',
+  callback?: (firebase?: firebase) => void
 ): useFirebaseType {
   if (subscribeFirebase.Firebase instanceof firebase === false) {
     if (typeof config === 'object' && config !== null) {
@@ -26,7 +33,12 @@ export function useFirebase(
       throw new Error('missing Firebase');
     }
 
-    subscribeFirebase.Firebase.initializeWithServiceWorker(scope);
+    subscribeFirebase.Firebase.initializeWithServiceWorker(
+      scope,
+      null,
+      null,
+      callback
+    );
   }
 
   return useSyncExternalStore<useFirebaseType>(

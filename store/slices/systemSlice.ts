@@ -3,11 +3,16 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export interface SystemState {
   systemName: string;
-  // 可以添加其他常用的翻譯
+  agreeNotification: boolean;
+  firebaseCroeInited: boolean;
+  firebaseMessagingInited: boolean;
 }
 
 const initialState: SystemState = {
-  systemName: ''
+  systemName: '',
+  agreeNotification: false,
+  firebaseCroeInited: false,
+  firebaseMessagingInited: false
 };
 
 // https://redux-toolkit.js.org/api/createslice#createasyncthunk
@@ -18,6 +23,21 @@ const systemSlice = createSlice({
     setSystemName: create.reducer((state, action: PayloadAction<string>) => {
       state.systemName = action.payload;
     }),
+    setAgreeNotification: create.reducer(
+      (state, action: PayloadAction<boolean>) => {
+        state.agreeNotification = action.payload;
+      }
+    ),
+    setFirebaseCroeInited: create.reducer(
+      (state, action: PayloadAction<boolean>) => {
+        state.firebaseCroeInited = action.payload;
+      }
+    ),
+    setFirebaseMessagingInited: create.reducer(
+      (state, action: PayloadAction<boolean>) => {
+        state.firebaseMessagingInited = action.payload;
+      }
+    )
   }),
   selectors: {
     systemNameUpperCase: (sliceState) => sliceState.systemName.toUpperCase()
@@ -25,4 +45,5 @@ const systemSlice = createSlice({
 });
 
 export const { setSystemName } = systemSlice.actions;
-export default systemSlice.reducer;
+export const systemReducer = systemSlice.reducer;
+export default systemReducer;

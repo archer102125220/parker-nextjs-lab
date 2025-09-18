@@ -1,0 +1,10 @@
+.notification_permission {
+  &-content {
+    width: 100%;
+  }
+  &-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+  }
+}

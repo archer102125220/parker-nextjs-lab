@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
-import systemReducer from '@/store/slices/systemSlice';
 import type { SystemState } from '@/store/slices/systemSlice';
+import { systemReducer } from '@/store/slices/systemSlice';
 
 export interface PreloadedState {
   system: SystemState;

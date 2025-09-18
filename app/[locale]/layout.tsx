@@ -21,6 +21,7 @@ import { GAInit } from '@/components/Google/GAInit';
 import { GTMInit } from '@/components/Google/GTMInit';
 import { FirebaseInit } from '@/components/FirebaseInit';
 import MuiThemeProvider from '@/components/MuiThemeProvider';
+import { NotificationPermission } from '@/components/NotificationPermission';
 
 interface LocaleLayout {
   children: ReactNode;
@@ -119,33 +120,27 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
         />
       </head>
       <body>
-        <GAInit gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
-        <GTMInit gtmId={process.env.NEXT_PUBLIC_GTM_ID || ''} />
-        <FirebaseInit
-          apiKey={process.env.NEXT_PUBLIC_FIREBASE_API_KEY || ''}
-          messagingSenderId={process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID || ''}
-          appId={process.env.NEXT_PUBLIC_APP_ID || ''}
-          measurementId={process.env.NEXT_PUBLIC_GA_ID || ''}
-        />
-
         <NextIntlClientProvider locale={locale}>
           <ReduxInit params={params}>
-            <AxiosInit apiBase={process.env.NEXT_PUBLIC_API_BASE} />
             <AppRouterCacheProvider>
-              {/* <MuiThemeProvider>
-                <LocalizationProvider
-                  dateAdapter={AdapterDateFns}
-                  adapterLocale={locale === 'zh-tw' ? zhTW : enUS}
-                >
-                  <Analytics />
-                  <SpeedInsights />
-                  <DefaultLayout>{children}</DefaultLayout>
-                </LocalizationProvider>
-              </MuiThemeProvider> */}
-
               <MuiThemeProvider>
+                <AxiosInit apiBase={process.env.NEXT_PUBLIC_API_BASE} />
+                <GAInit gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
+                <GTMInit gtmId={process.env.NEXT_PUBLIC_GTM_ID || ''} />
+                <FirebaseInit
+                  apiKey={process.env.NEXT_PUBLIC_FIREBASE_API_KEY || ''}
+                  authDomain="parker-nextjs-lab.firebaseapp.com"
+                  projectId="parker-nextjs-lab"
+                  storageBucket="parker-nextjs-lab.firebasestorage.app"
+                  messagingSenderId={
+                    process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID || ''
+                  }
+                  appId={process.env.NEXT_PUBLIC_APP_ID || ''}
+                  measurementId={process.env.NEXT_PUBLIC_GA_ID || ''}
+                />
                 <Analytics />
                 <SpeedInsights />
+                <NotificationPermission />
                 <DefaultLayout>{children}</DefaultLayout>
               </MuiThemeProvider>
             </AppRouterCacheProvider>
