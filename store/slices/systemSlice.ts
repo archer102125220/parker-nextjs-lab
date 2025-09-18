@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export interface SystemState {
   systemName: string;
+  loading: boolean;
   agreeNotification: boolean;
   firebaseCroeInited: boolean;
   firebaseMessagingInited: boolean;
@@ -10,6 +11,7 @@ export interface SystemState {
 
 const initialState: SystemState = {
   systemName: '',
+  loading: false,
   agreeNotification: false,
   firebaseCroeInited: false,
   firebaseMessagingInited: false
@@ -22,6 +24,9 @@ const systemSlice = createSlice({
   reducers: (create) => ({
     setSystemName: create.reducer((state, action: PayloadAction<string>) => {
       state.systemName = action.payload;
+    }),
+    setLoading: create.reducer((state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
     }),
     setAgreeNotification: create.reducer(
       (state, action: PayloadAction<boolean>) => {

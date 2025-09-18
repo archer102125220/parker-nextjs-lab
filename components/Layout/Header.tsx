@@ -9,12 +9,16 @@ import { useAppSelector } from '@/store';
 import I18nList from '@/components/Layout/I18nList';
 import LinkBox from '@/components/Link/Box';
 import GoBack from '@/components/GoBack';
+import { PageLoading } from '@/components/PageLoading';
 
 export function Header(): ReactNode {
   const systemName = useAppSelector((state) => state.system.systemName);
 
+  const loading = useAppSelector((state) => state.system.loading);
+
   return (
     <Toolbar>
+      <PageLoading loading={loading} />
       <GoBack />
       <Typography variant="h6" component="div" sx={{ flex: 1 }}>
         <LinkBox

@@ -26,6 +26,12 @@ export function NotificationPermission(): ReactNode {
   );
   const dispatch = useAppDispatch();
 
+  const setLoading = useCallback(
+    function setLoading(payload: boolean) {
+      dispatch({ type: 'system/setLoading', payload });
+    },
+    [dispatch]
+  );
   const setAgreeNotification = useCallback(
     function setAgreeNotification(payload: boolean) {
       dispatch({ type: 'system/setAgreeNotification', payload });
@@ -50,6 +56,7 @@ export function NotificationPermission(): ReactNode {
   const handleFirebase = useCallback(
     async function handleFirebase() {
       console.log('handleFirebase');
+      setLoading(true);
 
       if (Firebase instanceof firebase === true) {
         const result = await Firebase.requestNotificationPermission();
@@ -64,6 +71,8 @@ export function NotificationPermission(): ReactNode {
         setIsShow(false);
         setFirebaseMessagingInited(true);
       }
+
+      setLoading(false);
     },
     [Firebase]
   );
