@@ -30,7 +30,8 @@ export function I18nList(): ReactNode {
   return (
     <div>
       <Button ref={triggerRef} onClick={handleOpen}>
-        {t(locale)}
+        {/* {t(locale)} */}
+        {locale === 'zh-tw' ? '中文' : 'English'}
       </Button>
       {/*  https://mui.com/material-ui/react-menu/ */}
       <Menu
@@ -57,8 +58,8 @@ export function I18nList(): ReactNode {
                   : null
             }}
           >
-            {/* 中文 */}
-            {t('zh-tw')}
+            中文
+            {/* {t('zh-tw')} */}
           </LinkButton>
         </MenuItem>
         <MenuItem onClick={handleClose}>
@@ -73,8 +74,8 @@ export function I18nList(): ReactNode {
                 pathname.startsWith('/en') ? theme.palette.primary.main : null
             }}
           >
-            {/* English */}
-            {t('en')}
+            English
+            {/* {t('en')} */}
           </LinkButton>
         </MenuItem>
       </Menu>
