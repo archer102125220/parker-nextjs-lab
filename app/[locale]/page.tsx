@@ -16,6 +16,7 @@ function Locale(): ReactNode {
     >
       <GTMScnOpen />
       <LinkButton href="/components">自定義組件列表</LinkButton>
+      <LinkButton href="/firebase">Firebase 整合測試</LinkButton>
     </Box>
   );
 }

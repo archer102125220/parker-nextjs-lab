@@ -1,0 +1,23 @@
+.firebase_page {
+  &-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 16px;
+  }
+
+  &-link_list {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 8px;
+
+    &-link {
+      flex: 1;
+      flex-basis: 400px;
+    }
+  }
+}
