@@ -85,26 +85,6 @@
   width: 100%;
   min-height: 500px;
 
-  &-form {
-    .v-btn {
-      padding: 0 16px;
-
-      &.v-col {
-        &:not(:last-child) {
-          margin-right: 16px;
-
-          @include mobile {
-            flex: 1;
-            flex-basis: 100%;
-
-            margin-right: unset;
-            margin-bottom: 16px;
-          }
-        }
-      }
-    }
-  }
-
   &-refresh_btn {
     // @include mobile {
     //   display: none;
