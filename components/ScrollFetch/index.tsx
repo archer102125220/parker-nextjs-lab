@@ -36,7 +36,7 @@ interface ScrollFetchProps {
   infinityEndLabel?: string;
   infinityBuffer?: number;
   infinityDisable?: boolean;
-  isScrollToFetch?: boolean;
+  // isScrollToFetch?: boolean;
   infinityEnd?: boolean;
   infinityFetch?: () => Promise<void> | void;
   vibrate?: boolean;
@@ -90,7 +90,7 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
   infinityEndLabel = '沒有更多資料了',
   infinityBuffer = 100,
   infinityDisable = false,
-  isScrollToFetch = true,
+  // isScrollToFetch = true,
   infinityEnd = true,
   infinityFetch,
   vibrate = false,
@@ -434,7 +434,8 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
         (windowIsScrollIng === true && windowScrollIsTop === false)
       ) {
         setMoveDistance(20);
-        handlePullEnd(e);
+        // handlePullEnd(e);
+        handlePullEnd();
       } else if (
         isPullStart === false &&
         ((parentIsScrollIng === true && parentScrollIsTop === true) ||
@@ -513,7 +514,8 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
   );
 
   const handlePullEnd = useCallback(
-    async (e: TouchEvent | MouseEvent) => {
+    // async (e: TouchEvent | MouseEvent) => {
+    async () => {
       if (isPullStart === false) return;
 
       setIsPullStart(false);
@@ -620,7 +622,7 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
 
   const handleScroll = useCallback(
     (e: UIEvent<HTMLDivElement>) => {
-      const target = e?.target || {};
+      // const target = e?.target || {};
       onScroll?.(e);
 
       handleCheckScroll(infinityBuffer);
@@ -738,6 +740,8 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
     setWindowIsScrollIng(true);
 
     const scrollTriggerElement =
+      // TODO
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (e.target as any)?.body || (e.target as any)?.document?.body || e.target;
     const scrollTriggerElementBoundingClientRect =
       scrollTriggerElement?.getBoundingClientRect?.();
@@ -749,6 +753,8 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
     setWindowIsScrollIng(false);
 
     const scrollElement =
+      // TODO
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (e.target as any)?.body || (e.target as any)?.document?.body || e.target;
     const scrollElementBoundingClientRect =
       scrollElement?.getBoundingClientRect?.();
@@ -774,14 +780,15 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
 
     const handleContextMenu = () => {
       // Create a synthetic event for handlePullEnd
-      const syntheticEvent = {
-        targetTouches: [],
-        changedTouches: [],
-        clientY: 0,
-        pageY: 0,
-        screenY: 0
-      } as unknown as TouchEvent | MouseEvent;
-      handlePullEnd(syntheticEvent);
+      // const syntheticEvent = {
+      //   targetTouches: [],
+      //   changedTouches: [],
+      //   clientY: 0,
+      //   pageY: 0,
+      //   screenY: 0
+      // } as unknown as TouchEvent | MouseEvent;
+      // handlePullEnd(syntheticEvent);
+      handlePullEnd();
     };
 
     window.addEventListener('contextmenu', handleContextMenu);

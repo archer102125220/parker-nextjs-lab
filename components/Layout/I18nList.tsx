@@ -1,7 +1,10 @@
 'use client';
 import type { ReactNode } from 'react';
 import { useRef, useState } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import {
+  useLocale
+  // useTranslations
+} from 'next-intl';
 
 import { usePathname } from 'next/navigation';
 
@@ -14,7 +17,7 @@ import LinkButton from '@/components/Link/Button';
 export function I18nList(): ReactNode {
   const pathname = usePathname();
   const locale = useLocale();
-  const t = useTranslations();
+  // const t = useTranslations();
 
   const triggerRef = useRef<HTMLButtonElement>(null);
 
