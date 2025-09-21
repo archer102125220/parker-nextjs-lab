@@ -1,18 +1,24 @@
-export function handlePolyfillScrollEnd(
-  el: HTMLElement,
+declare global {
+  interface Window {
+    polyfillScrollEnd?: boolean;
+  }
+}
+
+export function handleBindScrollEnd(
+  el: HTMLElement | Window,
   handler: Function,
   wait: number = 100
 ) {
   if (typeof el?.addEventListener !== 'function') {
     console.error('missing scroll end element');
-    return;
+    return null;
   }
   if (typeof handler !== 'function') {
     console.error('missing scroll end handler');
-    return;
+    return null;
   }
 
-  const _el: HTMLElement = el;
+  const _el: HTMLElement | Window = el;
   if ('onscrollend' in _el) {
     function handleScrollEnd(event: Event, ...arg: any[]): void {
       setTimeout(() => handler(event, ...arg), wait);
@@ -38,4 +44,32 @@ export function handlePolyfillScrollEnd(
   return () => el.removeEventListener('scroll', polyfillScrollEnd);
 }
 
-export default handlePolyfillScrollEnd;
+export function createScrollEndEvent(wait: number = 100) {
+  let setTimeoutTimer: NodeJS.Timeout | number = 0;
+
+  return function detectScrollEnd(event: Event) {
+    if (setTimeoutTimer !== 0) {
+      clearTimeout(setTimeoutTimer);
+      setTimeoutTimer = 0;
+    }
+
+    setTimeoutTimer = setTimeout(() => {
+      const scrollEnd = new CustomEvent('scrollend', {
+        bubbles: true,
+        detail: event
+      });
+      event.target?.dispatchEvent(scrollEnd);
+    }, wait);
+  };
+}
+
+export function handlePolyfillScrollEnd(wait: number = 100) {
+  if (typeof window === 'undefined') return;
+  console.log('handlePolyfillScrollEnd');
+  if ('onscrollend' in window && window.polyfillScrollEnd === true) return;
+
+  document.addEventListener('scroll', createScrollEndEvent(wait));
+
+  window.polyfillScrollEnd = true;
+}
+export default handleBindScrollEnd;

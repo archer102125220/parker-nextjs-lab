@@ -15,6 +15,7 @@ import { routing } from '@/i18n/routing';
 
 import DefaultLayout from '@/layout/default';
 
+import { PolyfillEvent } from '@/components/PolyfillEvent';
 import { AxiosInit } from '@/components/AxiosInit';
 import { ReduxInit } from '@/components/ReduxInit';
 import { GAInit } from '@/components/Google/GAInit';
@@ -87,6 +88,7 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
 
   return (
     <html lang={locale} className={roboto.variable}>
+      <PolyfillEvent />
       <head>
         <meta charSet="utf-8" />
         <meta

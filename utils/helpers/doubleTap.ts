@@ -1,3 +1,9 @@
+declare global {
+  interface Window {
+    doubleTapInited?: boolean;
+  }
+}
+
 // https://gist.github.com/ethanny2/44d5ad69970596e96e0b48139b89154b
 export function doubleTap(doubleTapMs: number) {
   let timeout: NodeJS.Timeout,
@@ -54,10 +60,13 @@ export function customDoubleTap(
 
 export function initializeDoubleTap(doubleTapMs: number = 200): void {
   if (typeof window === 'undefined') return;
+  if (window.doubleTapInited === true) return;
 
   // initialize the new event
   // document.addEventListener('pointerup', doubleTap(doubleTapMs));
   document.addEventListener('touchend', doubleTap(doubleTapMs));
+
+  window.doubleTapInited = true;
 }
 
 export default initializeDoubleTap;

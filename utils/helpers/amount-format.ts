@@ -1,4 +1,4 @@
-export default function amountFormat(
+export function amountFormat(
   amount: number,
   formater: Array<string> | RegExp = [
     '\\B(?<!\\.\\d*)(?=(\\d{3})+(?!\\d))',
@@ -27,6 +27,8 @@ export default function amountFormat(
     }
   }
 }
+
+export default amountFormat;
 
 function handleSafari(amount: number, replaceString: string = ','): string {
   let output: string = '';
