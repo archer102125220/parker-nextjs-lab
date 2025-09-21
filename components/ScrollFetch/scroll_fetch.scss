@@ -1,0 +1,7 @@
+.scroll_fetching {
+  overflow: hidden;
+
+  *:not(.scroll_fetch):not(.scroll_fetch *) {
+    overflow: hidden;
+  }
+}
