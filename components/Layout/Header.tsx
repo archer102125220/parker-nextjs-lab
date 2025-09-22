@@ -1,25 +1,38 @@
 'use client';
 import type { ReactNode } from 'react';
+import { useCallback } from 'react';
 import Image from 'next/image';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
-import { useAppSelector } from '@/store';
+import { useAppDispatch, useAppSelector } from '@/store';
 
-import I18nList from '@/components/Layout/I18nList';
-import LinkBox from '@/components/Link/Box';
-import GoBack from '@/components/GoBack';
+import { I18nList } from '@/components/Layout/I18nList';
+import { LinkBox } from '@/components/Link/Box';
+import { GoBack } from '@/components/GoBack';
 import { PageLoading } from '@/components/PageLoading';
+import { Message } from '@/components/Message';
 
 export function Header(): ReactNode {
-  const systemName = useAppSelector((state) => state.system.systemName);
+  const dispatch = useAppDispatch();
 
+  const systemName = useAppSelector((state) => state.system.systemName);
   const loading = useAppSelector((state) => state.system.loading);
+  const messageState = useAppSelector((state) => state.system.message);
+
+  const resetMessageState = useCallback(
+    () => dispatch({ type: 'system/message_reset' }),
+    [dispatch]
+  );
 
   return (
     <Toolbar>
       <PageLoading loading={loading} />
       <GoBack />
+      <Message
+        messageState={messageState}
+        resetMessageState={resetMessageState}
+      />
       <Typography variant="h6" component="div" sx={{ flex: 1 }}>
         <LinkBox
           href="/"
