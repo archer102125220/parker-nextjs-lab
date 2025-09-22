@@ -8,7 +8,7 @@ const PAUSED = 2;
 const BUFFERING = 3;
 const CUED = 5;
 
-interface YoutubeOptions {
+export interface YoutubeOptions {
   beforeCreate?: () => void;
   videoId?: string;
   videoUrl?: string;
@@ -21,9 +21,12 @@ interface YoutubeOptions {
     endSeconds?: number
   ) => void;
   events?: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onReady?: (event: any, ...arg: any[]) => void;
   };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   created?: (player: any, el: HTMLElement, YT: any) => void;
   startSeconds?: number;
   endSeconds?: number;
@@ -169,6 +172,7 @@ export function useYoutube(
       setTimeout(() => createPlayer(YoutubeRefEl), 500);
     }
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function playerReady(e: any, ...arg: any[]) {
     const youtubePlayer = e.target;
     setPlayer(youtubePlayer);
