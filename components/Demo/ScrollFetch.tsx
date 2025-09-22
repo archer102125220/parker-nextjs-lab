@@ -38,6 +38,10 @@ function ScrollFetchDemo(): ReactNode {
     (payload: boolean) => dispatch({ type: 'system/setLoading', payload }),
     [dispatch]
   );
+  // const setMessageSuccess = useCallback(
+  //   (payload: string) => dispatch({ type: 'system/message_success', payload }),
+  //   [dispatch]
+  // );
 
   const handleRefresh = useCallback(
     async function refresh(done: () => void) {
@@ -67,7 +71,7 @@ function ScrollFetchDemo(): ReactNode {
 
       console.log('handleRefresh setTimeout');
       done();
-      // nuxtApp.$successMessage('handleRefresh');
+      // setMessageSuccess('handleRefresh');
       setLoading(false);
       setRefreshLoading(false);
     },
@@ -101,7 +105,7 @@ function ScrollFetchDemo(): ReactNode {
     // setInfinityEnd(true);
     console.log('handleInfinityFetch setTimeout');
     done();
-    // nuxtApp.$successMessage('handleInfinityFetch');
+    // setMessageSuccess('handleInfinityFetch');
     setLoading(false);
     setInfinityLoading(false);
   }, []);

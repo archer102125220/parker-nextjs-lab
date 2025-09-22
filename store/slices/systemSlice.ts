@@ -1,5 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+import type { AlertColor, AlertPropsColorOverrides } from '@mui/material/Alert';
 
 export interface windowInfo {
   width?: number;
@@ -8,8 +9,10 @@ export interface windowInfo {
   isTabletOnly: boolean;
   isTablet: boolean;
 }
+export type messageType = { text: string; type: AlertColor };
 export interface SystemState extends windowInfo {
   systemName: string;
+  message: messageType;
   windowInnerWidth: number;
   windowInnerHeight: number;
   loading: boolean;
@@ -18,8 +21,11 @@ export interface SystemState extends windowInfo {
   firebaseMessagingInited: boolean;
 }
 
+export const MESSAGE_TYPE = ['success', 'info', 'warning', 'error'];
+
 const initialState: SystemState = {
   systemName: '',
+  message: { text: '', type: 'success' },
   windowInnerWidth: 1920,
   windowInnerHeight: 1080,
   isMobile: false,
@@ -74,13 +80,51 @@ const systemSlice = createSlice({
       (state, action: PayloadAction<boolean>) => {
         state.firebaseMessagingInited = action.payload;
       }
+    ),
+    message_reset: create.reducer((state) => {
+      state.message = { text: '', type: 'success' };
+    }),
+    message_success: create.reducer(
+      (state, { payload }: PayloadAction<string>) => {
+        state.message = { text: payload, type: 'success' };
+      }
+    ),
+    message_error: create.reducer(
+      (state, { payload }: PayloadAction<string>) => {
+        state.message = { text: payload, type: 'error' };
+      }
+    ),
+    message_information: create.reducer(
+      (state, { payload }: PayloadAction<string>) => {
+        state.message = { text: payload, type: 'info' };
+      }
+    ),
+    message_warning: create.reducer(
+      (state, { payload }: PayloadAction<string>) => {
+        state.message = { text: payload, type: 'warning' };
+      }
+    ),
+
+    SAVE_message: create.reducer(
+      (state, { payload }: PayloadAction<messageType>) => {
+        state.message = payload;
+      }
     )
   }),
   selectors: {
-    systemNameUpperCase: (sliceState) => sliceState.systemName.toUpperCase()
+    messageContext: (sliceState) => {
+      const messageContext = sliceState.message?.text;
+      return typeof messageContext === 'string' ? messageContext : '';
+    },
+    messageType: (sliceState) => {
+      const messageType = sliceState.message?.type;
+      MESSAGE_TYPE.includes(messageType);
+      return MESSAGE_TYPE.includes(messageType) ? messageType : MESSAGE_TYPE[0];
+    }
   }
 });
 
 export const { setSystemName } = systemSlice.actions;
 export const systemReducer = systemSlice.reducer;
+export const systemSelectors = systemSlice.selectors;
 export default systemReducer;
