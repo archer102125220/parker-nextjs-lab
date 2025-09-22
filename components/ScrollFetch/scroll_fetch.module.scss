@@ -1,5 +1,5 @@
 @mixin refresh_animation {
-  &[data-refresh-animation='true'] {
+  &[css-refresh-animation='true'] {
     animation: refresh_animation 1s linear infinite;
   }
 }
@@ -78,7 +78,7 @@
           0 1px 6px rgba(0, 0, 0, 0.117647),
           0 1px 4px rgba(0, 0, 0, 0.117647);
 
-        &[data-activate-animation='true'] {
+        &[css-activate-animation='true'] {
           animation: activate_refresh_animation 0.2s;
         }
 

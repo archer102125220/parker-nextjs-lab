@@ -93,16 +93,16 @@
       transform: var(--drawer_drag_transform);
       transition: var(--drawer_drag_transition);
 
-      &[data-anchor='top'] {
+      &[css-anchor='top'] {
         animation-name: drawer_content_anchor_top;
       }
-      &[data-anchor='bottom'] {
+      &[css-anchor='bottom'] {
         animation-name: drawer_content_anchor_bottom;
       }
-      &[data-anchor='left'] {
+      &[css-anchor='left'] {
         animation-name: drawer_content_anchor_left;
       }
-      &[data-anchor='right'] {
+      &[css-anchor='right'] {
         animation-name: drawer_content_anchor_right;
       }
 
@@ -117,14 +117,14 @@
 
         background-color: #fff;
 
-        &[data-is-vertical='true'] {
+        &[css-is-vertical='true'] {
           width: 100%;
           height: 20px;
 
-          &[data-anchor='top'] {
+          &[css-anchor='top'] {
             bottom: 0px;
           }
-          &[data-anchor='bottom'] {
+          &[css-anchor='bottom'] {
             top: 0px;
           }
           &:after {
@@ -137,7 +137,7 @@
             background-color: #e4e4e4;
           }
         }
-        &[data-is-horizontal='true'] {
+        &[css-is-horizontal='true'] {
           width: 20px;
           // height: 100%;
           top: 0px;
@@ -145,10 +145,10 @@
 
           align-items: center;
 
-          &[data-anchor='left'] {
+          &[css-anchor='left'] {
             right: 0px;
           }
-          &[data-anchor='right'] {
+          &[css-anchor='right'] {
             left: 0px;
           }
           &:after {

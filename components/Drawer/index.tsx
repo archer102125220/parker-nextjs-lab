@@ -593,7 +593,7 @@ function Drawer(props: DrawerProps): ReactNode {
           <div
             ref={drawerRef}
             className={styles['drawer_root-wrapping-drawer']}
-            data-anchor={anchor}
+            css-anchor={anchor}
             onClick={(e) => e.stopPropagation()}
           >
             <DrawerDrag
@@ -713,9 +713,9 @@ function DrawerDrag(props: DrawerDragProps): ReactNode {
   return (
     <div
       className={styles['drawer_root-wrapping-drawer-drag_bar']}
-      data-anchor={anchor}
-      data-is-vertical={isVertical}
-      data-is-horizontal={isHorizontal}
+      css-anchor={anchor}
+      css-is-vertical={isVertical}
+      css-is-horizontal={isHorizontal}
       onClick={onClick}
       onMouseDown={onDragStart}
       onMouseMove={onDraging}

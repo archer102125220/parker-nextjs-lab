@@ -108,6 +108,7 @@
 
         @include mobile {
           user-select: none;
+          -webkit-user-select: none;
         }
 
         &-thead {

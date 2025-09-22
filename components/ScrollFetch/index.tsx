@@ -885,7 +885,7 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
                   className={
                     styles['scroll_fetch-trigger-refreshing-loading_icon']
                   }
-                  data-refresh-animation="true"
+                  css-refresh-animation="true"
                 />
                 <p className={styles['scroll_fetch-trigger-refreshing-label']}>
                   {loadingLabel}
@@ -907,7 +907,7 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
                       className={
                         styles['scroll_fetch-trigger-icon_center-icon']
                       }
-                      data-refresh-animation={
+                      css-refresh-animation={
                         refreshing === true && isPullStart === false
                       }
                     />
@@ -917,7 +917,7 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
                       className={
                         styles['scroll_fetch-trigger-icon_center-icon_img_bg']
                       }
-                      data-activate-animation={refreshIconAnimation}
+                      css-activate-animation={refreshIconAnimation}
                     >
                       <img
                         src={computedRefreshIcon}
@@ -926,7 +926,7 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
                             'scroll_fetch-trigger-icon_center-icon_img_bg-icon_img'
                           ]
                         }
-                        data-refresh-animation={
+                        css-refresh-animation={
                           refreshing === true && isPullStart === false
                         }
                       />
