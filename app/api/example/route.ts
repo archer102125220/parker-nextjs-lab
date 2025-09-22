@@ -2,11 +2,13 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+import qs from 'qs';
+
 // 定義 API 路由的處理函數
 export async function GET(request: NextRequest) {
   // 從 URL 獲取查詢參數
   const searchParams = request.nextUrl.searchParams;
-  const query = searchParams.get('query');
+  const query = qs.parse(searchParams.toString());
 
   // 返回 JSON 響應
   return NextResponse.json({

@@ -10,8 +10,6 @@ import { Fido2Lib } from 'fido2-lib';
 // 前端透過 GET_fido2LibGenerateOption 呼叫這隻http get的api
 
 export async function GET(request: NextRequest) {
-  console.log('api:scroll-fetch-test.get');
-
   const searchParams = request.nextUrl.searchParams;
 
   const f2l = new Fido2Lib({

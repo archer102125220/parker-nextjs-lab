@@ -1,11 +1,13 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+import qs from 'qs';
+
 export function GET(request: NextRequest) {
   console.log('api:frontend-api-cach-test.get');
 
   const searchParams = request.nextUrl.searchParams;
-  const query = searchParams.get('query');
+  const query = qs.parse(searchParams.toString());
 
   return NextResponse.json(query);
 }
