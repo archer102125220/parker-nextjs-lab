@@ -82,6 +82,14 @@ function CloudMessagingDataTable(
     (payload: boolean) => dispatch({ type: 'system/setLoading', payload }),
     [dispatch]
   );
+  const setMessageSuccess = useCallback(
+    (payload: string) => dispatch({ type: 'system/message_success', payload }),
+    [dispatch]
+  );
+  const setMessageError = useCallback(
+    (payload: string) => dispatch({ type: 'system/message_error', payload }),
+    [dispatch]
+  );
 
   const handleRefresh = useCallback(
     async function refresh() {
@@ -115,10 +123,10 @@ function CloudMessagingDataTable(
       try {
         await DELETE_DeleteToken(token);
         await handleRefresh();
-        // nuxtApp.$successMessage('刪除成功');
+        setMessageSuccess('刪除成功');
       } catch (error) {
         console.error('Error deleting token:', error);
-        // nuxtApp.$errorMessage('刪除失敗');
+        setMessageError('刪除失敗');
       } finally {
         setLoading(false);
         setSystemLoading(false);

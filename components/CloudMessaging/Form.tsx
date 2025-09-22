@@ -37,6 +37,15 @@ function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
     (payload: boolean) => dispatch({ type: 'system/setLoading', payload }),
     [dispatch]
   );
+  const setMessageInformation = useCallback(
+    (payload: string) =>
+      dispatch({ type: 'system/message_information', payload }),
+    [dispatch]
+  );
+  const setMessageError = useCallback(
+    (payload: string) => dispatch({ type: 'system/message_error', payload }),
+    [dispatch]
+  );
   const setWebTokenList = useCallback(
     (payload: string[]) =>
       dispatch({ type: 'firebase/setWebTokenList', payload }),
@@ -91,12 +100,13 @@ function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
 
         console.log({ response });
 
-        // const { failureCount = 0, successCount = 0 } = response;
-        // nuxtApp.$infoMessage(
-        //   `執行完畢，成功向${successCount}份裝置發送推播訊息，${failureCount}份裝置發送失敗`
-        // );
+        const { failureCount = 0, successCount = 0 } = response;
+        setMessageInformation(
+          `執行完畢，成功向${successCount}份裝置發送推播訊息，${failureCount}份裝置發送失敗`
+        );
       } catch (error) {
         console.error('Error sending push notification:', error);
+        setMessageError('執行失敗');
       } finally {
         setSystemLoading(false);
       }
