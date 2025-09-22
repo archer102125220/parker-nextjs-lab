@@ -1,5 +1,5 @@
-@import '@/styles/variable.scss';
-@import '@/styles/mixin.scss';
+@use '@/styles/variable.scss' as *;
+@use '@/styles/mixin.scss' as *;
 
 :export {
   mobileMaxWidth: $mobile-max-width;
