@@ -1,0 +1,35 @@
+@import '@/styles/variable.scss';
+@import '@/styles/mixin.scss';
+
+:export {
+  mobileMaxWidth: $mobile-max-width;
+  tabletMaxWidth: $tablet-max-width;
+
+  // Functional Color
+  primary: $primary;
+  secondary: $secondary;
+  warning: $warning;
+  danger: $danger;
+  info: $info;
+
+  // Font Color
+  textPrimary: $text-primary;
+  textRegular: $text-regular;
+  textSecondary: $text-secondary;
+  textPlaceholder: $text-placeholder;
+
+  // Border Color
+  borderColorBase: $border-color-base;
+  borderColorLight: $border-color-light;
+  borderColorLighter: $border-color-lighter;
+  borderColorExtraLight: $border-color-extra-light;
+
+  // Background Color
+  colorWhite: $color-white;
+  colorBlack: $color-black;
+  backgroundColorBase: $background-color-base;
+
+  // Animation Color
+  cardAnimationColor: $card-animation-color;
+  buttonAnimationColor: $button-animation-color;
+}
