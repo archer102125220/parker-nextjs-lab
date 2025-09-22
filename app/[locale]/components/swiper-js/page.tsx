@@ -4,8 +4,9 @@ import dynamic from 'next/dynamic';
 
 import pageStyles from '@/app/[locale]/components/swiper-js/page.module.scss';
 
+import DemoSwiperJs from '@/components/Demo/SwiperJs';
+
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
-const DemoSwiperJs = dynamic(() => import('@/components/Demo/SwiperJs'));
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

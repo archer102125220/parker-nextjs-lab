@@ -1,3 +1,4 @@
+'use client';
 import type {
   ReactNode,
   WheelEvent,
@@ -58,6 +59,7 @@ interface ScrollFetchProps {
     loading: boolean;
     infinityEnd: boolean;
   }) => ReactNode;
+
   onRefresh?: (done: () => void) => void;
   onInfinityFetch?: (done: () => void) => void;
   onWheel?: (e: WheelEvent) => void;
@@ -184,12 +186,18 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
 
     if (moveDistance > 0) {
       _cssVariable['--refresh_overflow'] = 'hidden';
-      if (typeof document?.querySelector === 'function') {
+      if (
+        typeof document === 'object' &&
+        typeof document.querySelector === 'function'
+      ) {
         document.querySelector('html')?.classList.add('scroll_fetching');
       }
     } else {
       _cssVariable['--refresh_overflow'] = 'auto';
-      if (typeof document?.querySelector === 'function') {
+      if (
+        typeof document === 'object' &&
+        typeof document.querySelector === 'function'
+      ) {
         document.querySelector('html')?.classList.remove('scroll_fetching');
       }
     }
@@ -450,8 +458,9 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
         infinityLoading === true ||
         refreshing === true ||
         loading === true
-      )
+      ) {
         return;
+      }
 
       const scrollTop = scrollFetchRef.current?.scrollTop;
       if (scrollTop && scrollTop > 0) return;
@@ -842,7 +851,7 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
   return (
     <div
       ref={scrollFetchRef}
-      className={styles.scroll_fetch}
+      className={[styles.scroll_fetch, 'scroll_fetch'].join(' ')}
       style={cssVariable}
       onScrollEnd={handleScrollEnd}
       onMouseDown={handlePullStart}
@@ -904,7 +913,7 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
                     />
                   ) : (
                     <div
-                      style={{ display: isShowRefreshIcon ? 'block' : 'none' }}
+                      style={{ display: isShowRefreshIcon ? '' : 'none' }}
                       className={
                         styles['scroll_fetch-trigger-icon_center-icon_img_bg']
                       }

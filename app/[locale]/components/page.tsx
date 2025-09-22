@@ -27,6 +27,7 @@ function ComponentsPage(): ReactNode {
       <LinkButton href="/components/dialog">Dialog 元件</LinkButton>
       <LinkButton href="/components/swiper-js">SwiperJs 元件</LinkButton>
       <LinkButton href="/components/drawer">Drawer 元件</LinkButton>
+      <LinkButton href="/components/scroll-fetch">下拉及無限滾動 元件</LinkButton>
     </Box>
   );
 }

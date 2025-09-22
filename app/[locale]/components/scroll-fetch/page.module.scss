@@ -1,0 +1,12 @@
+.scroll_fetch_page {
+  // height: 100dvh;
+  &-content {
+    background-color: #fff;
+    &-scroll_fetch {
+      // min-height: 100dvh;
+      &-text {
+        height: 200px;
+      }
+    }
+  }
+}

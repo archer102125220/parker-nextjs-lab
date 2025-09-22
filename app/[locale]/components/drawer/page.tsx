@@ -2,10 +2,11 @@ import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 
+import DemoDrawer from '@/components/Demo/Drawer';
+
 import style from '@/app/[locale]/components/drawer/page.module.scss';
 
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
-const DemoDrawer = dynamic(() => import('@/components/Demo/Drawer'));
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

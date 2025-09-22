@@ -31,26 +31,24 @@ function SwiperJsDemo(): ReactNode {
   }, []);
 
   return (
-    <>
-      <SwiperJs
-        className={pageStyles['swiper_js_page-content']}
-        shouldFillHeight={true}
-        value={slideValue}
-        slideList={slideList}
-        renderSlide={(props: SlideProps): ReactNode => {
-          const { item, index, isSliderMoveing } = props;
+    <SwiperJs
+      className={pageStyles['swiper_js_page-content']}
+      shouldFillHeight={true}
+      value={slideValue}
+      slideList={slideList}
+      renderSlide={(props: SlideProps): ReactNode => {
+        const { item, index, isSliderMoveing } = props;
 
-          return (
-            <div className={pageStyles['swiper_js_page-content-slide']}>
-              <p>item: {item}</p>
-              <p>index: {index}</p>
-              <p>isSliderMoveing: {`${isSliderMoveing}`}</p>
-            </div>
-          );
-        }}
-        change={handleSwiperJsChange}
-      />
-    </>
+        return (
+          <div className={pageStyles['swiper_js_page-content-slide']}>
+            <p>item: {item}</p>
+            <p>index: {index}</p>
+            <p>isSliderMoveing: {`${isSliderMoveing}`}</p>
+          </div>
+        );
+      }}
+      change={handleSwiperJsChange}
+    />
   );
 }
 

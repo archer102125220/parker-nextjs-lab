@@ -2,8 +2,9 @@ import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 
+import DemoDialog from '@/components/Demo/Dialog';
+
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
-const DemoDialog = dynamic(() => import('@/components/Demo/Dialog'));
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
