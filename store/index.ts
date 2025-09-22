@@ -3,15 +3,19 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 import type { SystemState } from '@/store/slices/systemSlice';
 import { systemReducer } from '@/store/slices/systemSlice';
+import type { FirebaseState } from '@/store/slices/firebaseSlice';
+import { firebaseReducer } from '@/store/slices/firebaseSlice';
 
 export interface PreloadedState {
   system: SystemState;
+  firebase: FirebaseState;
 }
 
 export const storeInit = (preloadedState?: PreloadedState) =>
   configureStore<PreloadedState>({
     reducer: {
-      system: systemReducer
+      system: systemReducer,
+      firebase: firebaseReducer
     },
     preloadedState,
     devTools: process.env.NODE_ENV !== 'production',

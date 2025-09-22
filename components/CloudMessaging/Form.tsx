@@ -1,21 +1,149 @@
 'use client';
-import type { ReactNode } from 'react';
+import type { ReactNode, FormEvent } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-function CloudMessagingForm(): ReactNode {
+import type { FirebaseMessaging } from '@/models/firebasemessaging';
+
+import { useAppDispatch, useAppSelector } from '@/store';
+
+import { POST_pushNotification } from '@/services/client/firebase-admin';
+
+type tokenListType = {
+  webTokenList: FirebaseMessaging[];
+  androidTokenList: FirebaseMessaging[];
+  iosTokenList: FirebaseMessaging[];
+};
+
+type CloudMessagingFormProps = {
+  serverTokenList: tokenListType;
+};
+
+function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
+  const { serverTokenList } = props;
+
+  const dispatch = useAppDispatch();
+
+  const [appMessageTitle, setAppMessageTitle] = useState('appMessageTitle');
+  const [appMessageData, setAppMessageData] = useState('appMessageData');
+  const [appMessageImg, setAppMessageImg] = useState('/img/ico/favicon.svg');
+
+  const systemLoading = useAppSelector((state) => state?.system?.loading);
+
+  const setSystemLoading = useCallback(
+    (payload: boolean) => dispatch({ type: 'system/setLoading', payload }),
+    [dispatch]
+  );
+  const setWebTokenList = useCallback(
+    (payload: string[]) =>
+      dispatch({ type: 'firebase/setWebTokenList', payload }),
+    [dispatch]
+  );
+  const setAndroidTokenList = useCallback(
+    (payload: string[]) =>
+      dispatch({ type: 'firebase/setAndroidTokenList', payload }),
+    [dispatch]
+  );
+  const setIosTokenList = useCallback(
+    (payload: string[]) =>
+      dispatch({ type: 'firebase/setIosTokenList', payload }),
+    [dispatch]
+  );
+
+  const POST_PushNotification = useCallback(
+    async function POST_PushNotification() {
+      if (typeof window !== 'object') return;
+
+      return await POST_pushNotification({
+        title: appMessageTitle,
+        data: appMessageData,
+        img: appMessageImg
+      });
+    },
+    [appMessageTitle, appMessageData, appMessageImg]
+  );
+
+  const handlePushNotification = useCallback(
+    async function pushNotification(e: FormEvent) {
+      e.preventDefault();
+
+      console.log({
+        // isValidSubmit: isValidSubmit.value,
+        systemLoading
+      });
+
+      if (
+        // isValidSubmit.value === false ||
+        systemLoading === true
+      ) {
+        return false;
+      }
+
+      console.log('push notification');
+
+      setSystemLoading(true);
+
+      try {
+        const response = await POST_PushNotification();
+
+        console.log({ response });
+
+        const { failureCount = 0, successCount = 0 } = response;
+        // nuxtApp.$infoMessage(
+        //   `執行完畢，成功向${successCount}份裝置發送推播訊息，${failureCount}份裝置發送失敗`
+        // );
+      } catch (error) {
+        console.error('Error sending push notification:', error);
+      } finally {
+        setSystemLoading(false);
+      }
+
+      return false;
+    },
+    [systemLoading]
+  );
+
+  useEffect(() => {
+    setWebTokenList(serverTokenList?.webTokenList as unknown[] as string[]);
+    setAndroidTokenList(
+      serverTokenList?.androidTokenList as unknown[] as string[]
+    );
+    setIosTokenList(serverTokenList?.iosTokenList as unknown[] as string[]);
+  }, [serverTokenList]);
+
   return (
-    <Grid container spacing={2}>
+    <Grid
+      component="form"
+      container
+      spacing={2}
+      onSubmit={handlePushNotification}
+    >
       <Grid size={12}>
-        <TextField label="推播標題" fullWidth />
+        <TextField
+          label="推播標題"
+          fullWidth
+          value={appMessageTitle}
+          onChange={(e) => setAppMessageTitle(e.target.value)}
+        />
       </Grid>
       <Grid size={12}>
-        <TextField label="推播訊息" fullWidth />
+        <TextField
+          label="推播訊息"
+          fullWidth
+          value={appMessageData}
+          onChange={(e) => setAppMessageData(e.target.value)}
+        />
       </Grid>
       <Grid size={12}>
-        <TextField label="推播圖片網址" fullWidth />
+        <TextField
+          label="推播圖片網址"
+          fullWidth
+          value={appMessageImg}
+          onChange={(e) => setAppMessageImg(e.target.value)}
+        />
       </Grid>
       <Grid
         container
@@ -27,12 +155,23 @@ function CloudMessagingForm(): ReactNode {
         }}
       >
         <Grid size={{ xs: 12, md: 6 }}>
-          <Button variant="outlined" color="primary" fullWidth>
+          <Button
+            variant="outlined"
+            color="primary"
+            fullWidth
+            disabled={systemLoading}
+          >
             重置
           </Button>
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
-          <Button variant="contained" color="primary" fullWidth>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            type="submit"
+            disabled={systemLoading}
+          >
             送出
           </Button>
         </Grid>

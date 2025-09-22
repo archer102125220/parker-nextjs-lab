@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 
+import Box from '@mui/material/Box';
+
 import { messagingFindAllToken } from '@/services/server/firebase-messaging';
 
 import GTMScnOpen from '@/components/Google/GTMScnOpen';
@@ -17,16 +19,25 @@ export function generateMetadata(): Metadata {
 }
 
 async function FirebaseCloudMessagingPage(): Promise<ReactNode> {
-  const tokenList = await messagingFindAllToken();
-  console.log(tokenList);
+  const [webTokenList, androidTokenList, iosTokenList] = await Promise.all([
+    messagingFindAllToken({ os: 'web' }),
+    messagingFindAllToken({ os: 'android' }),
+    messagingFindAllToken({ os: 'ios' })
+  ]);
+  const tokenList = {
+    webTokenList: JSON.parse(JSON.stringify(webTokenList)),
+    androidTokenList: JSON.parse(JSON.stringify(androidTokenList)),
+    iosTokenList: JSON.parse(JSON.stringify(iosTokenList))
+  };
 
   return (
     <main className={style.cloud_messaging_page}>
       <GTMScnOpen />
-      <h1>尚未串接完成</h1>
-      <h1>FCM推播通知後台</h1>
-      <CloudMessagingForm />
-      <CloudMessagingDataTable tokenList={tokenList} />
+      <Box component="h1" sx={{ marginBottom: '8px' }}>
+        FCM推播通知後台
+      </Box>
+      <CloudMessagingForm serverTokenList={tokenList} />
+      <CloudMessagingDataTable serverTokenList={tokenList} />
     </main>
   );
 }

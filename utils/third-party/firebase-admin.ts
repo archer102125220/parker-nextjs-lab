@@ -5,6 +5,7 @@ import firebaseAdmin from 'firebase-admin';
 // https://firebase.google.com/docs/cloud-messaging/js/client?hl=zh-tw#web_2
 
 export type firebaseAdminAppType = firebaseAdmin.app.App;
+export const firebaseAdminPackage = firebaseAdmin;
 
 export const CREDENTIAL = process.env.NEXT_PUBLIC_FIREBASE_CREDENTIAL || '{}';
 
@@ -59,9 +60,11 @@ export function getFirebaseAdmin(
 
 export function firebaseAdminServerInit() {
   try {
-    if (typeof window !== 'undefined') return;
+    if (typeof window !== 'undefined') {
+      return { firebaseAdminWeb, firebaseAdminAndroid, firebaseAdminIos };
+    }
 
-    if (getFirebaseAdmin('[DEFAULT]')) {
+    if (getFirebaseAdmin('[DEFAULT]') !== null) {
       firebaseAdminWeb = getFirebaseAdmin('[DEFAULT]');
     } else if (
       typeof CREDENTIAL === 'string' &&
@@ -73,8 +76,9 @@ export function firebaseAdminServerInit() {
         credential: firebaseAdmin.credential.cert(JSON.parse(CREDENTIAL))
       });
     }
+    console.error({ firebaseAdminWeb });
 
-    if (getFirebaseAdmin('androidFirebaseAdmin')) {
+    if (getFirebaseAdmin('androidFirebaseAdmin') !== null) {
       firebaseAdminAndroid = getFirebaseAdmin('androidFirebaseAdmin');
     } else if (
       typeof ANDROID_CREDENTIAL === 'string' &&
@@ -92,7 +96,7 @@ export function firebaseAdminServerInit() {
       );
     }
 
-    if (getFirebaseAdmin('iosFirebaseAdmin')) {
+    if (getFirebaseAdmin('iosFirebaseAdmin') !== null) {
       firebaseAdminIos = getFirebaseAdmin('iosFirebaseAdmin');
     } else if (
       typeof IOS_CREDENTIAL === 'string' &&

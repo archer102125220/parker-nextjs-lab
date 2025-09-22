@@ -45,3 +45,6 @@ certificates
 
 /public/sw.js
 /public/workbox-*.js
+
+# firebase
+*-firebase-adminsdk-*.json
