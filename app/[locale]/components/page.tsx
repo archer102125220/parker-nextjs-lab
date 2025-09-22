@@ -18,16 +18,25 @@ function ComponentsPage(): ReactNode {
     <Box
       sx={{
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        flexWrap: 'wrap'
       }}
     >
       <GTMScnOpen />
-      <LinkButton href="/components/dialog">Dialog 元件</LinkButton>
-      <LinkButton href="/components/swiper-js">SwiperJs 元件</LinkButton>
-      <LinkButton href="/components/drawer">Drawer 元件</LinkButton>
-      <LinkButton href="/components/scroll-fetch">下拉及無限滾動 元件</LinkButton>
+      <LinkButton href="/components/dialog" sx={{ flexShrink: 0 }}>
+        Dialog 元件
+      </LinkButton>
+      <LinkButton href="/components/swiper-js" sx={{ flexShrink: 0 }}>
+        SwiperJs 元件
+      </LinkButton>
+      <LinkButton href="/components/drawer" sx={{ flexShrink: 0 }}>
+        Drawer 元件
+      </LinkButton>
+      <LinkButton href="/components/scroll-fetch" sx={{ flexShrink: 0 }}>
+        下拉及無限滾動 元件
+      </LinkButton>
     </Box>
   );
 }
