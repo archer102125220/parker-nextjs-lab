@@ -209,7 +209,7 @@ export class firebase {
     if (this.initing === true) return;
     this._initing = true;
 
-    console.log('initializeWithServiceWorker');
+    // console.log('initializeWithServiceWorker');
 
     const safeFirebaseConfig =
       typeof firebaseConfig === 'object' && firebaseConfig !== null
@@ -221,7 +221,7 @@ export class firebase {
       await this.appInit(croe);
 
       if (typeof callback === 'function') {
-        console.log('initializeWithServiceWorker/callback');
+        // console.log('initializeWithServiceWorker/callback');
 
         callback(this);
       }
@@ -252,7 +252,7 @@ export class firebase {
     count = 0,
     callback?: (firebase?: firebase) => void
   ): Promise<void> {
-    console.log('_waitForServiceWorkerAndInitFirebase');
+    // console.log('_waitForServiceWorkerAndInitFirebase');
 
     const safeFirebaseConfig =
       typeof firebaseConfig === 'object' && firebaseConfig !== null
@@ -290,7 +290,7 @@ export class firebase {
     await this.appInit(croe);
 
     if (typeof callback === 'function') {
-      console.log('_waitForServiceWorkerAndInitFirebase/callback');
+      // console.log('_waitForServiceWorkerAndInitFirebase/callback');
 
       callback(this);
     }
@@ -499,7 +499,7 @@ export class firebase {
     return await this.registerServiceWorker(scope);
   }
   public async defaultSaveToken(token: string | null) {
-    console.log({ token });
+    // console.log({ token });
     return await POST_registerMessageToken({ token, os: 'web' });
   }
   public async messagingInit(
