@@ -5,8 +5,10 @@
   "scripts": {
     "sequelize": "./node_modules/.bin/sequelize",
     "sequelize:ts": "ts-node ./node_modules/.bin/sequelize",
-    "dev": "cross-env NODE_OPTIONS='--inspect' next dev --turbopack  -H 0.0.0.0 -p 3001",
-    "dev-https": "cross-env NODE_OPTIONS='--inspect' next dev --turbopack --experimental-https -H 0.0.0.0 -p 3000",
+    "dev:turbopack": "cross-env NODE_OPTIONS='--inspect' next dev --turbopack  -H 0.0.0.0 -p 3001",
+    "dev": "cross-env NODE_OPTIONS='--inspect' next dev  -H 0.0.0.0 -p 3001",
+    "dev-https:turbopack": "cross-env NODE_OPTIONS='--inspect' next dev --turbopack --experimental-https -H 0.0.0.0 -p 3000",
+    "dev-https": "cross-env NODE_OPTIONS='--inspect' next dev --experimental-https -H 0.0.0.0 -p 3000",
     "build": "next build",
     "start": "cross-env NITRO_PORT=3001 next start",
     "lint": "next lint",
