@@ -1,8 +1,7 @@
 'use client';
-import type { ReactNode } from 'react';
+import { useLayoutEffect, type ReactNode } from 'react';
 
 import { googleGTMInit } from '@/utils/third-party/gtm';
-import useIsomorphicLayoutEffect from '@/hooks/useIsomorphicLayoutEffect';
 
 interface GTMInitProps {
   gtmId: string;
@@ -13,7 +12,7 @@ interface GTMInitProps {
 const isDev = process.env.NODE_ENV === 'development';
 
 export function GTMInit({ children, gtmId, log }: GTMInitProps): ReactNode {
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     const _log = typeof log === 'boolean' ? log : isDev;
 
     googleGTMInit(gtmId, _log);

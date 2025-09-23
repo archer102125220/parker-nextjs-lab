@@ -10,7 +10,7 @@ import { GET_scrollFetchTest } from '@/services/nuxt-server';
 
 import style from '@/app/[locale]/components/drawer/page.module.scss';
 
-function ScrollFetchDemo(): ReactNode {
+export function ScrollFetchDemo(): ReactNode {
   const dispatch = useAppDispatch();
   const loading = useAppSelector((state) => state.system.loading);
 

@@ -1,6 +1,13 @@
 'use client';
 import type { ReactNode, ElementType, CSSProperties } from 'react';
-import { useRef, useState, useMemo, useCallback, useEffect } from 'react';
+import {
+  useRef,
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+  useLayoutEffect
+} from 'react';
 import type { DebouncedFunc } from 'lodash';
 import _debounce from 'lodash/debounce';
 
@@ -13,8 +20,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-
-import useIsomorphicLayoutEffect from '@/hooks/useIsomorphicLayoutEffect';
 
 import style from '@/components/SwiperJs/swiper_js.module.scss';
 
@@ -530,7 +535,7 @@ export function SwiperJs(props: swiperJsPropsType): ReactNode {
     [swiperObj, value, params, handleSlideChange, syncSlide]
   );
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     window.addEventListener('mouseup', resetMoveingStatus, { passive: true });
     window.addEventListener('touchend', resetMoveingStatus, { passive: true });
     return () => {

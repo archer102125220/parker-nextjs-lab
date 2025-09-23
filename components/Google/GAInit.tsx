@@ -1,8 +1,7 @@
 'use client';
-import type { ReactNode } from 'react';
+import { useLayoutEffect, type ReactNode } from 'react';
 
 import { googleGAInit } from '@/utils/third-party/ga';
-import useIsomorphicLayoutEffect from '@/hooks/useIsomorphicLayoutEffect';
 
 interface GAInitProps {
   gaId: string;
@@ -14,7 +13,7 @@ interface GAInitProps {
 const isDev = process.env.NODE_ENV === 'development';
 
 export function GAInit({ children, gaId, debug, log }: GAInitProps): ReactNode {
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     const _debug = typeof debug === 'boolean' ? debug : isDev;
     const _log = typeof log === 'boolean' ? log : isDev;
 

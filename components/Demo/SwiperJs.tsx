@@ -22,7 +22,7 @@ for (let i: number = 0; i <= 100; i++) {
   slideList.push(slide);
 }
 
-function SwiperJsDemo(): ReactNode {
+export function SwiperJsDemo(): ReactNode {
   const [slideValue, setSlideValue] = useState<swiperValue>(0);
 
   const handleSwiperJsChange = useCallback<swiperChange>((newValue) => {

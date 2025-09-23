@@ -1,6 +1,6 @@
 'use client';
 import type { ReactNode } from 'react';
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import {
   useLocale
   // useTranslations
@@ -23,12 +23,12 @@ export function I18nList(): ReactNode {
 
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
-  const handleOpen = () => {
+  const handleOpen = useCallback(() => {
     setMenuOpen(true);
-  };
-  const handleClose = () => {
+  }, []);
+  const handleClose = useCallback(() => {
     setMenuOpen(false);
-  };
+  }, []);
 
   return (
     <div>

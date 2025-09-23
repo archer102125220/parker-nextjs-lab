@@ -46,7 +46,7 @@ interface YoutubeProps {
  * // 帶入videoId
  * <Youtube videoId="W8p5RPTPsoU" />
  */
-const Youtube = function Youtube(props: YoutubeProps) {
+export function Youtube(props: YoutubeProps) {
   const {
     videoId = '',
     videoUrl = '',
@@ -120,6 +120,6 @@ const Youtube = function Youtube(props: YoutubeProps) {
   }
 
   return <div className={styles.youtube_root} ref={YoutubeRef} />;
-};
+}
 
 export default Youtube;

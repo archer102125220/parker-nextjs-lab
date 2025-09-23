@@ -181,25 +181,31 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleConfirm: handleCloseType = (e?: MouseEvent) => {
-    if (e?.target !== e?.currentTarget) {
-      return;
-    }
-    if (typeof confirm === 'function') {
-      confirm();
-    }
-    setOpacityTrigger(false);
-  };
+  const handleConfirm: handleCloseType = useCallback(
+    function _confirm(e?: MouseEvent) {
+      if (e?.target !== e?.currentTarget) {
+        return;
+      }
+      if (typeof confirm === 'function') {
+        confirm();
+      }
+      setOpacityTrigger(false);
+    },
+    [confirm]
+  );
 
-  function handleTransitionEnd() {
-    if (
-      opacityTrigger === false &&
-      open === true &&
-      typeof change === 'function'
-    ) {
-      change(false);
-    }
-  }
+  const handleTransitionEnd = useCallback(
+    function transitionEnd() {
+      if (
+        opacityTrigger === false &&
+        open === true &&
+        typeof change === 'function'
+      ) {
+        change(false);
+      }
+    },
+    [opacityTrigger, open, change]
+  );
 
   return (
     <div className={styles.dialog_root} style={cssVariable}>

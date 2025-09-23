@@ -22,7 +22,7 @@ type CloudMessagingFormProps = {
   serverTokenList: tokenListType;
 };
 
-function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
+export function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
   const { serverTokenList } = props;
 
   const dispatch = useAppDispatch();
@@ -116,6 +116,12 @@ function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
     [systemLoading]
   );
 
+  const handleResetForm = useCallback(function resetForm() {
+    setAppMessageTitle('appMessageTitle');
+    setAppMessageData('appMessageData');
+    setAppMessageImg('/img/ico/favicon.svg');
+  }, []);
+
   useEffect(() => {
     setWebTokenList(serverTokenList?.webTokenList as unknown[] as string[]);
     setAndroidTokenList(
@@ -170,6 +176,7 @@ function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
             color="primary"
             fullWidth
             disabled={systemLoading}
+            onClick={handleResetForm}
           >
             重置
           </Button>

@@ -53,7 +53,7 @@ interface DrawerProps {
   onOpen?: () => void;
 }
 
-function Drawer(props: DrawerProps): ReactNode {
+export function Drawer(props: DrawerProps): ReactNode {
   const {
     open = false,
     hasAnimation = true,
@@ -328,44 +328,53 @@ function Drawer(props: DrawerProps): ReactNode {
 
   // Event handlers
 
-  const handleTransitionEnd = useCallback(() => {
-    if (opacityTrigger === false && open === true) {
-      if (typeof onChange === 'function') {
-        onChange(false);
+  const handleTransitionEnd = useCallback(
+    function transitionEnd() {
+      if (opacityTrigger === false && open === true) {
+        if (typeof onChange === 'function') {
+          onChange(false);
+        }
+        if (typeof onClose === 'function') {
+          onClose();
+        }
+
+        setDragDuration(300);
+        setDragMoveDistance(0);
       }
-      if (typeof onClose === 'function') {
-        onClose();
+    },
+    [opacityTrigger, open, onChange, onClose]
+  );
+
+  const handleOpen = useCallback(
+    function _open() {
+      if (typeof onOpen === 'function') {
+        onOpen();
       }
 
-      setDragDuration(300);
-      setDragMoveDistance(0);
-    }
-  }, [opacityTrigger, open, onChange, onClose]);
+      if (typeof document?.querySelector === 'function') {
+        document.querySelector('html')?.classList.add('drawer_open');
+      }
+    },
+    [onOpen]
+  );
 
-  const handleOpen = useCallback(() => {
-    if (typeof onOpen === 'function') {
-      onOpen();
-    }
+  const handleClose = useCallback(
+    function _close() {
+      // if (typeof onClose === 'function') {
+      //   onClose();
+      // }
 
-    if (typeof document?.querySelector === 'function') {
-      document.querySelector('html')?.classList.add('drawer_open');
-    }
-  }, [onOpen]);
+      if (typeof document?.querySelector === 'function') {
+        document.querySelector('html')?.classList.remove('drawer_open');
+      }
 
-  const handleClose = useCallback(() => {
-    // if (typeof onClose === 'function') {
-    //   onClose();
-    // }
-
-    if (typeof document?.querySelector === 'function') {
-      document.querySelector('html')?.classList.remove('drawer_open');
-    }
-
-    if (open === true) {
-      setAnimationReverse(true);
-      window.requestAnimationFrame(() => setOpacityTrigger(false));
-    }
-  }, [open, onClose]);
+      if (open === true) {
+        setAnimationReverse(true);
+        window.requestAnimationFrame(() => setOpacityTrigger(false));
+      }
+    },
+    [open, onClose]
+  );
 
   const handleWindowClose = useCallback(
     (e: KeyboardEvent) => {

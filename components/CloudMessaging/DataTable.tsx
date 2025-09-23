@@ -25,7 +25,7 @@ type CloudMessagingDataTableProps = {
   serverTokenList: tokenListType;
 };
 
-function CloudMessagingDataTable(
+export function CloudMessagingDataTable(
   props: CloudMessagingDataTableProps
 ): ReactNode {
   const { serverTokenList } = props;

@@ -1,6 +1,6 @@
 'use client';
 import type { ReactNode } from 'react';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -10,23 +10,23 @@ import type { anchorType } from '@/components/Drawer';
 
 import style from '@/app/[locale]/components/drawer/page.module.scss';
 
-function DrawerDemo(): ReactNode {
+export function DrawerDemo(): ReactNode {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [anchor, setAnchor] = useState<anchorType>('left');
 
-  const handleOpen = () => {
+  const handleOpen = useCallback(() => {
     setIsOpen(true);
     console.log('Drawer opened');
-  };
+  }, []);
 
-  const handleClose = () => {
-    // setIsOpen(false);
-    console.log('Drawer closed');
-  };
+  const handleClose = useCallback(() => {
+    setIsOpen(true);
+    console.log('Drawer opened');
+  }, []);
 
-  const handleChange = (value: boolean) => {
+  const handleChange = useCallback((value: boolean) => {
     setIsOpen(value);
-  };
+  }, []);
 
   return (
     <div className={style['drawer_page-container']}>

@@ -1,16 +1,20 @@
 'use client';
 import type { ReactNode } from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { SnackbarOrigin } from '@mui/material/Snackbar';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
+// import { useAppSelector } from '@/store';
 import type {
   messageType,
   messageTypText,
   messageTypeType
 } from '@/store/slices/systemSlice';
-import { MESSAGE_TYPE } from '@/store/slices/systemSlice';
+import {
+  MESSAGE_TYPE
+  // systemSelectors
+} from '@/store/slices/systemSlice';
 
 export interface MessageProps {
   messageState: messageType;
@@ -33,6 +37,9 @@ export function Message(props: MessageProps): ReactNode {
   const [messageText, setMessageText] = useState<messageTypText>('');
   const [messageType, setMessageType] = useState<messageTypeType>('success');
 
+  // const messageContext = useAppSelector(systemSelectors.messageContext);
+  // console.log({ messageContext });
+
   useEffect(() => {
     const { text: _text = '', type: _type = 'success' } = messageState || {};
     setMessageText(_text);
@@ -48,9 +55,9 @@ export function Message(props: MessageProps): ReactNode {
     }
   }, [open, resetMessageState]);
 
-  function handleClose() {
+  const handleClose = useCallback(function _close() {
     setOpen(false);
-  }
+  }, []);
 
   return (
     <Snackbar

@@ -1,27 +1,27 @@
 'use client';
 import type { ReactNode } from 'react';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import Button from '@mui/material/Button';
 
 import Dialog from '@/components/Dialog';
 
-function DialogDemo(): ReactNode {
+export function DialogDemo(): ReactNode {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = useCallback(() => {
     setIsDialogOpen(true);
-  };
+  }, []);
 
-  const handleCloseDialog = () => {
+  const handleCloseDialog = useCallback(() => {
     console.log('Dialog Canceled/Closed');
     // setIsDialogOpen(false);
-  };
+  }, []);
 
-  const handleConfirmDialog = () => {
+  const handleConfirmDialog = useCallback(() => {
     console.log('Dialog Confirmed');
     // setIsDialogOpen(false);
     // 在這裡執行確認後的操作
-  };
+  }, []);
 
   return (
     <>
