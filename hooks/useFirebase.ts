@@ -12,12 +12,15 @@ export function useFirebaseInit(
 ): useFirebaseType {
   subscribeFirebase.Firebase = new firebase(config);
 
-  subscribeFirebase.Firebase.initializeWithServiceWorker(
-    scope,
-    null,
-    null,
-    callback
-  );
+  if (subscribeFirebase.firebaseInited === false) {
+    subscribeFirebase.Firebase.initializeWithServiceWorker(
+      scope,
+      null,
+      null,
+      callback
+    );
+    subscribeFirebase.firebaseInited = true;
+  }
 
   return useFirebase(config, scope, callback);
 }
@@ -33,12 +36,15 @@ export function useFirebase(
       throw new Error('missing Firebase');
     }
 
-    subscribeFirebase.Firebase.initializeWithServiceWorker(
-      scope,
-      null,
-      null,
-      callback
-    );
+    if (subscribeFirebase.firebaseInited === false) {
+      subscribeFirebase.Firebase.initializeWithServiceWorker(
+        scope,
+        null,
+        null,
+        callback
+      );
+      subscribeFirebase.firebaseInited = true;
+    }
   }
 
   return useSyncExternalStore<useFirebaseType>(
@@ -50,12 +56,14 @@ export function useFirebase(
 
 type subscribeFirebaseType = {
   Firebase: firebase | null;
+  firebaseInited: boolean;
   subscribe: () => () => void | undefined;
   getSnapshot: () => firebase | null | undefined;
   getServerSnapshot: () => firebase | Firestore | null | undefined;
 };
 const subscribeFirebase: subscribeFirebaseType = {
   Firebase: null,
+  firebaseInited: false,
   subscribe() {
     return () => {};
   },

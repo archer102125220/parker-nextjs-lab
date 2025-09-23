@@ -3,23 +3,22 @@ import type { ReactNode } from 'react';
 import { useState, useEffect } from 'react';
 import type { SnackbarOrigin } from '@mui/material/Snackbar';
 import Snackbar from '@mui/material/Snackbar';
-import type { OverridableStringUnion } from '@mui/types';
-import type { AlertColor, AlertPropsColorOverrides } from '@mui/material/Alert';
 import MuiAlert from '@mui/material/Alert';
 
-export type messageType = OverridableStringUnion<
-  AlertColor,
-  AlertPropsColorOverrides
->;
+import type {
+  messageType,
+  messageTypText,
+  messageTypeType
+} from '@/store/slices/systemSlice';
+import { MESSAGE_TYPE } from '@/store/slices/systemSlice';
+
 export interface MessageProps {
-  messageState: { text: string; type: messageType };
+  messageState: messageType;
   anchorOrigin?: SnackbarOrigin;
   autoHideDuration?: number;
   width?: string | number;
   resetMessageState?: () => void;
 }
-
-const MESSAGE_TYPE = ['success', 'info', 'warning', 'error'];
 
 export function Message(props: MessageProps): ReactNode {
   const {
@@ -30,9 +29,9 @@ export function Message(props: MessageProps): ReactNode {
     resetMessageState = () => {}
   } = props;
 
-  const [open, setOpen] = useState(false);
-  const [messageText, setMessageText] = useState('');
-  const [messageType, setMessageType] = useState<messageType>('success');
+  const [open, setOpen] = useState<boolean>(false);
+  const [messageText, setMessageText] = useState<messageTypText>('');
+  const [messageType, setMessageType] = useState<messageTypeType>('success');
 
   useEffect(() => {
     const { text: _text = '', type: _type = 'success' } = messageState || {};

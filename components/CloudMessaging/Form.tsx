@@ -63,7 +63,7 @@ function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
   );
 
   const POST_PushNotification = useCallback(
-    async function POST_PushNotification() {
+    async function post_pushNotification() {
       if (typeof window !== 'object') return;
 
       return await POST_pushNotification({

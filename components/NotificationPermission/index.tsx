@@ -54,18 +54,24 @@ export function NotificationPermission(): ReactNode {
   }
 
   const handleFirebase = useCallback(
-    async function handleFirebase() {
+    async function _firebase() {
       console.log('handleFirebase');
       setLoading(true);
 
-      if (Firebase instanceof firebase === true) {
+      if (
+        Firebase instanceof firebase === true &&
+        Firebase.messagingInited === false
+      ) {
         const result = await Firebase.requestNotificationPermission();
         if (result === true) {
           const firebaseCroe = Firebase.croe;
+          console.log({ Firebase, firebaseCroe });
           if (typeof firebaseCroe === 'undefined' || firebaseCroe === null) {
-            return handleFirebase();
+            await Firebase.croeInit();
+            await Firebase.appInit();
+          } else {
+            await Firebase.messagingInit(firebaseCroe);
           }
-          await Firebase.messagingInit(firebaseCroe);
         }
         setProcessing(false);
         setIsShow(false);
@@ -79,14 +85,14 @@ export function NotificationPermission(): ReactNode {
 
   useEffect(() => {
     console.log({ firebaseCroeInited, agreeNotification });
-    if (firebaseCroeInited === true) {
+    if (firebaseCroeInited === true && Firebase instanceof firebase === true) {
       if (agreeNotification === false) {
         setIsShow(true);
-      } else {
+      } else if (Firebase.croeInited === false) {
         handleFirebase();
       }
     }
-  }, [firebaseCroeInited, agreeNotification]);
+  }, [firebaseCroeInited, agreeNotification, Firebase]);
 
   return (
     <Snackbar

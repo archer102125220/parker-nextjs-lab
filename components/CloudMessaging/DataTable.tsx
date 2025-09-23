@@ -98,7 +98,7 @@ function CloudMessagingDataTable(
       setLoading(true);
       setSystemLoading(true);
       try {
-        const response = await GET_getMessageTokens();
+        const response = await GET_getMessageTokens(false, false);
         setRefreshResponse(response);
       } catch (error) {
         console.error(error);

@@ -1,5 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+import type { OverridableStringUnion } from '@mui/types';
 import type { AlertColor, AlertPropsColorOverrides } from '@mui/material/Alert';
 
 export interface windowInfo {
@@ -9,7 +10,15 @@ export interface windowInfo {
   isTabletOnly: boolean;
   isTablet: boolean;
 }
-export type messageType = { text: string; type: AlertColor };
+export type messageTypText = string;
+export type messageTypeType = OverridableStringUnion<
+  AlertColor,
+  AlertPropsColorOverrides
+>;
+export type messageType = {
+  text: messageTypText;
+  type: messageTypeType;
+};
 export interface SystemState extends windowInfo {
   systemName: string;
   message: messageType;

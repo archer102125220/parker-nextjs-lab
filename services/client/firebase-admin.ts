@@ -2,8 +2,12 @@ import { request } from '@/utils/request';
 
 const prefix = '/nextjs-server/firebase-admin';
 
-export function GET_getMessageTokens(useCache: boolean = false) {
+export function GET_getMessageTokens(
+  useServiceWorkerCache: boolean = false,
+  useCache: boolean = false
+) {
   return request.get(`${prefix}/get-push-notification-tokens`, null, {
+    useServiceWorkerCache,
     useCache
   });
 }
