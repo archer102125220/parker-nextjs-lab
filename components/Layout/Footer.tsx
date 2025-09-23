@@ -4,7 +4,7 @@ import { Box, Typography, BoxProps } from '@mui/material';
 import { useAppSelector } from '@/store';
 
 export function Footer(props: BoxProps): ReactNode {
-  const systemName = useAppSelector((state) => state.system.systemName);
+  const systemName = useAppSelector<string>((state) => state.system.systemName);
 
   return (
     <Box

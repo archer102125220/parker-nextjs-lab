@@ -15,8 +15,8 @@ import style from '@/components/NotificationPermission/style.module.scss';
 export function NotificationPermission(): ReactNode {
   const Firebase = useFirebase();
 
-  const [isShow, setIsShow] = useState(false);
-  const [processing, setProcessing] = useState(false);
+  const [isShow, setIsShow] = useState<boolean>(false);
+  const [processing, setProcessing] = useState<boolean>(false);
 
   const agreeNotification = useAppSelector<boolean>(
     (state) => state.system.agreeNotification
@@ -45,13 +45,13 @@ export function NotificationPermission(): ReactNode {
     [dispatch]
   );
 
-  function handleCancel() {
+  const handleCancel = useCallback(function cancel() {
     setIsShow(false);
-  }
-  function handleCofirm() {
+  }, []);
+  const handleCofirm = useCallback(function cofirm() {
     setProcessing(true);
     setAgreeNotification(true);
-  }
+  }, []);
 
   const handleFirebase = useCallback(
     async function _firebase() {

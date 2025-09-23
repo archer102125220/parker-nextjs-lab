@@ -3,7 +3,8 @@ import type {
   ElementType,
   MouseEvent,
   TouchEvent,
-  KeyboardEvent
+  KeyboardEvent,
+  CSSProperties
 } from 'react';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
@@ -52,6 +53,34 @@ interface DrawerProps {
   onClose?: () => void;
   onOpen?: () => void;
 }
+interface DrawerCssVariableType extends CSSProperties {
+  '--drawer_opacity'?: string | number;
+  '--drawer_drag_transform'?: string;
+  '--drawer_drag_transition'?: string;
+  '--drawer_root_position'?: string;
+  '--drawer_wrapping_position'?: string;
+  '--drawer_mask_position'?: string;
+  '--drawer_position'?: string;
+  '--drawer_z_index'?: string | number;
+  '--drawer_width'?: string | number;
+  '--drawer_height'?: string | number;
+  '--drawers_wrapping_top'?: string | number;
+  '--drawers_wrapping_right'?: string | number;
+  '--drawers_wrapping_bottom'?: string | number;
+  '--drawers_wrapping_left'?: string | number;
+  '--drawers_wrapping_z_index'?: string | number;
+  '--drawer_top'?: string;
+  '--drawer_bottom'?: string;
+  '--drawer_right'?: string;
+  '--drawer_left'?: string;
+  '--drawer_min_width'?: string;
+  '--drawer_min_height'?: string;
+  '--drawer_max_width'?: string;
+  '--drawer_max_height'?: string;
+  '--drawer_animation_duration'?: string;
+  '--drawer_animation_count'?: string;
+  '--drawer_animation_direction'?: string;
+}
 
 export function Drawer(props: DrawerProps): ReactNode {
   const {
@@ -93,14 +122,14 @@ export function Drawer(props: DrawerProps): ReactNode {
   const drawerRef = useRef<HTMLDivElement>(null);
 
   // State
-  const [opacityTrigger, setOpacityTrigger] = useState(open);
-  const [animationReverse, setAnimationReverse] = useState(false);
-  const [isDragStart, setIsDragStart] = useState(false);
-  const [isDraging, setIsDraging] = useState(false);
-  const [dragDuration, setDragDuration] = useState(INIT_DRAG_DURATION);
-  const [dragMoveDistance, setDragMoveDistance] = useState(0);
-  const [dragStartY, setDragStartY] = useState(0);
-  const [dragStartX, setDragStartX] = useState(0);
+  const [opacityTrigger, setOpacityTrigger] = useState<boolean>(open);
+  const [animationReverse, setAnimationReverse] = useState<boolean>(false);
+  const [isDragStart, setIsDragStart] = useState<boolean>(false);
+  const [isDraging, setIsDraging] = useState<boolean>(false);
+  const [dragDuration, setDragDuration] = useState<number>(INIT_DRAG_DURATION);
+  const [dragMoveDistance, setDragMoveDistance] = useState<number>(0);
+  const [dragStartY, setDragStartY] = useState<number>(0);
+  const [dragStartX, setDragStartX] = useState<number>(0);
 
   // Computed values
   const anchor = useMemo<anchorType>(() => {
@@ -108,17 +137,17 @@ export function Drawer(props: DrawerProps): ReactNode {
     return anchorStr.toLowerCase().trim() || 'left';
   }, [propsAnchor]);
 
-  const isVertical = useMemo(() => {
+  const isVertical = useMemo<boolean>(() => {
     return IS_VERTICAL.includes(anchor);
   }, [anchor]);
 
-  const isHorizontal = useMemo(() => {
+  const isHorizontal = useMemo<boolean>(() => {
     return IS_HORIZONTAL.includes(anchor);
   }, [anchor]);
 
   // CSS Variables
-  const cssVariable = useMemo(() => {
-    const _cssVariable: Record<string, string> = {};
+  const cssVariable = useMemo<DrawerCssVariableType>(() => {
+    const _cssVariable: DrawerCssVariableType = {};
 
     if (opacityTrigger === false) {
       _cssVariable['--drawer_opacity'] = '0';

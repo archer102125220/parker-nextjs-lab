@@ -5,7 +5,8 @@ import type {
   UIEvent,
   FC,
   TouchEvent,
-  MouseEvent
+  MouseEvent,
+  CSSProperties
 } from 'react';
 import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 
@@ -68,6 +69,22 @@ interface ScrollFetchProps {
   onScrollEnd?: (e: UIEvent<HTMLDivElement>) => void;
   onInfinityFail?: (error: Error) => void;
 }
+interface ScrollFetchCssVariable extends CSSProperties {
+  ['--refresh_icon_transform']?: string;
+  ['--refresh_transition']?: string;
+  ['--refresh_transform']?: string;
+  ['--refresh_ios_type_icon_size']?: number | string;
+  ['--refresh_ios_type_icon_stroke_width']?: number | string;
+
+  ['--refresh_icon_transition']?: string;
+  ['--refresh_icon_rotate']?: string;
+
+  ['--refresh_height']?: number | string;
+  ['--refresh_container_height']?: number | string;
+  ['--refresh_overflow']?: string;
+
+  ['--refresh_trigger_z_index']?: number | string;
+}
 
 const MOVE_DISTANCE_LIMIT = 50;
 
@@ -119,31 +136,33 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
   const infinityTimeoutTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // State
-  const [infinityIsIntersecting, setInfinityIsIntersecting] = useState(false);
-  const [isPullStart, setIsPullStart] = useState(false);
-  const [isShowRefreshIcon, setIsShowRefreshIcon] = useState(false);
-  const [startY, setStartY] = useState(0);
-  const [moveDistance, setMoveDistance] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [refreshing, setRefreshing] = useState(false);
-  const [isPulling, setIsPulling] = useState(false);
-  const [infinityTrigger, setInfinityTrigger] = useState(false);
-  const [infinityLoading, setInfinityLoading] = useState(false);
-  const [refreshIconAnimation, setRefreshIconAnimation] = useState(false);
-  const [refreshTriggerZIndex, setRefreshTriggerZIndex] = useState(-1);
-  const [refreshIconRotate, setRefreshIconRotate] = useState(0);
-  const [parentScrollIsTop, setParentScrollIsTop] = useState(false);
-  const [parentIsScrollIng, setParentIsScrollIng] = useState(false);
-  const [windowScrollIsTop, setWindowScrollIsTop] = useState(false);
-  const [windowIsScrollIng, setWindowIsScrollIng] = useState(false);
+  const [infinityIsIntersecting, setInfinityIsIntersecting] =
+    useState<boolean>(false);
+  const [isPullStart, setIsPullStart] = useState<boolean>(false);
+  const [isShowRefreshIcon, setIsShowRefreshIcon] = useState<boolean>(false);
+  const [startY, setStartY] = useState<number>(0);
+  const [moveDistance, setMoveDistance] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(0);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [isPulling, setIsPulling] = useState<boolean>(false);
+  const [infinityTrigger, setInfinityTrigger] = useState<boolean>(false);
+  const [infinityLoading, setInfinityLoading] = useState<boolean>(false);
+  const [refreshIconAnimation, setRefreshIconAnimation] =
+    useState<boolean>(false);
+  const [refreshTriggerZIndex, setRefreshTriggerZIndex] = useState<number>(-1);
+  const [refreshIconRotate, setRefreshIconRotate] = useState<number>(0);
+  const [parentScrollIsTop, setParentScrollIsTop] = useState<boolean>(false);
+  const [parentIsScrollIng, setParentIsScrollIng] = useState<boolean>(false);
+  const [windowScrollIsTop, setWindowScrollIsTop] = useState<boolean>(false);
+  const [windowIsScrollIng, setWindowIsScrollIng] = useState<boolean>(false);
 
   // Cleanup functions
   const removeParentScrollEndRef = useRef<(() => void) | null>(null);
   const removeWindowScrollEndRef = useRef<(() => void) | null>(null);
 
   // Computed values (useMemo)
-  const cssVariable = useMemo(() => {
-    const _cssVariable: Record<string, string> = {};
+  const cssVariable = useMemo<ScrollFetchCssVariable>(() => {
+    const _cssVariable: ScrollFetchCssVariable = {};
 
     if (iosStyle === true) {
       _cssVariable['--refresh_icon_transform'] = 'translate3d(0, 0, 0)';
@@ -216,15 +235,17 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
     refreshTriggerZIndex
   ]);
 
-  const hasRefreshIcon = useMemo(() => {
+  const hasRefreshIcon = useMemo<boolean>(() => {
     return typeof refreshIcon === 'string' && refreshIcon !== '';
   }, [refreshIcon]);
 
-  const computedRefreshIcon = useMemo(() => {
+  const computedRefreshIcon = useMemo<string>(() => {
     return (
       (refreshing === true && isPullStart === false
         ? refreshingIcon
-        : refreshIcon) || refreshIcon
+        : refreshIcon) ||
+      refreshIcon ||
+      ''
     );
   }, [refreshing, isPullStart, refreshingIcon, refreshIcon]);
 
@@ -926,6 +947,7 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
                             'scroll_fetch-trigger-icon_center-icon_img_bg-icon_img'
                           ]
                         }
+                        alt="scroll fetch icon"
                         css-refresh-animation={
                           refreshing === true && isPullStart === false
                         }

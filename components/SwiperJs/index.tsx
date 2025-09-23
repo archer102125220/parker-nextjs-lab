@@ -97,7 +97,7 @@ interface swiperJsPropsType {
   touchEnd?: swiperElementEvent;
 }
 export type swiperValue = swiperJsPropsType['value'];
-interface swiperJsCssVariableType extends CSSProperties {
+interface SwiperJsCssVariableType extends CSSProperties {
   '--slide_height'?: string;
   '--content_wrapper_slide_height'?: string;
   '--slide_overflow_y'?: string;
@@ -179,8 +179,8 @@ export function SwiperJs(props: swiperJsPropsType): ReactNode {
   const [params, setParams] = useState<SwiperOptions | null>(null);
   const [isSliderMoveing, setIsSliderMoveing] = useState(false);
 
-  const cssVariable = useMemo<swiperJsCssVariableType>(() => {
-    const _cssVariable: swiperJsCssVariableType = {};
+  const cssVariable = useMemo<SwiperJsCssVariableType>(() => {
+    const _cssVariable: SwiperJsCssVariableType = {};
 
     if (typeof overflow === 'boolean' && overflow === true) {
       _cssVariable['--content_wrapper_slide_height'] = '100%';

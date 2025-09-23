@@ -7,6 +7,8 @@ import Typography from '@mui/material/Typography';
 
 import { useAppDispatch, useAppSelector } from '@/store';
 
+import type { messageType } from '@/store/slices/systemSlice';
+
 import { I18nList } from '@/components/Layout/I18nList';
 import { LinkBox } from '@/components/Link/Box';
 import { GoBack } from '@/components/GoBack';
@@ -16,9 +18,11 @@ import { Message } from '@/components/Message';
 export function Header(): ReactNode {
   const dispatch = useAppDispatch();
 
-  const systemName = useAppSelector((state) => state.system.systemName);
-  const loading = useAppSelector((state) => state.system.loading);
-  const messageState = useAppSelector((state) => state.system.message);
+  const systemName = useAppSelector<string>((state) => state.system.systemName);
+  const loading = useAppSelector<boolean>((state) => state.system.loading);
+  const messageState = useAppSelector<messageType>(
+    (state) => state.system.message
+  );
 
   const resetMessageState = useCallback(
     () => dispatch({ type: 'system/message_reset' }),

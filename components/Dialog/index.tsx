@@ -41,7 +41,7 @@ interface DialogProps {
   confirm: () => void;
   cancel: () => void;
 }
-interface dialogCssVariableType extends CSSProperties {
+interface DialogCssVariableType extends CSSProperties {
   '--dialog_opacity'?: string;
   '--dialog_width'?: string;
   '--dialog_height'?: string;
@@ -79,8 +79,8 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
   } = props;
   const [opacityTrigger, setOpacityTrigger] = useState<boolean>(false);
 
-  const cssVariable = useMemo<dialogCssVariableType>(() => {
-    const _cssVariable: dialogCssVariableType = {};
+  const cssVariable = useMemo<DialogCssVariableType>(() => {
+    const _cssVariable: DialogCssVariableType = {};
 
     if (opacityTrigger === false) {
       _cssVariable['--dialog_opacity'] = '0';

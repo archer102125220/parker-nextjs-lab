@@ -12,16 +12,16 @@ import style from '@/app/[locale]/components/drawer/page.module.scss';
 
 export function ScrollFetchDemo(): ReactNode {
   const dispatch = useAppDispatch();
-  const loading = useAppSelector((state) => state.system.loading);
+  const loading = useAppSelector<boolean>((state) => state.system.loading);
 
-  const [refreshLoading, setRefreshLoading] = useState(false);
-  const [infinityLoading, setInfinityLoading] = useState(false);
-  // const [infinityEnd, setInfinityEnd] = useState(false);
-  const [infinityEnd] = useState(false);
-  const [page, setPage] = useState(1);
+  const [refreshLoading, setRefreshLoading] = useState<boolean>(false);
+  const [infinityLoading, setInfinityLoading] = useState<boolean>(false);
+  // const [infinityEnd, setInfinityEnd] = useState<boolean>(false);
+  const [infinityEnd] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
 
-  const limit = useMemo(() => page * 20, [page]);
-  const dataList = useMemo(() => {
+  const limit = useMemo<number>(() => page * 20, [page]);
+  const dataList = useMemo<string[]>(() => {
     const _dataList = [];
     for (let i = 0; i <= page * limit; i++) {
       // _dataList.push(i);

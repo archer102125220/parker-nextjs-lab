@@ -32,18 +32,20 @@ export function CloudMessagingDataTable(
 
   const dispatch = useAppDispatch();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [refreshResponse, setRefreshResponse] = useState<tokenListType | null>(
     null
   );
 
-  const OS_TD_TITLE = useMemo(() => '作業系統', []);
-  const TOKEN_TD_TITLE = useMemo(() => 'token', []);
-  const ACRION_TITLE = useMemo(() => '操作', []);
+  const OS_TD_TITLE = useMemo<string>(() => '作業系統', []);
+  const TOKEN_TD_TITLE = useMemo<string>(() => 'token', []);
+  const ACRION_TITLE = useMemo<string>(() => '操作', []);
 
-  const systemLoading = useAppSelector((state) => state?.system?.loading);
+  const systemLoading = useAppSelector<boolean>(
+    (state) => state?.system?.loading
+  );
 
-  const webTokenList = useMemo(
+  const webTokenList = useMemo<FirebaseMessaging[]>(
     () =>
       Array.isArray(refreshResponse?.webTokenList) === true
         ? refreshResponse.webTokenList
@@ -52,7 +54,7 @@ export function CloudMessagingDataTable(
           : [],
     [refreshResponse, serverTokenList]
   );
-  const androidTokenList = useMemo(
+  const androidTokenList = useMemo<FirebaseMessaging[]>(
     () =>
       Array.isArray(refreshResponse?.androidTokenList) === true
         ? refreshResponse.androidTokenList
@@ -61,7 +63,7 @@ export function CloudMessagingDataTable(
           : [],
     [refreshResponse, serverTokenList]
   );
-  const iosTokenList = useMemo(
+  const iosTokenList = useMemo<FirebaseMessaging[]>(
     () =>
       Array.isArray(refreshResponse?.iosTokenList) === true
         ? refreshResponse.iosTokenList
@@ -70,7 +72,7 @@ export function CloudMessagingDataTable(
           : [],
     [refreshResponse, serverTokenList]
   );
-  const isEmpty = useMemo(
+  const isEmpty = useMemo<boolean>(
     () =>
       webTokenList.length <= 0 &&
       androidTokenList.length <= 0 &&

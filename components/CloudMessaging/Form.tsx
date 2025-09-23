@@ -27,11 +27,17 @@ export function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
 
   const dispatch = useAppDispatch();
 
-  const [appMessageTitle, setAppMessageTitle] = useState('appMessageTitle');
-  const [appMessageData, setAppMessageData] = useState('appMessageData');
-  const [appMessageImg, setAppMessageImg] = useState('/img/ico/favicon.svg');
+  const [appMessageTitle, setAppMessageTitle] =
+    useState<string>('appMessageTitle');
+  const [appMessageData, setAppMessageData] =
+    useState<string>('appMessageData');
+  const [appMessageImg, setAppMessageImg] = useState<string>(
+    '/img/ico/favicon.svg'
+  );
 
-  const systemLoading = useAppSelector((state) => state?.system?.loading);
+  const systemLoading = useAppSelector<boolean>(
+    (state) => state?.system?.loading
+  );
 
   const setSystemLoading = useCallback(
     (payload: boolean) => dispatch({ type: 'system/setLoading', payload }),
