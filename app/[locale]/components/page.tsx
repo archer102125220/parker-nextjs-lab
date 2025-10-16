@@ -35,7 +35,7 @@ function ComponentsPage(): ReactNode {
         Drawer 元件
       </LinkButton>
       <LinkButton href="/components/scroll-fetch" sx={{ flexShrink: 0 }}>
-        下拉及無限滾動 元件
+        下拉及無限滾動元件
       </LinkButton>
     </Box>
   );
