@@ -1,6 +1,6 @@
 # Parker's Next.js Laboratory
 
-[繁體中文說明](./README.zh-TW.md)
+[繁體中文說明](./README.zh-tw.md)
 
 A comprehensive Next.js laboratory project showcasing modern web development practices, internationalization, Firebase integration, and custom component libraries.
 
