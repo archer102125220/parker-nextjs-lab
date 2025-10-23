@@ -20,8 +20,8 @@ export function DrawerDemo(): ReactNode {
   }, []);
 
   const handleClose = useCallback(() => {
-    setIsOpen(true);
-    console.log('Drawer opened');
+    setIsOpen(false);
+    console.log('Drawer closed');
   }, []);
 
   const handleChange = useCallback((value: boolean) => {

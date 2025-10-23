@@ -402,7 +402,7 @@ export function Drawer(props: DrawerProps): ReactNode {
         window.requestAnimationFrame(() => setOpacityTrigger(false));
       }
     },
-    [open, onClose]
+    [open]
   );
 
   const handleWindowClose = useCallback(
@@ -752,8 +752,8 @@ function DrawerDrag(props: DrawerDragProps): ReactNode {
     <div
       className={styles['drawer_root-wrapping-drawer-drag_bar']}
       css-anchor={anchor}
-      css-is-vertical={isVertical}
-      css-is-horizontal={isHorizontal}
+      css-is-vertical={`${isVertical}`}
+      css-is-horizontal={`${isHorizontal}`}
       onClick={onClick}
       onMouseDown={onDragStart}
       onMouseMove={onDraging}

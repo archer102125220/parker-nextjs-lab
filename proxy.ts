@@ -7,9 +7,9 @@ import i18nMiddleware from '@/middleware/i18n';
 import logMiddleware from '@/middleware/log';
 
 import {
-  middleware as middlewareOne,
-  exactMiddleware as exactMiddlewareOne
-} from '@/app/[locale]/one/middleware';
+  proxy as middlewareOne,
+  exactProxy as exactMiddlewareOne
+} from '@/app/[locale]/one/proxy';
 
 // 靜態檔案相關設定
 const STATIC_FILE_EXTENSIONS: RegExp =
@@ -21,10 +21,14 @@ const STATIC_FILE_PREFIXES: Array<string> = [
   '/robots.txt'
 ];
 
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 const POLICY_MIDDLEWARE_SETTINGS: Array<Function> = [
   contentSecurityPolicyMiddleware
 ];
 
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 const GLOBAL_MIDDLEWARE_SETTINGS: Array<Function> = [
   globalTestMiddleware,
   i18nMiddleware,
@@ -48,7 +52,7 @@ const MIDDLEWARE_SETTINGS: Array<MiddlewareSetting> = [
   }
 ];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   for (const middlewareHandler of POLICY_MIDDLEWARE_SETTINGS) {
     const middlewareResponse = await middlewareHandler(request);
     if (middlewareResponse) {
