@@ -1,16 +1,17 @@
-import getConfig from 'next/config';
 import { useState, useEffect } from 'react';
 
-const runtimeConfig = getConfig();
+const APP_ID = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID;
+const API_VERSION = process.env.NEXT_PUBLIC_FACEBOOK_API_VERSION;
 
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useFacebook(initFn: (...args: any[]) => void = () => {}) {
-  const APP_ID = runtimeConfig.FACEBOOK_APP_ID;
-  const API_VERSION = runtimeConfig.FACEBOOK_API_VERSION;
-
   const [facebook, setFacebook] = useState(null);
 
   useEffect(() => {
     if (document.querySelector('#facebookOAuth') === null) {
+      // TODO
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       window.fbAsyncInit = function (...arg: any[]) {
         setFacebook(window.FB);
         window.FB.init({
@@ -38,6 +39,8 @@ export function useFacebook(initFn: (...args: any[]) => void = () => {}) {
       script.setAttribute('crossorigin', 'anonymous');
       document.head.append(script);
     } else if (typeof window.FB === 'object') {
+      // TODO
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFacebook(window.FB);
     }
   }, []);

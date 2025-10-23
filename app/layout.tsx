@@ -5,9 +5,6 @@ import '@/app/global.scss';
 
 interface RootLayoutProps {
   children: ReactNode;
-  params: Promise<{
-    locale: string;
-  }>;
 }
 
 export const viewport: Viewport = {

@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 import { request as axios } from '@/utils/request';
 
-const APP_ID = process.env.FACEBOOK_APP_ID;
+const APP_ID = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID;
 
 export async function POST(request: NextRequest) {
   try {
