@@ -9,7 +9,7 @@ export function numberUnit(
   if (_input < 10000) return _input;
 
   let _unitIndex = Number(unitIndex || 0);
-  let _step = Number(step || 10000);
+  const _step = Number(step || 10000);
 
   while (Math.abs(_input) >= _step) {
     _input = _input / _step;

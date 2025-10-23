@@ -1,6 +1,12 @@
 export function findLastIndex(
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   array: Array<any>,
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   callback: (value: any, index: number, array: any[]) => unknown,
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   thisArg?: any
 ): number {
   if (typeof callback?.call !== 'function') {
@@ -15,7 +21,11 @@ export function findLastIndex(
 export function handleFindLastIndexPolyfill(): void {
   if (typeof Array.prototype.findLastIndex !== 'function') {
     Array.prototype.findLastIndex = function (
+      // TODO
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       callback: (value: any, index: number, array: any[]) => unknown,
+      // TODO
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       thisArg?: any
     ): number {
       return findLastIndex(this, callback, thisArg);

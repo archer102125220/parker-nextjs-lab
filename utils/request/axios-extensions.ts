@@ -29,6 +29,8 @@ function isCacheLike(
 
 export function cacheAdapterEnhancer(
   options: options,
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   defaultAdapter: Function,
   generateReqKey?: generateReqKey
 ): AxiosAdapter {
@@ -48,6 +50,8 @@ export function cacheAdapterEnhancer(
     requestKey: requestKey,
     isLike: boolean,
     ttlConfig: config['ttlConfig']
+    // TODO
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): Promise<any> {
     try {
       return await defaultAdapter(config); // 使用預設的xhrAdapter發送請求
@@ -71,6 +75,8 @@ export function cacheAdapterEnhancer(
         ? generateReqKey(config)
         : defaultGenerateReqKey(config); // 生成請求Key
 
+    // TODO
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let responsePromise: Promise<any> | null = null;
     if (useCache === true && isLike === true) {
       responsePromise =

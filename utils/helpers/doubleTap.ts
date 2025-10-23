@@ -28,13 +28,19 @@ export function doubleTap(doubleTapMs: number) {
 }
 
 export function customDoubleTap(
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   func: Function,
   doubleTapMs: number = 200,
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   defaultFunc: Function
 ) {
   let timeout: NodeJS.Timeout,
     lastTap = 0;
 
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return function detectDoubleTap(...args: any[]) {
     const currentTime = new Date().getTime();
     const tapLength = currentTime - lastTap;

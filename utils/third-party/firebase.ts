@@ -164,6 +164,8 @@ export class firebase {
     analyticsApp = this.analytics?.app,
     eventName: string,
     eventParams?: {
+      // TODO
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [key: string]: any;
     }
   ) {
@@ -176,6 +178,8 @@ export class firebase {
   public analyticsLog(
     eventName: string,
     eventParams?: {
+      // TODO
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [key: string]: any;
     }
   ) {

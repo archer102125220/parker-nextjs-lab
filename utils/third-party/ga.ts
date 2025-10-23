@@ -4,6 +4,8 @@ export function googleGAInit(
   googleGAID = '',
   debug = process.env.NODE_ENV === 'development',
   log = false,
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   callback?: Function
 ) {
   if (typeof googleGAID !== 'string' || googleGAID === '') {
@@ -16,6 +18,8 @@ export function googleGAInit(
   const src = `https://www.googletagmanager.com/gtag/js?id=${googleGAID}`;
 
   const script = document.createElement('script');
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   function init(gtag: Function, gtm: Function) {
     if (typeof gtag === 'function') {
       gtag('js', new Date());

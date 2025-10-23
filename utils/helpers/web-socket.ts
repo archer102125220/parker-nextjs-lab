@@ -1,7 +1,13 @@
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type WebSocketConfingFunction = (event: Event) => any;
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type WebSocketConfingMessageFunction = (event: MessageEvent) => any;
 type CustomWebSocketSend = (
   event: string | ArrayBufferLike | Blob | ArrayBufferView,
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any
 ) => void;
 interface WebSocketConfing {
@@ -43,6 +49,8 @@ export function createWebSocket(
   const socket: WebSocketInterface = new WebSocket(url);
 
   socket._send = socket.send;
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   socket.send = function (event: any, data: any) {
     const payload = { event, data };
     console.log(payload);

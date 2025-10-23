@@ -2,8 +2,8 @@ import { FirebaseMessaging, Sequelize } from '@/models';
 const { Op } = Sequelize;
 
 type addTokenPayloadType = {
-  token?: String;
-  os?: String;
+  token?: string;
+  os?: string;
 };
 export async function messagingAddToken(
   payload: addTokenPayloadType = { token: '', os: '' }
@@ -35,8 +35,8 @@ export async function messagingFindToken(token = '') {
 }
 
 type findAllTokenWhereType = {
-  token?: String;
-  os?: String;
+  token?: string;
+  os?: string;
 };
 export async function messagingFindAllToken(
   payload: findAllTokenWhereType = { token: '', os: '' }

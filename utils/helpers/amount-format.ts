@@ -5,6 +5,8 @@ export function amountFormat(
     'g'
   ],
   replaceString: string = ',',
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   handleError: Function = handleSafari
 ): void | string | number {
   let _formater: string | RegExp;
@@ -19,7 +21,7 @@ export function amountFormat(
     }
     if (isNaN(amount) || !_formater) return amount;
     return `${amount}`.replace(_formater, replaceString);
-  } catch (error: any) {
+  } catch (error) {
     console.log('Safari error?');
     console.log(error);
     if (typeof handleError === 'function') {

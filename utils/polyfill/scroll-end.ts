@@ -6,6 +6,8 @@ declare global {
 
 export function handleBindScrollEnd(
   el: HTMLElement | Window,
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   handler: Function,
   wait: number = 100
 ) {
@@ -20,6 +22,8 @@ export function handleBindScrollEnd(
 
   const _el: HTMLElement | Window = el;
   if ('onscrollend' in _el) {
+    // TODO
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function handleScrollEnd(event: Event, ...arg: any[]): void {
       setTimeout(() => handler(event, ...arg), wait);
     }
@@ -28,6 +32,8 @@ export function handleBindScrollEnd(
   }
 
   let setTimeoutTimer: NodeJS.Timeout | number = 0;
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function polyfillScrollEnd(event: Event, ...arg: any[]) {
     if (setTimeoutTimer !== 0) {
       clearTimeout(setTimeoutTimer);

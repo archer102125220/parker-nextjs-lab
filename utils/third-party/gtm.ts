@@ -3,6 +3,8 @@ import { googleGtagInit } from '@/utils/third-party/gtag';
 export function googleGTMInit(
   googleGTMID = '',
   log = false,
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   callback?: Function
 ) {
   if (typeof googleGTMID !== 'string' || googleGTMID === '') {
@@ -17,6 +19,8 @@ export function googleGTMInit(
   // window.dataLayer = window.dataLayer || [];
   // window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
   const gtmScript = document.createElement('script');
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   function init(gtag: Function, gtm: Function) {
     if (typeof gtm === 'function') {
       gtm({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });

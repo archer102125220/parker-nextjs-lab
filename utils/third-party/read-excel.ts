@@ -4,8 +4,9 @@ import type { Row, ParsedObjectsResult } from 'read-excel-file';
 type readXlsxFileType = typeof _readXlsxFile;
 
 interface Result {
-  // excel?: ParsedObjectsResult<Object>;
-  excel?: ParsedObjectsResult<Object> | Row[];
+  // excel?: ParsedObjectsResult<{ [key: string]: any }>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  excel?: ParsedObjectsResult<{ [key: string]: any }> | Row[];
   files?: File | ArrayBuffer;
 }
 

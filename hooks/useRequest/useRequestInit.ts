@@ -30,6 +30,8 @@ export interface requestInit {
 export function useRequestInit(
   apiBase: string = '',
   errorAdapter?: errorAdapterType,
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   defaultExtendOption?: { [key: string]: any }
 ): requestInit {
   const isInitialized = useRef<boolean>(

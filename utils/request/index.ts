@@ -33,6 +33,8 @@ const cacheCfg: LRUCache<string, number> = new LRUCache({
 export class cancelRequest implements cancelRequestInterface {
   requestCancelerList: requestCancelerList = {};
 
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getRequestKey(method: string, url: string | undefined, params: any) {
     let requestKey = method.toLocaleLowerCase() + '|__|' + url;
     if (typeof params === 'object' && params !== null) {
@@ -45,6 +47,8 @@ export class cancelRequest implements cancelRequestInterface {
     cancel: requestCanceler,
     method: string | undefined = 'GET',
     url: string | undefined,
+    // TODO
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     params: any
   ): void {
     const key = this.getRequestKey(method, url, params);
@@ -54,6 +58,8 @@ export class cancelRequest implements cancelRequestInterface {
   getRequestCanceler(
     method: string = 'GET',
     url: string,
+    // TODO
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     params: any
   ): requestCanceler {
     const key = this.getRequestKey(method, url, params);
@@ -63,12 +69,16 @@ export class cancelRequest implements cancelRequestInterface {
   removeRequestCanceler(
     method: string | undefined = 'GET',
     url: string | undefined,
+    // TODO
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     params: any
   ): void {
     const key = this.getRequestKey(method, url, params);
     this.requestCancelerList[key] = null;
   }
 
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handlerCancel = (method: string = 'GET', url: string, params: any): void => {
     const key = this.getRequestKey(method, url, params);
     const requestCanceler: requestCanceler =
@@ -101,6 +111,8 @@ export const CancelRequest: cancelRequestInterface = new cancelRequest();
 export function getCache(requestKey: requestKey = '') {
   return cacheCfg.get(requestKey);
 }
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function setCache(requestKey: requestKey = '', response: any) {
   return cacheCfg.set(requestKey, response);
 }
@@ -117,6 +129,8 @@ export let ax: AxiosInstance | null = null;
 export function axiosInit(
   baseURL: string,
   errorAdapter?: errorAdapterType,
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   defaultExtendOption?: { [key: string]: any }
 ) {
   ax = axios.create({
@@ -197,7 +211,11 @@ export function axiosInit(
 export const request: requestInterface = function (
   _method: string = 'GET',
   url: string,
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _params: { [key: string]: any } = {},
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _extendOption: { [key: string]: any } = {},
   hasErrorAdapter: boolean = true
 ) {
@@ -293,6 +311,8 @@ export const request: requestInterface = function (
           const headers = extendOption?.headers;
           const response = await request.errorAdapter(
             error,
+            // TODO
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (newHeaders: any) =>
               request(
                 _method,
@@ -320,7 +340,6 @@ export const request: requestInterface = function (
         }
       }
       if (typeof window === 'undefined') {
-        // eslint-disable-next-line unicorn/escape-case
         console.log('\x1b[31m%s\x1b[0m ', error);
       } else {
         try {
@@ -333,18 +352,28 @@ export const request: requestInterface = function (
     });
 };
 
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 request.get = function (...arg: requestArg): Promise<any> {
   return request('GET', ...arg);
 };
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 request.post = function (...arg: requestArg): Promise<any> {
   return request('POST', ...arg);
 };
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 request.put = function (...arg: requestArg): Promise<any> {
   return request('PUT', ...arg);
 };
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 request.delete = function (...arg: requestArg): Promise<any> {
   return request('DELETE', ...arg);
 };
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 request.patch = function (...arg: requestArg): Promise<any> {
   return request('PATCH', ...arg);
 };
