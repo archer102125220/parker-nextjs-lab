@@ -20,7 +20,8 @@ export function contentSecurityPolicyMiddleware(
 
   console.log('____contentSecurityPolicy____');
 
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+  // const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+  const nonce = crypto.randomUUID();
 
   console.log('____contentSecurityPolicy____ nonce');
   const cspHeader = `
@@ -44,6 +45,7 @@ export function contentSecurityPolicyMiddleware(
     .replace(/\s{2,}/g, ' ')
     .trim();
   console.log('____contentSecurityPolicy____ contentSecurityPolicyHeaderValue');
+  console.log({ nonce });
 
   requestHeaders.set('x-nonce', encodeURIComponent(nonce));
   console.log('____contentSecurityPolicy____ requestHeaders.set x-nonce');
