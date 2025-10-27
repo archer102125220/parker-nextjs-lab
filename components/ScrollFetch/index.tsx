@@ -9,6 +9,7 @@ import type {
   CSSProperties
 } from 'react';
 import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
+import Image from 'next/image';
 
 import { debounce } from 'lodash';
 
@@ -901,8 +902,9 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
                 refreshSlot({ isPulling, isPullStart, isShowRefreshIcon })
               ) : (
                 <p
-                  style={{ display: isShowRefreshIcon ? 'block' : 'none' }}
                   className={styles['scroll_fetch-trigger-pull_label']}
+                  style={{ display: isShowRefreshIcon ? 'block' : 'none' }}
+                  nonce={nonce}
                 >
                   {isPulling === true ? pullingLabel : pullLabel}
                 </p>
@@ -933,13 +935,14 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
                 <>
                   {hasRefreshIcon === false ? (
                     <div
-                      style={{ display: isShowRefreshIcon ? 'block' : 'none' }}
                       className={
                         styles['scroll_fetch-trigger-icon_center-icon']
                       }
+                      style={{ display: isShowRefreshIcon ? 'block' : 'none' }}
                       css-refresh-animation={
                         refreshing === true && isPullStart === false
                       }
+                      nonce={nonce}
                     />
                   ) : (
                     <div
@@ -948,8 +951,9 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
                         styles['scroll_fetch-trigger-icon_center-icon_img_bg']
                       }
                       css-activate-animation={refreshIconAnimation}
+                      nonce={nonce}
                     >
-                      <img
+                      <Image
                         src={computedRefreshIcon}
                         className={
                           styles[

@@ -18,6 +18,7 @@ import { Message } from '@/components/Message';
 export function Header(): ReactNode {
   const dispatch = useAppDispatch();
 
+  const nonce = useAppSelector<string>((state) => state.system.nonce);
   const systemName = useAppSelector<string>((state) => state.system.systemName);
   const loading = useAppSelector<boolean>((state) => state.system.loading);
   const messageState = useAppSelector<messageType>(
@@ -30,9 +31,9 @@ export function Header(): ReactNode {
   );
 
   return (
-    <Toolbar>
-      <PageLoading loading={loading} />
-      <GoBack />
+    <Toolbar nonce={nonce}>
+      <PageLoading nonce={nonce} loading={loading} />
+      <GoBack nonce={nonce} />
       <Message
         messageState={messageState}
         resetMessageState={resetMessageState}

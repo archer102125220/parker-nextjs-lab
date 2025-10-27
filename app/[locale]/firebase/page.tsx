@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 
 import LinkButton from '@/components/Link/Button';
 import GTMScnOpen from '@/components/Google/GTMScnOpen';
@@ -13,7 +14,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-function FirebasePage(): ReactNode {
+async function FirebasePage(): Promise<ReactNode> {
+  const nonce = (await headers()).get('x-nonce') || '';
+
   return (
     <main className={style.firebase_page}>
       <GTMScnOpen />
@@ -24,6 +27,7 @@ function FirebasePage(): ReactNode {
         <a
           href="https://resume-web-orpin.vercel.app/portfolio/firebase-admin"
           target="_blank"
+          rel="noopener"
         >
           電子履歷
         </a>
@@ -35,6 +39,7 @@ function FirebasePage(): ReactNode {
 
       <nav className={style['firebase_page-link_list']}>
         <LinkButton
+          nonce={nonce}
           className={style['firebase_page-link_list-link']}
           href="/firebase/cloud-messaging"
         >

@@ -23,12 +23,13 @@ type tokenListType = {
 
 type CloudMessagingDataTableProps = {
   serverTokenList: tokenListType;
+  nonce?: string;
 };
 
 export function CloudMessagingDataTable(
   props: CloudMessagingDataTableProps
 ): ReactNode {
-  const { serverTokenList } = props;
+  const { serverTokenList, nonce } = props;
 
   const dispatch = useAppDispatch();
 
@@ -138,8 +139,9 @@ export function CloudMessagingDataTable(
   );
 
   return (
-    <Box sx={{ marginTop: '8px' }}>
+    <Box nonce={nonce} sx={{ marginTop: '8px' }}>
       <Box
+        nonce={nonce}
         sx={{
           display: 'flex',
           flexDirection: 'row',
@@ -149,8 +151,9 @@ export function CloudMessagingDataTable(
         <Button
           variant="contained"
           color="primary"
-          startIcon={<CachedIcon />}
+          nonce={nonce}
           disabled={systemLoading}
+          startIcon={<CachedIcon />}
           onClick={handleRefresh}
         >
           重新整理
@@ -158,7 +161,7 @@ export function CloudMessagingDataTable(
       </Box>
 
       {loading === true ? (
-        <Skeleton sx={{ minHeight: '300px' }} />
+        <Skeleton nonce={nonce} sx={{ minHeight: '300px' }} />
       ) : isEmpty === true ? (
         ''
       ) : (
@@ -261,6 +264,7 @@ export function CloudMessagingDataTable(
                 >
                   <Button
                     color="error"
+                    nonce={nonce}
                     disabled={systemLoading}
                     onClick={() =>
                       handleDeleteToken(webToken.token as unknown as string)
@@ -314,6 +318,7 @@ export function CloudMessagingDataTable(
                 >
                   <Button
                     color="error"
+                    nonce={nonce}
                     disabled={systemLoading}
                     onClick={() =>
                       handleDeleteToken(androidToken.token as unknown as string)
@@ -367,6 +372,7 @@ export function CloudMessagingDataTable(
                 >
                   <Button
                     color="error"
+                    nonce={nonce}
                     disabled={systemLoading}
                     onClick={() =>
                       handleDeleteToken(iosToken.token as unknown as string)

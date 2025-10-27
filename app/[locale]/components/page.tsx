@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 
 import Box from '@mui/material/Box';
 
@@ -13,9 +14,12 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-function ComponentsPage(): ReactNode {
+async function ComponentsPage(): Promise<ReactNode> {
+  const nonce = (await headers()).get('x-nonce') || '';
+
   return (
     <Box
+      nonce={nonce}
       sx={{
         display: 'flex',
         justifyContent: 'space-around',
@@ -25,16 +29,32 @@ function ComponentsPage(): ReactNode {
       }}
     >
       <GTMScnOpen />
-      <LinkButton href="/components/dialog" sx={{ flexShrink: 0 }}>
+      <LinkButton
+        nonce={nonce}
+        href="/components/dialog"
+        sx={{ flexShrink: 0 }}
+      >
         Dialog 元件
       </LinkButton>
-      <LinkButton href="/components/swiper-js" sx={{ flexShrink: 0 }}>
+      <LinkButton
+        nonce={nonce}
+        href="/components/swiper-js"
+        sx={{ flexShrink: 0 }}
+      >
         SwiperJs 元件
       </LinkButton>
-      <LinkButton href="/components/drawer" sx={{ flexShrink: 0 }}>
+      <LinkButton
+        nonce={nonce}
+        href="/components/drawer"
+        sx={{ flexShrink: 0 }}
+      >
         Drawer 元件
       </LinkButton>
-      <LinkButton href="/components/scroll-fetch" sx={{ flexShrink: 0 }}>
+      <LinkButton
+        nonce={nonce}
+        href="/components/scroll-fetch"
+        sx={{ flexShrink: 0 }}
+      >
         下拉及無限滾動元件
       </LinkButton>
     </Box>

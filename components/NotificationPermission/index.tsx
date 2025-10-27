@@ -12,7 +12,13 @@ import { useFirebase } from '@/hooks/useFirebase';
 
 import style from '@/components/NotificationPermission/style.module.scss';
 
-export function NotificationPermission(): ReactNode {
+interface NotificationPermissionProps {
+  nonce?: string;
+}
+
+export function NotificationPermission({
+  nonce
+}: NotificationPermissionProps): ReactNode {
   const Firebase = useFirebase();
 
   const [isShow, setIsShow] = useState<boolean>(false);
@@ -48,12 +54,16 @@ export function NotificationPermission(): ReactNode {
   const handleCancel = useCallback(function cancel() {
     setIsShow(false);
   }, []);
+  // TODO
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const handleCofirm = useCallback(function cofirm() {
     setProcessing(true);
     setAgreeNotification(true);
   }, []);
 
   const handleFirebase = useCallback(
+    // TODO
+    // eslint-disable-next-line react-hooks/preserve-manual-memoization
     async function _firebase() {
       console.log('handleFirebase');
       setLoading(true);
@@ -87,6 +97,8 @@ export function NotificationPermission(): ReactNode {
     console.log({ firebaseCroeInited, agreeNotification });
     if (firebaseCroeInited === true && Firebase instanceof firebase === true) {
       if (agreeNotification === false) {
+        // TODO
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsShow(true);
       } else if (Firebase.croeInited === false) {
         handleFirebase();
@@ -96,6 +108,7 @@ export function NotificationPermission(): ReactNode {
 
   return (
     <Snackbar
+      nonce={nonce}
       open={isShow}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
     >
@@ -107,6 +120,7 @@ export function NotificationPermission(): ReactNode {
         </div>
         <div className={style['notification_permission-actions']}>
           <Button
+            nonce={nonce}
             color="error"
             variant="contained"
             disabled={processing}
@@ -115,6 +129,7 @@ export function NotificationPermission(): ReactNode {
             不同意
           </Button>
           <Button
+            nonce={nonce}
             color="primary"
             variant="contained"
             loading={processing}

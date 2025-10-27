@@ -5,7 +5,10 @@ import { usePathname, useRouter } from 'next/navigation';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-export function GoBack(): ReactNode {
+interface GoBackProps {
+  nonce?: string;
+}
+export function GoBack({ nonce }: GoBackProps): ReactNode {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -14,7 +17,7 @@ export function GoBack(): ReactNode {
   };
 
   return ['/', '/zh-tw', '/en'].includes(pathname) === false ? (
-    <IconButton color="primary" onClick={handleBack}>
+    <IconButton color="primary" onClick={handleBack} nonce={nonce}>
       <ArrowBackIcon />
     </IconButton>
   ) : (

@@ -14,7 +14,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 
 import { routing } from '@/i18n/routing';
 
-import DefaultLayout from '@/layout/default';
+import { DefaultLayout } from '@/layout/default';
 
 import { PolyfillEvent } from '@/components/PolyfillEvent';
 import { AxiosInit } from '@/components/AxiosInit';
@@ -153,7 +153,7 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
                 <Analytics />
                 <SpeedInsights />
                 <NotificationPermission />
-                <DefaultLayout>{children}</DefaultLayout>
+                <DefaultLayout nonce={nonce}>{children}</DefaultLayout>
               </MuiThemeProvider>
             </AppRouterCacheProvider>
           </ReduxInit>

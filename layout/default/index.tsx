@@ -6,10 +6,11 @@ import Footer from '@/components/Layout/Footer';
 
 interface DefaultLayoutProps {
   children: ReactNode;
+  nonce?: string;
 }
 
-export default function DefaultLayout(props: DefaultLayoutProps): ReactNode {
-  const { children } = props;
+export function DefaultLayout(props: DefaultLayoutProps): ReactNode {
+  const { children, nonce } = props;
 
   return (
     <>
@@ -20,6 +21,7 @@ export default function DefaultLayout(props: DefaultLayoutProps): ReactNode {
           flexDirection: 'column',
           minHeight: '100dvh'
         }}
+        nonce={nonce}
       >
         <Header />
         <Box
@@ -28,11 +30,16 @@ export default function DefaultLayout(props: DefaultLayoutProps): ReactNode {
             flexGrow: 1,
             py: 3
           }}
+          nonce={nonce}
         >
-          <Container maxWidth="lg">{children}</Container>
+          <Container maxWidth="lg" nonce={nonce}>
+            {children}
+          </Container>
         </Box>
         <Footer />
       </Box>
     </>
   );
 }
+
+export default DefaultLayout;

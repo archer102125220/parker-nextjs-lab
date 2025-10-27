@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 
 import Box from '@mui/material/Box';
 
@@ -19,6 +20,8 @@ export function generateMetadata(): Metadata {
 }
 
 async function FirebaseCloudMessagingPage(): Promise<ReactNode> {
+  const nonce = (await headers()).get('x-nonce') || '';
+
   const [webTokenList, androidTokenList, iosTokenList] = await Promise.all([
     messagingFindAllToken({ os: 'web' }),
     messagingFindAllToken({ os: 'android' }),
@@ -33,11 +36,11 @@ async function FirebaseCloudMessagingPage(): Promise<ReactNode> {
   return (
     <main className={style.cloud_messaging_page}>
       <GTMScnOpen />
-      <Box component="h1" sx={{ marginBottom: '8px' }}>
+      <Box component="h1" sx={{ marginBottom: '8px' }} nonce={nonce}>
         FCM推播通知後台
       </Box>
-      <CloudMessagingForm serverTokenList={tokenList} />
-      <CloudMessagingDataTable serverTokenList={tokenList} />
+      <CloudMessagingForm serverTokenList={tokenList} nonce={nonce} />
+      <CloudMessagingDataTable serverTokenList={tokenList} nonce={nonce} />
     </main>
   );
 }

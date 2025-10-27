@@ -4,13 +4,15 @@ import LinearProgress from '@mui/material/LinearProgress';
 
 interface PageLoadingProps {
   loading: boolean;
+  nonce?: string;
 }
 
 export function PageLoading(props: Readonly<PageLoadingProps>): ReactNode {
-  const { loading = false } = props;
+  const { loading = false, nonce } = props;
 
   return loading === true ? (
     <Box
+      nonce={nonce}
       sx={{
         position: 'absolute',
         minWidth: '100vw',
@@ -20,7 +22,7 @@ export function PageLoading(props: Readonly<PageLoadingProps>): ReactNode {
         zIndex: 100
       }}
     >
-      <LinearProgress color="primary" />
+      <LinearProgress nonce={nonce} color="primary" />
     </Box>
   ) : (
     <></>

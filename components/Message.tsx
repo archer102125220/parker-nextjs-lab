@@ -19,6 +19,7 @@ import {
 export interface MessageProps {
   messageState: messageType;
   anchorOrigin?: SnackbarOrigin;
+  nonce?: string;
   autoHideDuration?: number;
   width?: string | number;
   resetMessageState?: () => void;
@@ -26,6 +27,7 @@ export interface MessageProps {
 
 export function Message(props: MessageProps): ReactNode {
   const {
+    nonce,
     messageState = { text: '', type: 'success' },
     anchorOrigin = { vertical: 'top', horizontal: 'center' },
     autoHideDuration = 6000,
@@ -42,6 +44,8 @@ export function Message(props: MessageProps): ReactNode {
 
   useEffect(() => {
     const { text: _text = '', type: _type = 'success' } = messageState || {};
+    // TODO
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMessageText(_text);
     setMessageType(_type || 'success');
     if (_text !== '' && MESSAGE_TYPE.includes(_type)) {
@@ -61,17 +65,19 @@ export function Message(props: MessageProps): ReactNode {
 
   return (
     <Snackbar
+      nonce={nonce}
       open={open}
       anchorOrigin={anchorOrigin}
       autoHideDuration={autoHideDuration}
       onClose={handleClose}
     >
       <MuiAlert
+        nonce={nonce}
+        severity={messageType}
+        sx={{ width, alignItems: 'center' }}
         elevation={6}
         variant="filled"
         onClose={handleClose}
-        severity={messageType}
-        sx={{ width, alignItems: 'center' }}
       >
         {messageText}
       </MuiAlert>
