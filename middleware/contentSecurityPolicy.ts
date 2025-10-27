@@ -1,9 +1,9 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-export async function contentSecurityPolicyMiddleware(
+export function contentSecurityPolicyMiddleware(
   request: NextRequest
-): Promise<NextResponse | void> {
+): NextResponse | void {
   const requestHeaders = new Headers(request.headers);
   const response = NextResponse.next({
     request: {
@@ -21,6 +21,8 @@ export async function contentSecurityPolicyMiddleware(
   console.log('____contentSecurityPolicy____');
 
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+
+  console.log('____contentSecurityPolicy____ nonce');
   const cspHeader = `
     default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.youtube.com https://connect.facebook.net https://www.googletagmanager.com; // 允許資源來源
     font-src 'self' https://fonts.gstatic.com;
@@ -34,23 +36,34 @@ export async function contentSecurityPolicyMiddleware(
     connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com;
     frame-src 'self' https://www.youtube.com https://www.googletagmanager.com;
     upgrade-insecure-requests;
-`;
+  `;
+  console.log('____contentSecurityPolicy____ cspHeader');
+
   // Replace newline characters and spaces
   const contentSecurityPolicyHeaderValue = cspHeader
     .replace(/\s{2,}/g, ' ')
     .trim();
+  console.log('____contentSecurityPolicy____ contentSecurityPolicyHeaderValue');
 
   requestHeaders.set('x-nonce', encodeURIComponent(nonce));
+  console.log('____contentSecurityPolicy____ requestHeaders.set x-nonce');
   requestHeaders.set(
     'Content-Security-Policy',
     contentSecurityPolicyHeaderValue
   );
+  console.log(
+    '____contentSecurityPolicy____ requestHeaders.set Content-Security-Policy'
+  );
 
-  // response.headers.set('x-nonce', encodeURIComponent(nonce));
-  // response.headers.set(
-  //   'Content-Security-Policy',
-  //   contentSecurityPolicyHeaderValue
-  // );
+  response.headers.set('x-nonce', encodeURIComponent(nonce));
+  console.log('____contentSecurityPolicy____ response.headers.set x-nonce');
+  response.headers.set(
+    'Content-Security-Policy',
+    contentSecurityPolicyHeaderValue
+  );
+  console.log(
+    '____contentSecurityPolicy____ response.headers.set Content-Security-Policy'
+  );
 
   return response;
 }
