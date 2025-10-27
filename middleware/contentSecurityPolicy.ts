@@ -43,13 +43,13 @@ export async function contentSecurityPolicyMiddleware(
   requestHeaders.set('x-nonce', encodeURIComponent(nonce));
   requestHeaders.set(
     'Content-Security-Policy',
-    contentSecurityPolicyHeaderValue
+    encodeURIComponent(contentSecurityPolicyHeaderValue)
   );
 
   response.headers.set('x-nonce', encodeURIComponent(nonce));
   response.headers.set(
     'Content-Security-Policy',
-    contentSecurityPolicyHeaderValue
+    encodeURIComponent(contentSecurityPolicyHeaderValue)
   );
 
   return response;
