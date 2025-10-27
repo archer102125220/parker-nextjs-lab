@@ -1,7 +1,6 @@
 'use server';
 import type { ReactNode } from 'react';
 import { getTranslations } from 'next-intl/server';
-import { headers } from 'next/headers';
 
 import { storeInit } from '@/store';
 import { ClientProvider } from '@/components/ClientProvider';
@@ -9,16 +8,19 @@ import { ClientProvider } from '@/components/ClientProvider';
 type ReduxInitProps = {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
+  nonce?: string;
 };
 
 export async function ReduxInit({
   children,
-  params
+  params,
+  nonce
 }: ReduxInitProps): Promise<ReactNode> {
-  const nonce = (await headers()).get('x-nonce');
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'metadata' });
   const systemName = t('systemName');
+
+  console.log({ nonce });
 
   // 在伺服器端創建 store 並設置初始狀態
   const serverStore = storeInit();

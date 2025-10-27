@@ -82,6 +82,7 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
   const { children, params } = props;
 
   const nonce = (await headers()).get('x-nonce') || '';
+  console.log({ nonce });
 
   // Ensure that the incoming `locale` is valid
   const { locale } = await params;
@@ -126,7 +127,7 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
       </head>
       <body>
         <NextIntlClientProvider locale={locale}>
-          <ReduxInit params={params}>
+          <ReduxInit params={params} nonce={nonce}>
             <AppRouterCacheProvider>
               <MuiThemeProvider>
                 <AxiosInit apiBase={process.env.NEXT_PUBLIC_API_BASE} />
