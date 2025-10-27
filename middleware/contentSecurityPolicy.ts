@@ -40,16 +40,16 @@ export async function contentSecurityPolicyMiddleware(
     .replace(/\s{2,}/g, ' ')
     .trim();
 
-  requestHeaders.set('x-nonce', encodeURIComponent(nonce));
-  requestHeaders.set(
-    'Content-Security-Policy',
-    encodeURIComponent(contentSecurityPolicyHeaderValue)
-  );
+  // requestHeaders.set('x-nonce', encodeURIComponent(nonce));
+  // requestHeaders.set(
+  //   'Content-Security-Policy',
+  //   contentSecurityPolicyHeaderValue
+  // );
 
   response.headers.set('x-nonce', encodeURIComponent(nonce));
   response.headers.set(
     'Content-Security-Policy',
-    encodeURIComponent(contentSecurityPolicyHeaderValue)
+    contentSecurityPolicyHeaderValue
   );
 
   return response;
