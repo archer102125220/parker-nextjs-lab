@@ -18,11 +18,8 @@ export function contentSecurityPolicyMiddleware(
     return;
   }
 
-  console.log('____contentSecurityPolicy____');
-
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
 
-  console.log('____contentSecurityPolicy____ nonce');
   const cspHeader = `
     default-src 'self' fonts.googleapis.com fonts.gstatic.com www.youtube.com connect.facebook.net www.googletagmanager.com;
     font-src 'self' fonts.gstatic.com;
@@ -33,25 +30,17 @@ export function contentSecurityPolicyMiddleware(
     object-src 'none';
     script-src 'self' 'nonce-${nonce}' 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' connect.facebook.net www.googletagmanager.com;
     style-src 'self' 'nonce-${nonce}' 'unsafe-inline' fonts.googleapis.com;
-    connect-src 'self' fonts.googleapis.com fonts.gstatic.com;
+    connect-src 'self' fonts.googleapis.com fonts.gstatic.com firebase.googleapis.com www.google-analytics.com;
     frame-src 'self' www.youtube.com www.googletagmanager.com;
     upgrade-insecure-requests;
   `;
-  console.log('____contentSecurityPolicy____ cspHeader');
 
   // Replace newline characters and spaces
   const contentSecurityPolicyHeaderValue = cspHeader
     .replace(/\s{2,}/g, ' ')
     .trim();
-  console.log('____contentSecurityPolicy____ contentSecurityPolicyHeaderValue');
-  console.log({
-    contentSecurityPolicyHeaderValue,
-    ['encodeURIComponent(contentSecurityPolicyHeaderValue)']:
-      encodeURIComponent(contentSecurityPolicyHeaderValue)
-  });
 
   requestHeaders.set('x-nonce', nonce);
-  console.log('____contentSecurityPolicy____ requestHeaders.set x-nonce');
   requestHeaders.set(
     'Content-Security-Policy',
     contentSecurityPolicyHeaderValue
@@ -61,7 +50,6 @@ export function contentSecurityPolicyMiddleware(
   );
 
   response.headers.set('x-nonce', nonce);
-  console.log('____contentSecurityPolicy____ response.headers.set x-nonce');
   response.headers.set(
     'Content-Security-Policy',
     contentSecurityPolicyHeaderValue
