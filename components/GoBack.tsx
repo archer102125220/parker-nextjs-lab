@@ -17,7 +17,7 @@ export function GoBack({ nonce }: GoBackProps): ReactNode {
   };
 
   return ['/', '/zh-tw', '/en'].includes(pathname) === false ? (
-    <IconButton color="primary" onClick={handleBack} nonce={nonce}>
+    <IconButton color="primary" onClick={handleBack} nonce={`nonce-${nonce}`}>
       <ArrowBackIcon />
     </IconButton>
   ) : (

@@ -211,7 +211,11 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
   );
 
   return (
-    <div className={styles.dialog_root} style={cssVariable} nonce={nonce}>
+    <div
+      className={styles.dialog_root}
+      style={cssVariable}
+      nonce={`nonce-${nonce}`}
+    >
       {open === true ? (
         <div
           className={styles['dialog_root-dialog']}

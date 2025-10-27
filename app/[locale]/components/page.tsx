@@ -19,7 +19,6 @@ async function ComponentsPage(): Promise<ReactNode> {
 
   return (
     <Box
-      nonce={nonce}
       sx={{
         display: 'flex',
         justifyContent: 'space-around',
@@ -27,33 +26,30 @@ async function ComponentsPage(): Promise<ReactNode> {
         alignItems: 'center',
         flexWrap: 'wrap'
       }}
+      nonce={`nonce-${nonce}`}
     >
       <GTMScnOpen />
-      <LinkButton
-        nonce={nonce}
-        href="/components/dialog"
-        sx={{ flexShrink: 0 }}
-      >
+      <LinkButton href="/components/dialog" sx={{ flexShrink: 0 }}>
         Dialog 元件
       </LinkButton>
       <LinkButton
-        nonce={nonce}
         href="/components/swiper-js"
         sx={{ flexShrink: 0 }}
+        nonce={`nonce-${nonce}`}
       >
         SwiperJs 元件
       </LinkButton>
       <LinkButton
-        nonce={nonce}
         href="/components/drawer"
         sx={{ flexShrink: 0 }}
+        nonce={`nonce-${nonce}`}
       >
         Drawer 元件
       </LinkButton>
       <LinkButton
-        nonce={nonce}
         href="/components/scroll-fetch"
         sx={{ flexShrink: 0 }}
+        nonce={`nonce-${nonce}`}
       >
         下拉及無限滾動元件
       </LinkButton>

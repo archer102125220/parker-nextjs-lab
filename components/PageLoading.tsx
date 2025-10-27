@@ -12,7 +12,6 @@ export function PageLoading(props: Readonly<PageLoadingProps>): ReactNode {
 
   return loading === true ? (
     <Box
-      nonce={nonce}
       sx={{
         position: 'absolute',
         minWidth: '100vw',
@@ -21,8 +20,9 @@ export function PageLoading(props: Readonly<PageLoadingProps>): ReactNode {
         right: '0',
         zIndex: 100
       }}
+      nonce={`nonce-${nonce}`}
     >
-      <LinearProgress nonce={nonce} color="primary" />
+      <LinearProgress color="primary" nonce={`nonce-${nonce}`} />
     </Box>
   ) : (
     <></>

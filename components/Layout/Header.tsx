@@ -31,14 +31,20 @@ export function Header(): ReactNode {
   );
 
   return (
-    <Toolbar nonce={nonce}>
-      <PageLoading nonce={nonce} loading={loading} />
-      <GoBack nonce={nonce} />
+    <Toolbar nonce={`nonce-${nonce}`}>
+      <PageLoading nonce={`nonce-${nonce}`} loading={loading} />
+      <GoBack nonce={`nonce-${nonce}`} />
       <Message
+        nonce={`nonce-${nonce}`}
         messageState={messageState}
         resetMessageState={resetMessageState}
       />
-      <Typography variant="h6" component="div" sx={{ flex: 1 }}>
+      <Typography
+        variant="h6"
+        component="div"
+        sx={{ flex: 1 }}
+        nonce={`nonce-${nonce}`}
+      >
         <LinkBox
           href="/"
           sx={{
@@ -48,6 +54,7 @@ export function Header(): ReactNode {
             flexDirection: 'row',
             alignItems: 'center'
           }}
+          nonce={`nonce-${nonce}`}
         >
           <Image
             src="/img/icon/Next.jsLab.v.01.svg"

@@ -19,14 +19,14 @@ export function Footer(props: BoxProps): ReactNode {
             ? theme.palette.grey[200]
             : theme.palette.grey[800]
       }}
-      nonce={nonce}
+      nonce={`nonce-${nonce}`}
       {...props}
     >
       <Typography
         variant="body2"
         color="text.secondary"
         align="center"
-        nonce={nonce}
+        nonce={`nonce-${nonce}`}
       >
         © {new Date().getFullYear()} {systemName}
       </Typography>

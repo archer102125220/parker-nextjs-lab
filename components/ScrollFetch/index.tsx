@@ -883,7 +883,7 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
       ref={scrollFetchRef}
       className={[styles.scroll_fetch, 'scroll_fetch'].join(' ')}
       style={cssVariable}
-      nonce={nonce}
+      nonce={`nonce-${nonce}`}
       onScrollEnd={handleScrollEnd}
       onMouseDown={handlePullStart}
       onMouseMove={handlePulling}
@@ -904,7 +904,7 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
                 <p
                   className={styles['scroll_fetch-trigger-pull_label']}
                   style={{ display: isShowRefreshIcon ? 'block' : 'none' }}
-                  nonce={nonce}
+                  nonce={`nonce-${nonce}`}
                 >
                   {isPulling === true ? pullingLabel : pullLabel}
                 </p>
@@ -942,7 +942,7 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
                       css-refresh-animation={
                         refreshing === true && isPullStart === false
                       }
-                      nonce={nonce}
+                      nonce={`nonce-${nonce}`}
                     />
                   ) : (
                     <div
@@ -951,7 +951,7 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
                         styles['scroll_fetch-trigger-icon_center-icon_img_bg']
                       }
                       css-activate-animation={refreshIconAnimation}
-                      nonce={nonce}
+                      nonce={`nonce-${nonce}`}
                     >
                       <Image
                         src={computedRefreshIcon}

@@ -65,14 +65,14 @@ export function Message(props: MessageProps): ReactNode {
 
   return (
     <Snackbar
-      nonce={nonce}
+      nonce={`nonce-${nonce}`}
       open={open}
       anchorOrigin={anchorOrigin}
       autoHideDuration={autoHideDuration}
       onClose={handleClose}
     >
       <MuiAlert
-        nonce={nonce}
+        nonce={`nonce-${nonce}`}
         severity={messageType}
         sx={{ width, alignItems: 'center' }}
         elevation={6}

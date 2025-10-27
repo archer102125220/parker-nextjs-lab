@@ -35,7 +35,7 @@ export function I18nList(): ReactNode {
 
   return (
     <div>
-      <Button ref={triggerRef} nonce={nonce} onClick={handleOpen}>
+      <Button ref={triggerRef} nonce={`nonce-${nonce}`} onClick={handleOpen}>
         {/* {t(locale)} */}
         {locale === 'zh-tw' ? '中文' : 'English'}
       </Button>
@@ -44,7 +44,7 @@ export function I18nList(): ReactNode {
         // TODO
         // eslint-disable-next-line react-hooks/refs
         anchorEl={triggerRef.current}
-        nonce={nonce}
+        nonce={`nonce-${nonce}`}
         open={menuOpen}
         onClose={handleClose}
         slotProps={{
@@ -53,12 +53,12 @@ export function I18nList(): ReactNode {
           }
         }}
       >
-        <MenuItem nonce={nonce} onClick={handleClose}>
+        <MenuItem nonce={`nonce-${nonce}`} onClick={handleClose}>
           <LinkButton
             color="inherit"
             locale="zh-tw"
             replace={true}
-            nonce={nonce}
+            nonce={`nonce-${nonce}`}
             href={pathname.replace(/^\/zh-tw|^\/en/gi, '') || '/'}
             sx={{
               fontWeight: pathname.startsWith('/zh-tw') ? 'bold' : 'normal',
@@ -72,12 +72,12 @@ export function I18nList(): ReactNode {
             {/* {t('zh-tw')} */}
           </LinkButton>
         </MenuItem>
-        <MenuItem nonce={nonce} onClick={handleClose}>
+        <MenuItem nonce={`nonce-${nonce}`} onClick={handleClose}>
           <LinkButton
             color="inherit"
             locale="en"
             replace={true}
-            nonce={nonce}
+            nonce={`nonce-${nonce}`}
             href={pathname.replace(/^\/zh-tw|^\/en/gi, '') || '/'}
             sx={{
               fontWeight: pathname.startsWith('/en') ? 'bold' : 'normal',

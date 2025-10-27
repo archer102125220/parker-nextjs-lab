@@ -603,7 +603,7 @@ export function Drawer(props: DrawerProps): ReactNode {
     <div
       className={`drawer_root ${styles.drawer_root}`}
       style={cssVariable}
-      nonce={nonce}
+      nonce={`nonce-${nonce}`}
     >
       <DrawerBtn
         Element={OpenBtn}

@@ -10,19 +10,19 @@ async function Locale(): Promise<ReactNode> {
 
   return (
     <Box
-      nonce={nonce}
       sx={{
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'row',
         alignItems: 'center'
       }}
+      nonce={`nonce-${nonce}`}
     >
       <GTMScnOpen />
-      <LinkButton nonce={nonce} href="/components">
+      <LinkButton href="/components" nonce={`nonce-${nonce}`}>
         自定義組件列表
       </LinkButton>
-      <LinkButton nonce={nonce} href="/firebase">
+      <LinkButton href="/firebase" nonce={`nonce-${nonce}`}>
         Firebase 整合測試
       </LinkButton>
     </Box>

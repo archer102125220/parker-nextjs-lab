@@ -21,7 +21,7 @@ export function DefaultLayout(props: DefaultLayoutProps): ReactNode {
           flexDirection: 'column',
           minHeight: '100dvh'
         }}
-        nonce={nonce}
+        nonce={`nonce-${nonce}`}
       >
         <Header />
         <Box
@@ -30,9 +30,9 @@ export function DefaultLayout(props: DefaultLayoutProps): ReactNode {
             flexGrow: 1,
             py: 3
           }}
-          nonce={nonce}
+          nonce={`nonce-${nonce}`}
         >
-          <Container maxWidth="lg" nonce={nonce}>
+          <Container maxWidth="lg" nonce={`nonce-${nonce}`}>
             {children}
           </Container>
         </Box>

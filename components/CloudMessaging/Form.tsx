@@ -142,32 +142,32 @@ export function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
       component="form"
       container
       spacing={2}
-      nonce={nonce}
+      nonce={`nonce-${nonce}`}
       onSubmit={handlePushNotification}
     >
-      <Grid size={12} nonce={nonce}>
+      <Grid size={12} nonce={`nonce-${nonce}`}>
         <TextField
           label="推播標題"
           fullWidth
-          nonce={nonce}
+          nonce={`nonce-${nonce}`}
           value={appMessageTitle}
           onChange={(e) => setAppMessageTitle(e.target.value)}
         />
       </Grid>
-      <Grid nonce={nonce} size={12}>
+      <Grid size={12} nonce={`nonce-${nonce}`}>
         <TextField
           label="推播訊息"
           fullWidth
-          nonce={nonce}
+          nonce={`nonce-${nonce}`}
           value={appMessageData}
           onChange={(e) => setAppMessageData(e.target.value)}
         />
       </Grid>
-      <Grid nonce={nonce} size={12}>
+      <Grid size={12} nonce={`nonce-${nonce}`}>
         <TextField
           label="推播圖片網址"
           fullWidth
-          nonce={nonce}
+          nonce={`nonce-${nonce}`}
           value={appMessageImg}
           onChange={(e) => setAppMessageImg(e.target.value)}
         />
@@ -180,27 +180,27 @@ export function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
           justifyContent: 'center',
           alignItems: 'center'
         }}
-        nonce={nonce}
+        nonce={`nonce-${nonce}`}
       >
-        <Grid size={{ xs: 12, md: 6 }} nonce={nonce}>
+        <Grid size={{ xs: 12, md: 6 }} nonce={`nonce-${nonce}`}>
           <Button
             variant="outlined"
             color="primary"
             fullWidth
-            nonce={nonce}
+            nonce={`nonce-${nonce}`}
             disabled={systemLoading}
             onClick={handleResetForm}
           >
             重置
           </Button>
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }} nonce={nonce}>
+        <Grid size={{ xs: 12, md: 6 }} nonce={`nonce-${nonce}`}>
           <Button
             variant="contained"
             color="primary"
             fullWidth
             type="submit"
-            nonce={nonce}
+            nonce={`nonce-${nonce}`}
             disabled={systemLoading}
           >
             送出

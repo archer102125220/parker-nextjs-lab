@@ -127,17 +127,17 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
       </head>
       <body>
         <NextIntlClientProvider locale={locale}>
-          <ReduxInit params={params} nonce={nonce}>
+          <ReduxInit params={params} nonce={`nonce-${nonce}`}>
             <AppRouterCacheProvider>
               <MuiThemeProvider>
                 <AxiosInit apiBase={process.env.NEXT_PUBLIC_API_BASE} />
                 <GAInit
                   gaId={process.env.NEXT_PUBLIC_GA_ID || ''}
-                  nonce={nonce}
+                  nonce={`nonce-${nonce}`}
                 />
                 <GTMInit
                   gtmId={process.env.NEXT_PUBLIC_GTM_ID || ''}
-                  nonce={nonce}
+                  nonce={`nonce-${nonce}`}
                 />
                 <FirebaseInit
                   apiKey={process.env.NEXT_PUBLIC_FIREBASE_API_KEY || ''}
@@ -153,7 +153,9 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
                 <Analytics />
                 <SpeedInsights />
                 <NotificationPermission />
-                <DefaultLayout nonce={nonce}>{children}</DefaultLayout>
+                <DefaultLayout nonce={`nonce-${nonce}`}>
+                  {children}
+                </DefaultLayout>
               </MuiThemeProvider>
             </AppRouterCacheProvider>
           </ReduxInit>

@@ -32,7 +32,7 @@ export function GTMInit({
           height="0"
           width="0"
           style={{ display: 'none', visibility: 'hidden' }}
-          nonce={nonce}
+          nonce={`nonce-${nonce}`}
         />
       </noscript>
       {children}
