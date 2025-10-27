@@ -172,6 +172,8 @@ export function SwiperJs(props: swiperJsPropsType): ReactNode {
     touchEnd
   } = props;
 
+  console.log(JSON.stringify({ SwiperJsNonce: nonce }));
+
   const swiperJsRootRef = useRef<HTMLDivElement>(null);
   const prevRef = useRef<HTMLDivElement>(null);
   const nextRef = useRef<HTMLDivElement>(null);
@@ -571,7 +573,6 @@ export function SwiperJs(props: swiperJsPropsType): ReactNode {
       ref={swiperJsRootRef}
       className={[style['swiper_js'], className].join(' ')}
       style={cssVariable}
-      nonce={nonce}
       onScroll={resetSwiperScroll}
     >
       {/* If we need navigation buttons */}

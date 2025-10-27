@@ -120,18 +120,18 @@ export function NotificationPermission({
         </div>
         <div className={style['notification_permission-actions']}>
           <Button
-            nonce={nonce}
             color="error"
             variant="contained"
+            nonce={nonce}
             disabled={processing}
             onClick={handleCancel}
           >
             不同意
           </Button>
           <Button
-            nonce={nonce}
             color="primary"
             variant="contained"
+            nonce={nonce}
             loading={processing}
             onClick={handleCofirm}
           >

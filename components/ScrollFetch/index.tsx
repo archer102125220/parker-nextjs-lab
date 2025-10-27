@@ -134,6 +134,8 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
   onScrollEnd,
   onInfinityFail
 }) => {
+  console.log(JSON.stringify({ ScrollFetchNonce: nonce }));
+
   // Refs
   const scrollFetchRef = useRef<HTMLDivElement>(null);
   const infinityTriggerRef = useRef<HTMLDivElement>(null);
@@ -883,7 +885,6 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
       ref={scrollFetchRef}
       className={[styles.scroll_fetch, 'scroll_fetch'].join(' ')}
       style={cssVariable}
-      nonce={nonce}
       onScrollEnd={handleScrollEnd}
       onMouseDown={handlePullStart}
       onMouseMove={handlePulling}
@@ -904,7 +905,6 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
                 <p
                   className={styles['scroll_fetch-trigger-pull_label']}
                   style={{ display: isShowRefreshIcon ? 'block' : 'none' }}
-                  nonce={nonce}
                 >
                   {isPulling === true ? pullingLabel : pullLabel}
                 </p>
@@ -939,10 +939,7 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
                         styles['scroll_fetch-trigger-icon_center-icon']
                       }
                       style={{ display: isShowRefreshIcon ? 'block' : 'none' }}
-                      css-refresh-animation={
-                        refreshing === true && isPullStart === false
-                      }
-                      nonce={nonce}
+                      css-refresh-animation={`${refreshing === true && isPullStart === false}`}
                     />
                   ) : (
                     <div
@@ -950,20 +947,19 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
                       className={
                         styles['scroll_fetch-trigger-icon_center-icon_img_bg']
                       }
-                      css-activate-animation={refreshIconAnimation}
-                      nonce={nonce}
+                      css-activate-animation={`${refreshIconAnimation}`}
                     >
                       <Image
                         src={computedRefreshIcon}
+                        css-refresh-animation={`${refreshing === true && isPullStart === false}`}
                         className={
                           styles[
                             'scroll_fetch-trigger-icon_center-icon_img_bg-icon_img'
                           ]
                         }
+                        width={23}
+                        height={23}
                         alt="scroll fetch icon"
-                        css-refresh-animation={
-                          refreshing === true && isPullStart === false
-                        }
                       />
                     </div>
                   )}

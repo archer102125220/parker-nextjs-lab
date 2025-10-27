@@ -36,7 +36,7 @@ export function contentSecurityPolicyMiddleware(
   // `;
   const cspHeader = `
     default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.youtube.com https://connect.facebook.net https://www.googletagmanager.com;
-    font-src 'self' https://fonts.gstatic.com;
+    font-src 'self' data: https://fonts.gstatic.com;
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'self';

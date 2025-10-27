@@ -31,6 +31,8 @@ export function CloudMessagingDataTable(
 ): ReactNode {
   const { serverTokenList, nonce } = props;
 
+  console.log(JSON.stringify({ CloudMessagingDataTableNonce: nonce }));
+
   const dispatch = useAppDispatch();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -139,19 +141,17 @@ export function CloudMessagingDataTable(
   );
 
   return (
-    <Box sx={{ marginTop: '8px' }} nonce={nonce}>
+    <Box sx={{ marginTop: '8px' }}>
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'flex-end'
         }}
-        nonce={nonce}
       >
         <Button
           variant="contained"
           color="primary"
-          nonce={nonce}
           disabled={systemLoading}
           startIcon={<CachedIcon />}
           onClick={handleRefresh}
@@ -161,7 +161,7 @@ export function CloudMessagingDataTable(
       </Box>
 
       {loading === true ? (
-        <Skeleton nonce={nonce} sx={{ minHeight: '300px' }} />
+        <Skeleton sx={{ minHeight: '300px' }} />
       ) : isEmpty === true ? (
         ''
       ) : (
@@ -264,7 +264,6 @@ export function CloudMessagingDataTable(
                 >
                   <Button
                     color="error"
-                    nonce={nonce}
                     disabled={systemLoading}
                     onClick={() =>
                       handleDeleteToken(webToken.token as unknown as string)
@@ -318,7 +317,6 @@ export function CloudMessagingDataTable(
                 >
                   <Button
                     color="error"
-                    nonce={nonce}
                     disabled={systemLoading}
                     onClick={() =>
                       handleDeleteToken(androidToken.token as unknown as string)
@@ -372,7 +370,6 @@ export function CloudMessagingDataTable(
                 >
                   <Button
                     color="error"
-                    nonce={nonce}
                     disabled={systemLoading}
                     onClick={() =>
                       handleDeleteToken(iosToken.token as unknown as string)

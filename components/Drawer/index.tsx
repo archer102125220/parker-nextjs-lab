@@ -121,6 +121,8 @@ export function Drawer(props: DrawerProps): ReactNode {
     onOpen
   } = props;
 
+  console.log(JSON.stringify({ DrawerNonce: nonce }));
+
   // Refs
   const drawerWrappingRef = useRef<HTMLDivElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -600,11 +602,7 @@ export function Drawer(props: DrawerProps): ReactNode {
   }, [handleWindowClose, onChange, handleClose]);
 
   return (
-    <div
-      className={`drawer_root ${styles.drawer_root}`}
-      style={cssVariable}
-      nonce={nonce}
-    >
+    <div className={`drawer_root ${styles.drawer_root}`} style={cssVariable}>
       <DrawerBtn
         Element={OpenBtn}
         anchor={anchor}

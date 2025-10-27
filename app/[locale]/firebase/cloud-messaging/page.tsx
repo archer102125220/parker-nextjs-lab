@@ -33,20 +33,16 @@ async function FirebaseCloudMessagingPage(): Promise<ReactNode> {
     iosTokenList: JSON.parse(JSON.stringify(iosTokenList))
   };
 
+  console.log(JSON.stringify({ FirebaseCloudMessagingPageNonce: nonce }));
+
   return (
     <main className={style.cloud_messaging_page}>
       <GTMScnOpen />
-      <Box component="h1" sx={{ marginBottom: '8px' }} nonce={nonce}>
+      <Box component="h1" sx={{ marginBottom: '8px' }}>
         FCM推播通知後台
       </Box>
-      <CloudMessagingForm
-        serverTokenList={tokenList}
-        nonce={nonce}
-      />
-      <CloudMessagingDataTable
-        serverTokenList={tokenList}
-        nonce={nonce}
-      />
+      <CloudMessagingForm serverTokenList={tokenList} nonce={nonce} />
+      <CloudMessagingDataTable serverTokenList={tokenList} nonce={nonce} />
     </main>
   );
 }
