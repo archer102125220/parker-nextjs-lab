@@ -24,17 +24,17 @@ export function contentSecurityPolicyMiddleware(
 
   console.log('____contentSecurityPolicy____ nonce');
   const cspHeader = `
-    default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.youtube.com https://connect.facebook.net https://www.googletagmanager.com; // 允許資源來源
-    font-src 'self' https://fonts.gstatic.com;
+    default-src 'self' fonts.googleapis.com fonts.gstatic.com www.youtube.com connect.facebook.net www.googletagmanager.com;
+    font-src 'self' fonts.gstatic.com;
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'self';
     img-src 'self' data:;
     object-src 'none';
-    script-src 'self' 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https://connect.facebook.net https://www.googletagmanager.com;
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com;
-    frame-src 'self' https://www.youtube.com https://www.googletagmanager.com;
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' connect.facebook.net www.googletagmanager.com;
+    style-src 'self' 'unsafe-inline' fonts.googleapis.com;
+    connect-src 'self' fonts.googleapis.com fonts.gstatic.com;
+    frame-src 'self' www.youtube.com www.googletagmanager.com;
     upgrade-insecure-requests;
   `;
   console.log('____contentSecurityPolicy____ cspHeader');
@@ -54,7 +54,7 @@ export function contentSecurityPolicyMiddleware(
   console.log('____contentSecurityPolicy____ requestHeaders.set x-nonce');
   requestHeaders.set(
     'Content-Security-Policy',
-    encodeURIComponent(contentSecurityPolicyHeaderValue)
+    contentSecurityPolicyHeaderValue
   );
   console.log(
     '____contentSecurityPolicy____ requestHeaders.set Content-Security-Policy'
@@ -64,7 +64,7 @@ export function contentSecurityPolicyMiddleware(
   console.log('____contentSecurityPolicy____ response.headers.set x-nonce');
   response.headers.set(
     'Content-Security-Policy',
-    encodeURIComponent(contentSecurityPolicyHeaderValue)
+    contentSecurityPolicyHeaderValue
   );
   console.log(
     '____contentSecurityPolicy____ response.headers.set Content-Security-Policy'
