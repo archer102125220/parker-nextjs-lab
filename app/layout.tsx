@@ -7,8 +7,6 @@ interface RootLayoutProps {
   children: ReactNode;
 }
 
-export const dynamic = 'force-dynamic';
-
 export const viewport: Viewport = {
   themeColor: '#FFFFFF'
 };

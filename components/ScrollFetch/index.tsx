@@ -18,6 +18,8 @@ import '@/components/ScrollFetch/scroll_fetch.scss';
 import styles from '@/components/ScrollFetch/scroll_fetch.module.scss';
 
 interface ScrollFetchProps {
+  nonce?: string;
+
   pullLabel?: string;
   height?: string | number;
   containerHeight?: string | number;
@@ -89,6 +91,8 @@ interface ScrollFetchCssVariable extends CSSProperties {
 const MOVE_DISTANCE_LIMIT = 50;
 
 const ScrollFetch: FC<ScrollFetchProps> = ({
+  nonce,
+
   pullLabel = '下拉即可重整...',
   height,
   containerHeight,
@@ -305,6 +309,8 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
   }, [loading, useObserver, infinityDisable, infinityEnd, infinityBuffer]);
 
   const handleSyncScroll = useCallback(
+    // TODO
+    // eslint-disable-next-line react-hooks/use-memo
     debounce((newScrollTop: number) => {
       if (typeof newScrollTop === 'number' && newScrollTop > -1) {
         scrollFetchRef.current?.scrollTo({
@@ -661,6 +667,8 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
   );
 
   const handleScrollTop = useCallback(
+    // TODO
+    // eslint-disable-next-line react-hooks/use-memo
     debounce((e: UIEvent<HTMLDivElement>) => {
       onScrollTopChange?.((e.target as HTMLDivElement)?.scrollTop || 0);
     }, 50),
@@ -874,6 +882,7 @@ const ScrollFetch: FC<ScrollFetchProps> = ({
       ref={scrollFetchRef}
       className={[styles.scroll_fetch, 'scroll_fetch'].join(' ')}
       style={cssVariable}
+      nonce={nonce}
       onScrollEnd={handleScrollEnd}
       onMouseDown={handlePullStart}
       onMouseMove={handlePulling}

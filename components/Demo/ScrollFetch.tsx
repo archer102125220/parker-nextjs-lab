@@ -12,6 +12,7 @@ import style from '@/app/[locale]/components/drawer/page.module.scss';
 
 export function ScrollFetchDemo(): ReactNode {
   const dispatch = useAppDispatch();
+  const nonce = useAppSelector<string>((state) => state.system.nonce);
   const loading = useAppSelector<boolean>((state) => state.system.loading);
 
   const [refreshLoading, setRefreshLoading] = useState<boolean>(false);
@@ -44,6 +45,8 @@ export function ScrollFetchDemo(): ReactNode {
   // );
 
   const handleRefresh = useCallback(
+    // TODO
+    // eslint-disable-next-line react-hooks/preserve-manual-memoization
     async function refresh(done: () => void) {
       if (
         refreshLoading === true ||
@@ -77,6 +80,8 @@ export function ScrollFetchDemo(): ReactNode {
     },
     [refreshLoading, infinityLoading, loading]
   );
+  // TODO
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const handleInfinityFetch = useCallback(async function infinityFetch(
     done: () => void
   ) {
@@ -112,14 +117,15 @@ export function ScrollFetchDemo(): ReactNode {
 
   return (
     <ScrollFetch
+      nonce={nonce}
+      loading={loading}
+      infinityEnd={infinityEnd}
       iosStyle={false}
       refreshDisable={false}
       height="85dvh"
       refreshIcon="/img/icon/refresh/refresh-icon.svg"
       refreshingIcon="/img/icon/refresh/refreshing-icon.svg"
-      loading={loading}
       infinityBuffer={500}
-      infinityEnd={infinityEnd}
       onRefresh={handleRefresh}
       onInfinityFetch={handleInfinityFetch}
     >

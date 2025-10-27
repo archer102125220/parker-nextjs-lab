@@ -5,12 +5,16 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 
+import { useAppSelector } from '@/store';
+
 import Drawer from '@/components/Drawer';
 import type { anchorType } from '@/components/Drawer';
 
 import style from '@/app/[locale]/components/drawer/page.module.scss';
 
 export function DrawerDemo(): ReactNode {
+  const nonce = useAppSelector<string>((state) => state.system.nonce);
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [anchor, setAnchor] = useState<anchorType>('left');
 
@@ -54,14 +58,18 @@ export function DrawerDemo(): ReactNode {
       </div>
 
       <Drawer
+        nonce={nonce}
         open={isOpen}
         anchor={anchor}
-        hasAnimation={true}
-        hasMask={true}
-        dragCloseDisabled={false}
         width={anchor === 'left' || anchor === 'right' ? 300 : undefined}
         height={anchor === 'top' || anchor === 'bottom' ? 200 : undefined}
+        hasMask={true}
+        hasAnimation={true}
+        dragCloseDisabled={false}
         triggerPercentage={0.25}
+        onOpen={handleOpen}
+        onClose={handleClose}
+        onChange={handleChange}
         OpenBtn={({ onOpen }) => (
           <Button variant="contained" color="success" onClick={onOpen}>
             自定義打開按鈕
@@ -83,9 +91,6 @@ export function DrawerDemo(): ReactNode {
             </div>
           </div>
         )}
-        onChange={handleChange}
-        onOpen={handleOpen}
-        onClose={handleClose}
       />
     </div>
   );

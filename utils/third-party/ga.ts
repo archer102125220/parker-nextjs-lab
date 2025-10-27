@@ -2,6 +2,7 @@ import { googleGtagInit } from '@/utils/third-party/gtag';
 
 export function googleGAInit(
   googleGAID = '',
+  nonce: string | null = null,
   debug = process.env.NODE_ENV === 'development',
   log = false,
   // TODO
@@ -17,7 +18,7 @@ export function googleGAInit(
   }
   const src = `https://www.googletagmanager.com/gtag/js?id=${googleGAID}`;
 
-  const script = document.createElement('script');
+  const gaScript = document.createElement('script');
   // TODO
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   function init(gtag: Function, gtm: Function) {
@@ -31,19 +32,24 @@ export function googleGAInit(
       callback(gtag, gtm);
     }
   }
-  script.onload = () => googleGtagInit(log, init);
-  // script.addEventListener('load', () =>  googleGtagInit(googleGAID, log, init));
+  gaScript.onload = () => googleGtagInit(log, init);
+  // gaScript.addEventListener('load', () =>  googleGtagInit(googleGAID, log, init));
 
-  script.id = 'gaScript';
-  script.setAttribute('id', 'gaScript');
-  script.async = true;
-  script.setAttribute('async', 'true');
-  script.src = src;
-  script.setAttribute('src', src);
+  gaScript.id = 'gaScript';
+  gaScript.setAttribute('id', 'gaScript');
+  gaScript.async = true;
+  gaScript.setAttribute('async', 'true');
+  gaScript.src = src;
+  gaScript.setAttribute('src', src);
+
+  if (typeof nonce === 'string' && nonce !== '') {
+    gaScript.nonce = nonce;
+    gaScript.setAttribute('nonce', nonce);
+  }
 
   const headDom = document.querySelector('head');
   if (typeof headDom?.append === 'function') {
-    headDom.append(script);
+    headDom.append(gaScript);
   }
 }
 

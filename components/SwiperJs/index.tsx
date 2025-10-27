@@ -39,6 +39,8 @@ export type SlideProps = {
   isSliderMoveing: boolean;
 };
 interface swiperJsPropsType {
+  nonce?: string;
+
   // render相關參數
   className?: string;
   renderPrevBtn?: ElementType;
@@ -112,6 +114,8 @@ interface SwiperDivElement extends HTMLDivElement {
 
 export function SwiperJs(props: swiperJsPropsType): ReactNode {
   const {
+    nonce,
+
     // render相關參數
     className = '',
     renderPrevBtn: RenderPrevBtn = null,
@@ -567,6 +571,7 @@ export function SwiperJs(props: swiperJsPropsType): ReactNode {
       ref={swiperJsRootRef}
       className={[style['swiper_js'], className].join(' ')}
       style={cssVariable}
+      nonce={nonce}
       onScroll={resetSwiperScroll}
     >
       {/* If we need navigation buttons */}

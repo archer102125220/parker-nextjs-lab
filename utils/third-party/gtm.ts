@@ -2,6 +2,7 @@ import { googleGtagInit } from '@/utils/third-party/gtag';
 
 export function googleGTMInit(
   googleGTMID = '',
+  nonce: string | null = null,
   log = false,
   // TODO
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
@@ -38,6 +39,11 @@ export function googleGTMInit(
   gtmScript.setAttribute('async', 'true');
   gtmScript.src = src;
   gtmScript.setAttribute('src', src);
+
+  if (typeof nonce === 'string' && nonce !== '') {
+    gtmScript.nonce = nonce;
+    gtmScript.setAttribute('nonce', nonce);
+  }
 
   const headDom = document.querySelector('head');
   if (typeof headDom?.append === 'function') {

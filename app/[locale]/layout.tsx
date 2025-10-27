@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
+import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Roboto } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
@@ -77,10 +78,10 @@ export async function generateMetadata(props: LocaleLayout): Promise<Metadata> {
   };
 }
 
-export const dynamic = 'force-dynamic';
-
 async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
   const { children, params } = props;
+
+  const nonce = (await headers()).get('x-nonce') || '';
 
   // Ensure that the incoming `locale` is valid
   const { locale } = await params;
@@ -129,8 +130,14 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
             <AppRouterCacheProvider>
               <MuiThemeProvider>
                 <AxiosInit apiBase={process.env.NEXT_PUBLIC_API_BASE} />
-                <GAInit gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
-                <GTMInit gtmId={process.env.NEXT_PUBLIC_GTM_ID || ''} />
+                <GAInit
+                  gaId={process.env.NEXT_PUBLIC_GA_ID || ''}
+                  nonce={nonce}
+                />
+                <GTMInit
+                  gtmId={process.env.NEXT_PUBLIC_GTM_ID || ''}
+                  nonce={nonce}
+                />
                 <FirebaseInit
                   apiKey={process.env.NEXT_PUBLIC_FIREBASE_API_KEY || ''}
                   authDomain="parker-nextjs-lab.firebaseapp.com"

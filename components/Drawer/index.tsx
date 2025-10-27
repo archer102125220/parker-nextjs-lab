@@ -21,6 +21,8 @@ export type anchorType = string | 'top' | 'bottom' | 'left' | 'right';
 
 // 類型定義
 interface DrawerProps {
+  nonce?: string;
+
   open?: boolean;
   hasAnimation?: boolean;
   dragCloseDisabled?: boolean;
@@ -84,6 +86,8 @@ interface DrawerCssVariableType extends CSSProperties {
 
 export function Drawer(props: DrawerProps): ReactNode {
   const {
+    nonce,
+
     open = false,
     hasAnimation = true,
     dragCloseDisabled = false,
@@ -568,6 +572,8 @@ export function Drawer(props: DrawerProps): ReactNode {
   useEffect(() => {
     if (typeof document?.querySelector === 'function') {
       if (open === false) {
+        // TODO
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setAnimationReverse(false);
         document.querySelector('html')?.classList.remove('drawer_open');
       } else {
@@ -594,7 +600,11 @@ export function Drawer(props: DrawerProps): ReactNode {
   }, [handleWindowClose, onChange, handleClose]);
 
   return (
-    <div className={`drawer_root ${styles.drawer_root}`} style={cssVariable}>
+    <div
+      className={`drawer_root ${styles.drawer_root}`}
+      style={cssVariable}
+      nonce={nonce}
+    >
       <DrawerBtn
         Element={OpenBtn}
         anchor={anchor}

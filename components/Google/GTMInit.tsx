@@ -5,18 +5,24 @@ import { googleGTMInit } from '@/utils/third-party/gtm';
 
 interface GTMInitProps {
   gtmId: string;
+  nonce?: string;
   log?: boolean;
   children?: ReactNode;
 }
 
 const isDev = process.env.NODE_ENV === 'development';
 
-export function GTMInit({ children, gtmId, log }: GTMInitProps): ReactNode {
+export function GTMInit({
+  children,
+  nonce,
+  gtmId,
+  log
+}: GTMInitProps): ReactNode {
   useLayoutEffect(() => {
     const _log = typeof log === 'boolean' ? log : isDev;
 
-    googleGTMInit(gtmId, _log);
-  }, [gtmId, log]);
+    googleGTMInit(gtmId, nonce, _log);
+  }, [gtmId, nonce, log]);
 
   return (
     <>
@@ -26,6 +32,7 @@ export function GTMInit({ children, gtmId, log }: GTMInitProps): ReactNode {
           height="0"
           width="0"
           style={{ display: 'none', visibility: 'hidden' }}
+          nonce={nonce}
         />
       </noscript>
       {children}

@@ -21,6 +21,7 @@ export type messageType = {
 };
 export interface SystemState extends windowInfo {
   systemName: string;
+  nonce: string;
   message: messageType;
   windowInnerWidth: number;
   windowInnerHeight: number;
@@ -34,6 +35,7 @@ export const MESSAGE_TYPE = ['success', 'info', 'warning', 'error'];
 
 const initialState: SystemState = {
   systemName: '',
+  nonce: '',
   message: { text: '', type: 'success' },
   windowInnerWidth: 1920,
   windowInnerHeight: 1080,
@@ -53,6 +55,9 @@ const systemSlice = createSlice({
   reducers: (create) => ({
     setSystemName: create.reducer((state, action: PayloadAction<string>) => {
       state.systemName = action.payload;
+    }),
+    setNonce: create.reducer((state, action: PayloadAction<string>) => {
+      state.nonce = action.payload;
     }),
     setWindowInnerSize: create.reducer(
       (state, action: PayloadAction<windowInfo>) => {

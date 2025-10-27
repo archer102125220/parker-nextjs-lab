@@ -9,6 +9,8 @@ import type {
 } from '@/components/SwiperJs';
 import SwiperJs from '@/components/SwiperJs';
 
+import { useAppSelector } from '@/store';
+
 import pageStyles from '@/app/[locale]/components/swiper-js/page.module.scss';
 
 const slideList: Array<string> = [];
@@ -23,6 +25,8 @@ for (let i: number = 0; i <= 100; i++) {
 }
 
 export function SwiperJsDemo(): ReactNode {
+  const nonce = useAppSelector<string>((state) => state.system.nonce);
+
   const [slideValue, setSlideValue] = useState<swiperValue>(0);
 
   const handleSwiperJsChange = useCallback<swiperChange>((newValue) => {
@@ -33,6 +37,7 @@ export function SwiperJsDemo(): ReactNode {
   return (
     <SwiperJs
       className={pageStyles['swiper_js_page-content']}
+      nonce={nonce}
       shouldFillHeight={true}
       value={slideValue}
       slideList={slideList}

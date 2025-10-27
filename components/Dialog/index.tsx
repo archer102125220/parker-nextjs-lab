@@ -16,6 +16,7 @@ type handleCloseType = MouseEventHandler & ((e?: MouseEvent) => void);
 
 interface DialogProps {
   open: boolean;
+  nonce?: string;
   position?: string;
   rootPosition?: string;
   width?: string | number;
@@ -54,6 +55,8 @@ interface DialogCssVariableType extends CSSProperties {
 
 function Dialog(props: Readonly<DialogProps>): ReactNode {
   const {
+    nonce,
+
     open = false,
     width,
     height,
@@ -208,7 +211,7 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
   );
 
   return (
-    <div className={styles.dialog_root} style={cssVariable}>
+    <div className={styles.dialog_root} style={cssVariable} nonce={nonce}>
       {open === true ? (
         <div
           className={styles['dialog_root-dialog']}

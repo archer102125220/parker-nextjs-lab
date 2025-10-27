@@ -9,6 +9,7 @@ const BUFFERING = 3;
 const CUED = 5;
 
 export interface YoutubeOptions {
+  nonce?: string;
   beforeCreate?: () => void;
   videoId?: string;
   videoUrl?: string;
@@ -96,12 +97,17 @@ export function useYoutube(
       options.beforeCreate();
     }
     if (document.getElementById('youtube-script') === null) {
-      const el = document.createElement('script');
-      el.setAttribute('id', 'youtube-script');
-      el.setAttribute('src', 'https://www.youtube.com/iframe_api');
-      el.setAttribute('async', '');
-      el.setAttribute('defer', '');
-      document.body.appendChild(el);
+      const youtubeScript = document.createElement('script');
+      youtubeScript.setAttribute('id', 'youtube-script');
+      youtubeScript.setAttribute('src', 'https://www.youtube.com/iframe_api');
+      youtubeScript.setAttribute('async', '');
+      youtubeScript.setAttribute('defer', '');
+
+      if (typeof options?.nonce === 'string' && options?.nonce !== '') {
+        youtubeScript.setAttribute('nonce', options.nonce);
+      }
+
+      document.body.appendChild(youtubeScript);
       // TODO
       // eslint-disable-next-line react-hooks/immutability
       init();

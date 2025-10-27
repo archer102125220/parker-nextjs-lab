@@ -3,9 +3,13 @@ import type { ReactNode } from 'react';
 import { useCallback, useState } from 'react';
 import Button from '@mui/material/Button';
 
+import { useAppSelector } from '@/store';
+
 import Dialog from '@/components/Dialog';
 
 export function DialogDemo(): ReactNode {
+  const nonce = useAppSelector<string>((state) => state.system.nonce);
+
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   const handleOpenDialog = useCallback(() => {
@@ -30,14 +34,15 @@ export function DialogDemo(): ReactNode {
       </Button>
 
       <Dialog
+        nonce={nonce}
         open={isDialogOpen}
+        confirmDisabled={false}
+        cancelLabel="取消"
+        title="演示對話框標題"
+        confirmLabel="確認操作"
         change={setIsDialogOpen}
         cancel={handleCloseDialog}
         confirm={handleConfirmDialog}
-        title="演示對話框標題"
-        confirmLabel="確認操作"
-        cancelLabel="取消"
-        confirmDisabled={false}
       >
         <p>這是一個基本的對話框內容。</p>
         <p>你可以根據需要自訂這裡的內容和樣式。</p>
