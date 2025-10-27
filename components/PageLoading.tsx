@@ -20,9 +20,9 @@ export function PageLoading(props: Readonly<PageLoadingProps>): ReactNode {
         right: '0',
         zIndex: 100
       }}
-      nonce={`nonce-${nonce}`}
+      nonce={nonce}
     >
-      <LinearProgress color="primary" nonce={`nonce-${nonce}`} />
+      <LinearProgress color="primary" nonce={nonce} />
     </Box>
   ) : (
     <></>

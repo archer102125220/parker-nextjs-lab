@@ -7,5 +7,5 @@ export default async function Loading() {
 
   // Or a custom loading skeleton component
   // return <p>Loading...</p>;
-  return <PageLoading loading={true} nonce={`nonce-${nonce}`} />;
+  return <PageLoading loading={true} nonce={nonce} />;
 }

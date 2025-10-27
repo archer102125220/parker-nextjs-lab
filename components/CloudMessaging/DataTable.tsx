@@ -139,19 +139,19 @@ export function CloudMessagingDataTable(
   );
 
   return (
-    <Box sx={{ marginTop: '8px' }} nonce={`nonce-${nonce}`}>
+    <Box sx={{ marginTop: '8px' }} nonce={nonce}>
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'flex-end'
         }}
-        nonce={`nonce-${nonce}`}
+        nonce={nonce}
       >
         <Button
           variant="contained"
           color="primary"
-          nonce={`nonce-${nonce}`}
+          nonce={nonce}
           disabled={systemLoading}
           startIcon={<CachedIcon />}
           onClick={handleRefresh}
@@ -161,7 +161,7 @@ export function CloudMessagingDataTable(
       </Box>
 
       {loading === true ? (
-        <Skeleton nonce={`nonce-${nonce}`} sx={{ minHeight: '300px' }} />
+        <Skeleton nonce={nonce} sx={{ minHeight: '300px' }} />
       ) : isEmpty === true ? (
         ''
       ) : (
@@ -264,7 +264,7 @@ export function CloudMessagingDataTable(
                 >
                   <Button
                     color="error"
-                    nonce={`nonce-${nonce}`}
+                    nonce={nonce}
                     disabled={systemLoading}
                     onClick={() =>
                       handleDeleteToken(webToken.token as unknown as string)
@@ -318,7 +318,7 @@ export function CloudMessagingDataTable(
                 >
                   <Button
                     color="error"
-                    nonce={`nonce-${nonce}`}
+                    nonce={nonce}
                     disabled={systemLoading}
                     onClick={() =>
                       handleDeleteToken(androidToken.token as unknown as string)
@@ -372,7 +372,7 @@ export function CloudMessagingDataTable(
                 >
                   <Button
                     color="error"
-                    nonce={`nonce-${nonce}`}
+                    nonce={nonce}
                     disabled={systemLoading}
                     onClick={() =>
                       handleDeleteToken(iosToken.token as unknown as string)

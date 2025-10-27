@@ -58,7 +58,7 @@ export function DrawerDemo(): ReactNode {
       </div>
 
       <Drawer
-        nonce={`nonce-${nonce}`}
+        nonce={nonce}
         open={isOpen}
         anchor={anchor}
         width={anchor === 'left' || anchor === 'right' ? 300 : undefined}

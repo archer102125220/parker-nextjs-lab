@@ -7,7 +7,6 @@ import { notFound } from 'next/navigation';
 import { Roboto } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 // import { LocalizationProvider } from '@mui/x-date-pickers';
 // import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 // import { zhTW, enUS } from 'date-fns/locale';
@@ -16,6 +15,7 @@ import { routing } from '@/i18n/routing';
 
 import { DefaultLayout } from '@/layout/default';
 
+import { MuiCacheProvider } from '@/components/MuiCacheProvider';
 import { PolyfillEvent } from '@/components/PolyfillEvent';
 import { AxiosInit } from '@/components/AxiosInit';
 import { ReduxInit } from '@/components/ReduxInit';
@@ -82,7 +82,7 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
   const { children, params } = props;
 
   const nonce = (await headers()).get('x-nonce') || '';
-  console.log({ nonce });
+  console.log(JSON.stringify({ LocaleLayoutNonce: nonce }));
 
   // Ensure that the incoming `locale` is valid
   const { locale } = await params;
@@ -127,17 +127,17 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
       </head>
       <body>
         <NextIntlClientProvider locale={locale}>
-          <ReduxInit params={params} nonce={`nonce-${nonce}`}>
-            <AppRouterCacheProvider>
+          <ReduxInit params={params} nonce={nonce}>
+            <MuiCacheProvider nonce={nonce}>
               <MuiThemeProvider>
                 <AxiosInit apiBase={process.env.NEXT_PUBLIC_API_BASE} />
                 <GAInit
                   gaId={process.env.NEXT_PUBLIC_GA_ID || ''}
-                  nonce={`nonce-${nonce}`}
+                  nonce={nonce}
                 />
                 <GTMInit
                   gtmId={process.env.NEXT_PUBLIC_GTM_ID || ''}
-                  nonce={`nonce-${nonce}`}
+                  nonce={nonce}
                 />
                 <FirebaseInit
                   apiKey={process.env.NEXT_PUBLIC_FIREBASE_API_KEY || ''}
@@ -153,11 +153,9 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
                 <Analytics />
                 <SpeedInsights />
                 <NotificationPermission />
-                <DefaultLayout nonce={`nonce-${nonce}`}>
-                  {children}
-                </DefaultLayout>
+                <DefaultLayout nonce={nonce}>{children}</DefaultLayout>
               </MuiThemeProvider>
-            </AppRouterCacheProvider>
+            </MuiCacheProvider>
           </ReduxInit>
         </NextIntlClientProvider>
       </body>

@@ -20,13 +20,15 @@ export async function ReduxInit({
   const t = await getTranslations({ locale, namespace: 'metadata' });
   const systemName = t('systemName');
 
-  console.log({ nonce });
+  console.log(JSON.stringify({ ReduxInitNonce: nonce }));
 
   // 在伺服器端創建 store 並設置初始狀態
   const serverStore = storeInit();
   serverStore.dispatch({ type: 'system/setSystemName', payload: systemName });
   serverStore.dispatch({ type: 'system/setNonce', payload: nonce || '' });
   const initialState = serverStore.getState();
+
+  console.log(JSON.stringify({ ReduxInitInitialState: initialState }));
 
   return (
     <ClientProvider initialState={initialState}>{children}</ClientProvider>

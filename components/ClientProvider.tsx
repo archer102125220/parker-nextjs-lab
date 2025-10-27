@@ -19,6 +19,8 @@ export function ClientProvider({
 }: ProvidersProps): ReactNode {
   const store = storeInit(initialState);
 
+  console.log(JSON.stringify({ ClientProviderInitialState: initialState }));
+
   useEffect(() => {
     function _handleResize_() {
       store.dispatch({

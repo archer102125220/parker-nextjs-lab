@@ -8,6 +8,8 @@ import GTMScnOpen from '@/components/Google/GTMScnOpen';
 async function Locale(): Promise<ReactNode> {
   const nonce = (await headers()).get('x-nonce') || '';
 
+  console.log(JSON.stringify({ LocalePageNonce: nonce }));
+
   return (
     <Box
       sx={{
@@ -16,13 +18,12 @@ async function Locale(): Promise<ReactNode> {
         flexDirection: 'row',
         alignItems: 'center'
       }}
-      nonce={`nonce-${nonce}`}
     >
       <GTMScnOpen />
-      <LinkButton href="/components" nonce={`nonce-${nonce}`}>
+      <LinkButton href="/components" nonce={nonce}>
         自定義組件列表
       </LinkButton>
-      <LinkButton href="/firebase" nonce={`nonce-${nonce}`}>
+      <LinkButton href="/firebase" nonce={nonce}>
         Firebase 整合測試
       </LinkButton>
     </Box>

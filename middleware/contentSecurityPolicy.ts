@@ -12,7 +12,7 @@ export function contentSecurityPolicyMiddleware(
   });
 
   if (
-    process.env.NODE_ENV !== 'production' ||
+    // process.env.NODE_ENV !== 'production' ||
     response.headers.get('Content-Security-Policy')
   ) {
     return;
@@ -20,18 +20,32 @@ export function contentSecurityPolicyMiddleware(
 
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
 
+  // const cspHeader = `
+  //   default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.youtube.com https://connect.facebook.net https://www.googletagmanager.com;
+  //   font-src 'self' https://fonts.gstatic.com;
+  //   base-uri 'self';
+  //   form-action 'self';
+  //   frame-ancestors 'self';
+  //   img-src 'self' data:;
+  //   object-src 'none';
+  //   script-src 'self' 'nonce-${nonce}' 'sha256-${nonce}' 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https://connect.facebook.net https://www.googletagmanager.com https://va.vercel-scripts.com;
+  //   style-src 'self' 'nonce-${nonce}' 'sha256-${nonce}' 'unsafe-inline' https://fonts.googleapis.com;
+  //   connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://firebase.googleapis.com https://www.google-analytics.com;
+  //   frame-src 'self' https://www.youtube.com https://www.googletagmanager.com;
+  //   upgrade-insecure-requests;
+  // `;
   const cspHeader = `
-    default-src 'self' fonts.googleapis.com fonts.gstatic.com www.youtube.com connect.facebook.net www.googletagmanager.com;
-    font-src 'self' fonts.gstatic.com;
+    default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.youtube.com https://connect.facebook.net https://www.googletagmanager.com;
+    font-src 'self' https://fonts.gstatic.com;
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'self';
     img-src 'self' data:;
     object-src 'none';
-    script-src 'self' 'nonce-${nonce}' 'sha256-${nonce}' 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' connect.facebook.net www.googletagmanager.com;
-    style-src 'self' 'nonce-${nonce}' 'sha256-${nonce}' 'unsafe-inline' fonts.googleapis.com;
-    connect-src 'self' fonts.googleapis.com fonts.gstatic.com firebase.googleapis.com www.google-analytics.com;
-    frame-src 'self' www.youtube.com www.googletagmanager.com;
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://www.googletagmanager.com https://va.vercel-scripts.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://firebase.googleapis.com https://www.google-analytics.com;
+    frame-src 'self' https://www.youtube.com https://www.googletagmanager.com;
     upgrade-insecure-requests;
   `;
 

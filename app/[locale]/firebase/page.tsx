@@ -41,7 +41,7 @@ async function FirebasePage(): Promise<ReactNode> {
         <LinkButton
           className={style['firebase_page-link_list-link']}
           href="/firebase/cloud-messaging"
-          nonce={`nonce-${nonce}`}
+          nonce={nonce}
         >
           FCM推播通知後台
         </LinkButton>

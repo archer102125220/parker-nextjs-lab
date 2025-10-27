@@ -37,7 +37,7 @@ export function SwiperJsDemo(): ReactNode {
   return (
     <SwiperJs
       className={pageStyles['swiper_js_page-content']}
-      nonce={`nonce-${nonce}`}
+      nonce={nonce}
       shouldFillHeight={true}
       value={slideValue}
       slideList={slideList}

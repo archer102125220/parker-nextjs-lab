@@ -108,7 +108,7 @@ export function NotificationPermission({
 
   return (
     <Snackbar
-      nonce={`nonce-${nonce}`}
+      nonce={nonce}
       open={isShow}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
     >
@@ -120,7 +120,7 @@ export function NotificationPermission({
         </div>
         <div className={style['notification_permission-actions']}>
           <Button
-            nonce={`nonce-${nonce}`}
+            nonce={nonce}
             color="error"
             variant="contained"
             disabled={processing}
@@ -129,7 +129,7 @@ export function NotificationPermission({
             不同意
           </Button>
           <Button
-            nonce={`nonce-${nonce}`}
+            nonce={nonce}
             color="primary"
             variant="contained"
             loading={processing}

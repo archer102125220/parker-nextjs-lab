@@ -117,7 +117,7 @@ export function ScrollFetchDemo(): ReactNode {
 
   return (
     <ScrollFetch
-      nonce={`nonce-${nonce}`}
+      nonce={nonce}
       loading={loading}
       infinityEnd={infinityEnd}
       iosStyle={false}

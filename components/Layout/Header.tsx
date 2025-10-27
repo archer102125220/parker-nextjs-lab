@@ -15,7 +15,14 @@ import { GoBack } from '@/components/GoBack';
 import { PageLoading } from '@/components/PageLoading';
 import { Message } from '@/components/Message';
 
-export function Header(): ReactNode {
+interface HeaderProps {
+  nonce?: string;
+}
+
+export function Header(props: HeaderProps): ReactNode {
+  // const { nonce } = props;
+  const { nonce: _nonce } = props;
+
   const dispatch = useAppDispatch();
 
   const nonce = useAppSelector<string>((state) => state.system.nonce);
@@ -30,21 +37,18 @@ export function Header(): ReactNode {
     [dispatch]
   );
 
+  console.log(JSON.stringify({ HeaderNonce: nonce, _nonce }));
+
   return (
-    <Toolbar nonce={`nonce-${nonce}`}>
-      <PageLoading nonce={`nonce-${nonce}`} loading={loading} />
-      <GoBack nonce={`nonce-${nonce}`} />
+    <Toolbar>
+      <PageLoading nonce={nonce} loading={loading} />
+      <GoBack nonce={nonce} />
       <Message
-        nonce={`nonce-${nonce}`}
+        nonce={nonce}
         messageState={messageState}
         resetMessageState={resetMessageState}
       />
-      <Typography
-        variant="h6"
-        component="div"
-        sx={{ flex: 1 }}
-        nonce={`nonce-${nonce}`}
-      >
+      <Typography variant="h6" component="div" sx={{ flex: 1 }}>
         <LinkBox
           href="/"
           sx={{
@@ -54,7 +58,7 @@ export function Header(): ReactNode {
             flexDirection: 'row',
             alignItems: 'center'
           }}
-          nonce={`nonce-${nonce}`}
+          nonce={nonce}
         >
           <Image
             src="/img/icon/Next.jsLab.v.01.svg"

@@ -571,7 +571,7 @@ export function SwiperJs(props: swiperJsPropsType): ReactNode {
       ref={swiperJsRootRef}
       className={[style['swiper_js'], className].join(' ')}
       style={cssVariable}
-      nonce={`nonce-${nonce}`}
+      nonce={nonce}
       onScroll={resetSwiperScroll}
     >
       {/* If we need navigation buttons */}

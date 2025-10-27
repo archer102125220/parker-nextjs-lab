@@ -12,6 +12,8 @@ interface DefaultLayoutProps {
 export function DefaultLayout(props: DefaultLayoutProps): ReactNode {
   const { children, nonce } = props;
 
+  console.log(JSON.stringify({ DefaultLayoutNonce: nonce }));
+
   return (
     <>
       <CssBaseline />
@@ -21,22 +23,18 @@ export function DefaultLayout(props: DefaultLayoutProps): ReactNode {
           flexDirection: 'column',
           minHeight: '100dvh'
         }}
-        nonce={`nonce-${nonce}`}
       >
-        <Header />
+        <Header nonce={nonce} />
         <Box
           component="main"
           sx={{
             flexGrow: 1,
             py: 3
           }}
-          nonce={`nonce-${nonce}`}
         >
-          <Container maxWidth="lg" nonce={`nonce-${nonce}`}>
-            {children}
-          </Container>
+          <Container maxWidth="lg">{children}</Container>
         </Box>
-        <Footer />
+        <Footer nonce={nonce} />
       </Box>
     </>
   );
