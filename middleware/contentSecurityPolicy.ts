@@ -28,8 +28,8 @@ export function contentSecurityPolicyMiddleware(
     frame-ancestors 'self';
     img-src 'self' data:;
     object-src 'none';
-    script-src 'self' 'nonce-${nonce}' 'unsafe-eval' 'strict-dynamic' connect.facebook.net www.googletagmanager.com;
-    style-src 'self' 'nonce-${nonce}' fonts.googleapis.com;
+    script-src 'self' 'nonce-${nonce}' 'sha256-${nonce}' 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' connect.facebook.net www.googletagmanager.com;
+    style-src 'self' 'nonce-${nonce}' 'sha256-${nonce}' 'unsafe-inline' fonts.googleapis.com;
     connect-src 'self' fonts.googleapis.com fonts.gstatic.com firebase.googleapis.com www.google-analytics.com;
     frame-src 'self' www.youtube.com www.googletagmanager.com;
     upgrade-insecure-requests;
