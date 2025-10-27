@@ -77,6 +77,8 @@ export async function generateMetadata(props: LocaleLayout): Promise<Metadata> {
   };
 }
 
+export const dynamic = 'force-dynamic';
+
 async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
   const { children, params } = props;
 
