@@ -3,7 +3,7 @@ import type {
   ReactNode,
   WheelEvent,
   UIEvent,
-  FC,
+  FunctionComponent,
   TouchEvent,
   MouseEvent,
   CSSProperties
@@ -91,7 +91,7 @@ interface ScrollFetchCssVariable extends CSSProperties {
 
 const MOVE_DISTANCE_LIMIT = 50;
 
-const ScrollFetch: FC<ScrollFetchProps> = ({
+const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
   nonce,
 
   pullLabel = '下拉即可重整...',
