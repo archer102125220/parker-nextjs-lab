@@ -26,6 +26,9 @@ async function Locale(): Promise<ReactNode> {
       <LinkButton href="/firebase" nonce={nonce}>
         Firebase 整合測試
       </LinkButton>
+      <LinkButton href="/css-drawing" nonce={nonce}>
+        css繪圖相關測試
+      </LinkButton>
     </Box>
   );
 }
