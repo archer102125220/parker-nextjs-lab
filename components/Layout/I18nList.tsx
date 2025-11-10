@@ -1,6 +1,6 @@
 'use client';
 import type { ReactNode } from 'react';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState, useEffect } from 'react';
 import {
   useLocale
   // useTranslations
@@ -25,6 +25,7 @@ export function I18nList(): ReactNode {
 
   const triggerRef = useRef<HTMLButtonElement>(null);
 
+  const [clientNonce, setClientNonce] = useState<string>('');
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
   const handleOpen = useCallback(() => {
@@ -34,9 +35,16 @@ export function I18nList(): ReactNode {
     setMenuOpen(false);
   }, []);
 
+  useEffect(() => {
+    if (typeof nonce === 'string' && nonce !== '') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setClientNonce(nonce);
+    }
+  }, [nonce]);
+
   return (
     <div>
-      <Button ref={triggerRef} onClick={handleOpen}>
+      <Button ref={triggerRef} onClick={handleOpen} nonce={clientNonce}>
         {/* {t(locale)} */}
         {locale === 'zh-tw' ? '中文' : 'English'}
       </Button>
@@ -45,7 +53,7 @@ export function I18nList(): ReactNode {
         // TODO
         // eslint-disable-next-line react-hooks/refs
         anchorEl={triggerRef.current}
-        nonce={nonce}
+        nonce={clientNonce}
         open={menuOpen}
         onClose={handleClose}
         slotProps={{
@@ -54,7 +62,7 @@ export function I18nList(): ReactNode {
           }
         }}
       >
-        <MenuItem nonce={nonce} onClick={handleClose}>
+        <MenuItem nonce={clientNonce} onClick={handleClose}>
           <LinkButton
             color="inherit"
             locale="zh-tw"
@@ -73,7 +81,7 @@ export function I18nList(): ReactNode {
             {/* {t('zh-tw')} */}
           </LinkButton>
         </MenuItem>
-        <MenuItem nonce={nonce} onClick={handleClose}>
+        <MenuItem nonce={clientNonce} onClick={handleClose}>
           <LinkButton
             color="inherit"
             locale="en"

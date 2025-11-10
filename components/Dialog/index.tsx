@@ -80,6 +80,8 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
     Cancel,
     Confirm
   } = props;
+
+  const [clientNonce, setClientNonce] = useState<string>('');
   const [opacityTrigger, setOpacityTrigger] = useState<boolean>(false);
 
   const cssVariable = useMemo<DialogCssVariableType>(() => {
@@ -158,6 +160,12 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
   );
 
   useEffect(() => {
+    if (typeof nonce === 'string' && nonce !== '') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setClientNonce(nonce);
+    }
+  }, [nonce]);
+  useEffect(() => {
     if (typeof open === 'boolean' && open !== opacityTrigger) {
       setOpacityTrigger(open);
     }
@@ -211,11 +219,7 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
   );
 
   return (
-    <div
-      className={styles.dialog_root}
-      style={cssVariable}
-      nonce={nonce}
-    >
+    <div className={styles.dialog_root} style={cssVariable} nonce={clientNonce}>
       {open === true ? (
         <div
           className={styles['dialog_root-dialog']}

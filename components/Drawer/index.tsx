@@ -129,6 +129,7 @@ export function Drawer(props: DrawerProps): ReactNode {
   const drawerRef = useRef<HTMLDivElement>(null);
 
   // State
+  const [clientNonce, setClientNonce] = useState<string>('');
   const [opacityTrigger, setOpacityTrigger] = useState<boolean>(open);
   const [animationReverse, setAnimationReverse] = useState<boolean>(false);
   const [isDragStart, setIsDragStart] = useState<boolean>(false);
@@ -573,6 +574,13 @@ export function Drawer(props: DrawerProps): ReactNode {
 
   // Effects
   useEffect(() => {
+    if (typeof nonce === 'string' && nonce !== '') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setClientNonce(nonce);
+    }
+  }, [nonce]);
+
+  useEffect(() => {
     if (typeof document?.querySelector === 'function') {
       if (open === false) {
         // TODO
@@ -603,7 +611,11 @@ export function Drawer(props: DrawerProps): ReactNode {
   }, [handleWindowClose, onChange, handleClose]);
 
   return (
-    <div className={`drawer_root ${styles.drawer_root}`} style={cssVariable}>
+    <div
+      className={`drawer_root ${styles.drawer_root}`}
+      nonce={clientNonce}
+      style={cssVariable}
+    >
       <DrawerBtn
         Element={OpenBtn}
         anchor={anchor}

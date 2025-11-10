@@ -21,6 +21,7 @@ export function NotificationPermission({
 }: NotificationPermissionProps): ReactNode {
   const Firebase = useFirebase();
 
+  const [clientNonce, setClientNonce] = useState<string>('');
   const [isShow, setIsShow] = useState<boolean>(false);
   const [processing, setProcessing] = useState<boolean>(false);
 
@@ -94,6 +95,13 @@ export function NotificationPermission({
   );
 
   useEffect(() => {
+    if (typeof nonce === 'string' && nonce !== '') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setClientNonce(nonce);
+    }
+  }, [nonce]);
+
+  useEffect(() => {
     console.log({ firebaseCroeInited, agreeNotification });
     if (firebaseCroeInited === true && Firebase instanceof firebase === true) {
       if (agreeNotification === false) {
@@ -108,7 +116,7 @@ export function NotificationPermission({
 
   return (
     <Snackbar
-      nonce={nonce}
+      nonce={clientNonce}
       open={isShow}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
     >
@@ -122,7 +130,7 @@ export function NotificationPermission({
           <Button
             color="error"
             variant="contained"
-            nonce={nonce}
+            nonce={clientNonce}
             disabled={processing}
             onClick={handleCancel}
           >
@@ -131,7 +139,7 @@ export function NotificationPermission({
           <Button
             color="primary"
             variant="contained"
-            nonce={nonce}
+            nonce={clientNonce}
             loading={processing}
             onClick={handleCofirm}
           >

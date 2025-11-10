@@ -1,5 +1,6 @@
 'use client';
 import type { ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import Box, { BoxProps } from '@mui/material/Box';
 
 import { Link } from '@/i18n/navigation';
@@ -14,8 +15,16 @@ export function LinkBox(props: LinkBoxProps): ReactNode {
   const { nonce, ...boxProps } = props;
 
   console.log(JSON.stringify({ LinkBoxNonce: nonce }));
+  const [clientNonce, setClientNonce] = useState<string>('');
 
-  return <Box {...boxProps} component={Link} />;
+  useEffect(() => {
+    if (typeof nonce === 'string' && nonce !== '') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setClientNonce(nonce);
+    }
+  }, [nonce]);
+
+  return <Box {...boxProps} component={Link} nonce={clientNonce} />;
 }
 
 export default LinkBox;

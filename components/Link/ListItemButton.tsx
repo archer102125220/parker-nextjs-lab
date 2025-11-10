@@ -1,5 +1,6 @@
 'use client';
 import type { ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import ListItemButton, {
   ListItemButtonProps
 } from '@mui/material/ListItemButton';
@@ -18,8 +19,21 @@ export interface LinkListItemButtonProps extends _LinkListItemButtonProps {
 export function LinkListItemButton(props: LinkListItemButtonProps): ReactNode {
   const { nonce, ...listItemButtonProps } = props;
 
+  const [clientNonce, setClientNonce] = useState<string>('');
+
+  useEffect(() => {
+    if (typeof nonce === 'string' && nonce !== '') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setClientNonce(nonce);
+    }
+  }, [nonce]);
+
   return (
-    <ListItemButton {...listItemButtonProps} component={Link} nonce={nonce} />
+    <ListItemButton
+      {...listItemButtonProps}
+      component={Link}
+      nonce={clientNonce}
+    />
   );
 }
 

@@ -1,4 +1,6 @@
+'use client';
 import type { ReactNode } from 'react';
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 
@@ -10,6 +12,15 @@ interface PageLoadingProps {
 export function PageLoading(props: Readonly<PageLoadingProps>): ReactNode {
   const { loading = false, nonce } = props;
 
+  const [clientNonce, setClientNonce] = useState<string>('');
+
+  useEffect(() => {
+    if (typeof nonce === 'string' && nonce !== '') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setClientNonce(nonce);
+    }
+  }, [nonce]);
+
   return loading === true ? (
     <Box
       sx={{
@@ -20,9 +31,9 @@ export function PageLoading(props: Readonly<PageLoadingProps>): ReactNode {
         right: '0',
         zIndex: 100
       }}
-      nonce={nonce}
+      nonce={clientNonce}
     >
-      <LinearProgress color="primary" nonce={nonce} />
+      <LinearProgress color="primary" nonce={clientNonce} />
     </Box>
   ) : (
     <></>

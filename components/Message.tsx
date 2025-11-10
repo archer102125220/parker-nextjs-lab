@@ -35,12 +35,20 @@ export function Message(props: MessageProps): ReactNode {
     resetMessageState = () => {}
   } = props;
 
+  const [clientNonce, setClientNonce] = useState<string>('');
   const [open, setOpen] = useState<boolean>(false);
   const [messageText, setMessageText] = useState<messageTypText>('');
   const [messageType, setMessageType] = useState<messageTypeType>('success');
 
   // const messageContext = useAppSelector(systemSelectors.messageContext);
   // console.log({ messageContext });
+
+  useEffect(() => {
+    if (typeof nonce === 'string' && nonce !== '') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setClientNonce(nonce);
+    }
+  }, [nonce]);
 
   useEffect(() => {
     const { text: _text = '', type: _type = 'success' } = messageState || {};
@@ -72,7 +80,7 @@ export function Message(props: MessageProps): ReactNode {
       onClose={handleClose}
     >
       <MuiAlert
-        nonce={nonce}
+        nonce={clientNonce}
         severity={messageType}
         sx={{ width, alignItems: 'center' }}
         elevation={6}

@@ -1,5 +1,6 @@
 'use client';
-import { useCallback, useMemo, useState, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -32,6 +33,8 @@ export function CloudMessagingDataTable(
   const { serverTokenList, nonce } = props;
 
   console.log(JSON.stringify({ CloudMessagingDataTableNonce: nonce }));
+
+  const [clientNonce, setClientNonce] = useState<string>('');
 
   const dispatch = useAppDispatch();
 
@@ -140,20 +143,29 @@ export function CloudMessagingDataTable(
     [loading, systemLoading]
   );
 
+  useEffect(() => {
+    if (typeof nonce === 'string' && nonce !== '') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setClientNonce(nonce);
+    }
+  }, [nonce]);
+
   return (
-    <Box sx={{ marginTop: '8px' }}>
+    <Box sx={{ marginTop: '8px' }} nonce={clientNonce}>
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'flex-end'
         }}
+        nonce={clientNonce}
       >
         <Button
           variant="contained"
           color="primary"
           disabled={systemLoading}
           startIcon={<CachedIcon />}
+          nonce={clientNonce}
           onClick={handleRefresh}
         >
           重新整理
@@ -161,7 +173,7 @@ export function CloudMessagingDataTable(
       </Box>
 
       {loading === true ? (
-        <Skeleton sx={{ minHeight: '300px' }} />
+        <Skeleton sx={{ minHeight: '300px' }} nonce={clientNonce} />
       ) : isEmpty === true ? (
         ''
       ) : (
@@ -268,6 +280,7 @@ export function CloudMessagingDataTable(
                     onClick={() =>
                       handleDeleteToken(webToken.token as unknown as string)
                     }
+                    nonce={clientNonce}
                   >
                     刪除
                   </Button>
@@ -321,6 +334,7 @@ export function CloudMessagingDataTable(
                     onClick={() =>
                       handleDeleteToken(androidToken.token as unknown as string)
                     }
+                    nonce={clientNonce}
                   >
                     刪除
                   </Button>
@@ -374,6 +388,7 @@ export function CloudMessagingDataTable(
                     onClick={() =>
                       handleDeleteToken(iosToken.token as unknown as string)
                     }
+                    nonce={clientNonce}
                   >
                     刪除
                   </Button>

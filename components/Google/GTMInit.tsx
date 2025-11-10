@@ -1,5 +1,6 @@
 'use client';
-import { useLayoutEffect, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import { useState, useLayoutEffect, useEffect } from 'react';
 
 import { googleGTMInit } from '@/utils/third-party/gtm';
 
@@ -18,11 +19,20 @@ export function GTMInit({
   gtmId,
   log
 }: GTMInitProps): ReactNode {
+  const [clientNonce, setClientNonce] = useState<string>('');
+
   useLayoutEffect(() => {
     const _log = typeof log === 'boolean' ? log : isDev;
 
     googleGTMInit(gtmId, nonce, _log);
   }, [gtmId, nonce, log]);
+
+  useEffect(() => {
+    if (typeof nonce === 'string' && nonce !== '') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setClientNonce(nonce);
+    }
+  }, [nonce]);
 
   return (
     <>
@@ -32,7 +42,7 @@ export function GTMInit({
           height="0"
           width="0"
           style={{ display: 'none', visibility: 'hidden' }}
-          nonce={nonce}
+          nonce={clientNonce}
         />
       </noscript>
       {children}

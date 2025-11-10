@@ -1,6 +1,6 @@
 'use client';
 import type { ReactNode } from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 
 import { useAppSelector } from '@/store';
@@ -9,6 +9,8 @@ import Dialog from '@/components/Dialog';
 
 export function DialogDemo(): ReactNode {
   const nonce = useAppSelector<string>((state) => state.system.nonce);
+
+  const [clientNonce, setClientNonce] = useState<string>('');
 
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
@@ -27,9 +29,20 @@ export function DialogDemo(): ReactNode {
     // 在這裡執行確認後的操作
   }, []);
 
+  useEffect(() => {
+    if (typeof nonce === 'string' && nonce !== '') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setClientNonce(nonce);
+    }
+  }, [nonce]);
+
   return (
     <>
-      <Button variant="contained" onClick={handleOpenDialog}>
+      <Button
+        variant="contained"
+        nonce={clientNonce}
+        onClick={handleOpenDialog}
+      >
         打開對話框
       </Button>
 

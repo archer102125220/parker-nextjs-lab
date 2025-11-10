@@ -28,6 +28,8 @@ export function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
 
   console.log(JSON.stringify({ CloudMessagingFormNonce: nonce }));
 
+  const [clientNonce, setClientNonce] = useState<string>('');
+
   const dispatch = useAppDispatch();
 
   const [appMessageTitle, setAppMessageTitle] =
@@ -132,6 +134,13 @@ export function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
   }, []);
 
   useEffect(() => {
+    if (typeof nonce === 'string' && nonce !== '') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setClientNonce(nonce);
+    }
+  }, [nonce]);
+
+  useEffect(() => {
     setWebTokenList(serverTokenList?.webTokenList as unknown[] as string[]);
     setAndroidTokenList(
       serverTokenList?.androidTokenList as unknown[] as string[]
@@ -144,29 +153,33 @@ export function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
       component="form"
       container
       spacing={2}
+      nonce={clientNonce}
       onSubmit={handlePushNotification}
     >
-      <Grid size={12}>
+      <Grid size={12} nonce={clientNonce}>
         <TextField
           label="推播標題"
           fullWidth
           value={appMessageTitle}
+          nonce={clientNonce}
           onChange={(e) => setAppMessageTitle(e.target.value)}
         />
       </Grid>
-      <Grid size={12}>
+      <Grid size={12} nonce={clientNonce}>
         <TextField
           label="推播訊息"
           fullWidth
           value={appMessageData}
+          nonce={clientNonce}
           onChange={(e) => setAppMessageData(e.target.value)}
         />
       </Grid>
-      <Grid size={12}>
+      <Grid size={12} nonce={clientNonce}>
         <TextField
           label="推播圖片網址"
           fullWidth
           value={appMessageImg}
+          nonce={clientNonce}
           onChange={(e) => setAppMessageImg(e.target.value)}
         />
       </Grid>
@@ -178,24 +191,27 @@ export function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
           justifyContent: 'center',
           alignItems: 'center'
         }}
+        nonce={clientNonce}
       >
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 6 }} nonce={clientNonce}>
           <Button
             variant="outlined"
             color="primary"
             fullWidth
             disabled={systemLoading}
+            nonce={clientNonce}
             onClick={handleResetForm}
           >
             重置
           </Button>
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 6 }} nonce={clientNonce}>
           <Button
             variant="contained"
             color="primary"
             fullWidth
             type="submit"
+            nonce={clientNonce}
             disabled={systemLoading}
           >
             送出

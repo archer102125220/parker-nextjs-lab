@@ -143,6 +143,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
   const infinityTimeoutTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // State
+  const [clientNonce, setClientNonce] = useState<string>('');
   const [infinityIsIntersecting, setInfinityIsIntersecting] =
     useState<boolean>(false);
   const [isPullStart, setIsPullStart] = useState<boolean>(false);
@@ -805,6 +806,12 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
 
   // Lifecycle effects
   useEffect(() => {
+    if (typeof nonce === 'string' && nonce !== '') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setClientNonce(nonce);
+    }
+  }, [nonce]);
+  useEffect(() => {
     if (
       typeof scrollFetchRef.current?.parentElement?.addEventListener ===
       'function'
@@ -884,6 +891,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
     <div
       ref={scrollFetchRef}
       className={[styles.scroll_fetch, 'scroll_fetch'].join(' ')}
+      nonce={clientNonce}
       style={cssVariable}
       onScrollEnd={handleScrollEnd}
       onMouseDown={handlePullStart}
@@ -904,6 +912,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
               ) : (
                 <p
                   className={styles['scroll_fetch-trigger-pull_label']}
+                  nonce={clientNonce}
                   style={{ display: isShowRefreshIcon ? 'block' : 'none' }}
                 >
                   {isPulling === true ? pullingLabel : pullLabel}
@@ -938,11 +947,13 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
                       className={
                         styles['scroll_fetch-trigger-icon_center-icon']
                       }
+                      nonce={clientNonce}
                       style={{ display: isShowRefreshIcon ? 'block' : 'none' }}
                       css-refresh-animation={`${refreshing === true && isPullStart === false}`}
                     />
                   ) : (
                     <div
+                      nonce={clientNonce}
                       style={{ display: isShowRefreshIcon ? '' : 'none' }}
                       className={
                         styles['scroll_fetch-trigger-icon_center-icon_img_bg']

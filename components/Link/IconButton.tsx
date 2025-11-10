@@ -1,5 +1,6 @@
 'use client';
 import type { ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 
 import { Link } from '@/i18n/navigation';
@@ -15,8 +16,18 @@ export interface LinkIconButtonProps extends _LinkIconButtonProps {
 
 export function LinkIconButton(props: LinkIconButtonProps): ReactNode {
   const { nonce, ...iconButtonProps } = props;
+  const [clientNonce, setClientNonce] = useState<string>('');
 
-  return <IconButton {...iconButtonProps} component={Link} nonce={nonce} />;
+  useEffect(() => {
+    if (typeof nonce === 'string' && nonce !== '') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setClientNonce(nonce);
+    }
+  }, [nonce]);
+
+  return (
+    <IconButton {...iconButtonProps} component={Link} nonce={clientNonce} />
+  );
 }
 
 export default LinkIconButton;

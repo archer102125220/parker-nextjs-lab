@@ -181,6 +181,7 @@ export function SwiperJs(props: swiperJsPropsType): ReactNode {
   const paginationRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<HTMLDivElement>(null);
 
+  const [clientNonce, setClientNonce] = useState<string>('');
   const [swiperObj, setSwiperObj] = useState<Swiper | null>(null);
   const [params, setParams] = useState<SwiperOptions | null>(null);
   const [isSliderMoveing, setIsSliderMoveing] = useState(false);
@@ -541,6 +542,13 @@ export function SwiperJs(props: swiperJsPropsType): ReactNode {
     [swiperObj, value, params, handleSlideChange, syncSlide]
   );
 
+  useEffect(() => {
+    if (typeof nonce === 'string' && nonce !== '') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setClientNonce(nonce);
+    }
+  }, [nonce]);
+
   useLayoutEffect(() => {
     window.addEventListener('mouseup', resetMoveingStatus, { passive: true });
     window.addEventListener('touchend', resetMoveingStatus, { passive: true });
@@ -572,6 +580,7 @@ export function SwiperJs(props: swiperJsPropsType): ReactNode {
     <div
       ref={swiperJsRootRef}
       className={[style['swiper_js'], className].join(' ')}
+      nonce={clientNonce}
       style={cssVariable}
       onScroll={resetSwiperScroll}
     >

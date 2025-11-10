@@ -1,6 +1,6 @@
 'use client';
 import type { ReactNode } from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -14,6 +14,8 @@ import style from '@/app/[locale]/components/drawer/page.module.scss';
 
 export function DrawerDemo(): ReactNode {
   const nonce = useAppSelector<string>((state) => state.system.nonce);
+
+  const [clientNonce, setClientNonce] = useState<string>('');
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [anchor, setAnchor] = useState<anchorType>('left');
@@ -32,6 +34,13 @@ export function DrawerDemo(): ReactNode {
     setIsOpen(value);
   }, []);
 
+  useEffect(() => {
+    if (typeof nonce === 'string' && nonce !== '') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setClientNonce(nonce);
+    }
+  }, [nonce]);
+
   return (
     <div className={style['drawer_page-container']}>
       <div className={style['drawer_page-container-input_field']}>
@@ -40,19 +49,32 @@ export function DrawerDemo(): ReactNode {
           label="錨點位置:"
           value={anchor}
           className={style['drawer_page-container-input_field-selector']}
+          nonce={clientNonce}
           onChange={(e) => {
             setAnchor(e.target.value as anchorType);
           }}
         >
-          <MenuItem value="left">左側</MenuItem>
-          <MenuItem value="right">右側</MenuItem>
-          <MenuItem value="top">頂部</MenuItem>
-          <MenuItem value="bottom">底部</MenuItem>
+          <MenuItem value="left" nonce={clientNonce}>
+            左側
+          </MenuItem>
+          <MenuItem value="right" nonce={clientNonce}>
+            右側
+          </MenuItem>
+          <MenuItem value="top" nonce={clientNonce}>
+            頂部
+          </MenuItem>
+          <MenuItem value="bottom" nonce={clientNonce}>
+            底部
+          </MenuItem>
         </TextField>
       </div>
 
       <div className={style['drawer_page-container-trigger']}>
-        <Button variant="contained" onClick={() => setIsOpen(true)}>
+        <Button
+          variant="contained"
+          nonce={clientNonce}
+          onClick={() => setIsOpen(true)}
+        >
           打開抽屜
         </Button>
       </div>
@@ -71,7 +93,12 @@ export function DrawerDemo(): ReactNode {
         onClose={handleClose}
         onChange={handleChange}
         OpenBtn={({ onOpen }) => (
-          <Button variant="contained" color="success" onClick={onOpen}>
+          <Button
+            variant="contained"
+            color="success"
+            nonce={clientNonce}
+            onClick={onOpen}
+          >
             自定義打開按鈕
           </Button>
         )}
@@ -85,7 +112,7 @@ export function DrawerDemo(): ReactNode {
             <div
               className={style['drawer_page-container-drawer_container-close']}
             >
-              <Button variant="contained" onClick={onClose}>
+              <Button variant="contained" nonce={clientNonce} onClick={onClose}>
                 關閉抽屜
               </Button>
             </div>
