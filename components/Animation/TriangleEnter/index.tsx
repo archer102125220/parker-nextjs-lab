@@ -4,9 +4,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import animejs from 'animejs';
 
 import '@/components/Triangle/triangle.scss';
-import triangleEnterStyle from '@/components/Animation/TriangleEnter/triangle_enter.module.scss';
-
 import Triangle from '@/components/Triangle';
+
+import triangleEnterStyle from '@/components/Animation/TriangleEnter/triangle_enter.module.scss';
 
 interface promiseAnimeJsType extends anime.AnimeParams {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -17,11 +17,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 function ScrollFetchDemoPage(): ReactNode {
   return (
-    <main className={style.scroll_fetch_page}>
+    <section className={style.scroll_fetch_page}>
       <GTMScnOpen />
       <h1>下拉及無限滾動 元件演示</h1>
       <DemoScrollFetch />
-    </main>
+    </section>
   );
 }
 

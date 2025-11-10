@@ -3,9 +3,9 @@ import type { ReactNode } from 'react';
 function One(): ReactNode {
   return (
     <div>
-      <main>
+      <section>
         <p>One Sub</p>
-      </main>
+      </section>
     </div>
   );
 }

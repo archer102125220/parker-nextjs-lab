@@ -2,11 +2,13 @@
 import type { ReactNode } from 'react';
 import { useCallback } from 'react';
 import Image from 'next/image';
+import type { SxProps } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
 import { useAppDispatch, useAppSelector } from '@/store';
 
+import type { ThemeType } from '@/styles/theme';
 import type { messageType } from '@/store/slices/systemSlice';
 
 import { I18nList } from '@/components/Layout/I18nList';
@@ -17,11 +19,13 @@ import { Message } from '@/components/Message';
 
 interface HeaderProps {
   nonce?: string;
+  className?: string;
+  sx?: SxProps<ThemeType> | undefined;
 }
 
 export function Header(props: HeaderProps): ReactNode {
-  // const { nonce } = props;
-  const { nonce: _nonce } = props;
+  // const { className, nonce } = props;
+  const { className, nonce: _nonce, sx } = props;
 
   const dispatch = useAppDispatch();
 
@@ -40,7 +44,7 @@ export function Header(props: HeaderProps): ReactNode {
   console.log(JSON.stringify({ HeaderNonce: nonce, _nonce }));
 
   return (
-    <Toolbar>
+    <Toolbar className={className} sx={sx}>
       <PageLoading nonce={nonce} loading={loading} />
       <GoBack nonce={nonce} />
       <Message

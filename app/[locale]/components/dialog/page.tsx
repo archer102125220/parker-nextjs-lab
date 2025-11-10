@@ -15,11 +15,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 function DialogDemoPage(): ReactNode {
   return (
-    <main>
+    <section>
       <GTMScnOpen />
       <h1>Dialog 元件演示</h1>
       <DemoDialog />
-    </main>
+    </section>
   );
 }
 

@@ -17,11 +17,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 function SwiperJsDemoPage(): ReactNode {
   return (
-    <main className={pageStyles['swiper_js_page']}>
+    <section className={pageStyles['swiper_js_page']}>
       <GTMScnOpen />
       <h1>SwiperJs 元件演示</h1>
       <DemoSwiperJs />
-    </main>
+    </section>
   );
 }
 

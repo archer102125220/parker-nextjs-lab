@@ -14,6 +14,7 @@ const withSerwist = withSerwistInit({
 
 const nextConfig: NextConfig = withSerwist(
   withNextIntl({
+    transpilePackages: ['mui-color-input'],
     /* config options here */
     sassOptions: {
       additionalData:

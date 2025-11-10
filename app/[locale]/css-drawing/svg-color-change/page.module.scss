@@ -1,0 +1,18 @@
+// https://codepen.io/noahblon/post/coloring-svgs-in-css-background-images
+.svg_color_change_page {
+  &-pseudo_elements {
+    display: flex;
+    margin-top: 8px;
+
+    &::after {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 24px;
+
+      background-color: var(--change_color, #fff);
+      // background-image: url('@app/static/android.svg');
+      mask: url('/img/svg-color-change/android.svg');
+    }
+  }
+}

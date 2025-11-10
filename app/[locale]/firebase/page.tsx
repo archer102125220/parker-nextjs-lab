@@ -18,7 +18,7 @@ async function FirebasePage(): Promise<ReactNode> {
   const nonce = (await headers()).get('x-nonce') || '';
 
   return (
-    <main className={style.firebase_page}>
+    <section className={style.firebase_page}>
       <GTMScnOpen />
       <h1>Firebase 元件演示</h1>
 
@@ -46,7 +46,7 @@ async function FirebasePage(): Promise<ReactNode> {
           FCM推播通知後台
         </LinkButton>
       </nav>
-    </main>
+    </section>
   );
 }
 

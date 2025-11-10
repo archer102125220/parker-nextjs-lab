@@ -13,8 +13,6 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 
 import { routing } from '@/i18n/routing';
 
-import { DefaultLayout } from '@/layout/default';
-
 import { MuiCacheProvider } from '@/components/MuiCacheProvider';
 import { PolyfillEvent } from '@/components/PolyfillEvent';
 import { AxiosInit } from '@/components/AxiosInit';
@@ -81,8 +79,8 @@ export async function generateMetadata(props: LocaleLayout): Promise<Metadata> {
 async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
   const { children, params } = props;
 
-  const nonce = (await headers()).get('x-nonce') || '';
-  console.log(JSON.stringify({ LocaleLayoutNonce: nonce }));
+  const headersData = await headers();
+  const nonce = headersData.get('x-nonce') || '';
 
   // Ensure that the incoming `locale` is valid
   const { locale } = await params;
@@ -153,7 +151,7 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
                 <Analytics />
                 <SpeedInsights />
                 <NotificationPermission />
-                <DefaultLayout nonce={nonce}>{children}</DefaultLayout>
+                {children}
               </MuiThemeProvider>
             </MuiCacheProvider>
           </ReduxInit>

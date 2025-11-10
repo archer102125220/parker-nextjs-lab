@@ -17,11 +17,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 function DialogDemoPage(): ReactNode {
   return (
-    <main className={style.drawer_page}>
+    <section className={style.drawer_page}>
       <GTMScnOpen />
       <h1>Drawer 元件演示</h1>
       <DemoDrawer />
-    </main>
+    </section>
   );
 }
 

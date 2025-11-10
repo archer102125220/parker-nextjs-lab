@@ -16,12 +16,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
 function TriangleAnimeTest(): ReactNode {
   return (
-    <main className={style.triangle_anime_test_page}>
+    <section className={style.triangle_anime_test_page}>
       <GTMScnOpen />
       {/* <h1>CSS三角形滿版動畫測試</h1> */}
 
       <TriangleAnimation />
-    </main>
+    </section>
   );
 }
 

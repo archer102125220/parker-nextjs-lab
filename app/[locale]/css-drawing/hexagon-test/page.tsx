@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 function HexagonTest(): ReactNode {
   return (
-    <main className={style.hexagon_page}>
+    <section className={style.hexagon_page}>
       <GTMScnOpen />
       <Hexagon className={style['hexagon_page-component']} />
       <HexagonContainer className={style['hexagon_page-hexagon_container']}>
@@ -49,7 +49,7 @@ function HexagonTest(): ReactNode {
       <div className={style['hexagon_page-drawing_container']}>
         <div className={style['hexagon_page-drawing_container-drawing']} />
       </div>
-    </main>
+    </section>
   );
 }
 

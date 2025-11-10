@@ -5,6 +5,8 @@ import { headers } from 'next/headers';
 import LinkButton from '@/components/Link/Button';
 import GTMScnOpen from '@/components/Google/GTMScnOpen';
 
+import { DefaultLayout } from '@/layout/default';
+
 import style from '@/app/[locale]/css-drawing/page.module.scss';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -15,8 +17,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function CssDrawing(): Promise<ReactNode> {
-  const nonce = (await headers()).get('x-nonce') || '';
-  // triangle-anime-test
+  const headersData = await headers();
+  const nonce = headersData.get('x-nonce') || '';
 
   const linkList = [
     { href: '/css-drawing/triangle-test', label: 'css三角形測試' },
@@ -39,34 +41,36 @@ async function CssDrawing(): Promise<ReactNode> {
   ];
 
   return (
-    <main className={style.css_animejs_page}>
-      <GTMScnOpen />
-      {/* <h1>CSS繪圖相關測試</h1> */}
+    <DefaultLayout nonce={nonce}>
+      <section className={style.css_animejs_page}>
+        <GTMScnOpen />
+        {/* <h1>CSS繪圖相關測試</h1> */}
 
-      <p className={style['css_animejs_page-content']}>
-        主要以css繪圖及anime.js整合測試為主
-      </p>
+        <p className={style['css_animejs_page-content']}>
+          主要以css繪圖及anime.js整合測試為主
+        </p>
 
-      <nav className={style['css_animejs_page-link_list']}>
-        {/* <LinkButton
+        <nav className={style['css_animejs_page-link_list']}>
+          {/* <LinkButton
           className={style['css_animejs_page-link_list-link']}
           href="/css-drawing/hexagon-test"
           nonce={nonce}
         >
           css六邊形測試
         </LinkButton> */}
-        {linkList.map((link) => (
-          <LinkButton
-            key={link.href}
-            className={style['css_animejs_page-link_list-link']}
-            href={link.href}
-            nonce={nonce}
-          >
-            {link.label}
-          </LinkButton>
-        ))}
-      </nav>
-    </main>
+          {linkList.map((link) => (
+            <LinkButton
+              key={link.href}
+              className={style['css_animejs_page-link_list-link']}
+              href={link.href}
+              nonce={nonce}
+            >
+              {link.label}
+            </LinkButton>
+          ))}
+        </nav>
+      </section>
+    </DefaultLayout>
   );
 }
 
