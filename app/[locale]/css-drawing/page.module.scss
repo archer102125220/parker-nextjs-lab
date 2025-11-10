@@ -1,0 +1,18 @@
+.css_animejs_page {
+  &-banner {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  &-content {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 8px;
+
+    &-link {
+      flex: 1;
+      flex-basis: 150px;
+    }
+  }
+}

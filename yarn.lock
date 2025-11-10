@@ -2580,6 +2580,11 @@
   dependencies:
     tslib "^2.4.0"
 
+"@types/animejs@^3.1.13":
+  version "3.1.13"
+  resolved "https://registry.yarnpkg.com/@types/animejs/-/animejs-3.1.13.tgz#f31d1630a647b4695c2dbdc7950c6d26bab1fcc7"
+  integrity sha512-yWg9l1z7CAv/TKpty4/vupEh24jDGUZXv4r26StRkpUPQm04ztJaftgpto8vwdFs8SiTq6XfaPKCSI+wjzNMvQ==
+
 "@types/autocannon@^7.12.7":
   version "7.12.7"
   resolved "https://registry.yarnpkg.com/@types/autocannon/-/autocannon-7.12.7.tgz#b62d06b5685be994565c86ba01a47ce4622ddee1"
@@ -3268,10 +3273,10 @@ ajv@^8.0.0, ajv@^8.6.0, ajv@^8.9.0:
     json-schema-traverse "^1.0.0"
     require-from-string "^2.0.2"
 
-animejs@^4.0.0:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/animejs/-/animejs-4.2.2.tgz#75f2529cb8a5b837109f94591e1f28a0e50f2e09"
-  integrity sha512-Ys3RuvLdAeI14fsdKCQy7ytu4057QX6Bb7m4jwmfd6iKmUmLquTwk1ut0e4NtRQgCeq/s2Lv5+oMBjz6c7ZuIg==
+animejs@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/animejs/-/animejs-3.2.2.tgz#59be98c58834339d5847f4a70ddba74ac75b6afc"
+  integrity sha512-Ao95qWLpDPXXM+WrmwcKbl6uNlC5tjnowlaRYtuVDHHoygjtIPfDUoK9NthrlZsQSKjZXlmji2TrBUAVbiH0LQ==
 
 ansi-escapes@^7.0.0:
   version "7.1.1"

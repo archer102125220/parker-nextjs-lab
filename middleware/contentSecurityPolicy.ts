@@ -40,11 +40,11 @@ export function contentSecurityPolicyMiddleware(
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'self';
-    img-src 'self' data:;
+    img-src 'self' data: https://www.googletagmanager.com;
     object-src 'none';
     script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://www.googletagmanager.com https://va.vercel-scripts.com;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://firebase.googleapis.com https://www.google-analytics.com;
+    connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://firebase.googleapis.com https://www.google-analytics.com https://firebaseinstallations.googleapis.com https://fcmregistrations.googleapis.com;
     frame-src 'self' https://www.youtube.com https://www.googletagmanager.com;
     upgrade-insecure-requests;
   `;
@@ -59,17 +59,11 @@ export function contentSecurityPolicyMiddleware(
     'Content-Security-Policy',
     contentSecurityPolicyHeaderValue
   );
-  console.log(
-    '____contentSecurityPolicy____ requestHeaders.set Content-Security-Policy'
-  );
 
   response.headers.set('x-nonce', nonce);
   response.headers.set(
     'Content-Security-Policy',
     contentSecurityPolicyHeaderValue
-  );
-  console.log(
-    '____contentSecurityPolicy____ response.headers.set Content-Security-Policy'
   );
 
   return response;

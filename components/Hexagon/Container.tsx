@@ -1,8 +1,11 @@
 import type { ReactNode, CSSProperties } from 'react';
 import { useMemo } from 'react';
 
+import '@/components/Hexagon/container.scss';
+
 interface HexagonContainerProps {
   children?: ReactNode;
+  className?: string;
   height?: string | number;
   width?: string | number;
   maskColor?: string;
@@ -15,7 +18,12 @@ interface HexagonContainerCssVariableType extends CSSProperties {
 }
 
 export function HexagonContainer(props: HexagonContainerProps): ReactNode {
-  const { children, height, width, maskColor } = props;
+  const {
+    children,
+    height = '120px',
+    width = '100px',
+    maskColor = '#007bff'
+  } = props;
 
   const cssVariable = useMemo<HexagonContainerCssVariableType>(() => {
     const _cssVariable: HexagonContainerCssVariableType = {};
@@ -53,7 +61,10 @@ export function HexagonContainer(props: HexagonContainerProps): ReactNode {
   }, [height, width, maskColor]);
 
   return (
-    <div className="hexagon_container" style={cssVariable}>
+    <div
+      className={['hexagon_container', props.className].join(' ')}
+      style={cssVariable}
+    >
       <div className="hexagon_container-top" />
       {children}
       <div className="hexagon_container-bottom" />
