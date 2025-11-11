@@ -3,12 +3,12 @@ import { headers } from 'next/headers';
 
 import { FullScreenLayout } from '@/layout/full-screen';
 
-interface RootLayoutProps {
+interface TriangleFullTestLayoutProps {
   children: ReactNode;
 }
 
-async function RootLayout(
-  props: Readonly<RootLayoutProps>
+async function TriangleFullTestLayout(
+  props: Readonly<TriangleFullTestLayoutProps>
 ): Promise<ReactNode> {
   const { children } = props;
   const headersData = await headers();
@@ -17,4 +17,4 @@ async function RootLayout(
   return <FullScreenLayout nonce={nonce}>{children}</FullScreenLayout>;
 }
 
-export default RootLayout;
+export default TriangleFullTestLayout;

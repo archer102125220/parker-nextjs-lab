@@ -3,12 +3,12 @@ import { headers } from 'next/headers';
 
 import { DefaultLayout } from '@/layout/default';
 
-interface RootLayoutProps {
+interface ComponentsLayoutProps {
   children: ReactNode;
 }
 
-async function RootLayout(
-  props: Readonly<RootLayoutProps>
+async function ComponentsLayout(
+  props: Readonly<ComponentsLayoutProps>
 ): Promise<ReactNode> {
   const { children } = props;
   const headersData = await headers();
@@ -18,4 +18,4 @@ async function RootLayout(
   return <DefaultLayout nonce={nonce}>{children}</DefaultLayout>;
 }
 
-export default RootLayout;
+export default ComponentsLayout;

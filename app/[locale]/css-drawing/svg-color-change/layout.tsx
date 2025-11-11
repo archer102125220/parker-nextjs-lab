@@ -3,12 +3,12 @@ import { headers } from 'next/headers';
 
 import { DefaultLayout } from '@/layout/default';
 
-interface RootLayoutProps {
+interface SvgColorChangeLayoutProps {
   children: ReactNode;
 }
 
-async function RootLayout(
-  props: Readonly<RootLayoutProps>
+async function SvgColorChangeLayout(
+  props: Readonly<SvgColorChangeLayoutProps>
 ): Promise<ReactNode> {
   const { children } = props;
   const headersData = await headers();
@@ -17,4 +17,4 @@ async function RootLayout(
   return <DefaultLayout nonce={nonce}>{children}</DefaultLayout>;
 }
 
-export default RootLayout;
+export default SvgColorChangeLayout;

@@ -2,7 +2,7 @@ import { headers } from 'next/headers';
 
 import { PageLoading } from '@/components/PageLoading';
 
-export default async function ComponentsLoading() {
+export default async function TriangleFullTestLoading() {
   const nonce = (await headers()).get('x-nonce') || '';
 
   // Or a custom loading skeleton component

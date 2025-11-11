@@ -3,12 +3,12 @@ import { headers } from 'next/headers';
 
 import { DefaultLayout } from '@/layout/default';
 
-interface RootLayoutProps {
+interface TriangleTestLayoutProps {
   children: ReactNode;
 }
 
-async function RootLayout(
-  props: Readonly<RootLayoutProps>
+async function TriangleTestLayout(
+  props: Readonly<TriangleTestLayoutProps>
 ): Promise<ReactNode> {
   const { children } = props;
   const headersData = await headers();
@@ -17,4 +17,4 @@ async function RootLayout(
   return <DefaultLayout nonce={nonce}>{children}</DefaultLayout>;
 }
 
-export default RootLayout;
+export default TriangleTestLayout;
