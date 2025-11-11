@@ -3,7 +3,8 @@ import { useMemo } from 'react';
 
 import { Button } from '@mui/material';
 
-import { DefaultLayout } from '@/layout/default';
+import { MuiCacheProvider } from '@/components/MuiCacheProvider';
+import MuiThemeProvider from '@/components/MuiThemeProvider';
 
 export function GlobalError({
   error,
@@ -27,22 +28,24 @@ export function GlobalError({
     // global-error must include html and body tags
     <html>
       <body>
-        <DefaultLayout>
-          <section>
-            <h2>Something went wrong!</h2>
-            {memoError ? (
-              <>
-                <p>{memoError.name}</p>
-                <p>{memoError.message}</p>
-                <p>{memoError.stack}</p>
-                <p>{memoError.digest}</p>
-              </>
-            ) : (
-              ''
-            )}
-            <Button onClick={() => reset()}>Try again</Button>
-          </section>
-        </DefaultLayout>
+        <MuiCacheProvider>
+          <MuiThemeProvider>
+            <section>
+              <h2>Something went wrong!</h2>
+              {memoError ? (
+                <>
+                  <p>{memoError.name}</p>
+                  <p>{memoError.message}</p>
+                  <p>{memoError.stack}</p>
+                  <p>{memoError.digest}</p>
+                </>
+              ) : (
+                ''
+              )}
+              <Button onClick={() => reset()}>Try again</Button>
+            </section>
+          </MuiThemeProvider>
+        </MuiCacheProvider>
       </body>
     </html>
   );
