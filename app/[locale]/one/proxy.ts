@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-// 須至 @/middleware.ts 中註冊 middleware處理事件
+// 須至 @/proxy.ts 中註冊 middleware處理事件
 export async function proxy() {
   console.log('____one____');
 
