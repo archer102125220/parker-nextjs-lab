@@ -1,6 +1,6 @@
 'use client';
 import type { ReactNode } from 'react';
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 
 import ScrollFetch from '@/components/ScrollFetch';
 
@@ -22,15 +22,15 @@ export function ScrollFetchDemo(): ReactNode {
   const [page, setPage] = useState<number>(1);
 
   const limit = useMemo<number>(() => page * 20, [page]);
-  const dataList = useMemo<string[]>(() => {
+  const dataList = useMemo<string[] | number[]>(() => {
     const _dataList = [];
     for (let i = 0; i <= page * limit; i++) {
-      // _dataList.push(i);
-      let data = '';
-      for (let j = i; j >= 0; j--) {
-        data += j;
-      }
-      _dataList.push(data);
+      _dataList.push(i);
+      // let data = '';
+      // for (let j = i; j >= 0; j--) {
+      //   data += j;
+      // }
+      // _dataList.push(data);
     }
     return _dataList;
   }, [page, limit]);
@@ -45,15 +45,12 @@ export function ScrollFetchDemo(): ReactNode {
   // );
 
   const handleRefresh = useCallback(
-    // TODO
-    // eslint-disable-next-line react-hooks/preserve-manual-memoization
-    async function refresh(done: () => void) {
+    async function refresh() {
       if (
         refreshLoading === true ||
         infinityLoading === true ||
         loading === true
       ) {
-        done();
         return;
       }
 
@@ -61,59 +58,51 @@ export function ScrollFetchDemo(): ReactNode {
       setLoading(true);
       console.log('handleRefresh');
 
-      setPage(1);
       const response = await GET_scrollFetchTest(
-        { page },
-        { useCache: false, useCacheRefresh: true }
+        { page: 1 },
+        { useCache: true, useCacheRefresh: false }
       );
-      // await new Promise((resolve) =>
-      //   setTimeout(() => resolve(undefined), 1000)
-      // );
-
+      // await new Promise((resolve) => setTimeout(() => resolve(undefined), 1000));
       console.log({ response });
 
       console.log('handleRefresh setTimeout');
-      done();
-      // setMessageSuccess('handleRefresh');
+
       setLoading(false);
-      setRefreshLoading(false);
+      setInfinityLoading(false);
+      setPage(1);
     },
-    [refreshLoading, infinityLoading, loading]
+    [refreshLoading, infinityLoading, loading, setLoading]
   );
-  // TODO
-  // eslint-disable-next-line react-hooks/preserve-manual-memoization
-  const handleInfinityFetch = useCallback(async function infinityFetch(
-    done: () => void
-  ) {
-    if (
-      refreshLoading === true ||
-      infinityLoading === true ||
-      loading === true
-    ) {
-      done();
-      return;
-    }
 
-    setInfinityLoading(true);
-    setLoading(true);
-    console.log('handleInfinityFetch');
+  const handleInfinityFetch = useCallback(
+    async function infinityFetch() {
+      if (
+        refreshLoading === true ||
+        infinityLoading === true ||
+        loading === true
+      ) {
+        return;
+      }
 
-    setPage(page + 1);
-    const response = await GET_scrollFetchTest(
-      { page: page },
-      { useCache: true, useCacheRefresh: false }
-    );
-    // await new Promise((resolve) => setTimeout(() => resolve(undefined), 1000));
+      setInfinityLoading(true);
+      setLoading(true);
 
-    console.log({ response });
+      console.log('handleInfinityFetch');
+      const response = await GET_scrollFetchTest(
+        { page: page + 1 },
+        { useCache: true, useCacheRefresh: false }
+      );
+      // await new Promise((resolve) => setTimeout(() => resolve(undefined), 1000));
+      console.log({ response });
 
-    // setInfinityEnd(true);
-    console.log('handleInfinityFetch setTimeout');
-    done();
-    // setMessageSuccess('handleInfinityFetch');
-    setLoading(false);
-    setInfinityLoading(false);
-  }, []);
+      // setInfinityEnd(true);
+      console.log('handleInfinityFetch setTimeout');
+      setLoading(false);
+      setInfinityLoading(false);
+      setPage(page + 1);
+    },
+    [refreshLoading, infinityLoading, loading, setLoading, page]
+  );
 
   return (
     <ScrollFetch

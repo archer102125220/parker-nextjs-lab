@@ -26,7 +26,6 @@ async function ComponentsPage(): Promise<ReactNode> {
         alignItems: 'center',
         flexWrap: 'wrap'
       }}
-      nonce={nonce}
     >
       <GTMScnOpen />
       <LinkButton href="/components/dialog" sx={{ flexShrink: 0 }}>

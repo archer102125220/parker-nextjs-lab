@@ -13,7 +13,7 @@ import type { messageType } from '@/store/slices/systemSlice';
 
 import { I18nList } from '@/components/Layout/I18nList';
 import { LinkBox } from '@/components/Link/Box';
-import { GoBack } from '@/components/GoBack';
+import { GoBack } from '@/components/Layout/GoBack';
 import { PageLoading } from '@/components/PageLoading';
 import { Message } from '@/components/Message';
 

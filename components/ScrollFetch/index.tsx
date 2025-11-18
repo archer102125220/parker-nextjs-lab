@@ -11,9 +11,10 @@ import type {
 import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 
-import { debounce } from 'lodash';
+import _debounce from 'lodash/debounce';
 
 import { handleBindScrollEnd } from '@/utils/polyfill/scroll-end';
+import GoTop from '@/components/GoTop';
 
 import '@/components/ScrollFetch/scroll_fetch.scss';
 import styles from '@/components/ScrollFetch/scroll_fetch.module.scss';
@@ -26,7 +27,6 @@ interface ScrollFetchProps {
   containerHeight?: string | number;
   pullingLabel?: string;
   loadingLabel?: string;
-  refresh?: () => Promise<void> | void;
   refreshIcon?: string;
   refreshingIcon?: string;
   refreshDisable?: boolean;
@@ -43,29 +43,32 @@ interface ScrollFetchProps {
   infinityDisable?: boolean;
   // isScrollToFetch?: boolean;
   infinityEnd?: boolean;
-  infinityFetch?: () => Promise<void> | void;
   vibrate?: boolean;
   infinityTimeout?: number;
   scrollTop?: number;
+  userSelectNone?: boolean;
+  hasGoTop?: boolean;
+  isMobile?: boolean;
+
   children?: ReactNode;
-  refreshSlot?: (props: {
+  refreshRender?: (props: {
     isPulling: boolean;
     isPullStart: boolean;
     isShowRefreshIcon: boolean;
   }) => ReactNode;
-  refreshingSlot?: () => ReactNode;
-  refreshIconSlot?: (props: {
+  refreshingRender?: () => ReactNode;
+  refreshIconRender?: (props: {
     isShowRefreshIcon: boolean;
     isPullStart: boolean;
   }) => ReactNode;
-  emptySlot?: () => ReactNode;
-  infinityLabelSlot?: (props: {
+  emptyRender?: () => ReactNode;
+  infinityLabelRender?: (props: {
     loading: boolean;
     infinityEnd: boolean;
   }) => ReactNode;
 
-  onRefresh?: (done: () => void) => void;
-  onInfinityFetch?: (done: () => void) => void;
+  onRefresh?: () => Promise<void> | void;
+  onInfinityFetch?: () => Promise<void> | void;
   onWheel?: (e: WheelEvent) => void;
   onScroll?: (e: UIEvent<HTMLDivElement>) => void;
   onScrollTopChange?: (scrollTop: number) => void;
@@ -84,6 +87,7 @@ interface ScrollFetchCssVariable extends CSSProperties {
 
   ['--refresh_height']?: number | string;
   ['--refresh_container_height']?: number | string;
+  ['--refresh_user_select']?: string;
   ['--refresh_overflow']?: string;
 
   ['--refresh_trigger_z_index']?: number | string;
@@ -99,7 +103,6 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
   containerHeight,
   pullingLabel = '釋放即可重整...',
   loadingLabel = '加載中...',
-  refresh,
   refreshIcon,
   refreshingIcon,
   refreshDisable = true,
@@ -116,16 +119,18 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
   infinityDisable = false,
   // isScrollToFetch = true,
   infinityEnd = true,
-  infinityFetch,
   vibrate = false,
   infinityTimeout,
   scrollTop,
+  userSelectNone = false,
+  hasGoTop = false,
+  isMobile = true,
   children,
-  refreshSlot,
-  refreshingSlot,
-  refreshIconSlot,
-  emptySlot,
-  infinityLabelSlot,
+  refreshRender: RefreshRender,
+  refreshingRender: RefreshingRender,
+  refreshIconRender: RefreshIconRender,
+  emptyRender: EmptyRender,
+  infinityLabelRender: InfinityLabelRender,
   onRefresh,
   onInfinityFetch,
   onWheel,
@@ -211,6 +216,10 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
       _cssVariable['--refresh_container_height'] = `${containerHeight}px`;
     }
 
+    if (userSelectNone === true) {
+      _cssVariable['--refresh_user_select'] = 'none';
+    }
+
     if (moveDistance > 0) {
       _cssVariable['--refresh_overflow'] = 'hidden';
       if (
@@ -235,6 +244,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
     iosStyle,
     duration,
     moveDistance,
+    userSelectNone,
     iosTypeIconSize,
     iosTypeIconStrokeWidth,
     refreshIconRotate,
@@ -315,7 +325,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
   const handleSyncScroll = useCallback(
     // TODO
     // eslint-disable-next-line react-hooks/use-memo
-    debounce((newScrollTop: number) => {
+    _debounce((newScrollTop: number) => {
       if (typeof newScrollTop === 'number' && newScrollTop > -1) {
         scrollFetchRef.current?.scrollTo({
           top: newScrollTop,
@@ -394,12 +404,10 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
             }, infinityTimeout);
           }
 
-          if (typeof infinityFetch === 'function') {
-            await infinityFetch();
-            resolve(undefined);
-          } else {
-            onInfinityFetch?.(() => resolve(undefined));
+          if (typeof onInfinityFetch === 'function') {
+            await onInfinityFetch();
           }
+          resolve(undefined);
         } catch (error) {
           reject(error);
         }
@@ -414,13 +422,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
       infinityTimeoutTimerRef.current = null;
     }
     setInfinityLoading(false);
-  }, [
-    infinityLoading,
-    infinityTimeout,
-    infinityFetch,
-    onInfinityFetch,
-    onInfinityFail
-  ]);
+  }, [infinityLoading, infinityTimeout, onInfinityFetch, onInfinityFail]);
 
   const handlePullStart = useCallback(
     (e: TouchEvent | MouseEvent) => {
@@ -553,6 +555,37 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
     ]
   );
 
+  const handleRefreshDone = useCallback(async () => {
+    setRefreshing(false);
+
+    if (iosStyle === true) {
+      setMoveDistance(0);
+      setRefreshIconRotate(0);
+      setIsPulling(false);
+    }
+
+    if (infinityIsIntersecting === true) {
+      if (infinityTrigger === false) {
+        setInfinityTrigger(true);
+      } else {
+        handleInfinityTrigger(
+          infinityTrigger,
+          infinityLoading,
+          infinityDisable,
+          infinityEnd
+        );
+      }
+    }
+  }, [
+    iosStyle,
+    infinityIsIntersecting,
+    infinityTrigger,
+    infinityLoading,
+    infinityDisable,
+    infinityEnd,
+    handleInfinityTrigger
+  ]);
+
   const handlePullEnd = useCallback(
     // async (e: TouchEvent | MouseEvent) => {
     async () => {
@@ -589,12 +622,10 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
         if (iosStyle === true) {
           setMoveDistance(50);
         }
-        if (typeof refresh === 'function') {
-          await refresh();
-          handleRefreshDone();
-        } else {
-          onRefresh?.(handleRefreshDone);
+        if (typeof onRefresh === 'function') {
+          await onRefresh();
         }
+        handleRefreshDone();
       } else {
         setMoveDistance(0);
         setRefreshIconRotate(0);
@@ -608,41 +639,10 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
       infinityLoading,
       isPulling,
       iosStyle,
-      refresh,
-      onRefresh
+      onRefresh,
+      handleRefreshDone
     ]
   );
-
-  const handleRefreshDone = useCallback(async () => {
-    setRefreshing(false);
-
-    if (iosStyle === true) {
-      setMoveDistance(0);
-      setRefreshIconRotate(0);
-      setIsPulling(false);
-    }
-
-    if (infinityIsIntersecting === true) {
-      if (infinityTrigger === false) {
-        setInfinityTrigger(true);
-      } else {
-        handleInfinityTrigger(
-          infinityTrigger,
-          infinityLoading,
-          infinityDisable,
-          infinityEnd
-        );
-      }
-    }
-  }, [
-    iosStyle,
-    infinityIsIntersecting,
-    infinityTrigger,
-    infinityLoading,
-    infinityDisable,
-    infinityEnd,
-    handleInfinityTrigger
-  ]);
 
   const handleRefreshIcon = useCallback(() => {
     if (refreshing === false) {
@@ -673,7 +673,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
   const handleScrollTop = useCallback(
     // TODO
     // eslint-disable-next-line react-hooks/use-memo
-    debounce((e: UIEvent<HTMLDivElement>) => {
+    _debounce((e: UIEvent<HTMLDivElement>) => {
       onScrollTopChange?.((e.target as HTMLDivElement)?.scrollTop || 0);
     }, 50),
     [onScrollTopChange]
@@ -812,18 +812,21 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
     }
   }, [nonce]);
   useEffect(() => {
-    if (
-      typeof scrollFetchRef.current?.parentElement?.addEventListener ===
-      'function'
-    ) {
-      scrollFetchRef.current.parentElement.addEventListener(
-        'scroll',
-        parentScroll
-      );
-      removeParentScrollEndRef.current = handleBindScrollEnd(
-        scrollFetchRef.current.parentElement,
-        parentScrollEnd
-      );
+    if (isMobile === true) {
+      if (
+        typeof scrollFetchRef.current?.parentElement?.addEventListener ===
+        'function'
+      ) {
+        scrollFetchRef.current.parentElement.addEventListener(
+          'scroll',
+          parentScroll
+        );
+        removeParentScrollEndRef.current = handleBindScrollEnd(
+          scrollFetchRef.current.parentElement,
+          parentScrollEnd
+        );
+      }
+      window.addEventListener('scroll', windowScroll);
     }
 
     const handleContextMenu = () => {
@@ -840,7 +843,6 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
     };
 
     window.addEventListener('contextmenu', handleContextMenu);
-    window.addEventListener('scroll', windowScroll);
 
     removeWindowScrollEndRef.current = handleBindScrollEnd(
       window,
@@ -855,25 +857,29 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
 
     return () => {
       window.removeEventListener('contextmenu', handleContextMenu);
-      window.removeEventListener('scroll', windowScroll);
 
-      if (typeof removeWindowScrollEndRef.current === 'function') {
-        removeWindowScrollEndRef.current();
-      }
+      if (isMobile === true) {
+        window.removeEventListener('scroll', windowScroll);
 
-      if (typeof removeParentScrollEndRef.current === 'function') {
-        removeParentScrollEndRef.current();
-      }
+        if (typeof removeWindowScrollEndRef.current === 'function') {
+          removeWindowScrollEndRef.current();
+        }
 
-      if (
-        typeof observerRef.current?.unobserve === 'function' &&
-        typeof infinityTriggerRef.current === 'object' &&
-        infinityTriggerRef.current !== null
-      ) {
-        observerRef.current.unobserve(infinityTriggerRef.current);
+        if (typeof removeParentScrollEndRef.current === 'function') {
+          removeParentScrollEndRef.current();
+        }
+
+        if (
+          typeof observerRef.current?.unobserve === 'function' &&
+          typeof infinityTriggerRef.current === 'object' &&
+          infinityTriggerRef.current !== null
+        ) {
+          observerRef.current.unobserve(infinityTriggerRef.current);
+        }
       }
     };
   }, [
+    isMobile,
     useObserver,
     infinityDisable,
     infinityEnd,
@@ -907,8 +913,13 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
         <div className={styles['scroll_fetch-trigger']}>
           {iosStyle === true ? (
             refreshing === false ? (
-              refreshSlot ? (
-                refreshSlot({ isPulling, isPullStart, isShowRefreshIcon })
+              RefreshRender ? (
+                // RefreshRender({ isPulling, isPullStart, isShowRefreshIcon })
+                <RefreshRender
+                  isPulling={isPulling}
+                  isPullStart={isPullStart}
+                  isShowRefreshIcon={isShowRefreshIcon}
+                />
               ) : (
                 <p
                   className={styles['scroll_fetch-trigger-pull_label']}
@@ -918,8 +929,9 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
                   {isPulling === true ? pullingLabel : pullLabel}
                 </p>
               )
-            ) : refreshingSlot ? (
-              refreshingSlot()
+            ) : RefreshingRender ? (
+              // refreshingRender()
+              <RefreshingRender />
             ) : (
               <div className={styles['scroll_fetch-trigger-refreshing']}>
                 <div
@@ -938,8 +950,12 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
               className={styles['scroll_fetch-trigger-icon_center']}
               onTransitionEnd={handleRefreshIcon}
             >
-              {refreshIconSlot ? (
-                refreshIconSlot({ isShowRefreshIcon, isPullStart })
+              {RefreshIconRender ? (
+                // RefreshIconRender({ isShowRefreshIcon, isPullStart })
+                <RefreshIconRender
+                  isShowRefreshIcon={isShowRefreshIcon}
+                  isPullStart={isPullStart}
+                />
               ) : (
                 <>
                   {hasRefreshIcon === false ? (
@@ -993,8 +1009,9 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
 
       {isEmpty === true && (
         <div className={styles['scroll_fetch-empty']}>
-          {emptySlot ? (
-            emptySlot()
+          {EmptyRender ? (
+            // EmptyRender()
+            <EmptyRender />
           ) : (
             <p className={styles['scroll_fetch-empty-label']}>{emptyLabel}</p>
           )}
@@ -1004,8 +1021,12 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
       <div ref={infinityTriggerRef} />
 
       {infinityDisable === false &&
-        (infinityLabelSlot ? (
-          infinityLabelSlot({ loading: infinityLoading, infinityEnd })
+        (InfinityLabelRender ? (
+          // InfinityLabelRender({ loading: infinityLoading, infinityEnd })
+          <InfinityLabelRender
+            loading={infinityLoading}
+            infinityEnd={infinityEnd}
+          />
         ) : (
           <p className={styles['scroll_fetch-infinity_label']}>
             {infinityEnd === false
@@ -1015,6 +1036,17 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
               : infinityEndLabel}
           </p>
         ))}
+
+      {hasGoTop === true ? (
+        <GoTop
+          position="sticky"
+          right="unset"
+          left="90%"
+          parentElementTrigger={true}
+        />
+      ) : (
+        ''
+      )}
     </div>
   );
 };
