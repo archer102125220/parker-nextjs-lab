@@ -95,51 +95,51 @@ interface ScrollFetchCssVariable extends CSSProperties {
 
 const MOVE_DISTANCE_LIMIT = 50;
 
-const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
-  nonce,
+const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
+  const {
+    nonce,
 
-  pullLabel = '下拉即可重整...',
-  height,
-  containerHeight,
-  pullingLabel = '釋放即可重整...',
-  loadingLabel = '加載中...',
-  refreshIcon,
-  refreshingIcon,
-  refreshDisable = true,
-  loading = false,
-  iosStyle = false,
-  iosTypeIconSize = 10,
-  iosTypeIconStrokeWidth = 2,
-  isEmpty = false,
-  emptyLabel = '暂无资料',
-  useObserver = true,
-  infinityLabel = '拉至底部可繼續加載',
-  infinityEndLabel = '沒有更多資料了',
-  infinityBuffer = 100,
-  infinityDisable = false,
-  // isScrollToFetch = true,
-  infinityEnd = true,
-  vibrate = false,
-  infinityTimeout,
-  scrollTop,
-  userSelectNone = false,
-  hasGoTop = false,
-  isMobile = true,
-  children,
-  refreshRender: RefreshRender,
-  refreshingRender: RefreshingRender,
-  refreshIconRender: RefreshIconRender,
-  emptyRender: EmptyRender,
-  infinityLabelRender: InfinityLabelRender,
-  onRefresh,
-  onInfinityFetch,
-  onWheel,
-  onScroll,
-  onScrollTopChange,
-  onScrollEnd,
-  onInfinityFail
-}) => {
-  console.log(JSON.stringify({ ScrollFetchNonce: nonce }));
+    pullLabel = '下拉即可重整...',
+    height,
+    containerHeight,
+    pullingLabel = '釋放即可重整...',
+    loadingLabel = '加載中...',
+    refreshIcon,
+    refreshingIcon,
+    refreshDisable = true,
+    loading = false,
+    iosStyle = false,
+    iosTypeIconSize = 10,
+    iosTypeIconStrokeWidth = 2,
+    isEmpty = false,
+    emptyLabel = '暂无资料',
+    useObserver = true,
+    infinityLabel = '拉至底部可繼續加載',
+    infinityEndLabel = '沒有更多資料了',
+    infinityBuffer = 100,
+    infinityDisable = false,
+    // isScrollToFetch = true,
+    infinityEnd = true,
+    vibrate = false,
+    infinityTimeout,
+    scrollTop,
+    userSelectNone = false,
+    hasGoTop = true,
+    isMobile = true,
+    children,
+    refreshRender: RefreshRender,
+    refreshingRender: RefreshingRender,
+    refreshIconRender: RefreshIconRender,
+    emptyRender: EmptyRender,
+    infinityLabelRender: InfinityLabelRender,
+    onRefresh,
+    onInfinityFetch,
+    onWheel,
+    onScroll,
+    onScrollTopChange,
+    onScrollEnd,
+    onInfinityFail
+  } = props;
 
   // Refs
   const scrollFetchRef = useRef<HTMLDivElement>(null);
@@ -268,6 +268,10 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
   }, [refreshing, isPullStart, refreshingIcon, refreshIcon]);
 
   // Effects (equivalent to watchers)
+  useEffect(() => {
+    console.log(JSON.stringify({ ScrollFetchNonce: nonce }));
+  }, [nonce]);
+
   useEffect(() => {
     if (refreshing === false && duration === 300) {
       setMoveDistance(0);
@@ -674,7 +678,9 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = ({
     // TODO
     // eslint-disable-next-line react-hooks/use-memo
     _debounce((e: UIEvent<HTMLDivElement>) => {
-      onScrollTopChange?.((e.target as HTMLDivElement)?.scrollTop || 0);
+      if (typeof onScrollTopChange === 'function') {
+        onScrollTopChange((e.target as HTMLDivElement)?.scrollTop || 0);
+      }
     }, 50),
     [onScrollTopChange]
   );

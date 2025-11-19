@@ -2,7 +2,7 @@
 import type { ReactNode, CSSProperties, RefObject } from 'react';
 import { useRef, useState, useMemo, useCallback, useEffect } from 'react';
 import IconButton from '@mui/material/IconButton';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
 
 import '@/components/GoTop/go_top.scss';
 
@@ -90,7 +90,7 @@ export function GoTop(props: GoTopProps): ReactNode {
       if (isShow === false) return;
 
       if (
-        safeRef?.current &&
+        safeRef?.current instanceof HTMLElement &&
         safeRef.current.parentElement instanceof HTMLElement
       ) {
         const parentElementScrollTop =
@@ -131,13 +131,11 @@ export function GoTop(props: GoTopProps): ReactNode {
 
   const handleScroll = useCallback(
     function () {
-      console.log({ safeRef });
-
       if (
         (parentElementTrigger !== true &&
           (document.body.scrollTop > limit ||
             document.documentElement.scrollTop > limit)) ||
-        (safeRef?.current &&
+        (safeRef?.current instanceof HTMLElement &&
           safeRef.current.parentElement instanceof HTMLElement &&
           safeRef.current.parentElement.scrollTop > limit)
       ) {
@@ -150,8 +148,6 @@ export function GoTop(props: GoTopProps): ReactNode {
   );
 
   useEffect(() => {
-    console.log({ handleScroll, safeRef });
-
     window.onscroll = handleScroll;
     window.addEventListener('scroll', handleScroll);
     if (
@@ -183,7 +179,7 @@ export function GoTop(props: GoTopProps): ReactNode {
     <div
       ref={safeRef}
       className="go_top"
-      css-is-show={isShow}
+      css-is-show={`${isShow}`}
       style={cssVariable}
       onClick={goTop}
     >
@@ -195,7 +191,7 @@ export function GoTop(props: GoTopProps): ReactNode {
           aria-label="go_to_top"
           className="go_top-btn"
         >
-          <ArrowUpwardIcon />
+          <ArrowCircleUpRoundedIcon fontSize="large" />
         </IconButton>
       )}
     </div>
