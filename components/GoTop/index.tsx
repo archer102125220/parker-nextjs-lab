@@ -191,7 +191,7 @@ export function GoTop(props: GoTopProps): ReactNode {
           aria-label="go_to_top"
           className="go_top-btn"
         >
-          <ArrowCircleUpRoundedIcon fontSize="large" />
+          <ArrowCircleUpRoundedIcon sx={{ width: '2em', height: '2em' }} />
         </IconButton>
       )}
     </div>

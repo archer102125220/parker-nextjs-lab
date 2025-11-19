@@ -1,6 +1,6 @@
 'use client';
 import type { ReactNode } from 'react';
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 
 import ScrollFetch from '@/components/ScrollFetch';
 

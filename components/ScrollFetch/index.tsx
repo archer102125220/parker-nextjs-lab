@@ -14,7 +14,7 @@ import Image from 'next/image';
 import _debounce from 'lodash/debounce';
 
 import { handleBindScrollEnd } from '@/utils/polyfill/scroll-end';
-import GoTop from '@/components/GoTop';
+import { GoTop } from '@/components/GoTop';
 
 import '@/components/ScrollFetch/scroll_fetch.scss';
 import styles from '@/components/ScrollFetch/scroll_fetch.module.scss';
