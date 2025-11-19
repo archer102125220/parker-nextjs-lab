@@ -819,6 +819,13 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
   }, [nonce]);
   useEffect(() => {
     if (isMobile === true) {
+      if (document instanceof Document) {
+        const htmlDom = document.querySelector('html');
+        if (htmlDom) {
+          htmlDom.style.setProperty('--root_overscroll_behavior', 'none');
+        }
+      }
+
       if (
         typeof scrollFetchRef.current?.parentElement?.addEventListener ===
         'function'
@@ -865,6 +872,14 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
       window.removeEventListener('contextmenu', handleContextMenu);
 
       if (isMobile === true) {
+        if (document instanceof Document) {
+          const htmlDom = document.querySelector('html');
+          if (htmlDom) {
+            htmlDom.style.setProperty('--root_overscroll_behavior', '');
+            htmlDom.style.removeProperty('--root_overscroll_behavior');
+          }
+        }
+
         window.removeEventListener('scroll', windowScroll);
 
         if (typeof removeWindowScrollEndRef.current === 'function') {
