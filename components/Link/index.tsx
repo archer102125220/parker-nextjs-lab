@@ -14,7 +14,7 @@ export interface LinkProps extends _MuiLinkProps {
 export function Link(props: LinkProps): ReactNode {
   const { nonce, ...boxProps } = props;
 
-  console.log(JSON.stringify({ LinkNonce: nonce }));
+  // console.log(JSON.stringify({ LinkNonce: nonce }));
   const [clientNonce, setClientNonce] = useState<string>('');
 
   useEffect(() => {

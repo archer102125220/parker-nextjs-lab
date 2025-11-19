@@ -17,7 +17,7 @@ export function FirebaseInit(props: FirebaseInitProps): ReactNode {
   const dispatch = useAppDispatch();
 
   useFirebaseInit(firebaseConfig, '/', (Firebase) => {
-    console.log('useFirebaseInit/callback');
+    // console.log('useFirebaseInit/callback');
 
     if (Firebase instanceof firebase === true) {
       dispatch({

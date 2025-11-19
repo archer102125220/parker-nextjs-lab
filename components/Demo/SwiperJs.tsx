@@ -30,7 +30,7 @@ export function SwiperJsDemo(): ReactNode {
   const [slideValue, setSlideValue] = useState<swiperValue>(0);
 
   const handleSwiperJsChange = useCallback<swiperChange>((newValue) => {
-    console.log({ newValue });
+    // console.log({ newValue });
     setSlideValue(newValue);
   }, []);
 

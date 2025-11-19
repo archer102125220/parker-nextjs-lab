@@ -21,6 +21,7 @@ import styles from '@/components/ScrollFetch/scroll_fetch.module.scss';
 
 interface ScrollFetchProps {
   nonce?: string;
+  className?: string;
 
   pullLabel?: string;
   height?: string | number;
@@ -98,6 +99,8 @@ const MOVE_DISTANCE_LIMIT = 50;
 const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
   const {
     nonce,
+
+    className,
 
     pullLabel = '下拉即可重整...',
     height,
@@ -269,7 +272,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
 
   // Effects (equivalent to watchers)
   useEffect(() => {
-    console.log(JSON.stringify({ ScrollFetchNonce: nonce }));
+    // console.log(JSON.stringify({ ScrollFetchNonce: nonce }));
   }, [nonce]);
 
   useEffect(() => {
@@ -917,7 +920,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
   return (
     <div
       ref={scrollFetchRef}
-      className={[styles.scroll_fetch, 'scroll_fetch'].join(' ')}
+      className={[className, styles.scroll_fetch, 'scroll_fetch'].join(' ')}
       nonce={clientNonce}
       style={cssVariable}
       onScrollEnd={handleScrollEnd}

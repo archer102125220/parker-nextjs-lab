@@ -33,7 +33,7 @@ async function FirebaseCloudMessagingPage(): Promise<ReactNode> {
     iosTokenList: JSON.parse(JSON.stringify(iosTokenList))
   };
 
-  console.log(JSON.stringify({ FirebaseCloudMessagingPageNonce: nonce }));
+  // console.log(JSON.stringify({ FirebaseCloudMessagingPageNonce: nonce }));
 
   return (
     <section className={style.cloud_messaging_page}>

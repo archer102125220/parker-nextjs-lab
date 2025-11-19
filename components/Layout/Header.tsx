@@ -41,7 +41,7 @@ export function Header(props: HeaderProps): ReactNode {
     [dispatch]
   );
 
-  console.log(JSON.stringify({ HeaderNonce: nonce, _nonce }));
+  // console.log(JSON.stringify({ HeaderNonce: nonce, _nonce }));
 
   return (
     <Toolbar className={className} sx={sx}>

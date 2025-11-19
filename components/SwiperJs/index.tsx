@@ -172,7 +172,7 @@ export function SwiperJs(props: swiperJsPropsType): ReactNode {
     touchEnd
   } = props;
 
-  console.log(JSON.stringify({ SwiperJsNonce: nonce }));
+  // console.log(JSON.stringify({ SwiperJsNonce: nonce }));
 
   const swiperJsRootRef = useRef<HTMLDivElement>(null);
   const prevRef = useRef<HTMLDivElement>(null);

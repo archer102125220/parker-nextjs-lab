@@ -1,5 +1,9 @@
+import type {
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+  AxiosResponse
+} from 'axios';
 import axios from 'axios';
-import type { AxiosInstance } from 'axios';
 // import qs from 'qs';
 import { LRUCache } from 'lru-cache';
 
@@ -208,6 +212,24 @@ export function axiosInit(
   return request;
 }
 
+export type responseSettingType = {
+  returnRawResponse?: boolean;
+  returnHeaders?: boolean;
+};
+export type responseType =
+  | null
+  | AxiosResponse
+  | {
+      data:
+        | AxiosResponse['data']
+        | {
+            responseHeaders?: AxiosResponse['headers'];
+          };
+      headers: AxiosResponse['headers'];
+    };
+export interface responseConfigType extends InternalAxiosRequestConfig {
+  responseSetting?: responseSettingType;
+}
 export const request: requestInterface = function (
   _method: string = 'GET',
   url: string,
@@ -286,13 +308,16 @@ export const request: requestInterface = function (
       ...extendOption
       // withCredentials: true,
     })
-    .then((response) => {
-      const { config, data } = response;
+    .then((response): responseType => {
+      const { config, data, headers } = response;
+      const { responseSetting } = (config as responseConfigType) || {};
+
       let params = config.params;
       const configData = config.data;
-      if (configData && typeof configData === 'string') {
+      if (typeof configData === 'string') {
         try {
           params = JSON.parse(configData);
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
           params = configData;
         }
@@ -300,6 +325,15 @@ export const request: requestInterface = function (
         params = configData;
       }
       CancelRequest.removeRequestCanceler(config.method, config.url, params);
+
+      if (responseSetting?.returnRawResponse === true) {
+        return response;
+      }
+
+      if (responseSetting?.returnHeaders === true) {
+        data.responseHeaders = headers;
+      }
+
       return data;
     })
     .catch(async (error) => {
@@ -326,7 +360,7 @@ export const request: requestInterface = function (
             return response;
           }
         } catch (error) {
-          console.log('errorAdapter', error);
+          console.error('errorAdapter', error);
         }
       }
       const errorStatus = error?.response?.status;

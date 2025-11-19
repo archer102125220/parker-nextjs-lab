@@ -171,9 +171,9 @@ export function GoTop(props: GoTopProps): ReactNode {
     };
   }, [handleScroll, safeRef]);
 
-  useEffect(() => {
-    console.log(JSON.stringify({ GoTopNonce: nonce }));
-  }, [nonce]);
+  // useEffect(() => {
+  //   console.log(JSON.stringify({ GoTopNonce: nonce }));
+  // }, [nonce]);
 
   return (
     <div

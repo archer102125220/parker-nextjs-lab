@@ -14,7 +14,7 @@ export interface LinkButtonProps extends _LinkButtonProps {
 export function LinkButton(props: LinkButtonProps): ReactNode {
   const { nonce, ...buttonProps } = props;
 
-  console.log(JSON.stringify({ LinkButtonNonce: nonce }));
+  // console.log(JSON.stringify({ LinkButtonNonce: nonce }));
   const [clientNonce, setClientNonce] = useState<string>('');
 
   useEffect(() => {

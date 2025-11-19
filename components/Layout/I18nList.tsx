@@ -21,7 +21,7 @@ export function I18nList(): ReactNode {
   const locale = useLocale();
   // const t = useTranslations();
   const nonce = useAppSelector<string>((state) => state.system.nonce);
-  console.log(JSON.stringify({ I18nListNonce: nonce }));
+  // console.log(JSON.stringify({ I18nListNonce: nonce }));
 
   const triggerRef = useRef<HTMLButtonElement>(null);
 

@@ -1,39 +1,28 @@
 'use client';
 import type { ReactNode } from 'react';
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 
-import ScrollFetch from '@/components/ScrollFetch';
+import type { responseType } from '@/utils/request';
 
 import { useAppSelector, useAppDispatch } from '@/store';
 
-import { GET_scrollFetchTest } from '@/services/nuxt-server';
+import ScrollFetch from '@/components/ScrollFetch';
+
+import { useGitHubUsersRepos } from '@/hooks/gitHub/useGitHubUsers';
+// import { GET_scrollFetchTest } from '@/services/nuxt-server';
 
 import style from '@/app/[locale]/components/drawer/page.module.scss';
 
-export function ScrollFetchDemo(): ReactNode {
+interface ScrollFetchDemoProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  initDisplayDataList?: any[];
+}
+export function ScrollFetchDemo(props: ScrollFetchDemoProps): ReactNode {
+  const { initDisplayDataList = [] } = props;
+
   const dispatch = useAppDispatch();
   const nonce = useAppSelector<string>((state) => state.system.nonce);
   const loading = useAppSelector<boolean>((state) => state.system.loading);
-
-  const [refreshLoading, setRefreshLoading] = useState<boolean>(false);
-  const [infinityLoading, setInfinityLoading] = useState<boolean>(false);
-  // const [infinityEnd, setInfinityEnd] = useState<boolean>(false);
-  const [infinityEnd] = useState<boolean>(false);
-  const [page, setPage] = useState<number>(1);
-
-  const limit = useMemo<number>(() => page * 20, [page]);
-  const dataList = useMemo<string[] | number[]>(() => {
-    const _dataList = [];
-    for (let i = 0; i <= page * limit; i++) {
-      _dataList.push(i);
-      // let data = '';
-      // for (let j = i; j >= 0; j--) {
-      //   data += j;
-      // }
-      // _dataList.push(data);
-    }
-    return _dataList;
-  }, [page, limit]);
 
   const setLoading = useCallback(
     (payload: boolean) => dispatch({ type: 'system/setLoading', payload }),
@@ -44,73 +33,105 @@ export function ScrollFetchDemo(): ReactNode {
   //   [dispatch]
   // );
 
+  const [displayDataList, setDisplayDataList] =
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    useState<any[]>(initDisplayDataList);
+  const [userTokenType, setUserTokenType] = useState<string>('default');
+  const [userInputToken, setUserInputToken] = useState<string>('');
+  const [userAccountType, setUserAccountType] = useState<string>('default');
+  const [userInputAccount, setUserInputAccount] = useState<string>('');
+  const [page, setPage] = useState<number>(1);
+
+  const token = useMemo(
+    function () {
+      return userTokenType === 'default'
+        ? process.env.NEXT_PUBLIC_GITHUB_TOKEN || ''
+        : userInputToken;
+    },
+    [userTokenType, userInputToken]
+  );
+  const account = useMemo(
+    function () {
+      return userAccountType === 'default'
+        ? process.env.NEXT_PUBLIC_GITHUB_ACCOUNT || ''
+        : userInputAccount;
+    },
+    [userAccountType, userInputAccount]
+  );
+
+  const { isLoading, hasNext, refresh } = useGitHubUsersRepos(
+    {
+      token,
+      account,
+      page
+    },
+    function (_response: responseType) {
+      console.log({ _response });
+
+      if (Array.isArray(_response?.data) && _response.data.length > 0) {
+        const newDisplayDataList = Array.isArray(displayDataList)
+          ? displayDataList
+          : [];
+        setDisplayDataList([...newDisplayDataList, ..._response.data]);
+      }
+    }
+  );
+
   const handleRefresh = useCallback(
-    async function refresh() {
-      if (
-        refreshLoading === true ||
-        infinityLoading === true ||
-        loading === true
-      ) {
+    function refresh() {
+      if (isLoading === true || loading === true) {
         return;
       }
-
-      setRefreshLoading(true);
-      setLoading(true);
-      console.log('handleRefresh');
-
-      const response = await GET_scrollFetchTest(
-        { page: 1 },
-        { useCache: true, useCacheRefresh: false }
-      );
-      // await new Promise((resolve) => setTimeout(() => resolve(undefined), 1000));
-      console.log({ response });
-
-      console.log('handleRefresh setTimeout');
-
-      setLoading(false);
-      setInfinityLoading(false);
+      setDisplayDataList([]);
       setPage(1);
     },
-    [refreshLoading, infinityLoading, loading, setLoading]
+    [isLoading, loading]
   );
 
   const handleInfinityFetch = useCallback(
-    async function infinityFetch() {
-      if (
-        refreshLoading === true ||
-        infinityLoading === true ||
-        loading === true
-      ) {
+    function infinityFetch() {
+      if (isLoading === true || loading === true) {
         return;
       }
-
-      setInfinityLoading(true);
-      setLoading(true);
-
-      console.log('handleInfinityFetch');
-      const response = await GET_scrollFetchTest(
-        { page: page + 1 },
-        { useCache: true, useCacheRefresh: false }
-      );
-      // await new Promise((resolve) => setTimeout(() => resolve(undefined), 1000));
-      console.log({ response });
-
-      // setInfinityEnd(true);
-      console.log('handleInfinityFetch setTimeout');
-      setLoading(false);
-      setInfinityLoading(false);
       setPage(page + 1);
     },
-    [refreshLoading, infinityLoading, loading, setLoading, page]
+    [isLoading, loading, page]
+  );
+
+  useEffect(
+    function () {
+      console.log({ loading, isLoading });
+
+      if (loading !== isLoading) {
+        setLoading(isLoading);
+      }
+    },
+    [setLoading, loading, isLoading]
+  );
+
+  useEffect(
+    function () {
+      console.log({ page });
+      refresh();
+    },
+    [page]
+  );
+
+  useEffect(
+    function () {
+      console.log({ hasNext });
+    },
+    [hasNext]
   );
 
   return (
     <ScrollFetch
       nonce={nonce}
-      loading={loading}
-      infinityEnd={infinityEnd}
+      loading={isLoading}
+      infinityEnd={hasNext === false}
       iosStyle={false}
       refreshDisable={false}
+      className={style['scroll_fetch_page-scroll_fetch']}
       height="85dvh"
       refreshIcon="/img/icon/refresh/refresh-icon.svg"
       refreshingIcon="/img/icon/refresh/refreshing-icon.svg"
@@ -118,11 +139,71 @@ export function ScrollFetchDemo(): ReactNode {
       onRefresh={handleRefresh}
       onInfinityFetch={handleInfinityFetch}
     >
-      <div className={style['scroll_fetch_page-content']}>
-        {dataList.map((data, index) => (
-          <p key={index} className={style['scroll_fetch_page-content-text']}>
-            {data}
-          </p>
+      <div className={style['scroll_fetch_page-scroll_fetch-content']}>
+        {displayDataList.map((displayData, index) => (
+          // <p key={displayData.id} className={style['scroll_fetch_page-content-text']}>
+          //   {displayData}
+          // </p>
+
+          <div
+            key={displayData.id}
+            className={
+              style['scroll_fetch_test_page-scroll_fetch-content-item']
+            }
+          >
+            <p
+              className={
+                style['scroll_fetch_test_page-scroll_fetch-content-item-number']
+              }
+            >
+              No.{index + 1}
+            </p>
+            {/* <p
+              className={
+                style[
+                  'scroll_fetch_test_page-scroll_fetch-content-item-full_name'
+                ]
+              }
+            >
+              {displayData.full_name}
+            </p> */}
+            <p
+              className={
+                style['scroll_fetch_test_page-scroll_fetch-content-item-name']
+              }
+            >
+              respo名稱: {displayData.name}
+            </p>
+            <p
+              className={
+                style[
+                  'scroll_fetch_test_page-scroll_fetch-content-item-description'
+                ]
+              }
+            >
+              repo描述: {displayData.description}
+            </p>
+            <div
+              className={
+                style[
+                  'scroll_fetch_test_page-scroll_fetch-content-item-html_link'
+                ]
+              }
+            >
+              <p>repo連結:</p>
+              <a
+                className={
+                  style[
+                    'scroll_fetch_test_page-scroll_fetch-content-item-html_link-repo_link'
+                  ]
+                }
+                target="_blank"
+                href={displayData.html_url}
+              >
+                {displayData.html_url}
+              </a>
+            </div>
+          </div>
         ))}
       </div>
     </ScrollFetch>

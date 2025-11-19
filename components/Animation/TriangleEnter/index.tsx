@@ -99,7 +99,7 @@ export function TriangleEnter(props: TriangleEnterPropsType): ReactNode {
 
   const handleAnimeInit = useCallback(
     async function (currentIsMobile: boolean = false) {
-      console.log('handleAnimeInit');
+      // console.log('handleAnimeInit');
 
       if (triangleLeft.current !== null && triangleRight.current !== null) {
         await Promise.all([

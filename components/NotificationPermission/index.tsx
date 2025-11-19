@@ -66,7 +66,7 @@ export function NotificationPermission({
     // TODO
     // eslint-disable-next-line react-hooks/preserve-manual-memoization
     async function _firebase() {
-      console.log('handleFirebase');
+      // console.log('handleFirebase');
       setLoading(true);
 
       if (
@@ -76,7 +76,7 @@ export function NotificationPermission({
         const result = await Firebase.requestNotificationPermission();
         if (result === true) {
           const firebaseCroe = Firebase.croe;
-          console.log({ Firebase, firebaseCroe });
+          // console.log({ Firebase, firebaseCroe });
           if (typeof firebaseCroe === 'undefined' || firebaseCroe === null) {
             await Firebase.croeInit();
             await Firebase.appInit();
@@ -102,7 +102,7 @@ export function NotificationPermission({
   }, [nonce]);
 
   useEffect(() => {
-    console.log({ firebaseCroeInited, agreeNotification });
+    // console.log({ firebaseCroeInited, agreeNotification });
     if (firebaseCroeInited === true && Firebase instanceof firebase === true) {
       if (agreeNotification === false) {
         // TODO
