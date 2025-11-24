@@ -329,6 +329,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
     }
   }, [loading, useObserver, infinityDisable, infinityEnd, infinityBuffer]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleSyncScroll = useCallback(
     // TODO
     // eslint-disable-next-line react-hooks/use-memo
@@ -350,13 +351,82 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
   }, [scrollTop, handleSyncScroll]);
 
   // Event handlers
+  const handleInfinityFetch = useCallback(
+    async function () {
+      if (infinityLoading === true) {
+        return;
+      }
+
+      if (typeof infinityTimeoutTimerRef.current === 'number') {
+        clearTimeout(infinityTimeoutTimerRef.current);
+      }
+
+      setInfinityLoading(true);
+
+      try {
+        await new Promise<void>(async function (resolve, reject) {
+          try {
+            // 如果沒有正常觸發釋放事件，則由props.timeout自動釋放
+            if (typeof infinityTimeout === 'number' && infinityTimeout > 0) {
+              infinityTimeoutTimerRef.current = setTimeout(function () {
+                clearTimeout(infinityTimeoutTimerRef.current!);
+                infinityTimeoutTimerRef.current = null;
+                reject(new Error('Infinity fetch timeout exceeded'));
+              }, infinityTimeout);
+            }
+
+            if (typeof onInfinityFetch === 'function') {
+              await onInfinityFetch();
+            }
+            resolve();
+          } catch (error) {
+            reject(error);
+          }
+        });
+      } catch (error) {
+        console.error('ScrollFetch infinity fetch error:', error);
+        onInfinityFail?.(error as Error);
+      }
+
+      if (typeof infinityTimeoutTimerRef.current === 'number') {
+        clearTimeout(infinityTimeoutTimerRef.current);
+        infinityTimeoutTimerRef.current = null;
+      }
+      setInfinityLoading(false);
+    },
+    [infinityLoading, infinityTimeout, onInfinityFetch, onInfinityFail]
+  );
+
+  const handleCheckScroll = useCallback(
+    function (_infinityBuffer?: number) {
+      const elementInfo = scrollFetchRef.current;
+
+      if (!elementInfo) return;
+
+      const scrollTop = elementInfo.scrollTop || 0;
+      const scrollHeight = elementInfo.scrollHeight || 1;
+      const height = elementInfo.clientHeight || 1;
+
+      const bufferValue = _infinityBuffer || infinityBuffer || 0;
+      const safeHeight = typeof height === 'number' ? height : 1;
+      const safeScrollHeight =
+        (typeof scrollHeight === 'number' ? scrollHeight : 1) - safeHeight;
+      const safeScrollTop = typeof scrollTop === 'number' ? scrollTop : 0;
+
+      const infinityLimit = safeScrollHeight - bufferValue;
+
+      setInfinityTrigger(safeScrollTop >= infinityLimit);
+    },
+    [infinityBuffer]
+  );
+
   const handleInfinityTrigger = useCallback(
-    async (
+    async function (
       currentInfinityTrigger = false,
       currentInfinityLoading = false,
       currentInfinityDisable = false,
       currentInfinityEnd = false
-    ) => {
+    ) {
       if (currentInfinityTrigger !== true) return;
 
       if (currentInfinityLoading !== true) {
@@ -386,53 +456,17 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
         setInfinityTrigger(false);
       }
     },
-    [infinityTimeout, useObserver, infinityBuffer]
+    [
+      useObserver,
+      infinityTimeout,
+      handleInfinityFetch,
+      handleCheckScroll,
+      infinityBuffer
+    ]
   );
 
-  const handleInfinityFetch = useCallback(async () => {
-    if (infinityLoading === true) {
-      return;
-    }
-
-    if (typeof infinityTimeoutTimerRef.current === 'number') {
-      clearTimeout(infinityTimeoutTimerRef.current);
-    }
-
-    setInfinityLoading(true);
-
-    try {
-      await new Promise(async (resolve, reject) => {
-        try {
-          if (typeof infinityTimeout === 'number' && infinityTimeout > 0) {
-            infinityTimeoutTimerRef.current = setTimeout(async () => {
-              clearTimeout(infinityTimeoutTimerRef.current!);
-              infinityTimeoutTimerRef.current = null;
-              reject(new Error('Infinity fetch timeout exceeded'));
-            }, infinityTimeout);
-          }
-
-          if (typeof onInfinityFetch === 'function') {
-            await onInfinityFetch();
-          }
-          resolve(undefined);
-        } catch (error) {
-          reject(error);
-        }
-      });
-    } catch (error) {
-      console.error('ScrollFetch infinity fetch error:', error);
-      onInfinityFail?.(error as Error);
-    }
-
-    if (typeof infinityTimeoutTimerRef.current === 'number') {
-      clearTimeout(infinityTimeoutTimerRef.current);
-      infinityTimeoutTimerRef.current = null;
-    }
-    setInfinityLoading(false);
-  }, [infinityLoading, infinityTimeout, onInfinityFetch, onInfinityFail]);
-
   const handlePullStart = useCallback(
-    (e: TouchEvent | MouseEvent) => {
+    function (e: TouchEvent | MouseEvent) {
       if (
         (windowIsScrollIng === true && windowScrollIsTop === false) ||
         (parentIsScrollIng === true && parentScrollIsTop === false) ||
@@ -475,8 +509,100 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
     ]
   );
 
+  const handleRefreshDone = useCallback(
+    async function () {
+      setRefreshing(false);
+
+      if (iosStyle === true) {
+        setMoveDistance(0);
+        setRefreshIconRotate(0);
+        setIsPulling(false);
+      }
+
+      if (infinityIsIntersecting === true) {
+        if (infinityTrigger === false) {
+          setInfinityTrigger(true);
+        } else {
+          handleInfinityTrigger(
+            infinityTrigger,
+            infinityLoading,
+            infinityDisable,
+            infinityEnd
+          );
+        }
+      }
+    },
+    [
+      iosStyle,
+      infinityIsIntersecting,
+      infinityTrigger,
+      infinityLoading,
+      infinityDisable,
+      infinityEnd,
+      handleInfinityTrigger
+    ]
+  );
+
+  const handlePullEnd = useCallback(
+    // async function (e: TouchEvent | MouseEvent) {
+    async function () {
+      if (isPullStart === false) return;
+
+      setIsPullStart(false);
+      setStartY(0);
+      setDuration(300);
+
+      if (moveDistance <= 6) {
+        setMoveDistance(0);
+        setRefreshIconRotate(0);
+        setRefreshTriggerZIndex(-1);
+        setIsShowRefreshIcon(false);
+      }
+
+      if (
+        refreshDisable === true ||
+        refreshing === true ||
+        infinityLoading === true
+      ) {
+        if (moveDistance > 6) {
+          requestAnimationFrame(() => {
+            setMoveDistance(0);
+            setRefreshIconRotate(0);
+          });
+        }
+        return;
+      }
+
+      if (moveDistance > MOVE_DISTANCE_LIMIT && isPulling === true) {
+        setRefreshing(true);
+        setIsPulling(false);
+        if (iosStyle === true) {
+          setMoveDistance(50);
+        }
+        if (typeof onRefresh === 'function') {
+          await onRefresh();
+        }
+        handleRefreshDone();
+      } else {
+        setMoveDistance(0);
+        setRefreshIconRotate(0);
+      }
+    },
+    [
+      isPullStart,
+      moveDistance,
+      refreshDisable,
+      refreshing,
+      infinityLoading,
+      isPulling,
+      iosStyle,
+      onRefresh,
+      handleRefreshDone
+    ]
+  );
+
   const handlePulling = useCallback(
-    (e: TouchEvent | MouseEvent) => {
+    function (e: TouchEvent | MouseEvent) {
       if (
         (parentIsScrollIng === true && parentScrollIsTop === false) ||
         (windowIsScrollIng === true && windowScrollIsTop === false)
@@ -557,130 +683,48 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
       refreshing,
       loading,
       startY,
+      handlePullEnd,
+      handlePullStart,
       iosStyle,
       vibrate
     ]
   );
 
-  const handleRefreshDone = useCallback(async () => {
-    setRefreshing(false);
-
-    if (iosStyle === true) {
-      setMoveDistance(0);
-      setRefreshIconRotate(0);
-      setIsPulling(false);
-    }
-
-    if (infinityIsIntersecting === true) {
-      if (infinityTrigger === false) {
-        setInfinityTrigger(true);
-      } else {
-        handleInfinityTrigger(
-          infinityTrigger,
-          infinityLoading,
-          infinityDisable,
-          infinityEnd
-        );
-      }
-    }
-  }, [
-    iosStyle,
-    infinityIsIntersecting,
-    infinityTrigger,
-    infinityLoading,
-    infinityDisable,
-    infinityEnd,
-    handleInfinityTrigger
-  ]);
-
-  const handlePullEnd = useCallback(
-    // async (e: TouchEvent | MouseEvent) => {
-    async () => {
-      if (isPullStart === false) return;
-
-      setIsPullStart(false);
-      setStartY(0);
-      setDuration(300);
-
-      if (moveDistance <= 6) {
-        setMoveDistance(0);
-        setRefreshIconRotate(0);
-        setRefreshTriggerZIndex(-1);
-        setIsShowRefreshIcon(false);
-      }
-
-      if (
-        refreshDisable === true ||
-        refreshing === true ||
-        infinityLoading === true
-      ) {
-        if (moveDistance > 6) {
-          requestAnimationFrame(() => {
-            setMoveDistance(0);
-            setRefreshIconRotate(0);
-          });
-        }
-        return;
-      }
-
-      if (moveDistance > MOVE_DISTANCE_LIMIT && isPulling === true) {
-        setRefreshing(true);
-        setIsPulling(false);
-        if (iosStyle === true) {
-          setMoveDistance(50);
-        }
-        if (typeof onRefresh === 'function') {
-          await onRefresh();
-        }
-        handleRefreshDone();
-      } else {
-        setMoveDistance(0);
-        setRefreshIconRotate(0);
+  const handleRefreshIcon = useCallback(
+    function () {
+      if (refreshing === false) {
+        requestAnimationFrame(() => {
+          setRefreshTriggerZIndex(-1);
+          setIsShowRefreshIcon(false);
+        });
       }
     },
-    [
-      isPullStart,
-      moveDistance,
-      refreshDisable,
-      refreshing,
-      infinityLoading,
-      isPulling,
-      iosStyle,
-      onRefresh,
-      handleRefreshDone
-    ]
+    [refreshing]
   );
 
-  const handleRefreshIcon = useCallback(() => {
-    if (refreshing === false) {
-      requestAnimationFrame(() => {
-        setRefreshTriggerZIndex(-1);
-        setIsShowRefreshIcon(false);
-      });
-    }
-  }, [refreshing]);
-
   const handleWheel = useCallback(
-    (e: WheelEvent) => {
+    function (e: WheelEvent) {
       onWheel?.(e);
     },
     [onWheel]
   );
 
   const handleScroll = useCallback(
-    (e: UIEvent<HTMLDivElement>) => {
+    function (e: UIEvent<HTMLDivElement>) {
       // const target = e?.target || {};
       onScroll?.(e);
 
       handleCheckScroll(infinityBuffer);
     },
-    [onScroll, infinityBuffer]
+    [onScroll, handleCheckScroll, infinityBuffer]
   );
 
+  // TODO
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleScrollTop = useCallback(
     // TODO
     // eslint-disable-next-line react-hooks/use-memo
-    _debounce((e: UIEvent<HTMLDivElement>) => {
+    _debounce(function (e: UIEvent<HTMLDivElement>) {
       if (typeof onScrollTopChange === 'function') {
         onScrollTopChange((e.target as HTMLDivElement)?.scrollTop || 0);
       }
@@ -689,16 +733,16 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
   );
 
   const handleScrollEnd = useCallback(
-    (e: UIEvent<HTMLDivElement>) => {
+    function (e: UIEvent<HTMLDivElement>) {
       handleScrollTop(e);
       onScrollEnd?.(e);
       handleCheckScroll(infinityBuffer);
     },
-    [handleScrollTop, onScrollEnd, infinityBuffer]
+    [handleScrollTop, onScrollEnd, handleCheckScroll, infinityBuffer]
   );
 
   const createObserver = useCallback(
-    (_useObserver?: boolean, _infinityBuffer?: number) => {
+    function (_useObserver?: boolean, _infinityBuffer?: number) {
       const observerValue =
         typeof _useObserver === 'boolean' ? _useObserver : useObserver;
       const bufferValue =
@@ -732,30 +776,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
     [useObserver, infinityBuffer]
   );
 
-  const handleCheckScroll = useCallback(
-    (_infinityBuffer?: number) => {
-      const elementInfo = scrollFetchRef.current;
-
-      if (!elementInfo) return;
-
-      const scrollTop = elementInfo.scrollTop || 0;
-      const scrollHeight = elementInfo.scrollHeight || 1;
-      const height = elementInfo.clientHeight || 1;
-
-      const bufferValue = _infinityBuffer || infinityBuffer || 0;
-      const safeHeight = typeof height === 'number' ? height : 1;
-      const safeScrollHeight =
-        (typeof scrollHeight === 'number' ? scrollHeight : 1) - safeHeight;
-      const safeScrollTop = typeof scrollTop === 'number' ? scrollTop : 0;
-
-      const infinityLimit = safeScrollHeight - bufferValue;
-
-      setInfinityTrigger(safeScrollTop >= infinityLimit);
-    },
-    [infinityBuffer]
-  );
-
-  const parentScroll = useCallback((e: Event) => {
+  const parentScroll = useCallback(function (e: Event) {
     if (e.target === scrollFetchRef.current || e.target === window) {
       if (e.target === scrollFetchRef.current) {
         setParentScrollIsTop(false);
@@ -770,7 +791,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
     );
   }, []);
 
-  const parentScrollEnd = useCallback((e: Event) => {
+  const parentScrollEnd = useCallback(function (e: Event) {
     if (e.target === scrollFetchRef.current || e.target === window) {
       return;
     }
@@ -781,7 +802,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
     );
   }, []);
 
-  const windowScroll = useCallback((e: Event) => {
+  const windowScroll = useCallback(function (e: Event) {
     if (e.target === scrollFetchRef.current) {
       setWindowScrollIsTop(false);
       setWindowIsScrollIng(false);
@@ -800,7 +821,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
     setWindowScrollIsTop((scrollTriggerElementBoundingClientRect?.y || 0) <= 0);
   }, []);
 
-  const windowScrollEnd = useCallback((e: Event) => {
+  const windowScrollEnd = useCallback(function (e: Event) {
     setWindowIsScrollIng(false);
 
     const scrollElement =

@@ -1,4 +1,4 @@
-.scroll_fetch_test_page {
+.scroll_fetch_page {
   // height: 100dvh;
 
   // :deep(.v-input__details) {
@@ -12,17 +12,35 @@
   }
 
   &-form {
-    &-token_type {
+    &-token_option {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 16px;
+
+      &-label {
+        flex: 0;
+        word-break: keep-all;
+      }
+
       &-token_input {
         flex: 1;
-        margin-bottom: 16px;
       }
     }
 
-    &-account_type {
+    &-account_option {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 16px;
+
+      &-label {
+        flex: 0;
+        word-break: keep-all;
+      }
+
       &-account_input {
         flex: 1;
-        margin-bottom: 16px;
       }
     }
   }

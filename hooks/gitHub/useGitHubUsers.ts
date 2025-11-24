@@ -41,7 +41,7 @@ export function useGitHubUsersRepos(
         .split(',')
         .some((linkString: string) => linkString.includes('rel="next"'));
 
-      console.log({ headersLink, newHasNext });
+      // console.log({ headersLink, newHasNext });
 
       return newHasNext;
     },
