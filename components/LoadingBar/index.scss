@@ -1,0 +1,46 @@
+.loading_bar {
+    /* Positioning */
+    position: var(--loading_position, absolute);
+    top: 0;
+    left: 0;
+    z-index: 10;
+
+    /* Display & Box Model */
+    width: var(--loading_width, 100%);
+    height: var(--loading_height, 6px);
+    border-radius: 2px;
+    overflow: hidden;
+
+    /* Visual */
+    background-color: rgb(217 217 217 / 25%);
+
+    /* Animation */
+    transition: 0.4s linear;
+    transition-property: width, background-color;
+
+    &::after {
+        /* Display & Box Model */
+        display: block;
+        width: 50%;
+        height: var(--loading_height, 6px);
+
+        /* Visual */
+        background-color: var(--loading_color, #1976d2);
+
+        /* Animation */
+        animation: progressAnimationStrike 1.5s infinite;
+
+        /* Misc */
+        content: '';
+    }
+}
+
+@keyframes progressAnimationStrike {
+    from {
+        transform: translateX(-150%);
+    }
+
+    to {
+        transform: translateX(250%);
+    }
+}

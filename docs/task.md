@@ -5,7 +5,7 @@
 - **開始日期 (Start Date)**: 待定 (TBD)
 - **目標完成日期 (Target Completion)**: 待定 (TBD)
 - **當前階段 (Current Phase)**: Phase 0 - 規劃階段 (Planning)
-- **整體進度 (Overall Progress)**: 0% (0/100+ tasks)
+- **整體進度 (Overall Progress)**: ~5% (Stage 1.1: 4/5 完成)
 
 ---
 
@@ -23,34 +23,34 @@
 
 ## Phase 1: 核心組件基礎 (Core Components Foundation)
 
-### Stage 1.1: 簡單組件 (Simple Components) [0/5]
+### Stage 1.1: 簡單組件 (Simple Components) [4/5]
 
 #### QRCode Component
-- [ ] 建立 `components/QRCode/` 目錄
-- [ ] 實作 QRCode.tsx 組件
-- [ ] 添加 TypeScript 類型定義
-- [ ] 實作樣式 (SCSS)
+- [x] 建立 `components/QRCode/` 目錄
+- [x] 實作 QRCode.tsx 組件
+- [x] 添加 TypeScript 類型定義
+- [x] 實作樣式 (SCSS)
 - [ ] 單元測試
 
 #### SwitchButton Component
-- [ ] 建立 `components/SwitchButton/` 目錄
-- [ ] 實作 SwitchButton.tsx 組件
-- [ ] 添加動畫效果
-- [ ] 實作樣式 (SCSS)
+- [x] 建立 `components/SwitchButton/` 目錄
+- [x] 實作 SwitchButton.tsx 組件
+- [x] 添加動畫效果
+- [x] 實作樣式 (SCSS)
 - [ ] 單元測試
 
 #### LoadingBar Component
-- [ ] 建立 `components/LoadingBar/` 目錄
-- [ ] 實作 LoadingBar.tsx 組件
-- [ ] 添加進度動畫
-- [ ] 實作樣式 (SCSS)
+- [x] 建立 `components/LoadingBar/` 目錄
+- [x] 實作 LoadingBar.tsx 組件
+- [x] 添加進度動畫
+- [x] 實作樣式 (SCSS)
 - [ ] 單元測試
 
 #### PWALoading Component
-- [ ] 建立 `components/PWALoading/` 目錄
-- [ ] 實作 PWALoading.tsx 組件
-- [ ] 添加載入動畫
-- [ ] 實作樣式 (SCSS)
+- [x] 建立 `components/PWALoading/` 目錄
+- [x] 實作 PWALoading.tsx 組件
+- [x] 添加載入動畫
+- [x] 實作樣式 (SCSS)
 - [ ] 單元測試
 
 #### DatePicker Component
