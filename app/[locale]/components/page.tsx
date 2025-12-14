@@ -28,6 +28,39 @@ async function ComponentsPage(): Promise<ReactNode> {
       }}
     >
       <GTMScnOpen />
+      <LinkButton href="/components/banner-demo" sx={{ flexShrink: 0 }} nonce={nonce}>
+        Banner 輪播組件
+      </LinkButton>
+      <LinkButton href="/components/countdown-test" sx={{ flexShrink: 0 }} nonce={nonce}>
+        Countdown 倒數計時
+      </LinkButton>
+      <LinkButton href="/components/selector" sx={{ flexShrink: 0 }} nonce={nonce}>
+        Selector 下拉選單
+      </LinkButton>
+      <LinkButton href="/components/phone-input" sx={{ flexShrink: 0 }} nonce={nonce}>
+        PhoneInput 電話輸入
+      </LinkButton>
+      <LinkButton href="/components/image-upload-test" sx={{ flexShrink: 0 }} nonce={nonce}>
+        ImageUpload 圖片上傳
+      </LinkButton>
+      <LinkButton href="/components/tab-test" sx={{ flexShrink: 0 }} nonce={nonce}>
+        Tabs 分頁組件
+      </LinkButton>
+      <LinkButton href="/components/slide-in-panel" sx={{ flexShrink: 0 }} nonce={nonce}>
+        SlideInPanel 滑入面板
+      </LinkButton>
+      <LinkButton href="/components/qr-code-test" sx={{ flexShrink: 0 }} nonce={nonce}>
+        QRCode 組件
+      </LinkButton>
+      <LinkButton href="/components/switch-button" sx={{ flexShrink: 0 }} nonce={nonce}>
+        SwitchButton 開關
+      </LinkButton>
+      <LinkButton href="/components/wang-editor-test" sx={{ flexShrink: 0 }} nonce={nonce}>
+        WangEditor 富文本
+      </LinkButton>
+      <LinkButton href="/components/swiper-test" sx={{ flexShrink: 0 }} nonce={nonce}>
+        SwiperCustom 輪播
+      </LinkButton>
       <LinkButton href="/components/dialog" sx={{ flexShrink: 0 }}>
         Dialog 元件
       </LinkButton>
