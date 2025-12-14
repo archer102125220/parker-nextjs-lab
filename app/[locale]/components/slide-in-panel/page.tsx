@@ -5,11 +5,11 @@ import SlideInPanel from '@/components/SlideInPanel';
 
 export default function SlideInPanelPage() {
   const [message, setMessage] = useState<string>('');
+  const [counter, setCounter] = useState(0);
 
   const addMessage = (msg: string) => {
     setMessage(msg);
-    // Reset after a short delay to allow the component to process
-    setTimeout(() => setMessage(''), 100);
+    setCounter(prev => prev + 1);
   };
 
   return (
@@ -23,7 +23,7 @@ export default function SlideInPanelPage() {
         <h2>添加通知</h2>
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
           <button
-            onClick={() => addMessage('操作成功!')}
+            onClick={() => addMessage('✅ 操作成功!')}
             style={{
               padding: '10px 20px',
               backgroundColor: '#4caf50',
@@ -36,7 +36,7 @@ export default function SlideInPanelPage() {
             成功訊息
           </button>
           <button
-            onClick={() => addMessage('發生錯誤!')}
+            onClick={() => addMessage('❌ 發生錯誤!')}
             style={{
               padding: '10px 20px',
               backgroundColor: '#f44336',
@@ -49,7 +49,7 @@ export default function SlideInPanelPage() {
             錯誤訊息
           </button>
           <button
-            onClick={() => addMessage('這是一則資訊')}
+            onClick={() => addMessage('ℹ️ 這是一則資訊')}
             style={{
               padding: '10px 20px',
               backgroundColor: '#2196f3',
@@ -62,7 +62,7 @@ export default function SlideInPanelPage() {
             資訊訊息
           </button>
           <button
-            onClick={() => addMessage('請注意!')}
+            onClick={() => addMessage('⚠️ 請注意!')}
             style={{
               padding: '10px 20px',
               backgroundColor: '#ff9800',
@@ -78,6 +78,7 @@ export default function SlideInPanelPage() {
       </div>
 
       <SlideInPanel
+        key={counter}
         value={message}
         timeout={3000}
         maxRow={5}
