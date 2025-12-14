@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Editor, Toolbar } from '@wangeditor/editor-for-react';
 import { IDomEditor, IEditorConfig, IToolbarConfig } from '@wangeditor/editor';
 import '@wangeditor/editor/dist/css/style.css';
@@ -29,6 +29,7 @@ export function WangEditor({
 }: WangEditorProps) {
   const [editor, setEditor] = useState<IDomEditor | null>(null);
   const [html, setHtml] = useState(value);
+  const isInternalChange = useRef(false);
 
   // Toolbar configuration
   const defaultToolbarConfig: Partial<IToolbarConfig> = {
@@ -61,7 +62,7 @@ export function WangEditor({
       'redo',
       '|',
       'fullScreen'
-    ],
+    ] as string[],
     ...toolbarConfig
   };
 
@@ -74,10 +75,12 @@ export function WangEditor({
 
   // Sync external value changes
   useEffect(() => {
-    if (value !== html && value !== undefined) {
+    if (!isInternalChange.current && value !== undefined && value !== html) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setHtml(value);
     }
-  }, [value]); // Removed html from dependencies to avoid infinite loop
+    isInternalChange.current = false;
+  }, [value, html]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -90,6 +93,7 @@ export function WangEditor({
 
   const handleChange = (editor: IDomEditor) => {
     const newHtml = editor.getHtml();
+    isInternalChange.current = true;
     setHtml(newHtml);
     onChange?.(newHtml);
   };
