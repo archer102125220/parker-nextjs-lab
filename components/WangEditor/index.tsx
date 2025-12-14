@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Editor, Toolbar } from '@wangeditor/editor-for-react';
 import { IDomEditor, IEditorConfig, IToolbarConfig } from '@wangeditor/editor';
 import '@wangeditor/editor/dist/css/style.css';
@@ -74,10 +74,10 @@ export function WangEditor({
 
   // Sync external value changes
   useEffect(() => {
-    if (value !== html) {
+    if (value !== html && value !== undefined) {
       setHtml(value);
     }
-  }, [value]);
+  }, [value]); // Removed html from dependencies to avoid infinite loop
 
   // Cleanup on unmount
   useEffect(() => {
