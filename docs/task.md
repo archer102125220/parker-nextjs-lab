@@ -5,7 +5,7 @@
 - **開始日期 (Start Date)**: 待定 (TBD)
 - **目標完成日期 (Target Completion)**: 待定 (TBD)
 - **當前階段 (Current Phase)**: Phase 0 - 規劃階段 (Planning)
-- **整體進度 (Overall Progress)**: ~10% (Stage 1.1: 5/5 ✅, Stage 1.2: 3/5 🔄)
+- **整體進度 (Overall Progress)**: ~12% (Stage 1.1: 5/5 ✅, Stage 1.2: 5/5 ✅)
 
 ---
 
@@ -62,7 +62,7 @@
 
 ---
 
-### Stage 1.2: 中等複雜度組件 (Medium Complexity) [3/5]
+### Stage 1.2: 中等複雜度組件 (Medium Complexity) [5/5] ✅
 
 #### Selector Component
 - [x] 建立 `components/Selector/` 目錄
@@ -75,12 +75,12 @@
 - [ ] 單元測試
 
 #### PhoneInput Component
-- [ ] 建立 `components/PhoneInput/` 目錄
-- [ ] 實作 PhoneInput.tsx 組件
-- [ ] 實作國碼選擇器
-- [ ] 添加號碼格式化
-- [ ] 添加驗證邏輯
-- [ ] 實作樣式 (SCSS)
+- [x] 建立 `components/PhoneInput/` 目錄
+- [x] 實作 PhoneInput.tsx 組件
+- [x] 實作國碼選擇器
+- [x] 添加號碼格式化
+- [x] 添加驗證邏輯
+- [x] 實作樣式 (SCSS)
 - [ ] 單元測試
 
 #### ImageUpload Component
@@ -93,12 +93,12 @@
 - [ ] 單元測試
 
 #### SlideInPanel Component
-- [ ] 建立 `components/SlideInPanel/` 目錄
-- [ ] 實作 SlideInPanel.tsx 組件
-- [ ] 添加滑入動畫
-- [ ] 實作背景遮罩
-- [ ] 添加關閉邏輯
-- [ ] 實作樣式 (SCSS)
+- [x] 建立 `components/SlideInPanel/` 目錄
+- [x] 實作 SlideInPanel.tsx 組件
+- [x] 添加滑入動畫
+- [x] 實作背景遮罩 (訊息佇列管理)
+- [x] 添加關閉邏輯 (auto-remove + click-to-remove)
+- [x] 實作樣式 (SCSS)
 - [ ] 單元測試
 
 #### Tabs Component

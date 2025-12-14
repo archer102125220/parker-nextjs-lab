@@ -1,0 +1,193 @@
+// Import flag-icons CSS
+@import 'flag-icons/css/flag-icons.min.css';
+
+.phone_input {
+    /* Display & Box Model */
+    width: 100%;
+
+    &-container {
+        /* Display & Box Model */
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        border: 1px solid var(--phone-input-border-color, #d5d5d5);
+        border-radius: 8px;
+
+        /* Visual */
+        background-color: #fff;
+        box-shadow: var(--phone-input-box-shadow, none);
+
+        /* Animation */
+        transition: all 0.3s ease;
+
+        &:hover {
+            border-color: #999;
+        }
+    }
+
+    &-country_selector {
+        /* Display & Box Model */
+        display: flex;
+        align-items: center;
+        min-width: 100px;
+        min-height: auto;
+        padding: 0;
+        border: none;
+
+        &-flag {
+            /* Display & Box Model */
+            display: flex;
+            align-items: center;
+            margin-right: 8px;
+
+            .fi {
+                /* Display & Box Model */
+                width: 24px;
+                height: 18px;
+                border-radius: 2px;
+
+                /* Visual */
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        &-code {
+            /* Typography */
+            font-family: 'PingFang SC', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: #111;
+        }
+
+        &-option {
+            /* Display & Box Model */
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+
+            &-flag {
+                /* Display & Box Model */
+                flex-shrink: 0;
+                width: 20px;
+                height: 15px;
+                border-radius: 2px;
+
+                /* Visual */
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            }
+
+            &-name {
+                /* Display & Box Model */
+                flex: 1;
+
+                /* Typography */
+                font-size: 13px;
+                color: #333;
+            }
+
+            &-code {
+                /* Typography */
+                font-size: 12px;
+                font-weight: 500;
+                color: #666;
+
+                &.selected {
+                    color: #1976d2;
+                }
+            }
+        }
+    }
+
+    &-divider {
+        /* Display & Box Model */
+        width: 1px;
+        height: 24px;
+        margin: 0 12px;
+
+        /* Visual */
+        background-color: #e0e0e0;
+    }
+
+    &-number {
+        /* Display & Box Model */
+        flex: 1;
+        display: flex;
+        align-items: center;
+
+        &-field {
+            /* Display & Box Model */
+            width: 100%;
+            padding: 0;
+            border: none;
+
+            /* Typography */
+            font-family: 'PingFang SC', sans-serif;
+            font-size: 14px;
+            color: #111;
+
+            /* Visual */
+            background: transparent;
+
+            /* Misc */
+            outline: none;
+
+            &::placeholder {
+                color: #999;
+            }
+
+            &::-webkit-outer-spin-button,
+            &::-webkit-inner-spin-button {
+                margin: 0;
+                appearance: none;
+                -webkit-appearance: none;
+            }
+
+            &[type='number'] {
+                appearance: textfield;
+                -moz-appearance: textfield;
+            }
+
+            &:disabled {
+                color: #ccc;
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    &-error {
+        /* Display & Box Model */
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 6px;
+
+        /* Typography */
+        font-size: 13px;
+        font-weight: 500;
+        color: #dc3545;
+
+        /* Animation */
+        animation: errorFadeIn 0.3s ease-in-out;
+
+        &::before {
+            /* Typography */
+            font-size: 14px;
+
+            /* Misc */
+            content: '⚠';
+        }
+    }
+}
+
+@keyframes errorFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

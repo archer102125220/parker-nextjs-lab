@@ -1,12 +1,6 @@
 // https://www.webdesigntooler.com/internet-country-code-table
 // https://hoohoo.top/blog/country-code-and-call-coded-against-the-json-table/
-
-export interface phoneAreaCode {
-  countryCode?: string;
-  countryName?: string;
-  phoneCode?: string;
-}
-export const PHONE_AREA_CODE: phoneAreaCode[] = [
+export const PHONE_AREA_CODE = [
   {
     countryCode: 'US',
     countryName: '美國',
