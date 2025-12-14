@@ -49,7 +49,7 @@
         /* Positioning */
         position: absolute;
         top: 8px;
-        right: var(--switch_button_icon_right);
+        right: var(--switch_button_icon_right, auto);
         bottom: 8px;
         left: var(--switch_button_icon_left, calc(100% - 39px));
 

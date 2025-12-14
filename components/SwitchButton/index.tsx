@@ -69,11 +69,15 @@ export function SwitchButton({
     }
 
     if (!checked) {
-      vars['--switch_button_icon_left'] = 'calc(100% - 39px)';
+      vars['--switch_button_icon_left'] = iconWidth > 0 ? `calc(100% - ${iconWidth + 8}px)` : 'calc(100% - 39px)';
+      vars['--switch_button_icon_right'] = 'auto';
       vars['--switch_button_label_padding_right'] = `${iconWidth}px`;
+      vars['--switch_button_label_padding_left'] = '0';
     } else {
       vars['--switch_button_icon_left'] = '8px';
+      vars['--switch_button_icon_right'] = 'auto';
       vars['--switch_button_label_padding_left'] = `${iconWidth}px`;
+      vars['--switch_button_label_padding_right'] = '0';
     }
 
     return vars;
