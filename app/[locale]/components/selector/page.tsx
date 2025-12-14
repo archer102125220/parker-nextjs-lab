@@ -5,7 +5,7 @@ import Selector from '@/components/Selector';
 
 export default function SelectorPage() {
   const [selectedValue, setSelectedValue] = useState('');
-  const [selectedObject, setSelectedObject] = useState<any>(null);
+  const [selectedObject, setSelectedObject] = useState<{ code: string; name: string } | undefined>(undefined);
 
   const options = [
     { label: '選項 1', value: '1' },
@@ -34,7 +34,7 @@ export default function SelectorPage() {
         <h2>基本用法</h2>
         <Selector
           value={selectedValue}
-          onChange={(value) => setSelectedValue(value)}
+          onChange={(value) => setSelectedValue(String(value))}
           optionList={options}
           valueKey="value"
           displayKey="label"

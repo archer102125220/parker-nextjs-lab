@@ -1,4 +1,4 @@
-import { isValidPhoneNumber } from 'libphonenumber-js';
+import { isValidPhoneNumber, CountryCode as LibCountryCode } from 'libphonenumber-js';
 import PHONE_AREA_CODE from '@/assets/phoneCountryCode';
 import type { CountryCode } from '@/assets/phoneCountryCode';
 
@@ -58,8 +58,8 @@ export function checkPhone(phone = '000', phoneCode = ''): CheckPhoneResult {
     // 構建完整電話號碼
     const fullNumber = `+${phoneCode}${phone.replace(/[\s\-()]/g, '')}`;
 
-    // 使用 libphonenumber-js 驗證
-    const isValid = isValidPhoneNumber(fullNumber, countryCode as any);
+    // 使用 libphonenumber-js 驗證，傳入國家代碼以提高準確性
+    const isValid = isValidPhoneNumber(fullNumber, countryCode as LibCountryCode);
 
     result.phoneError = !isValid;
     result.isValid = isValid;

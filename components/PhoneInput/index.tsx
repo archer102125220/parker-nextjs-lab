@@ -46,7 +46,7 @@ export function PhoneInput({
 
   // Merge countries with same phone code
   const countryList = useMemo(() => {
-    const phoneCodeMap = new Map<string, CountryCode & { countryNames: string[] }>();
+    const phoneCodeMap = new Map<string, CountryCode & { countryNames: string[]; [key: string]: unknown }>();
 
     PHONE_AREA_CODE.forEach((country) => {
       if (!phoneCodeMap.has(country.phoneCode)) {
@@ -154,8 +154,8 @@ export function PhoneInput({
     }
   };
 
-  const handleCountryChange = (newCountryCode: string) => {
-    const country = countryList.find((c) => c.countryCode === newCountryCode);
+  const handleCountryChange = (newCountryCode: string | number) => {
+    const country = countryList.find((c) => c.countryCode === String(newCountryCode));
     if (country) {
       setSelectedCountry(country);
       emitValue();
@@ -222,10 +222,10 @@ export function PhoneInput({
           suffixSlot={() => <span className="phone_input-country_selector-code">+{selectedCountry?.phoneCode || '886'}</span>}
           optionSlot={(option, index, selected) => (
             <div className="phone_input-country_selector-option">
-              <span className={`fi fi-${option.countryCode?.toLowerCase()} phone_input-country_selector-option-flag`} />
-              <span className="phone_input-country_selector-option-name">{option.countryName}</span>
+              <span className={`fi fi-${(option as CountryCode & { [key: string]: unknown }).countryCode?.toLowerCase()} phone_input-country_selector-option-flag`} />
+              <span className="phone_input-country_selector-option-name">{(option as CountryCode & { [key: string]: unknown }).countryName}</span>
               <span className={`phone_input-country_selector-option-code ${selected ? 'selected' : ''}`}>
-                +{option.phoneCode}
+                +{(option as CountryCode & { [key: string]: unknown }).phoneCode}
               </span>
             </div>
           )}

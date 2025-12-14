@@ -4,14 +4,14 @@ import { useState, useEffect, useRef, useMemo, CSSProperties, ReactNode } from '
 import './index.scss';
 
 export interface SelectorOption {
-  [key: string]: any;
+  [key: string]: unknown;
   label?: string;
-  value?: any;
+  value?: string | number;
 }
 
 export interface SelectorProps {
-  value?: any;
-  onChange?: (value: any, index: number) => void;
+  value?: string | number;
+  onChange?: (value: string | number, index: number) => void;
   optionList?: SelectorOption[];
   valueKey?: string;
   displayKey?: string;
@@ -77,8 +77,14 @@ export function Selector({
     }
   }, [isOpen]);
 
+  // 當 loading 狀態改變時,需要關閉下拉選單以避免 UI 不一致
+  // 這是必要的副作用,用於保持 UI 狀態一致性
+  // Note: ESLint 警告 "setState in useEffect" 是預期的,這是合理的狀態同步
   useEffect(() => {
-    if (loading) setIsOpen(false);
+    if (loading) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsOpen(false);
+    }
   }, [loading]);
 
   const cssVariables = useMemo((): CSSProperties => {
@@ -139,26 +145,21 @@ export function Selector({
 
   const displayValue = useMemo(() => {
     const currentOption = optionList.find((option) => {
-      const optionValue = valueKey ? option[valueKey] : (option.value ?? option);
-      const currentValue = valueKey && typeof value === 'object' ? value[valueKey] : value;
-      return optionValue === currentValue;
+      const optionValue = valueKey ? (option[valueKey] as string | number) : (option.value ?? '');
+      return optionValue === value;
     });
 
     if (currentOption) {
-      return displayKey ? currentOption[displayKey] : (currentOption.label ?? currentOption);
+      const display = displayKey ? (currentOption[displayKey] as string) : (currentOption.label ?? '');
+      return String(display);
     }
 
-    if (typeof value === 'object' && value !== null) {
-      return displayKey ? value[displayKey] : (value.label ?? '');
-    }
-
-    return value;
+    return value ? String(value) : '';
   }, [value, optionList, valueKey, displayKey]);
 
   const isSelected = (option: SelectorOption) => {
-    const optionValue = valueKey ? option[valueKey] : (option.value ?? option);
-    const currentValue = valueKey && typeof value === 'object' ? value[valueKey] : value;
-    return currentValue === optionValue;
+    const optionValue = valueKey ? (option[valueKey] as string | number) : (option.value ?? '');
+    return value === optionValue;
   };
 
   const handleToggle = (e: React.MouseEvent) => {
@@ -169,9 +170,9 @@ export function Selector({
   };
 
   const handleChange = (option: SelectorOption, index: number) => {
-    const newValue = valueKey ? option[valueKey] : (option.value ?? option);
+    const newValue = valueKey ? (option[valueKey] as string | number) : (option.value ?? '');
     if (value !== newValue) {
-      onChange?.(valueKey ? newValue : option, index);
+      onChange?.(newValue, index);
     }
     setIsOpen(false);
   };
@@ -203,7 +204,7 @@ export function Selector({
             {optionSlot ? (
               optionSlot(option, index, isSelected(option))
             ) : (
-              <p>{displayKey ? option[displayKey] : (option.label ?? option)}</p>
+              <p>{displayKey ? String(option[displayKey]) : (option.label ?? '')}</p>
             )}
           </div>
         ))}

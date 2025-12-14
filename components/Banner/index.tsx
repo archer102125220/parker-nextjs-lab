@@ -9,7 +9,7 @@ export interface BannerItem {
   title?: string;
   description?: string;
   alt?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface BannerProps {
