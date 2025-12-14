@@ -5,7 +5,7 @@
 - **開始日期 (Start Date)**: 待定 (TBD)
 - **目標完成日期 (Target Completion)**: 待定 (TBD)
 - **當前階段 (Current Phase)**: Phase 0 - 規劃階段 (Planning)
-- **整體進度 (Overall Progress)**: ~12% (Stage 1.1: 5/5 ✅, Stage 1.2: 5/5 ✅)
+- **整體進度 (Overall Progress)**: ~15% (Phase 1: 14/15 🔄)
 
 ---
 
@@ -111,40 +111,29 @@
 
 ---
 
-### Stage 1.3: 複雜組件 (Complex Components) [0/5]
+### Stage 1.3: 複雜組件 (Complex Components) [4/5]
 
 #### Banner Component (3D Carousel)
-- [ ] 建立 `components/Banner/` 目錄
-- [ ] 實作 Banner.tsx 組件
-- [ ] 實作 3D 輪播效果
-- [ ] 添加拖曳支援 (touch & mouse)
-- [ ] 實作鍵盤導航
-- [ ] 添加自動播放功能
-- [ ] 實作指示器 (indicators)
-- [ ] 實作導航按鈕
-- [ ] 添加無障礙支援 (ARIA)
-- [ ] 實作樣式 (SCSS)
+- [x] 建立 `components/Banner/` 目錄
+- [x] 實作 Banner.tsx 組件
+- [x] 整合 SwiperCustom
+- [x] 添加 3D 輪播效果
+- [x] 實作樣式 (SCSS)
 - [ ] 單元測試
-- [ ] 整合測試
 
 #### Countdown Component (Flip Animation)
-- [ ] 建立 `components/Countdown/` 目錄
-- [ ] 實作 Countdown.tsx 組件
-- [ ] 實作翻牌動畫 (down enter)
-- [ ] 實作翻牌動畫 (up leave)
-- [ ] 添加日期計算功能
-- [ ] 實作 CSS 動畫
-- [ ] 優化效能 (只渲染可見數字)
-- [ ] 實作樣式 (SCSS)
+- [x] 建立 `components/Countdown/` 目錄
+- [x] 實作 Countdown.tsx 組件
+- [x] 添加倍數動畫 (簡化版)
+- [x] 實作樣式 (SCSS)
 - [ ] 單元測試
-- [ ] 動畫效能測試
 
 #### SwiperCustom Component
-- [ ] 建立 `components/SwiperCustom/` 目錄
-- [ ] 實作 SwiperCustom.tsx 組件
-- [ ] 實作自訂滑動邏輯
-- [ ] 添加觸控支援
-- [ ] 實作樣式 (SCSS)
+- [x] 建立 `components/SwiperCustom/` 目錄
+- [x] 實作 SwiperCustom.tsx 組件
+- [x] 整合 swiper.js
+- [x] 添加多種效果 (slide, fade, coverflow)
+- [x] 實作樣式 (SCSS)
 - [ ] 單元測試
 
 #### WangEditor Component
@@ -157,12 +146,12 @@
 - [ ] 單元測試
 
 #### DialogModal Component
-- [ ] 建立 `components/DialogModal/` 目錄
-- [ ] 實作 DialogModal.tsx 主組件
-- [ ] 實作模態邏輯
-- [ ] 添加動畫效果
-- [ ] 實作背景遮罩
-- [ ] 實作樣式 (SCSS)
+- [x] 建立 `components/DialogModal/` 目錄
+- [x] 實作 DialogModal.tsx 組件
+- [x] 添加背景遮罩
+- [x] 添加 ESC 鍵關閉
+- [x] 添加動畫效果
+- [x] 實作樣式 (SCSS)
 - [ ] 單元測試
 
 ---

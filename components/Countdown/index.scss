@@ -1,0 +1,62 @@
+.countdown {
+    /* Display & Box Model */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    &-display {
+        /* Display & Box Model */
+        padding: 40px;
+        border-radius: 12px;
+
+        /* Visual */
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    &-number {
+        /* Typography */
+        font-size: 72px;
+        font-weight: 700;
+        color: #fff;
+        font-family: 'Arial', sans-serif;
+        line-height: 1;
+    }
+
+    &-controls {
+        /* Display & Box Model */
+        display: flex;
+        gap: 12px;
+
+        button {
+            /* Display & Box Model */
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+
+            /* Typography */
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+
+            /* Visual */
+            background-color: #1976d2;
+
+            /* Misc */
+            cursor: pointer;
+
+            /* Animation */
+            transition: background-color 0.2s;
+
+            &:hover:not(:disabled) {
+                background-color: #1565c0;
+            }
+
+            &:disabled {
+                background-color: #ccc;
+                cursor: not-allowed;
+            }
+        }
+    }
+}
