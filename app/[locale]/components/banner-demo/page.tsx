@@ -10,25 +10,25 @@ export default function BannerDemoPage() {
   const banners: BannerItem[] = [
     {
       id: 1,
-      image: 'https://picsum.photos/1200/400?random=1',
+      image: '/img/test-img/pexels-maxfrancis-2246476.jpg',
       title: 'Banner 1',
       description: '這是第一個 Banner 的描述'
     },
     {
       id: 2,
-      image: 'https://picsum.photos/1200/400?random=2',
+      image: '/img/test-img/53818685860_7a896e1bde_h.jpg',
       title: 'Banner 2',
       description: '這是第二個 Banner 的描述'
     },
     {
       id: 3,
-      image: 'https://picsum.photos/1200/400?random=3',
+      image: '/img/test-img/pngtree-green-field-landscape-wallpapers-picture-image_3163831.jpg',
       title: 'Banner 3',
       description: '這是第三個 Banner 的描述'
     },
     {
       id: 4,
-      image: 'https://picsum.photos/1200/400?random=4',
+      image: '/img/test-img/kirby-game-wallpaper-2560x1600_7.jpg',
       title: 'Banner 4',
       description: '這是第四個 Banner 的描述'
     }
