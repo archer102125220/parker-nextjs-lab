@@ -22,12 +22,10 @@ export function DrawerDemo(): ReactNode {
 
   const handleOpen = useCallback(() => {
     setIsOpen(true);
-    console.log('Drawer opened');
   }, []);
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
-    console.log('Drawer closed');
   }, []);
 
   const handleChange = useCallback((value: boolean) => {

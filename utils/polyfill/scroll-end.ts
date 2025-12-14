@@ -71,7 +71,7 @@ export function createScrollEndEvent(wait: number = 100) {
 
 export function handlePolyfillScrollEnd(wait: number = 100) {
   if (typeof window === 'undefined') return;
-  console.log('handlePolyfillScrollEnd');
+  // console.log('handlePolyfillScrollEnd');
   if ('onscrollend' in window && window.polyfillScrollEnd === true) return;
 
   document.addEventListener('scroll', createScrollEndEvent(wait));

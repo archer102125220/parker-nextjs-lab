@@ -1,3 +1,6 @@
+html {
+  overscroll-behavior: var(--root_overscroll_behavior);
+}
 .scroll_fetching {
   overflow: hidden;
 

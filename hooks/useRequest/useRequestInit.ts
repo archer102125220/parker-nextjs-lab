@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 import type {
   errorAdapterType,
@@ -12,7 +12,7 @@ export interface requestInit {
   isInitialized: boolean;
   isLoading: boolean;
   error: unknown | null;
-  reinitialize: Function;
+  reinitialize: () => void;
 }
 
 /**
@@ -34,44 +34,49 @@ export function useRequestInit(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   defaultExtendOption?: { [key: string]: any }
 ): requestInit {
-  const isInitialized = useRef<boolean>(
+  const [isInitialized, setIsInitialized] = useState<boolean>(
     typeof axiosRequest.ax === 'object' && axiosRequest.ax !== null
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<unknown | null>(null);
 
-  const initialize = useCallback(() => {
-    if (
-      !isInitialized.current &&
-      (typeof axiosRequest.ax !== 'object' || axiosRequest.ax === null)
-    ) {
-      setIsLoading(true);
-      setError(null);
+  const initialize = useCallback(
+    function () {
+      if (
+        isInitialized === false &&
+        (typeof axiosRequest.ax !== 'object' || axiosRequest.ax === null)
+      ) {
+        setIsLoading(true);
+        setError(null);
 
-      try {
-        const baseURL = apiBase || process.env.NEXT_PUBLIC_API_BASE || '';
-        console.log({ baseURL });
-        if (typeof baseURL !== 'string' || baseURL === '') {
-          console.warn('NEXT_PUBLIC_API_BASE 環境變數未設定');
+        try {
+          const baseURL = apiBase || process.env.NEXT_PUBLIC_API_BASE || '';
+          console.log({ baseURL });
+          if (typeof baseURL !== 'string' || baseURL === '') {
+            console.warn('NEXT_PUBLIC_API_BASE 環境變數未設定');
+          }
+          axiosInit(baseURL, errorAdapter, defaultExtendOption);
+          setIsInitialized(true);
+        } catch (err) {
+          setError(err);
+          console.error('初始化 axios 失敗:', err);
         }
-        axiosInit(baseURL, errorAdapter, defaultExtendOption);
-        isInitialized.current = true;
-      } catch (err) {
-        setError(err);
-        console.error('初始化 axios 失敗:', err);
-      }
 
-      setIsLoading(false);
-    }
-  }, [apiBase, errorAdapter, defaultExtendOption]);
+        setIsLoading(false);
+      }
+    },
+    [isInitialized, apiBase, errorAdapter, defaultExtendOption]
+  );
 
   useEffect(() => {
+    // TODO
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     initialize();
   }, [initialize]);
 
   return {
     request: axiosRequest,
-    isInitialized: isInitialized.current,
+    isInitialized,
     isLoading,
     error,
     reinitialize: initialize

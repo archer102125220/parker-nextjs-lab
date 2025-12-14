@@ -13,7 +13,7 @@ export default function Error({
   const memoError = useMemo(
     function () {
       if (process.env.NODE_ENV === 'development') {
-        console.log({ error });
+        console.error({ error });
         return error;
       }
       return null;

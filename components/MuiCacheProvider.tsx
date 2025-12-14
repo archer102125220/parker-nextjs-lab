@@ -12,7 +12,7 @@ export interface MuiCacheProviderProps {
 }
 
 export function MuiCacheProvider({ children, nonce }: MuiCacheProviderProps) {
-  console.log(JSON.stringify({ MuiCacheProviderNonce: nonce }));
+  // console.log(JSON.stringify({ MuiCacheProviderNonce: nonce }));
 
   const [clientNonce, setClientNonce] = useState<string>('');
 

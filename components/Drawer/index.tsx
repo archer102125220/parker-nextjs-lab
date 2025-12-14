@@ -122,7 +122,7 @@ export function Drawer(props: DrawerProps): ReactNode {
     onOpen
   } = props;
 
-  console.log(JSON.stringify({ DrawerNonce: nonce }));
+  // console.log(JSON.stringify({ DrawerNonce: nonce }));
 
   // Refs
   const drawerWrappingRef = useRef<HTMLDivElement>(null);

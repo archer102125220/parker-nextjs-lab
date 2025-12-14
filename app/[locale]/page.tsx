@@ -10,7 +10,7 @@ import { DefaultLayout } from '@/layout/default';
 async function Locale(): Promise<ReactNode> {
   const nonce = (await headers()).get('x-nonce') || '';
 
-  console.log(JSON.stringify({ LocalePageNonce: nonce }));
+  // console.log(JSON.stringify({ LocalePageNonce: nonce }));
 
   return (
     <DefaultLayout nonce={nonce}>

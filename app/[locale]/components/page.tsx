@@ -26,7 +26,6 @@ async function ComponentsPage(): Promise<ReactNode> {
         alignItems: 'center',
         flexWrap: 'wrap'
       }}
-      nonce={nonce}
     >
       <GTMScnOpen />
       <LinkButton href="/components/dialog" sx={{ flexShrink: 0 }}>
@@ -52,6 +51,13 @@ async function ComponentsPage(): Promise<ReactNode> {
         nonce={nonce}
       >
         下拉及無限滾動元件
+      </LinkButton>
+      <LinkButton
+        href="/components/skeleton-loader"
+        sx={{ flexShrink: 0 }}
+        nonce={nonce}
+      >
+        載入骨架元件
       </LinkButton>
     </Box>
   );

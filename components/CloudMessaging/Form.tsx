@@ -26,7 +26,7 @@ type CloudMessagingFormProps = {
 export function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
   const { serverTokenList, nonce } = props;
 
-  console.log(JSON.stringify({ CloudMessagingFormNonce: nonce }));
+  // console.log(JSON.stringify({ CloudMessagingFormNonce: nonce }));
 
   const [clientNonce, setClientNonce] = useState<string>('');
 
@@ -90,10 +90,10 @@ export function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
     async function pushNotification(e: FormEvent) {
       e.preventDefault();
 
-      console.log({
-        // isValidSubmit: isValidSubmit.value,
-        systemLoading
-      });
+      // console.log({
+      //   // isValidSubmit: isValidSubmit.value,
+      //   systemLoading
+      // });
 
       if (
         // isValidSubmit.value === false ||
@@ -102,14 +102,14 @@ export function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
         return false;
       }
 
-      console.log('push notification');
+      // console.log('push notification');
 
       setSystemLoading(true);
 
       try {
         const response = await POST_PushNotification();
 
-        console.log({ response });
+        // console.log({ response });
 
         const { failureCount = 0, successCount = 0 } = response;
         setMessageInformation(

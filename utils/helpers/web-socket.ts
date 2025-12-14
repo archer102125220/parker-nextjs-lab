@@ -53,7 +53,7 @@ export function createWebSocket(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   socket.send = function (event: any, data: any) {
     const payload = { event, data };
-    console.log(payload);
+    // console.log(payload);
     // TODO
     // eslint-disable-next-line
     // @ts-ignore

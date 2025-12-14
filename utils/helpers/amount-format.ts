@@ -23,7 +23,7 @@ export function amountFormat(
     return `${amount}`.replace(_formater, replaceString);
   } catch (error) {
     console.log('Safari error?');
-    console.log(error);
+    console.error(error);
     if (typeof handleError === 'function') {
       return handleError(amount, replaceString, error);
     }

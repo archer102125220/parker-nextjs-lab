@@ -14,7 +14,7 @@ export interface LinkBoxProps extends _LinkBoxProps {
 export function LinkBox(props: LinkBoxProps): ReactNode {
   const { nonce, ...boxProps } = props;
 
-  console.log(JSON.stringify({ LinkBoxNonce: nonce }));
+  // console.log(JSON.stringify({ LinkBoxNonce: nonce }));
   const [clientNonce, setClientNonce] = useState<string>('');
 
   useEffect(() => {

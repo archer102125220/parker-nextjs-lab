@@ -3,15 +3,17 @@ import { NextIntlClientProvider } from 'next-intl';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
-import { ReduxInit } from '@/components/ReduxInit';
 import { MuiCacheProvider } from '@/components/MuiCacheProvider';
 import MuiThemeProvider from '@/components/MuiThemeProvider';
 
+import { ReduxInit } from '@/components/ReduxInit';
 import { AxiosInit } from '@/components/AxiosInit';
 import { GAInit } from '@/components/Google/GAInit';
 import { GTMInit } from '@/components/Google/GTMInit';
 import { FirebaseInit } from '@/components/FirebaseInit';
+
 import { NotificationPermission } from '@/components/NotificationPermission';
+import { GoTop } from '@/components/GoTop';
 
 export type BodyProps = {
   children: ReactNode;
@@ -53,6 +55,8 @@ export function Body(props: BodyProps): ReactNode {
               <SpeedInsights />
               <NotificationPermission />
               {children}
+
+              <GoTop />
             </MuiThemeProvider>
           </MuiCacheProvider>
         </ReduxInit>

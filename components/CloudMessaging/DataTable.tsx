@@ -32,7 +32,7 @@ export function CloudMessagingDataTable(
 ): ReactNode {
   const { serverTokenList, nonce } = props;
 
-  console.log(JSON.stringify({ CloudMessagingDataTableNonce: nonce }));
+  // console.log(JSON.stringify({ CloudMessagingDataTableNonce: nonce }));
 
   const [clientNonce, setClientNonce] = useState<string>('');
 
@@ -124,7 +124,7 @@ export function CloudMessagingDataTable(
         return;
       }
 
-      console.log({ token });
+      // console.log({ token });
 
       setLoading(true);
       setSystemLoading(true);

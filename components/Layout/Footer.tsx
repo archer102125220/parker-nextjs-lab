@@ -16,7 +16,7 @@ export function Footer(props: FooterProps): ReactNode {
   const nonce = useAppSelector<string>((state) => state.system.nonce);
   const systemName = useAppSelector<string>((state) => state.system.systemName);
 
-  console.log(JSON.stringify({ FooterNonce: nonce, _nonce }));
+  // console.log(JSON.stringify({ FooterNonce: nonce, _nonce }));
   const [clientNonce, setClientNonce] = useState<string>('');
 
   useEffect(() => {

@@ -2,29 +2,36 @@ import { useState, useEffect, useCallback } from 'react';
 import _cloneDeep from 'lodash/cloneDeep';
 
 import type { errorAdapterType } from '@/utils/request/request.d.ts';
+import type { responseType } from '@/utils/request';
+
 import { useRequestInit } from '@/hooks/useRequest/useRequestInit';
 import type { requestInit } from '@/hooks/useRequest/useRequestInit';
 
 // import { axiosInit, request as axiosRequest } from '@/utils/request';
 
-interface requestOptionInterface {
+export interface requestOptionInterface {
   apiBase: string;
   errorAdapter?: errorAdapterType;
+  // TODO:
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   defaultExtendOption?: { [key: string]: any };
 }
 
-type checkPayloadType = (
-  payload: any,
+export type checkPayloadType = (
+  payload: unknown,
   path: string,
+  // TODO:
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extendOption: { [key: string]: any }
 ) => boolean;
 
-type useRequestReturnType = {
+export type useRequestReturnType = {
   cancelRequest: () => void;
-  response: any;
+  response: responseType;
   isLoading: boolean;
   error: unknown | null;
-  refetch: () => Promise<any>;
+  refresh: () => Promise<unknown>;
+  refetch: () => Promise<unknown>;
 };
 
 /**
@@ -33,13 +40,13 @@ type useRequestReturnType = {
  * @param {string} path - 請求url
  * @param {object} payload - 請求參數，會被轉換成query string或body
  * @param {function} checkPayload - 檢查請求參數的函式，如果回傳false，則不會發出請求
- * @param {boolean} hasErrorAdapter - 是否使用錯誤處理函式
  * @param {object} extendOption - 請求配置選項
  * @param {object} extendOption.retry - 重試次數
  * @param {object} extendOption.useCache - 是否使用快取，預設為true
  * @param {object} extendOption.useServiceWorkerCache - 是否使用service worker快取，預設為true
  * @param {object} extendOption.cacheKey - 快取key，預設為path
  * @param {object} extendOption.cacheTime - 快取時間，預設為1000 * 60 * 10
+ * @param {boolean} hasErrorAdapter - 是否使用錯誤處理函式
  * @param {object} requestOption - 請求選項，包含apiBase、errorAdapter、defaultExtendOption
  * @param {string} requestOption.apiBase - axios的baseURL，預設為process.env.NEXT_PUBLIC_API_BASE
  * @param {function} requestOption.errorAdapter - 錯誤處理函式，預設為null
@@ -54,10 +61,12 @@ type useRequestReturnType = {
 export function useRequest(
   method: string = 'get',
   path: string = '',
-  payload: any = {},
+  payload: unknown = {},
   checkPayload: checkPayloadType | null,
-  hasErrorAdapter: boolean,
+  // TODO:
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extendOption: { [key: string]: any } = { retry: 3 },
+  hasErrorAdapter: boolean = true,
   requestOption: requestOptionInterface = { apiBase: '' }
 ): useRequestReturnType {
   const { apiBase = '', errorAdapter, defaultExtendOption } = requestOption;
@@ -68,7 +77,7 @@ export function useRequest(
     defaultExtendOption
   );
 
-  const [response, setResponse] = useState<any>(null);
+  const [response, setResponse] = useState<responseType>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<unknown | null>(null);
   const [retryCount, setRetryCount] = useState<number>(0);
@@ -95,7 +104,10 @@ export function useRequest(
 
       const _extendOption = _cloneDeep(extendOption);
 
+      const handleInfinity = _extendOption.handleInfinity;
+
       delete _extendOption.retry;
+      delete _extendOption.handleInfinity;
 
       if (/GET/i.test(method) === true) {
         _extendOption.useCache =
@@ -118,6 +130,8 @@ export function useRequest(
         hasErrorAdapter
       );
 
+      handleInfinity(newResponse);
+
       setResponse(newResponse);
 
       return newResponse;
@@ -138,15 +152,17 @@ export function useRequest(
 
   const handleRetry = useCallback(async () => {
     if (error !== null && isLoading === false) return response;
-    setRetryCount(retryCount + 1);
+    const newRetryCount = retryCount + 1;
+    console.log({ newRetryCount });
+    setRetryCount(newRetryCount);
     return await handleRequest();
   }, [error, isLoading, response, handleRequest, retryCount]);
 
   useEffect(() => {
     handleRequest();
-  }, [payload, handleRequest]);
+  }, []);
   useEffect(() => {
-    if (error === null) return;
+    if (typeof error !== 'undefined' || error === null) return;
     const { retry } = extendOption;
     const _retry = typeof retry === 'number' ? retry : 3;
     if (retryCount <= _retry) {
@@ -159,17 +175,20 @@ export function useRequest(
     response,
     isLoading,
     error,
+    refresh: handleRequest,
     refetch: handleRetry
   };
 }
 
-type argType = [
+export type argType = [
   string, // path: string;
-  any, // payload: any;
+  unknown, // payload: any;
   checkPayloadType | null, // checkPayload: checkPayloadType | null;
-  boolean, // hasErrorAdapter: boolean;
-  { [key: string]: any }, // extendOption: { [key: string]: any };
-  requestOptionInterface // requestOption: requestOptionInterface;
+  // TODO:
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  { [key: string]: any }?, // extendOption: { [key: string]: any };
+  boolean?, // hasErrorAdapter: boolean;
+  requestOptionInterface? // requestOption: requestOptionInterface;
 ];
 
 /**
@@ -229,7 +248,6 @@ export function usePatchRequest(...arg: argType): useRequestReturnType {
   return useRequest('patch', ...arg);
 }
 
-
 /**
  * 使用axios呼叫PUT api的hook
  * @param {string} path - 請求url
@@ -248,7 +266,6 @@ export function usePatchRequest(...arg: argType): useRequestReturnType {
 export function usePutRequest(...arg: argType): useRequestReturnType {
   return useRequest('put', ...arg);
 }
-
 
 /**
  * 使用axios呼叫DELETE api的hook
