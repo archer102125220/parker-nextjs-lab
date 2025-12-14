@@ -15,7 +15,7 @@ import './index.scss';
 export interface SwiperCustomSlide {
   id: string | number;
   content?: ReactNode;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface SwiperCustomProps {
