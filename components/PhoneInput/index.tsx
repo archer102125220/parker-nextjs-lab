@@ -116,7 +116,7 @@ export function PhoneInput({
       const cleaned = phoneNumber.replace(/[\s\-()]/g, '');
       
       // Import and use checkPhone utility
-      import('@/utils/checkPhone').then(({ checkPhone }) => {
+      import('@/utils/third-party/check-phone').then(({ checkPhone }) => {
         const result = checkPhone(cleaned, selectedCountry?.phoneCode || '886');
         
         if (result.isValid) {
