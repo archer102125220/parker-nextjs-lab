@@ -111,18 +111,30 @@ export function PhoneInput({
       return true;
     }
 
-    // Basic validation: check if it's a valid phone number format
-    const cleaned = phoneNumber.replace(/[\s\-()]/g, '');
-    if (!/^\d{7,15}$/.test(cleaned)) {
-      const error = '請輸入有效的電話號碼';
-      setValidationError(error);
-      onValidate?.({ isValid: false, error });
+    // Use libphonenumber-js for validation
+    try {
+      const cleaned = phoneNumber.replace(/[\s\-()]/g, '');
+      
+      // Import and use checkPhone utility
+      import('@/utils/checkPhone').then(({ checkPhone }) => {
+        const result = checkPhone(cleaned, selectedCountry?.phoneCode || '886');
+        
+        if (result.isValid) {
+          setValidationError('');
+          onValidate?.({ isValid: true, error: '' });
+        } else {
+          setValidationError(result.errorMessage);
+          onValidate?.({ isValid: false, error: result.errorMessage });
+        }
+      });
+      
+      return true;
+    } catch {
+      const errorMsg = '請輸入有效的電話號碼';
+      setValidationError(errorMsg);
+      onValidate?.({ isValid: false, error: errorMsg });
       return false;
     }
-
-    setValidationError('');
-    onValidate?.({ isValid: true, error: '' });
-    return true;
   };
 
   const emitValue = () => {
