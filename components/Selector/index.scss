@@ -1,0 +1,135 @@
+.selector {
+    // Positioning
+    position: relative;
+
+    // Display & Box Model
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-height: 100%;
+
+    &-prefix {
+        // Display & Box Model
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    &-current_value {
+        // Display & Box Model
+        flex: 1;
+        overflow: hidden;
+
+        // Typography
+        font-family: 'PingFang SC';
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 20px;
+        color: #111;
+
+        &-label {
+            // Display & Box Model
+            width: 100%;
+            overflow: hidden;
+
+            // Typography
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    &-option_list {
+        // Positioning
+        position: absolute;
+        top: var(--select_option_list_top, 500vh);
+        left: var(--select_option_list_left);
+        right: var(--select_option_list_right);
+        z-index: 2;
+
+        // Display & Box Model
+        width: var(--select_option_list_width, 100%);
+        height: var(--select_option_list_heigth);
+        max-height: 45vh;
+        overflow: auto;
+        border-radius: var(--select_option_list_border_radius);
+        border: var(--select_option_list_border);
+
+        // Visual
+        background-color: #fff;
+        box-shadow: var(--select_option_list_shadow);
+
+        // Animation
+        transition: var(--select_option_list_transition);
+
+        &-item {
+            // Display & Box Model
+            padding: 8px;
+
+            // Typography
+            font-family: 'PingFang SC';
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 20px;
+            color: #111;
+
+            // Misc
+            cursor: pointer;
+
+            &:hover {
+                background-color: #f5f5f5;
+            }
+
+            p {
+                margin: 0;
+            }
+        }
+
+        &-item_selsected {
+            // Typography
+            color: #1976d2;
+
+            // Visual
+            background-color: #e3f2fd;
+
+            // Animation
+            transition: var(--select_option_list_item_selsected_transition);
+        }
+
+        &-item_empty {
+            // Display & Box Model
+            padding: 8px;
+
+            // Typography
+            font-family: 'PingFang SC';
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: center;
+            color: #999;
+
+            p {
+                margin: 0;
+            }
+        }
+    }
+
+    &-suffix {
+        // Display & Box Model
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        &-arrow_icon {
+            // Display & Box Model
+            width: 16px;
+            height: 16px;
+
+            // Animation
+            transition: var(--select_suffix_arrow_icon_transition);
+            transform: var(--selector_arrow_icon, rotate(0deg));
+        }
+    }
+}

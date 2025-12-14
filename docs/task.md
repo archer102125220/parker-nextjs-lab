@@ -5,7 +5,7 @@
 - **開始日期 (Start Date)**: 待定 (TBD)
 - **目標完成日期 (Target Completion)**: 待定 (TBD)
 - **當前階段 (Current Phase)**: Phase 0 - 規劃階段 (Planning)
-- **整體進度 (Overall Progress)**: ~5% (Stage 1.1: 4/5 完成)
+- **整體進度 (Overall Progress)**: ~10% (Stage 1.1: 5/5 ✅, Stage 1.2: 3/5 🔄)
 
 ---
 
@@ -23,7 +23,7 @@
 
 ## Phase 1: 核心組件基礎 (Core Components Foundation)
 
-### Stage 1.1: 簡單組件 (Simple Components) [4/5]
+### Stage 1.1: 簡單組件 (Simple Components) [5/5] ✅
 
 #### QRCode Component
 - [x] 建立 `components/QRCode/` 目錄
@@ -54,24 +54,24 @@
 - [ ] 單元測試
 
 #### DatePicker Component
-- [ ] 建立 `components/DatePicker/` 目錄
-- [ ] 實作 DatePicker.tsx 組件
-- [ ] 整合日期選擇邏輯
-- [ ] 實作樣式 (SCSS)
+- [x] 建立 `components/DatePicker/` 目錄
+- [x] 實作 DatePicker.tsx 組件
+- [x] 整合日期選擇邏輯 (Material-UI DatePicker)
+- [x] 實作樣式 (SCSS)
 - [ ] 單元測試
 
 ---
 
-### Stage 1.2: 中等複雜度組件 (Medium Complexity) [0/5]
+### Stage 1.2: 中等複雜度組件 (Medium Complexity) [3/5]
 
 #### Selector Component
-- [ ] 建立 `components/Selector/` 目錄
-- [ ] 實作 Selector.tsx 組件
-- [ ] 實作下拉選單邏輯
-- [ ] 添加動態高度計算
-- [ ] 實作自訂 slot (children props)
-- [ ] 添加鍵盤導航
-- [ ] 實作樣式 (SCSS)
+- [x] 建立 `components/Selector/` 目錄
+- [x] 實作 Selector.tsx 組件
+- [x] 實作下拉選單邏輯
+- [x] 添加動態高度計算
+- [x] 實作自訂 slot (children props)
+- [x] 添加鍵盤導航 (click outside)
+- [x] 實作樣式 (SCSS)
 - [ ] 單元測試
 
 #### PhoneInput Component
@@ -84,12 +84,12 @@
 - [ ] 單元測試
 
 #### ImageUpload Component
-- [ ] 建立 `components/ImageUpload/` 目錄
-- [ ] 實作 ImageUpload.tsx 組件
-- [ ] 實作圖片預覽
-- [ ] 添加拖放支援
-- [ ] 添加檔案驗證
-- [ ] 實作樣式 (SCSS)
+- [x] 建立 `components/ImageUpload/` 目錄
+- [x] 實作 ImageUpload.tsx 組件
+- [x] 實作圖片預覽
+- [x] 添加拖放支援
+- [x] 添加檔案驗證
+- [x] 實作樣式 (SCSS)
 - [ ] 單元測試
 
 #### SlideInPanel Component
@@ -102,11 +102,11 @@
 - [ ] 單元測試
 
 #### Tabs Component
-- [ ] 建立 `components/Tabs/` 目錄
-- [ ] 實作 Tabs.tsx 主組件
-- [ ] 實作 TabPanel.tsx 子組件
-- [ ] 添加切換動畫
-- [ ] 實作樣式 (SCSS)
+- [x] 建立 `components/Tabs/` 目錄
+- [x] 實作 Tabs.tsx 主組件
+- [x] 實作 TabPanel.tsx 子組件
+- [x] 添加切換動畫
+- [x] 實作樣式 (SCSS)
 - [ ] 單元測試
 
 ---

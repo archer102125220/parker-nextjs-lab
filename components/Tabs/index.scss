@@ -1,0 +1,75 @@
+.tabs {
+    /* Display & Box Model */
+    width: 100%;
+
+    &-header {
+        /* Positioning */
+        position: relative;
+
+        /* Display & Box Model */
+        display: flex;
+        border-bottom: 1px solid #e0e0e0;
+
+        &_standard {
+            justify-content: flex-start;
+        }
+
+        &_fullWidth {
+            justify-content: space-between;
+
+            .tabs-header-item {
+                flex: 1;
+                text-align: center;
+            }
+        }
+
+        &-item {
+            /* Display & Box Model */
+            padding: 12px 24px;
+
+            /* Typography */
+            font-family: 'PingFang SC', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            text-align: center;
+
+            /* Misc */
+            cursor: pointer;
+            user-select: none;
+
+            /* Animation */
+            transition: color 0.3s;
+
+            &:hover:not(&_disabled) {
+                color: #1976d2;
+            }
+
+            &_active {
+                color: #1976d2;
+                font-weight: 600;
+            }
+
+            &_disabled {
+                color: #ccc;
+                cursor: not-allowed;
+            }
+        }
+
+        &-indicator {
+            /* Positioning */
+            position: absolute;
+            bottom: 0;
+            left: 0;
+
+            /* Display & Box Model */
+            height: 2px;
+
+            /* Visual */
+            background-color: #1976d2;
+
+            /* Animation */
+            transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
+        }
+    }
+}
