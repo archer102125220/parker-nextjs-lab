@@ -46,33 +46,37 @@ export function SlideInPanel({
   const [messageList, setMessageList] = useState<SlideInMessage[]>([]);
 
   // Add new message when value changes
-  // Note: setState in effect is necessary here to manage message queue
+  // Note: Calling setState in useEffect is the correct pattern here because we're
+  // responding to an external prop change (value) to update internal state (messageList).
+  // This is explicitly allowed by React: https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
   useEffect(() => {
-    if (value && value !== '' && value !== null && value !== undefined) {
-      const timestamp = Date.now();
-      const id = `${timestamp}-${Math.random()}`;
-      const newMessage: SlideInMessage = { content: value, timestamp, id };
-      
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setMessageList((prev) => {
-        const updated = [...prev, newMessage];
-        // Remove oldest if exceeds maxRow
-        if (updated.length > maxRow) {
-          const removed = updated.shift();
-          if (removed) {
-            onRemove?.(removed, 0);
-          }
-        }
-        return updated;
-      });
-
-      // Auto remove after timeout
-      const timer = setTimeout(() => {
-        setMessageList((prev) => prev.filter((m) => m.id !== id));
-      }, timeout);
-
-      return () => clearTimeout(timer);
+    if (!value || value === '' || value === null || value === undefined) {
+      return;
     }
+
+    const timestamp = Date.now();
+    const id = `${timestamp}-${Math.random()}`;
+    const newMessage: SlideInMessage = { content: value, timestamp, id };
+    
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMessageList((prev) => {
+      const updated = [...prev, newMessage];
+      // Remove oldest if exceeds maxRow
+      if (updated.length > maxRow) {
+        const removed = updated.shift();
+        if (removed) {
+          onRemove?.(removed, 0);
+        }
+      }
+      return updated;
+    });
+
+    // Schedule auto removal
+    const timer = setTimeout(() => {
+      setMessageList((prev) => prev.filter((m) => m.id !== id));
+    }, timeout);
+
+    return () => clearTimeout(timer);
   }, [value, timeout, maxRow, onRemove]);
 
   const handleRemoveMessage = useCallback((message: SlideInMessage, index: number) => {
