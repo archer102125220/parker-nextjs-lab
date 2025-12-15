@@ -4,8 +4,8 @@
 
 - **開始日期 (Start Date)**: 2025-12-13
 - **目標完成日期 (Target Completion)**: 待定 (TBD)
-- **當前階段 (Current Phase)**: Phase 5 - 頁面組件 (Page Components) ✅ 完成
-- **整體進度 (Overall Progress)**: ~45% (Phase 1: 15/15 ✅ | Phase 3: 11/11 ✅ | Phase 4.1: 4/5 ✅ | Phase 5.1: 17/17 ✅)
+- **當前階段 (Current Phase)**: Phase 4.2 - 進階 Hooks (Advanced Hooks) ✅ 部分完成
+- **整體進度 (Overall Progress)**: ~50% (Phase 1: 15/15 ✅ | Phase 3: 11/11 ✅ | Phase 4: 10/15 🔄 | Phase 5.1: 17/17 ✅)
 
 ---
 
@@ -230,7 +230,7 @@
 
 ---
 
-## Phase 4: Hooks 與工具函式 (Hooks & Utilities) [4/15]
+## Phase 4: Hooks 與工具函式 (Hooks & Utilities) [10/15]
 
 ### Stage 4.1: 基礎 Hooks [4/5]
 
@@ -266,7 +266,7 @@
 
 ---
 
-### Stage 4.2: 進階 Hooks [0/10]
+### Stage 4.2: 進階 Hooks [6/10]
 
 #### useSocketIoClient
 - [ ] 建立 `hooks/useSocketIoClient.ts`
@@ -295,13 +295,13 @@
 - [x] 添加 TypeScript 類型 (已完成)
 - [ ] 單元測試
 
-#### 其他 Hooks (6+)
-- [ ] useWindowSize
-- [ ] useEventListener
-- [ ] useClickOutside
-- [ ] useKeyPress
-- [ ] useTimeout
-- [ ] useInterval
+#### 其他 Hooks (6/6) ✅
+- [x] useWindowSize
+- [x] useEventListener
+- [x] useClickOutside
+- [x] useKeyPress
+- [x] useTimeout
+- [x] useInterval
 
 ---
 
