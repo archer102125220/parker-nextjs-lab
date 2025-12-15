@@ -1,8 +1,8 @@
 .slide_in_panel_list {
     /* Positioning */
     position: var(--slide_in_panel_list_container_position, fixed);
-    top: var(--slide_in_panel_list_top);
-    bottom: var(--slide_in_panel_list_bottom);
+    top: var(--slide_in_panel_list_top, auto);
+    bottom: var(--slide_in_panel_list_bottom, 0);
     z-index: var(--slide_in_panel_list_zIndex, 9999);
 
     /* Display & Box Model */
@@ -12,12 +12,14 @@
     user-select: none;
     pointer-events: none;
 
-    &[data-left-enter='true'] {
-        left: var(--slide_in_panel_list_left, -100vw);
+    &[css-left-enter='true'] {
+        left: 0;
+        right: auto;
     }
 
-    &:not([data-left-enter='true']) {
-        right: var(--slide_in_panel_list_right, -100vw);
+    &:not([css-left-enter='true']) {
+        right: 0;
+        left: auto;
     }
 
     &-message {
@@ -56,12 +58,12 @@
             opacity 0.4s;
         animation: slideIn 0.3s ease-out;
 
-        &[data-left-enter='true'] {
+        &[css-left-enter='true'] {
             left: 0;
             right: auto;
         }
 
-        &:not([data-left-enter='true']) {
+        &:not([css-left-enter='true']) {
             right: 0;
             left: auto;
         }
@@ -93,7 +95,7 @@
     }
 }
 
-.slide_in_panel_list[data-left-enter='true'] .slide_in_panel_list-message {
+.slide_in_panel_list[css-left-enter='true'] .slide_in_panel_list-message {
     @keyframes slideIn {
         from {
             transform: translateX(-100%);

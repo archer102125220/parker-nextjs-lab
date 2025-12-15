@@ -4,12 +4,10 @@ import { useState } from 'react';
 import SlideInPanel from '@/components/SlideInPanel';
 
 export default function SlideInPanelPage() {
-  const [message, setMessage] = useState<string>('');
-  const [counter, setCounter] = useState(0);
+  const [message, setMessage] = useState<{ text: string; timestamp: number } | null>(null);
 
   const addMessage = (msg: string) => {
-    setMessage(msg);
-    setCounter(prev => prev + 1);
+    setMessage({ text: msg, timestamp: Date.now() });
   };
 
   return (
@@ -78,8 +76,7 @@ export default function SlideInPanelPage() {
       </div>
 
       <SlideInPanel
-        key={counter}
-        value={message}
+        value={message?.text}
         timeout={3000}
         maxRow={5}
       />

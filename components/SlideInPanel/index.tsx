@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect, useRef, ReactNode } from 'react';
+import { useState, useEffect, useCallback, ReactNode } from 'react';
 import './index.scss';
 
 export interface SlideInMessage {
   content: ReactNode | string;
   timestamp: number;
+  id: string;
 }
 
 export interface SlideInPanelProps {
@@ -38,20 +39,21 @@ export function SlideInPanel({
   zIndex,
   containerPosition = 'fixed',
   userRemoveType = 'none',
-  removeDeltaX = 100,
   onClose,
   onRemove,
   children
 }: SlideInPanelProps) {
   const [messageList, setMessageList] = useState<SlideInMessage[]>([]);
-  const timeoutRefs = useRef<Map<number, NodeJS.Timeout>>(new Map());
 
-  // Add new message
+  // Add new message when value changes
+  // Note: setState in effect is necessary here to manage message queue
   useEffect(() => {
-    if (value !== '' && value !== null && value !== undefined) {
+    if (value && value !== '' && value !== null && value !== undefined) {
       const timestamp = Date.now();
-      const newMessage: SlideInMessage = { content: value, timestamp };
+      const id = `${timestamp}-${Math.random()}`;
+      const newMessage: SlideInMessage = { content: value, timestamp, id };
       
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setMessageList((prev) => {
         const updated = [...prev, newMessage];
         // Remove oldest if exceeds maxRow
@@ -63,42 +65,27 @@ export function SlideInPanel({
         }
         return updated;
       });
+
+      // Auto remove after timeout
+      const timer = setTimeout(() => {
+        setMessageList((prev) => prev.filter((m) => m.id !== id));
+      }, timeout);
+
+      return () => clearTimeout(timer);
     }
-  }, [value, maxRow, onRemove]);
+  }, [value, timeout, maxRow, onRemove]);
 
-  // Auto remove messages after timeout
-  useEffect(() => {
-    messageList.forEach((message, index) => {
-      if (!timeoutRefs.current.has(message.timestamp)) {
-        const timer = setTimeout(() => {
-          handleRemoveMessage(message, index);
-        }, timeout + index * 100);
-        
-        timeoutRefs.current.set(message.timestamp, timer);
-      }
-    });
-
-    return () => {
-      timeoutRefs.current.forEach((timer) => clearTimeout(timer));
-      timeoutRefs.current.clear();
-    };
-  }, [messageList, timeout]);
-
-  const handleRemoveMessage = (message: SlideInMessage, index: number) => {
+  const handleRemoveMessage = useCallback((message: SlideInMessage, index: number) => {
     onClose?.(message, index);
-    
-    setTimeout(() => {
-      setMessageList((prev) => prev.filter((m) => m.timestamp !== message.timestamp));
-      timeoutRefs.current.delete(message.timestamp);
-      onRemove?.(message, index);
-    }, 500); // Wait for animation
-  };
+    setMessageList((prev) => prev.filter((m) => m.id !== message.id));
+    onRemove?.(message, index);
+  }, [onClose, onRemove]);
 
-  const handleClick = (message: SlideInMessage, index: number) => {
+  const handleClick = useCallback((message: SlideInMessage, index: number) => {
     if (userRemoveType === 'click') {
       handleRemoveMessage(message, index);
     }
-  };
+  }, [userRemoveType, handleRemoveMessage]);
 
   const cssVariables = {
     '--slide_in_panel_list_top': typeof top === 'number' ? `${top}px` : top,
@@ -118,19 +105,19 @@ export function SlideInPanel({
     <div
       className="slide_in_panel_list"
       style={cssVariables}
-      data-left-enter={leftEnter}
+      css-left-enter={leftEnter ? 'true' : 'false'}
     >
       {messageList.map((message, index) => {
         const bottomPosition = `calc(var(--message_item_height, 60px) * ${messageList.length - index - 1} + var(--slide_in_panel_list_item_spacing, 0px) * ${messageList.length - index})`;
         
         return (
           <div
-            key={message.timestamp}
+            key={message.id}
             className="slide_in_panel_list-message"
             style={{
               '--message_bottom': bottomPosition
             } as React.CSSProperties}
-            data-left-enter={leftEnter}
+            css-left-enter={leftEnter ? 'true' : 'false'}
             onClick={() => handleClick(message, index)}
           >
             {children ? children(message, index) : <p>{String(message.content)}</p>}
