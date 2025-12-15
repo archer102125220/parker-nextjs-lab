@@ -1,0 +1,50 @@
+.go_back {
+
+    /* Button */
+    &-button {
+        padding: 8px;
+        margin-right: 8px;
+        border-radius: 50%;
+        transition: all 0.2s;
+        cursor: pointer;
+
+        &:hover {
+            background-color: rgba(25, 118, 210, 0.04);
+            transform: translateX(-2px);
+        }
+
+        &:active {
+            transform: translateX(-4px);
+        }
+    }
+
+    /* Icon */
+    &-icon {
+        font-size: 24px;
+        color: var(--go-back-icon-color, #1976d2);
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+        &-button {
+            padding: 6px;
+            margin-right: 4px;
+        }
+
+        &-icon {
+            font-size: 20px;
+        }
+    }
+
+    /* Tablet */
+    @media (max-width: 1024px) {
+        &-button {
+            padding: 7px;
+            margin-right: 6px;
+        }
+
+        &-icon {
+            font-size: 22px;
+        }
+    }
+}

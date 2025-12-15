@@ -6,6 +6,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
+import './go_back.scss';
+
 interface GoBackProps {
   nonce?: string;
 }
@@ -29,8 +31,13 @@ export function GoBack({ nonce }: GoBackProps): ReactNode {
   }, [nonce]);
 
   return ['/', '/zh-tw', '/en'].includes(pathname) === false ? (
-    <IconButton color="primary" nonce={clientNonce} onClick={handleBack}>
-      <ArrowBackIcon />
+    <IconButton 
+      color="primary" 
+      className="go_back-button"
+      nonce={clientNonce} 
+      onClick={handleBack}
+    >
+      <ArrowBackIcon className="go_back-icon" />
     </IconButton>
   ) : (
     ''
@@ -38,3 +45,4 @@ export function GoBack({ nonce }: GoBackProps): ReactNode {
 }
 
 export default GoBack;
+

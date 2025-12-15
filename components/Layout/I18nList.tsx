@@ -16,6 +16,8 @@ import { useAppSelector } from '@/store';
 
 import LinkButton from '@/components/Link/Button';
 
+import './i18n_list.scss';
+
 export function I18nList(): ReactNode {
   const pathname = usePathname();
   const locale = useLocale();
@@ -42,17 +44,26 @@ export function I18nList(): ReactNode {
     }
   }, [nonce]);
 
+  const isZhTw = pathname.startsWith('/zh-tw');
+  const isEn = pathname.startsWith('/en');
+
   return (
-    <div>
-      <Button ref={triggerRef} onClick={handleOpen} nonce={clientNonce}>
+    <div className="i18n_list">
+      <Button 
+        ref={triggerRef} 
+        onClick={handleOpen} 
+        className="i18n_list-trigger"
+        nonce={clientNonce}
+      >
         {/* {t(locale)} */}
         {locale === 'zh-tw' ? '中文' : 'English'}
       </Button>
       {/*  https://mui.com/material-ui/react-menu/ */}
       <Menu
         // TODO
-        // eslint-disable-next-line react-hooks/refs
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         anchorEl={triggerRef.current}
+        className="i18n_list-menu"
         nonce={clientNonce}
         open={menuOpen}
         onClose={handleClose}
@@ -62,36 +73,46 @@ export function I18nList(): ReactNode {
           }
         }}
       >
-        <MenuItem nonce={clientNonce} onClick={handleClose}>
+        <MenuItem 
+          className="i18n_list-item"
+          css-active={isZhTw ? 'true' : 'false'}
+          nonce={clientNonce} 
+          onClick={handleClose}
+        >
           <LinkButton
             color="inherit"
             locale="zh-tw"
             replace={true}
+            className="i18n_list-link"
             nonce={nonce}
             href={pathname.replace(/^\/zh-tw|^\/en/gi, '') || '/'}
             sx={{
-              fontWeight: pathname.startsWith('/zh-tw') ? 'bold' : 'normal',
+              fontWeight: isZhTw ? 'bold' : 'normal',
               color: (theme) =>
-                pathname.startsWith('/zh-tw')
-                  ? theme.palette.primary.main
-                  : null
+                isZhTw ? theme.palette.primary.main : null
             }}
           >
             中文
             {/* {t('zh-tw')} */}
           </LinkButton>
         </MenuItem>
-        <MenuItem nonce={clientNonce} onClick={handleClose}>
+        <MenuItem 
+          className="i18n_list-item"
+          css-active={isEn ? 'true' : 'false'}
+          nonce={clientNonce} 
+          onClick={handleClose}
+        >
           <LinkButton
             color="inherit"
             locale="en"
             replace={true}
+            className="i18n_list-link"
             nonce={nonce}
             href={pathname.replace(/^\/zh-tw|^\/en/gi, '') || '/'}
             sx={{
-              fontWeight: pathname.startsWith('/en') ? 'bold' : 'normal',
+              fontWeight: isEn ? 'bold' : 'normal',
               color: (theme) =>
-                pathname.startsWith('/en') ? theme.palette.primary.main : null
+                isEn ? theme.palette.primary.main : null
             }}
           >
             English

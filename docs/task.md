@@ -156,7 +156,7 @@
 
 ---
 
-## Phase 2: Layout 優化與響應式設計 (Layout Optimization & Responsive Design) [0/3]
+## Phase 2: Layout 優化與響應式設計 (Layout Optimization & Responsive Design) [1/3]
 
 > **注意**: Layout 組件 (Header, Footer, Body, GoBack, I18nList) 已存在於 `components/Layout/`,此階段主要進行優化和響應式設計。
 
@@ -169,8 +169,8 @@
 - [x] Head.tsx 已存在 (Head 元數據)
 
 ### SCSS 轉換與優化
-- [ ] 檢查 Layout 組件是否有對應 SCSS
-- [ ] 如無 SCSS,創建對應的 .scss 檔案
+- [x] 檢查 Layout 組件是否有對應 SCSS
+- [x] 如無 SCSS,創建對應的 .scss 檔案
 - [ ] 統一 CSS 命名規範 (使用 css- 前綴)
 - [ ] 優化樣式結構
 - [ ] 移除內聯樣式,改用 SCSS

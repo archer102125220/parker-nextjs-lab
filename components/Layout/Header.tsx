@@ -17,6 +17,8 @@ import { GoBack } from '@/components/Layout/GoBack';
 import { PageLoading } from '@/components/PageLoading';
 import { Message } from '@/components/Message';
 
+import './header.scss';
+
 interface HeaderProps {
   nonce?: string;
   className?: string;
@@ -44,7 +46,7 @@ export function Header(props: HeaderProps): ReactNode {
   // console.log(JSON.stringify({ HeaderNonce: nonce, _nonce }));
 
   return (
-    <Toolbar className={className} sx={sx}>
+    <Toolbar className={`header-toolbar ${className || ''}`} sx={sx}>
       <PageLoading nonce={nonce} loading={loading} />
       <GoBack nonce={nonce} />
       <Message
@@ -55,6 +57,7 @@ export function Header(props: HeaderProps): ReactNode {
       <Typography variant="h6" component="div" sx={{ flex: 1 }}>
         <LinkBox
           href="/"
+          className="header-title"
           sx={{
             color: 'inherit',
             textDecoration: 'none',
@@ -69,6 +72,7 @@ export function Header(props: HeaderProps): ReactNode {
             alt="Parker's Next.js Lab"
             width={50}
             height={50}
+            className="header-logo"
           />
           <p>{systemName}</p>
         </LinkBox>
@@ -79,3 +83,4 @@ export function Header(props: HeaderProps): ReactNode {
   );
 }
 export default Header;
+
