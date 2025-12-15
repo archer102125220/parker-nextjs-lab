@@ -4,8 +4,8 @@
 
 - **開始日期 (Start Date)**: 2025-12-13
 - **目標完成日期 (Target Completion)**: 待定 (TBD)
-- **當前階段 (Current Phase)**: Phase 4.2 - 進階 Hooks (Advanced Hooks) ✅ 近乎完成
-- **整體進度 (Overall Progress)**: ~55% (Phase 1: 15/15 ✅ | Phase 3: 11/11 ✅ | Phase 4: 13/15 🔄 | Phase 5.1: 17/17 ✅)
+- **當前階段 (Current Phase)**: Phase 2 - Layout 優化 (Layout Optimization) 🔄 進行中
+- **整體進度 (Overall Progress)**: ~58% (Phase 1: 15/15 ✅ | Phase 2: 2/3 🔄 | Phase 3: 11/11 ✅ | Phase 4: 13/15 🔄 | Phase 5.1: 17/17 ✅)
 
 ---
 
@@ -156,7 +156,7 @@
 
 ---
 
-## Phase 2: Layout 優化與響應式設計 (Layout Optimization & Responsive Design) [1/3]
+## Phase 2: Layout 優化與響應式設計 (Layout Optimization & Responsive Design) [2/3]
 
 > **注意**: Layout 組件 (Header, Footer, Body, GoBack, I18nList) 已存在於 `components/Layout/`,此階段主要進行優化和響應式設計。
 
@@ -171,20 +171,20 @@
 ### SCSS 轉換與優化
 - [x] 檢查 Layout 組件是否有對應 SCSS
 - [x] 如無 SCSS,創建對應的 .scss 檔案
-- [ ] 統一 CSS 命名規範 (使用 css- 前綴)
-- [ ] 優化樣式結構
-- [ ] 移除內聯樣式,改用 SCSS
+- [x] 統一 CSS 命名規範 (使用 css- 前綴)
+- [x] 優化樣式結構
+- [x] 移除內聯樣式,改用 SCSS
 
 ### Responsive Design 優化
-- [ ] Header 響應式設計
-  - [ ] 行動裝置 (< 768px): 漢堡選單
-  - [ ] 平板裝置 (768px - 1024px): 簡化導航
-  - [ ] 桌面裝置 (> 1024px): 完整導航
-- [ ] Footer 響應式設計
-  - [ ] 行動裝置: 垂直堆疊
-  - [ ] 平板/桌面: 水平排列
-- [ ] 整體 Layout 響應式測試
-  - [ ] 測試不同螢幕尺寸
+- [x] Header 響應式設計
+  - [x] 行動裝置 (< 768px): 漢堡選單
+  - [x] 平板裝置 (768px - 1024px): 簡化導航
+  - [x] 桌面裝置 (> 1024px): 完整導航
+- [x] Footer 響應式設計
+  - [x] 行動裝置: 垂直堆疊
+  - [x] 平板/桌面: 水平排列
+- [x] 整體 Layout 響應式測試
+  - [x] 測試不同螢幕尺寸
   - [ ] 測試橫向/直向切換
   - [ ] 測試觸控操作
 
