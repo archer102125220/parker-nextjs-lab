@@ -106,6 +106,20 @@ async function ComponentsPage(): Promise<ReactNode> {
       >
         Youtube 播放器
       </LinkButton>
+      <LinkButton
+        href="/components/virtual-scroller"
+        sx={{ flexShrink: 0 }}
+        nonce={nonce}
+      >
+        Virtual Scroller 虛擬滾動
+      </LinkButton>
+      <LinkButton
+        href="/components/enter-label"
+        sx={{ flexShrink: 0 }}
+        nonce={nonce}
+      >
+        Enter Label 浮動標籤
+      </LinkButton>
     </Box>
   );
 }

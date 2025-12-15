@@ -4,8 +4,8 @@
 
 - **開始日期 (Start Date)**: 2025-12-13
 - **目標完成日期 (Target Completion)**: 待定 (TBD)
-- **當前階段 (Current Phase)**: Phase 5 - 頁面組件 (Page Components)
-- **整體進度 (Overall Progress)**: ~40% (Phase 1: 15/15 ✅ | Phase 3: 11/11 ✅ | Phase 4.1: 4/5 ✅ | Phase 5.1: 14/17 ✅)
+- **當前階段 (Current Phase)**: Phase 5 - 頁面組件 (Page Components) ✅ 完成
+- **整體進度 (Overall Progress)**: ~45% (Phase 1: 15/15 ✅ | Phase 3: 11/11 ✅ | Phase 4.1: 4/5 ✅ | Phase 5.1: 17/17 ✅)
 
 ---
 
@@ -156,34 +156,43 @@
 
 ---
 
-## Phase 2: Layout 與導航 (Layout & Navigation) [0/4]
+## Phase 2: Layout 優化與響應式設計 (Layout Optimization & Responsive Design) [0/3]
 
-### Header Component
-- [ ] 建立 `components/Layout/Header/` 目錄
-- [ ] 實作 Header.tsx 組件
-- [ ] 實作導航選單
-- [ ] 添加響應式設計
-- [ ] 整合語言切換
-- [ ] 實作樣式 (SCSS)
-- [ ] 單元測試
+> **注意**: Layout 組件 (Header, Footer, Body, GoBack, I18nList) 已存在於 `components/Layout/`,此階段主要進行優化和響應式設計。
 
-### Footer Component
-- [ ] 建立 `components/Layout/Footer/` 目錄
-- [ ] 實作 Footer.tsx 組件
-- [ ] 添加連結區塊
-- [ ] 添加響應式設計
-- [ ] 實作樣式 (SCSS)
-- [ ] 單元測試
+### Layout Components Review
+- [x] Header.tsx 已存在 (包含導航、語言切換)
+- [x] Footer.tsx 已存在 (包含版權資訊)
+- [x] Body.tsx 已存在 (主要內容容器)
+- [x] GoBack.tsx 已存在 (返回按鈕)
+- [x] I18nList.tsx 已存在 (語言切換列表)
+- [x] Head.tsx 已存在 (Head 元數據)
 
-### Navigation System
-- [ ] 整合 Header 到主 Layout
-- [ ] 整合 Footer 到主 Layout
+### SCSS 轉換與優化
+- [ ] 檢查 Layout 組件是否有對應 SCSS
+- [ ] 如無 SCSS,創建對應的 .scss 檔案
+- [ ] 統一 CSS 命名規範 (使用 css- 前綴)
+- [ ] 優化樣式結構
+- [ ] 移除內聯樣式,改用 SCSS
+
+### Responsive Design 優化
+- [ ] Header 響應式設計
+  - [ ] 行動裝置 (< 768px): 漢堡選單
+  - [ ] 平板裝置 (768px - 1024px): 簡化導航
+  - [ ] 桌面裝置 (> 1024px): 完整導航
+- [ ] Footer 響應式設計
+  - [ ] 行動裝置: 垂直堆疊
+  - [ ] 平板/桌面: 水平排列
+- [ ] 整體 Layout 響應式測試
+  - [ ] 測試不同螢幕尺寸
+  - [ ] 測試橫向/直向切換
+  - [ ] 測試觸控操作
+
+### 整合測試
+- [ ] 測試 Header/Footer 在所有頁面的顯示
+- [ ] 測試語言切換功能
+- [ ] 測試返回按鈕功能
 - [ ] 測試導航流程
-
-### Responsive Design
-- [ ] 測試行動裝置顯示
-- [ ] 測試平板裝置顯示
-- [ ] 測試桌面裝置顯示
 
 ---
 
@@ -296,15 +305,15 @@
 
 ---
 
-## Phase 5: 頁面組件 (Page Components) [14/40+]
+## Phase 5: 頁面組件 (Page Components) [17/40+]
 
-### Stage 5.1: Components 測試頁面 [14/17]
+### Stage 5.1: Components 測試頁面 [17/17] ✅
 
 #### Components Index Page
-- [ ] 建立 `app/[locale]/components/page.tsx`
-- [ ] 實作組件總覽頁面
-- [ ] 添加導航連結
-- [ ] 實作樣式
+- [x] 建立 `app/[locale]/components/page.tsx`
+- [x] 實作組件總覽頁面
+- [x] 添加導航連結
+- [x] 實作樣式
 
 #### Banner Demo Page
 - [x] 建立 `app/[locale]/components/banner-demo/page.tsx`
@@ -369,9 +378,9 @@
 - [x] 實作樣式
 
 #### Virtual Scroller Page
-- [ ] 建立 `app/[locale]/components/virtual-scroller/page.tsx`
-- [ ] 實作虛擬滾動示範
-- [ ] 實作樣式
+- [x] 建立 `app/[locale]/components/virtual-scroller/page.tsx`
+- [x] 實作虛擬滾動示範
+- [x] 實作樣式
 
 
 #### Youtube Test Page
@@ -385,9 +394,9 @@
 - [x] 實作樣式
 
 #### Enter Label Page
-- [ ] 建立 `app/[locale]/components/enter-label/page.tsx`
-- [ ] 實作 EnterLabel 示範
-- [ ] 實作樣式
+- [x] 建立 `app/[locale]/components/enter-label/page.tsx`
+- [x] 實作 EnterLabel 示範
+- [x] 實作樣式
 
 #### Components Test Page
 - [ ] 建立 `app/[locale]/components/components-test/page.tsx`

@@ -1,0 +1,103 @@
+.enter_label {
+    /* Positioning */
+    position: relative;
+
+    /* Display & Box Model */
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+
+    &-label {
+        /* Positioning */
+        position: absolute;
+        left: 12px;
+        top: 16px;
+
+        /* Typography */
+        font-size: 16px;
+        color: #666;
+
+        /* Animation */
+        transition: all 0.2s ease-out;
+        transform-origin: left top;
+        pointer-events: none;
+        background: white;
+        padding: 0 4px;
+    }
+
+    &-required {
+        color: #f44336;
+        margin-left: 2px;
+    }
+
+    &-input {
+        /* Display & Box Model */
+        padding: 16px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+
+        /* Typography */
+        font-family: inherit;
+        color: #333;
+
+        /* Animation */
+        transition: border-color 0.2s ease;
+
+        &:focus {
+            outline: none;
+            border-color: #1976d2;
+        }
+
+        &::placeholder {
+            color: #999;
+        }
+    }
+
+    &-error {
+        /* Typography */
+        font-size: 12px;
+        color: var(--enter_label_error_color, #f44336);
+        margin-top: 4px;
+        margin-left: 12px;
+    }
+
+    /* Focused or has value state */
+    &[css-focused='true'],
+    &[css-has-value='true'] {
+        .enter_label-label {
+            transform: translateY(-28px) scale(0.75);
+            color: #1976d2;
+        }
+    }
+
+    /* Error state */
+    &[css-has-error='true'] {
+        .enter_label-input {
+            border-color: #f44336;
+        }
+
+        .enter_label-label {
+            color: #f44336;
+        }
+
+        &[css-focused='true'] .enter_label-label {
+            color: #f44336;
+        }
+    }
+
+    /* Disabled state */
+    &[css-disabled='true'] {
+        opacity: 0.6;
+        pointer-events: none;
+
+        .enter_label-input {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .enter_label-label {
+            color: #999;
+        }
+    }
+}
