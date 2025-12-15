@@ -28,6 +28,9 @@ async function ComponentsPage(): Promise<ReactNode> {
       }}
     >
       <GTMScnOpen />
+      <LinkButton href="/hooks-test" sx={{ flexShrink: 0 }} nonce={nonce}>
+        Hooks 測試
+      </LinkButton>
       <LinkButton href="/components/banner-demo" sx={{ flexShrink: 0 }} nonce={nonce}>
         Banner 輪播組件
       </LinkButton>
