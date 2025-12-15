@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 // Make socket.io-client optional - only import if needed
 type Socket = any; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -10,7 +10,7 @@ export interface UseSocketIoClientOptions {
 }
 
 export interface UseSocketIoClientReturn {
-  socket: Socket | null;
+  getSocket: () => Socket | null;
   isConnected: boolean;
   error: Error | null;
   connect: () => void;
@@ -25,10 +25,10 @@ export interface UseSocketIoClientReturn {
  * Note: Requires socket.io-client to be installed: npm install socket.io-client
  * 
  * @param config - Socket.IO configuration
- * @returns Socket instance and connection utilities
+ * @returns Socket getter and connection utilities
  * 
  * @example
- * const { socket, isConnected, emit, on } = useSocketIoClient({
+ * const { getSocket, isConnected, emit, on } = useSocketIoClient({
  *   url: 'http://localhost:3001',
  *   autoConnect: true
  * });
@@ -36,18 +36,24 @@ export interface UseSocketIoClientReturn {
  * useEffect(() => {
  *   on('message', (data) => console.log(data));
  * }, [on]);
+ * 
+ * // Get socket instance when needed
+ * const socket = getSocket();
  */
 export function useSocketIoClient(
   config: UseSocketIoClientOptions
 ): UseSocketIoClientReturn {
   const { url, options = {}, autoConnect = true } = config;
   
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const socketRef = useRef<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
+  // Provide a getter function instead of direct ref access
+  const getSocket = useCallback(() => socketRef.current, []);
+
   const connect = useCallback(() => {
-    if (socket?.connected) return;
+    if (socketRef.current?.connected) return;
 
     try {
       // Dynamic import of socket.io-client
@@ -71,7 +77,7 @@ export function useSocketIoClient(
           setIsConnected(false);
         });
 
-        setSocket(newSocket);
+        socketRef.current = newSocket;
         newSocket.connect();
       }).catch((err) => {
         setError(new Error('socket.io-client not installed. Run: npm install socket.io-client'));
@@ -80,37 +86,37 @@ export function useSocketIoClient(
     } catch (err) {
       setError(err as Error);
     }
-  }, [url, options, socket]);
+  }, [url, options]);
 
   const disconnect = useCallback(() => {
-    if (socket) {
-      socket.disconnect();
-      setSocket(null);
+    if (socketRef.current) {
+      socketRef.current.disconnect();
+      socketRef.current = null;
       setIsConnected(false);
     }
-  }, [socket]);
+  }, []);
 
   const emit = useCallback((event: string, ...args: unknown[]) => {
-    if (socket?.connected) {
-      socket.emit(event, ...args);
+    if (socketRef.current?.connected) {
+      socketRef.current.emit(event, ...args);
     }
-  }, [socket]);
+  }, []);
 
   const on = useCallback((event: string, handler: (...args: unknown[]) => void) => {
-    if (socket) {
-      socket.on(event, handler);
+    if (socketRef.current) {
+      socketRef.current.on(event, handler);
     }
-  }, [socket]);
+  }, []);
 
   const off = useCallback((event: string, handler?: (...args: unknown[]) => void) => {
-    if (socket) {
+    if (socketRef.current) {
       if (handler) {
-        socket.off(event, handler);
+        socketRef.current.off(event, handler);
       } else {
-        socket.off(event);
+        socketRef.current.off(event);
       }
     }
-  }, [socket]);
+  }, []);
 
   useEffect(() => {
     if (autoConnect) {
@@ -123,7 +129,7 @@ export function useSocketIoClient(
   }, [autoConnect, connect, disconnect]);
 
   return {
-    socket,
+    getSocket,
     isConnected,
     error,
     connect,
