@@ -92,6 +92,20 @@ async function ComponentsPage(): Promise<ReactNode> {
       >
         載入骨架元件
       </LinkButton>
+      <LinkButton
+        href="/components/go-top"
+        sx={{ flexShrink: 0 }}
+        nonce={nonce}
+      >
+        GoTop 回到頂部
+      </LinkButton>
+      <LinkButton
+        href="/components/youtube-test"
+        sx={{ flexShrink: 0 }}
+        nonce={nonce}
+      >
+        Youtube 播放器
+      </LinkButton>
     </Box>
   );
 }
