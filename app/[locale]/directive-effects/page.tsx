@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import Image from 'next/image';
 import {
@@ -29,8 +28,6 @@ const DEMO_LINKS = [
 ];
 
 export default function DirectiveEffectsPage(): React.ReactNode {
-  const t = useTranslations();
-
   return (
     <section className="directive_effects_page">
       <Typography variant="body1" paragraph>

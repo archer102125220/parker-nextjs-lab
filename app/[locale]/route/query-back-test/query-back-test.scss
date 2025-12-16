@@ -1,0 +1,19 @@
+.query_back_test_page {
+  &-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+
+    padding: 24px;
+    margin-bottom: 24px;
+
+    text-align: center;
+  }
+
+  &-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}

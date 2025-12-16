@@ -4,8 +4,8 @@
 
 - **開始日期 (Start Date)**: 2025-12-13
 - **目標完成日期 (Target Completion)**: 待定 (TBD)
-- **當前階段 (Current Phase)**: Phase 5.4 - Route 測試頁面 (Route Test Pages) ⏭️ 待開始
-- **整體進度 (Overall Progress)**: ~72% (Phase 1: 15/15 ✅ | Phase 2: 3/3 ✅ | Phase 3: 5/5 ✅ | Phase 4: 13/15 🔄 | Phase 5.1: 17/17 ✅ | Phase 5.2: 4/4 ✅ | Phase 5.3: 5/5 ✅)
+- **當前階段 (Current Phase)**: Phase 6.1 - 認證功能 (Authentication) ⏭️ 待開始
+- **整體進度 (Overall Progress)**: ~76% (Phase 1-3: ✅ | Phase 4: 13/15 🔄 | Phase 5: 29/29 ✅)
 
 ---
 
@@ -460,22 +460,26 @@
 
 ---
 
-### Stage 5.4: Route 測試頁面 [0/4]
+### Stage 5.4: Route 測試頁面 [3/3] ✅
 
-#### Route Index Page
-- [ ] 建立 `app/[locale]/route/page.tsx`
-- [ ] 實作路由測試總覽
-- [ ] 實作樣式
+> ✅ **已完成** (2025-12-16): 實作了路由測試頁面，展示 push 與 replace 行為差異。
 
-#### Params Back Test Page
-- [ ] 建立 `app/[locale]/route/params-back-test/page.tsx`
-- [ ] 實作參數回傳測試
-- [ ] 實作樣式
+#### Route Index Page ✅
+- [x] 建立 `app/[locale]/route/page.tsx`
+- [x] 實作路由測試總覽 (LinkCard 導航)
+- [x] 實作樣式 (`route.scss`)
 
-#### Query Back Test Page
-- [ ] 建立 `app/[locale]/route/query-back-test/page.tsx`
-- [ ] 實作查詢參數測試
-- [ ] 實作樣式
+#### Query Back Test Page ✅
+- [x] 建立 `app/[locale]/route/query-back-test/page.tsx`
+- [x] 實作 URL query 參數 push/replace 測試
+- [x] 使用 `useSearchParams` 監聽變化
+- [x] 實作樣式 (`query-back-test.scss`)
+
+#### Params Back Test Page ✅
+- [x] 建立 `app/[locale]/route/params-back-test/[testData]/page.tsx`
+- [x] 實作動態路由參數 push/replace 測試
+- [x] 使用 `useParams` 取得參數
+- [x] 實作樣式 (`params-back-test.scss`)
 
 ---
 

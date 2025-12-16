@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 import { Skeleton, Alert } from '@mui/material';
 
 import '@/app/[locale]/about/about.scss';
@@ -19,7 +19,6 @@ interface Section {
 }
 
 export default function AboutPage(): React.ReactNode {
-  const t = useTranslations();
   const locale = useLocale();
   const [data, setData] = useState<Section[] | null>(null);
   const [loading, setLoading] = useState(true);
