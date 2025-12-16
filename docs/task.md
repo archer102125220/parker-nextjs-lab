@@ -4,8 +4,8 @@
 
 - **開始日期 (Start Date)**: 2025-12-13
 - **目標完成日期 (Target Completion)**: 待定 (TBD)
-- **當前階段 (Current Phase)**: Phase 5.2 - 功能頁面 (Feature Pages) ⏭️ 待開始
-- **整體進度 (Overall Progress)**: ~62% (Phase 1: 15/15 ✅ | Phase 2: 3/3 ✅ | Phase 3: 5/5 ✅ | Phase 4: 13/15 🔄 | Phase 5.1: 17/17 ✅)
+- **當前階段 (Current Phase)**: Phase 5.3 - 指令效果頁面 (Directive-like Effects) ⏭️ 待開始
+- **整體進度 (Overall Progress)**: ~68% (Phase 1: 15/15 ✅ | Phase 2: 3/3 ✅ | Phase 3: 5/5 ✅ | Phase 4: 13/15 🔄 | Phase 5.1: 17/17 ✅ | Phase 5.2: 4/4 ✅)
 
 ---
 
@@ -398,29 +398,33 @@
 
 ---
 
-### Stage 5.2: 功能頁面 [0/4]
+### Stage 5.2: 功能頁面 [4/4] ✅
 
-#### About Page
-- [ ] 建立 `app/[locale]/about/page.tsx`
-- [ ] 實作關於頁面內容
-- [ ] 實作樣式
+> ✅ **已完成** (2025-12-16): 實作了所有功能頁面及相關 API 路由。
 
-#### Offline Page
-- [ ] 建立 `app/[locale]/offline/page.tsx`
-- [ ] 實作離線頁面
-- [ ] 添加 PWA 離線支援
-- [ ] 實作樣式
+#### About Page ✅
+- [x] 建立 `app/[locale]/about/page.tsx`
+- [x] 實作關於頁面內容 (API fetch with locale support)
+- [x] 建立 `app/api/about-content/route.ts` API 端點
+- [x] 實作樣式 (`about.scss`)
 
-#### Web Cam Page
-- [ ] 建立 `app/[locale]/web-cam/page.tsx`
-- [ ] 實作網路攝影機功能
-- [ ] 添加權限請求
-- [ ] 實作樣式
+#### Offline Page ✅
+- [x] 建立 `app/[locale]/offline/page.tsx`
+- [x] 實作離線頁面 (network status detection)
+- [x] 使用 MUI 組件 (Card, Chip, Alert)
+- [x] 實作樣式 (`offline.scss` - 漸層背景、pulse 動畫)
 
-#### Frontend API Cache Test Page
-- [ ] 建立 `app/[locale]/frontend-api-cache-test/page.tsx`
-- [ ] 實作 API 快取測試
-- [ ] 實作樣式
+#### Web Cam Page ✅
+- [x] 建立 `app/[locale]/web-cam/page.tsx`
+- [x] 實作網路攝影機功能 (getUserMedia API)
+- [x] 使用 Canvas 渲染 (requestAnimationFrame)
+- [x] 實作樣式 (`web-cam.scss`)
+
+#### Frontend API Cache Test Page ✅
+- [x] 建立 `app/[locale]/frontend-api-cache-test/page.tsx`
+- [x] 實作 API 快取測試 (GET/POST toggle, cache options)
+- [x] 建立 `app/api/frontend-api-cache-test/route.ts` API 端點
+- [x] 實作樣式 (`frontend-api-cache-test.scss`)
 
 ---
 
