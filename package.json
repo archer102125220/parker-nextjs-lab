@@ -45,6 +45,7 @@
     "animejs": "^3.2.2",
     "axios": "^1.8.4",
     "axios-mock-adapter": "^2.1.0",
+    "cbor-x": "^1.6.0",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.18",
     "fido2-lib": "^3.5.3",
@@ -54,10 +55,12 @@
     "google-auth-library": "^10.3.0",
     "google-libphonenumber": "^3.2.40",
     "js-base64": "^3.7.8",
+    "jwt-decode": "^4.0.0",
     "libphonenumber-js": "^1.12.31",
     "lodash": "^4.17.21",
     "lru-cache": "^11.1.0",
     "mui-color-input": "^7.0.0",
+    "nanoid": "^5.1.6",
     "next": "16.0.10",
     "next-intl": "^4.0.2",
     "pg": "^8.16.3",
@@ -70,7 +73,8 @@
     "read-excel-file": "^5.8.7",
     "sequelize": "^6.37.7",
     "socket.io-client": "^4.8.1",
-    "swiper": "^11.2.8"
+    "swiper": "^11.2.8",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@babel/node": "^7.26.0",
@@ -88,6 +92,7 @@
     "@types/qs": "^6.9.18",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
+    "@types/uuid": "^11.0.0",
     "autocannon": "^8.0.0",
     "cross-env": "^7.0.3",
     "dotenv": "^17.2.2",
