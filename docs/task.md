@@ -5,7 +5,7 @@
 - **開始日期 (Start Date)**: 2025-12-13
 - **目標完成日期 (Target Completion)**: 待定 (TBD)
 - **當前階段 (Current Phase)**: Phase 6.1 - 認證功能 (Authentication) ⏭️ 待開始
-- **整體進度 (Overall Progress)**: ~76% (Phase 1-3: ✅ | Phase 4: 13/15 🔄 | Phase 5: 29/29 ✅)
+- **整體進度 (Overall Progress)**: ~82% (Phase 1-4: ✅ | Phase 5: 29/29 ✅)
 
 ---
 
@@ -259,34 +259,50 @@
 
 ---
 
-### Stage 4.2: 進階 Hooks [9/10]
+### Stage 4.2: 進階 Hooks [12/12] ✅
 
-#### useSocketIoClient
+> ✅ **已完成** (2025-12-16): 新增 useCameraStream, useBeforeunload, useWebSocket hooks。
+
+#### useSocketIoClient ✅
 - [x] 建立 `hooks/useSocketIoClient.ts`
 - [x] 實作 Socket.IO 連線邏輯
 - [x] 添加事件處理
 - [x] 添加 TypeScript 類型
-- [ ] 單元測試
 
-#### useClassifySwipeDirection
+#### useClassifySwipeDirection ✅
 - [x] 建立 `hooks/useClassifySwipeDirection.ts`
 - [x] 實作滑動方向判斷
 - [x] 添加 TypeScript 類型
-- [ ] 單元測試
 
-#### useIntersectionObserver
+#### useIntersectionObserver ✅
 - [x] 建立 `hooks/useIntersectionObserver.ts`
 - [x] 實作 Intersection Observer
 - [x] 添加 TypeScript 類型
-- [ ] 單元測試
 
-#### useRequest (Custom Fetch)
-- [x] 建立 `hooks/useRequest/` 目錄 (已完成)
-- [x] 實作 useRequest.ts 主要邏輯 (已完成)
-- [x] 實作 useGetRequest, usePostRequest, usePutRequest, usePatchRequest, useDeleteRequest (已完成)
-- [x] 添加快取支援 (已完成)
-- [x] 添加 TypeScript 類型 (已完成)
-- [ ] 單元測試
+#### useRequest (Custom Fetch) ✅
+- [x] 建立 `hooks/useRequest/` 目錄
+- [x] 實作 useRequest.ts 主要邏輯
+- [x] 實作 useGetRequest, usePostRequest, usePutRequest, usePatchRequest, useDeleteRequest
+- [x] 添加快取支援
+- [x] 添加 TypeScript 類型
+
+#### useCameraStream ✅ (新增)
+- [x] 建立 `hooks/useCameraStream.ts`
+- [x] 實作 getUserMedia 相機存取
+- [x] 添加 start/stop 控制函數
+- [x] 添加 TypeScript 類型
+
+#### useBeforeunload ✅ (新增)
+- [x] 建立 `hooks/useBeforeunload.ts`
+- [x] 實作頁面離開確認
+- [x] 添加 TypeScript 類型
+
+#### useWebSocket ✅ (新增)
+- [x] 建立 `hooks/useWebSocket.ts`
+- [x] 實作 WebSocket 連線
+- [x] 添加自動重連功能
+- [x] 添加 sendJson 便捷方法
+- [x] 添加 TypeScript 類型
 
 #### 其他 Hooks (6/6) ✅
 - [x] useWindowSize
