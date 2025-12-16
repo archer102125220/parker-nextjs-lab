@@ -1,0 +1,167 @@
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import {
+  Typography,
+  Paper,
+  Button,
+  TextField,
+  Alert,
+  Chip
+} from '@mui/material';
+
+import { useSocketIoClient } from '@/hooks/useSocketIoClient';
+
+export default function SocketIoPage(): React.ReactNode {
+  const [messageList, setMessageList] = useState<unknown[]>([]);
+  const [inputMessage, setInputMessage] = useState('');
+
+  const handleMessage = useCallback((payload: unknown) => {
+    console.log('Received:', payload);
+    setMessageList((prev) => [...prev, payload]);
+  }, []);
+
+  // Get the URL for Socket.IO server
+  const socketUrl =
+    typeof window !== 'undefined'
+      ? `${window.location.protocol}//${window.location.host}`
+      : 'http://localhost:3001';
+
+  const { isConnected, connect, disconnect, emit, on, off, error } =
+    useSocketIoClient({
+      url: socketUrl,
+      autoConnect: true
+    });
+
+  // Set up event listeners
+  useEffect(() => {
+    on('socket.io-test', handleMessage);
+    on('message', handleMessage);
+
+    return () => {
+      off('socket.io-test', handleMessage);
+      off('message', handleMessage);
+    };
+  }, [on, off, handleMessage]);
+
+  const handleSendMessage = () => {
+    if (!inputMessage.trim()) return;
+
+    const payload = {
+      message: inputMessage,
+      timestamp: new Date().toISOString()
+    };
+
+    emit('message', payload);
+    setInputMessage('');
+  };
+
+  const handleSendTestData = () => {
+    emit('socket.io-test', {
+      a: 'b',
+      c: [],
+      testData: 'socket.io test Data'
+    });
+  };
+
+  return (
+    <section>
+      <Typography variant="h5" gutterBottom>
+        Socket.IO 測試
+      </Typography>
+
+      <Alert severity="info" sx={{ mb: 2 }}>
+        注意：Socket.IO 需要伺服器端支援。在 serverless 環境（如
+        Vercel）中可能無法正常運作。
+      </Alert>
+
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          連線錯誤: {error.message}
+        </Alert>
+      )}
+
+      <div
+        style={{
+          marginBottom: 16,
+          display: 'flex',
+          gap: 16,
+          alignItems: 'center'
+        }}
+      >
+        <Chip
+          label={isConnected ? '已連線' : '未連線'}
+          color={isConnected ? 'success' : 'error'}
+        />
+        <Button
+          variant="contained"
+          onClick={() => (isConnected ? disconnect() : connect())}
+        >
+          {isConnected ? '斷線' : '連線'}
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={handleSendTestData}
+          disabled={!isConnected}
+        >
+          發送測試資料
+        </Button>
+      </div>
+
+      <Paper sx={{ p: 2, mb: 2 }}>
+        <Typography variant="subtitle2" gutterBottom>
+          發送訊息
+        </Typography>
+        <div style={{ display: 'flex', gap: 16 }}>
+          <TextField
+            fullWidth
+            size="small"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            placeholder="輸入訊息..."
+            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+            disabled={!isConnected}
+          />
+          <Button
+            variant="contained"
+            onClick={handleSendMessage}
+            disabled={!isConnected || !inputMessage.trim()}
+          >
+            發送
+          </Button>
+        </div>
+      </Paper>
+
+      <Paper sx={{ p: 2 }}>
+        <Typography variant="subtitle2" gutterBottom>
+          接收到的訊息：
+        </Typography>
+        <div style={{ maxHeight: 400, overflow: 'auto' }}>
+          {messageList.length === 0 ? (
+            <Typography variant="body2" color="text.secondary">
+              尚無訊息
+            </Typography>
+          ) : (
+            messageList.map((msg, index) => (
+              <div
+                key={index}
+                style={{
+                  marginBottom: 8,
+                  padding: 8,
+                  backgroundColor: '#f5f5f5',
+                  borderRadius: 4
+                }}
+              >
+                <pre
+                  style={{ margin: 0, fontSize: 12, whiteSpace: 'pre-wrap' }}
+                >
+                  {JSON.stringify(msg, null, 2)}
+                </pre>
+              </div>
+            ))
+          )}
+        </div>
+      </Paper>
+    </section>
+  );
+}

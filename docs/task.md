@@ -4,8 +4,8 @@
 
 - **開始日期 (Start Date)**: 2025-12-13
 - **目標完成日期 (Target Completion)**: 待定 (TBD)
-- **當前階段 (Current Phase)**: Phase 6.1 - 認證功能 (Authentication) ⏭️ 待開始
-- **整體進度 (Overall Progress)**: ~82% (Phase 1-4: ✅ | Phase 5: 29/29 ✅)
+- **當前階段 (Current Phase)**: Phase 6.3 - WebRTC 🔄 進行中
+- **整體進度 (Overall Progress)**: ~87% (Phase 1-5: ✅ | Phase 6: 15/30+ 🔄)
 
 ---
 
@@ -499,15 +499,18 @@
 
 ---
 
-## Phase 6: 進階功能 (Advanced Features) [0/30+]
+## Phase 6: 進階功能 (Advanced Features) [15/30+]
 
-### Stage 6.1: 認證功能 [0/6]
+> 🔄 **進行中** (2025-12-16): 已完成 WebAuthn、Socket Test、SSE Test 頁面。
 
-#### WebAuthn Page
-- [ ] 建立 `app/[locale]/web-authn/page.tsx`
-- [ ] 實作 WebAuthn 註冊
-- [ ] 實作 WebAuthn 驗證
-- [ ] 實作樣式
+### Stage 6.1: 認證功能 [4/6] 🔄
+
+#### WebAuthn Page ✅
+- [x] 建立 `app/[locale]/web-authn/page.tsx`
+- [x] 實作 WebAuthn 註冊
+- [x] 實作 WebAuthn 驗證
+- [x] 實作樣式
+- [x] 建立 API routes (`generate-challenge`, `registration`, `verify`)
 
 #### FIDO2 Lib Page
 - [ ] 建立 `app/[locale]/fido2-lib/page.tsx`
@@ -522,32 +525,33 @@
 
 ---
 
-### Stage 6.2: 即時通訊 [0/10]
+### Stage 6.2: 即時通訊 [10/10] ✅
 
-#### Socket.IO Client Setup
-- [ ] 安裝 socket.io-client
-- [ ] 建立 Socket.IO provider
-- [ ] 實作連線邏輯
+> ✅ **已完成** (2025-12-16): Socket.IO 和 SSE 測試頁面皆已完成。
 
-#### Socket Test Pages
-- [ ] 建立 `app/[locale]/socket-test/page.tsx` (index)
-- [ ] 建立 `app/[locale]/socket-test/global/page.tsx`
-- [ ] 建立 `app/[locale]/socket-test/room/page.tsx`
-- [ ] 實作全域訊息功能
-- [ ] 實作房間訊息功能
-- [ ] 實作樣式
+#### Socket.IO Client Setup ✅
+- [x] 安裝 socket.io-client (已存在)
+- [x] 使用 `useSocketIoClient` hook
+- [x] 實作連線邏輯
 
-#### Server-Sent Events Setup
-- [ ] 實作 SSE client 邏輯
+#### Socket Test Pages ✅
+- [x] 建立 `app/[locale]/socket-test/page.tsx` (index)
+- [x] 建立 `app/[locale]/socket-test/socket-io/page.tsx`
+- [x] 建立 `app/[locale]/socket-test/websocket/page.tsx`
+- [x] 實作訊息發送/接收功能
+- [x] 實作樣式
 
-#### SSE Test Pages
-- [ ] 建立 `app/[locale]/server-sent-event-test/page.tsx` (index)
-- [ ] 建立 `app/[locale]/server-sent-event-test/global-get/page.tsx`
-- [ ] 建立 `app/[locale]/server-sent-event-test/global-post/page.tsx`
-- [ ] 建立 `app/[locale]/server-sent-event-test/room-get/[uuId]/page.tsx`
-- [ ] 建立 `app/[locale]/server-sent-event-test/room-post/[uuId]/page.tsx`
-- [ ] 實作 SSE 功能
-- [ ] 實作樣式
+#### Server-Sent Events Setup ✅
+- [x] 使用 `useEventSource` 和 `usePostEventSource` hooks
+
+#### SSE Test Pages ✅
+- [x] 建立 `app/[locale]/server-sent-event-test/page.tsx` (index)
+- [x] 建立 `app/[locale]/server-sent-event-test/global-get/page.tsx`
+- [x] 建立 `app/[locale]/server-sent-event-test/global-post/page.tsx`
+- [x] 建立 `app/[locale]/server-sent-event-test/room-get/[[...uuId]]/page.tsx`
+- [x] 建立 `app/[locale]/server-sent-event-test/room-post/[[...uuId]]/page.tsx`
+- [x] 實作 SSE 功能
+- [x] 實作樣式
 
 ---
 
