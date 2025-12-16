@@ -135,10 +135,13 @@ This plan aims to complete the missing features and components in `parker-nextjs
    - youtube-test
    - components-test (總覽頁)
 
-2. **directives/** 目錄:
-   - customize-lazyload-test
-   - customize-ripple-test
-   - index
+2. **directives/** 目錄 → **directive-effects/**:
+   > ⚠️ **重要**: Vue Directives (`v-xxx`) 在 React 中不存在。
+   > 這些功能需要轉換為 **Custom Hooks** 或 **Components**。
+   
+   - `v-customize-lazyload` → `useLazyLoad` Hook (使用 Intersection Observer)
+   - `v-customize-ripple` → `<Ripple>` Component
+   - index → 效果總覽頁
 
 3. **face-api.vue** - Face API 功能頁面
 

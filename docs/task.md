@@ -431,21 +431,35 @@
 
 ---
 
-### Stage 5.3: Directives 頁面 [0/3]
+### Stage 5.3: 指令效果頁面 (Directive-like Effects) [0/5]
 
-#### Directives Index Page
-- [ ] 建立 `app/[locale]/directives/page.tsx`
-- [ ] 實作 directives 總覽
+> ⚠️ **重要**: Vue Directives (`v-xxx`) 在 React 中不存在。
+> 這些功能需要轉換為 **Custom Hooks** 或 **Components**。
+
+#### useLazyLoad Hook
+- [ ] 建立 `hooks/useLazyLoad.ts`
+- [ ] 使用 Intersection Observer API 實作懶載入邏輯
+- [ ] 添加 TypeScript 類型
+
+#### Ripple Component
+- [ ] 建立 `components/Ripple/Ripple.tsx`
+- [ ] 實作點擊波紋效果
+- [ ] 添加 CSS 動畫
+- [ ] 實作樣式 (SCSS)
+
+#### Directive Effects Index Page
+- [ ] 建立 `app/[locale]/directive-effects/page.tsx`
+- [ ] 實作效果總覽 (說明 Vue Directives 如何轉換為 React)
 - [ ] 實作樣式
 
-#### Customize Lazyload Test Page
-- [ ] 建立 `app/[locale]/directives/customize-lazyload-test/page.tsx`
-- [ ] 實作 lazyload 示範
+#### Lazyload Demo Page
+- [ ] 建立 `app/[locale]/directive-effects/lazyload-test/page.tsx`
+- [ ] 使用 `useLazyLoad` Hook 實作圖片懶載入示範
 - [ ] 實作樣式
 
-#### Customize Ripple Test Page
-- [ ] 建立 `app/[locale]/directives/customize-ripple-test/page.tsx`
-- [ ] 實作 ripple 效果示範
+#### Ripple Effect Demo Page
+- [ ] 建立 `app/[locale]/directive-effects/ripple-test/page.tsx`
+- [ ] 使用 `<Ripple>` Component 實作波紋效果示範
 - [ ] 實作樣式
 
 ---
