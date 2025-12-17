@@ -54,7 +54,7 @@
     "firebase": "^12.2.1",
     "firebase-admin": "^13.5.0",
     "flag-icons": "^7.3.2",
-    "google-auth-library": "^10.3.0",
+    "google-auth-library": "^10.5.0",
     "google-libphonenumber": "^3.2.40",
     "js-base64": "^3.7.8",
     "jwt-decode": "^4.0.0",

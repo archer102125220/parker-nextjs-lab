@@ -11,6 +11,8 @@ import {
   exactProxy as exactMiddlewareOne
 } from '@/app/[locale]/one/proxy';
 
+import { proxy as webRtcMiddleware } from '@/app/[locale]/web-rtc/proxy';
+
 // 靜態檔案相關設定
 const STATIC_FILE_EXTENSIONS: RegExp =
   /\.(js|css|svg|jpg|jpeg|png|ico|gif|webp|txt|json|woff2?|ttf|eot|map)$/;
@@ -49,6 +51,10 @@ const MIDDLEWARE_SETTINGS: Array<MiddlewareSetting> = [
   {
     patch: '/one',
     handler: middlewareOne
+  },
+  {
+    patch: '/web-rtc',
+    handler: webRtcMiddleware
   }
 ];
 

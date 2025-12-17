@@ -5,7 +5,7 @@
 - **開始日期 (Start Date)**: 2025-12-13
 - **目標完成日期 (Target Completion)**: 待定 (TBD)
 - **當前階段 (Current Phase)**: Phase 7 - API Routes 🔄 進行中
-- **整體進度 (Overall Progress)**: ~91% (Phase 1-5: ✅ | Phase 6: 27/30+ 🔄)
+- **整體進度 (Overall Progress)**: ~93% (Phase 1-6: ✅ | Phase 7: 13/30+ 🔄)
 
 ---
 
@@ -603,16 +603,16 @@
 
 ---
 
-## Phase 7: API Routes 與 Server 功能 (API & Server) [0/30+]
+## Phase 7: API Routes 與 Server 功能 (API & Server) [13/30+]
 
-### OAuth API Routes [0/3]
-- [ ] 建立 `app/api/facebook-oauth-verify/route.ts`
-- [ ] 建立 `app/api/google-oauth-verify/route.ts`
-- [ ] 建立 `app/api/line-oauth-verify/route.ts`
+### OAuth API Routes [3/3] ✅
+- [x] 建立 `app/api/facebook-oauth-verify/route.ts`
+- [x] 建立 `app/api/google-oauth-verify/route.ts`
+- [x] 建立 `app/api/line-oauth-verify/route.ts`
 
-### Face Swap API [0/2]
-- [ ] 建立 `app/api/face-swap/process/route.ts`
-- [ ] 實作後端處理邏輯
+### Face Swap API [1/2]
+- [x] 建立 `app/api/face-swap/process/route.ts` (API 定義)
+- [ ] 實作完整後端處理邏輯 (需 tfjs-node 等設置)
 
 ### Nuxt Server APIs 轉換 [0/22]
 - [ ] 分析 Nuxt server APIs
@@ -620,21 +620,23 @@
 - [ ] 測試所有 API endpoints
 
 ### Socket.IO Server [0/5]
-- [ ] 設置 Socket.IO server
+- [ ] 設置 Socket.IO server (Vercel 不支援 WebSocket)
 - [ ] 實作全域訊息 routes
 - [ ] 實作房間訊息 routes
 - [ ] 測試連線
 
-### SSE Server Routes [0/5]
-- [ ] 實作 SSE endpoints
-- [ ] 實作全域 SSE
-- [ ] 實作房間 SSE
+### SSE Server Routes [4/5] ✅
+- [x] 實作 SSE endpoints
+- [x] 實作全域 SSE `app/api/server-sent-event/route.ts`
+- [x] 實作房間 SSE `app/api/server-sent-event/room/[roomId]/route.ts`
+- [x] 實作房間訊息發送 `app/api/server-sent-event/room/[roomId]/send/route.ts`
 - [ ] 測試 SSE 連線
 
-### WebRTC Signaling Server [0/3]
-- [ ] 設置 signaling server
-- [ ] 實作 offer/answer 交換
-- [ ] 實作 ICE candidate 交換
+### WebRTC Signaling Server [4/4] ✅
+- [x] 設置 signaling server (使用 Upstash Redis + SSE)
+- [x] 實作 offer/answer 交換 `app/api/web-rtc/description/route.ts`
+- [x] 實作 ICE candidate 交換 `app/api/web-rtc/candidate-list/route.ts`
+- [x] 實作 join-room 和 subscription API
 
 ---
 
