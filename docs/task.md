@@ -4,8 +4,8 @@
 
 - **開始日期 (Start Date)**: 2025-12-13
 - **目標完成日期 (Target Completion)**: 待定 (TBD)
-- **當前階段 (Current Phase)**: Phase 6.3 - WebRTC 🔄 進行中
-- **整體進度 (Overall Progress)**: ~87% (Phase 1-5: ✅ | Phase 6: 15/30+ 🔄)
+- **當前階段 (Current Phase)**: Phase 7 - API Routes 🔄 進行中
+- **整體進度 (Overall Progress)**: ~91% (Phase 1-5: ✅ | Phase 6: 27/30+ 🔄)
 
 ---
 
@@ -555,30 +555,37 @@
 
 ---
 
-### Stage 6.3: WebRTC [0/10]
+### Stage 6.3: WebRTC [7/10] 🔄
+
+> 🔄 **進行中** (2025-12-17): 已完成基礎 WebRTC 頁面結構，完整 Signaling 實作待後端支援。
 
 #### WebRTC Setup
-- [ ] 安裝 simple-peer
-- [ ] 建立 WebRTC utilities
-- [ ] 實作 signaling 邏輯
+- [x] 使用原生 RTCPeerConnection API
+- [ ] 建立完整 WebRTC hook (useWebRTC)
+- [ ] 實作完整 signaling 邏輯
 
-#### WebRTC Pages (10+)
-- [ ] 建立 `app/[locale]/web-rtc/page.tsx` (index)
-- [ ] 建立各種 WebRTC 測試頁面
-- [ ] 實作 P2P 連線
-- [ ] 實作視訊通話
-- [ ] 實作音訊通話
-- [ ] 實作螢幕分享
-- [ ] 實作樣式
+#### WebRTC Pages ✅
+- [x] 建立 `app/[locale]/web-rtc/page.tsx` (index)
+- [x] 建立 `app/[locale]/web-rtc/server-sent-event/page.tsx`
+- [x] 建立 `app/[locale]/web-rtc/socket-io/page.tsx`
+- [x] 建立 `app/[locale]/web-rtc/websocket/page.tsx`
+- [x] 建立 `app/[locale]/web-rtc/server-sent-event/room/[roomId]/page.tsx`
+- [x] 建立 `app/[locale]/web-rtc/socket-io/room/[roomId]/page.tsx`
+- [x] 建立 `app/[locale]/web-rtc/websocket/room/[roomId]/page.tsx`
+- [x] 實作本地視訊預覽
+- [x] 實作視訊/音訊控制
+- [x] 實作樣式
 
 ---
 
-### Stage 6.4: AI/ML 功能 [0/8]
+### Stage 6.4: AI/ML 功能 [5/8] 🔄
+
+> 🔄 **進行中** (2025-12-17): 已完成 Face Swap 頁面，Face API 頁面待實作。
 
 #### Face API Setup
-- [ ] 安裝 face-api.js
-- [ ] 下載模型檔案到 public/models/
-- [ ] 建立 face-api utilities
+- [x] 使用 @vladmandic/face-api 套件
+- [ ] 下載模型檔案到 public/ai_models/
+- [ ] 建立 face-api utilities hook
 
 #### Face API Page
 - [ ] 建立 `app/[locale]/face-api/page.tsx`
@@ -586,17 +593,13 @@
 - [ ] 實作人臉辨識
 - [ ] 實作樣式
 
-#### Face Swap Setup
-- [ ] 研究 face swap 演算法
-- [ ] 建立 face swap utilities
-
-#### Face Swap Pages
-- [ ] 建立 `app/[locale]/face-swap/page.tsx` (index)
-- [ ] 建立 `app/[locale]/face-swap/frontend/page.tsx`
-- [ ] 建立 `app/[locale]/face-swap/backend/page.tsx`
-- [ ] 實作前端換臉
-- [ ] 實作後端換臉
-- [ ] 實作樣式
+#### Face Swap Pages ✅
+- [x] 建立 `app/[locale]/face-swap/page.tsx` (index)
+- [x] 建立 `app/[locale]/face-swap/frontend/page.tsx`
+- [x] 建立 `app/[locale]/face-swap/backend/page.tsx`
+- [x] 實作前端換臉（使用 face-api.js + Canvas）
+- [x] 實作後端換臉頁面（API 呼叫介面）
+- [x] 實作樣式
 
 ---
 
