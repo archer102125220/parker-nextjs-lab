@@ -183,7 +183,63 @@ NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
 - **Serwist**: Service Worker/PWA
 - **SCSS**: 帶全域變數和混入的樣式
 
-## 🚀 部署
+## 🔀 Middleware 架構
+
+本專案實現了受 Nuxt.js 啟發的模組化 middleware 系統，允許集中式路由處理與可重複使用的 middleware 模組。
+
+### 結構
+
+```
+├── proxy.ts                      # Middleware 主入口（在 middleware.ts 中註冊）
+├── proxy/                        # 全域 middleware 模組
+│   ├── contentSecurityPolicy.ts  # CSP 標頭
+│   ├── globalTest.ts            # 全域測試 middleware
+│   ├── i18n.ts                  # 國際化
+│   └── log.ts                   # 請求日誌
+└── app/[locale]/
+    ├── one/proxy.ts             # 頁面專用 middleware 範例
+    └── web-rtc/proxy.ts         # WebRTC UUID 生成 middleware
+```
+
+### 運作原理
+
+1. **全域 Middleware**（`proxy/`）：套用至所有路由
+2. **頁面專用 Middleware**（`app/[locale]/{page}/proxy.ts`）：套用至特定路由前綴
+3. **註冊**：所有 middleware 必須在 `proxy.ts` 中註冊
+
+### 註冊範例
+
+```typescript
+// proxy.ts
+import { proxy as webRtcMiddleware } from '@/app/[locale]/web-rtc/proxy';
+
+const MIDDLEWARE_SETTINGS: Array<MiddlewareSetting> = [
+  { patch: '/web-rtc', handler: webRtcMiddleware }
+];
+```
+
+### 建立頁面 Middleware
+
+```typescript
+// app/[locale]/your-page/proxy.ts
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+export async function proxy(request: NextRequest) {
+  // 你的 middleware 邏輯
+  return NextResponse.next();
+}
+```
+
+### Middleware 類型
+
+| 類型 | 位置 | 用途 |
+|------|------|------|
+| Policy | `proxy/` + `POLICY_MIDDLEWARE_SETTINGS` | 安全標頭（CSP） |
+| Global | `proxy/` + `GLOBAL_MIDDLEWARE_SETTINGS` | i18n、日誌 |
+| Page | `app/[locale]/{page}/proxy.ts` | 路由專用邏輯 |
+
+## �🚀 部署
 
 ### Vercel（推薦）
 1. 將 GitHub 倉庫連接到 Vercel

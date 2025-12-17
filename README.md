@@ -183,6 +183,62 @@ The project uses:
 - **Serwist**: Service Worker/PWA
 - **SCSS**: Styling with global variables and mixins
 
+## 🔀 Middleware Architecture
+
+The project implements a modular middleware system inspired by Nuxt.js, allowing centralized route handling with reusable middleware modules.
+
+### Structure
+
+```
+├── proxy.ts                      # Main middleware entry (registered in middleware.ts)
+├── proxy/                        # Global middleware modules
+│   ├── contentSecurityPolicy.ts  # CSP headers
+│   ├── globalTest.ts            # Global test middleware
+│   ├── i18n.ts                  # Internationalization
+│   └── log.ts                   # Request logging
+└── app/[locale]/
+    ├── one/proxy.ts             # Page-specific middleware example
+    └── web-rtc/proxy.ts         # WebRTC UUID generation middleware
+```
+
+### How It Works
+
+1. **Global Middleware** (`proxy/`): Applied to all routes
+2. **Page-specific Middleware** (`app/[locale]/{page}/proxy.ts`): Applied to specific route prefixes
+3. **Registration**: All middleware must be registered in `proxy.ts`
+
+### Registration Example
+
+```typescript
+// proxy.ts
+import { proxy as webRtcMiddleware } from '@/app/[locale]/web-rtc/proxy';
+
+const MIDDLEWARE_SETTINGS: Array<MiddlewareSetting> = [
+  { patch: '/web-rtc', handler: webRtcMiddleware }
+];
+```
+
+### Creating Page Middleware
+
+```typescript
+// app/[locale]/your-page/proxy.ts
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+export async function proxy(request: NextRequest) {
+  // Your middleware logic
+  return NextResponse.next();
+}
+```
+
+### Middleware Types
+
+| Type | Location | Purpose |
+|------|----------|---------|
+| Policy | `proxy/` + `POLICY_MIDDLEWARE_SETTINGS` | Security headers (CSP) |
+| Global | `proxy/` + `GLOBAL_MIDDLEWARE_SETTINGS` | i18n, logging |
+| Page | `app/[locale]/{page}/proxy.ts` | Route-specific logic |
+
 ## 🚀 Deployment
 
 ### Vercel (Recommended)
