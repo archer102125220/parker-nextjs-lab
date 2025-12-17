@@ -88,7 +88,6 @@ export function useSocketIoClient(
 ): UseSocketIoClientReturn {
   const {
     channel = '/',
-    channelAsPath = true,
     options = {},
     autoConnect = true,
     listeners = {}
@@ -98,12 +97,22 @@ export function useSocketIoClient(
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
+  // 使用 useRef 來存儲 config，避免依賴變更導致無限重連
+  const configRef = useRef({ channel, options, listeners });
+  const initializedRef = useRef(false);
+
+  // 更新 configRef（不觸發重新渲染）
+  configRef.current = { channel, options, listeners };
+
   // Provide a getter function instead of direct ref access
   const getSocket = useCallback(() => socketRef.current, []);
 
   const connect = useCallback(() => {
     if (typeof window === 'undefined') return;
     if (socketRef.current?.connected) return;
+    if (initializedRef.current) return; // 防止重複初始化
+
+    initializedRef.current = true;
 
     try {
       // Dynamic import of socket.io-client
@@ -111,32 +120,30 @@ export function useSocketIoClient(
         .then(({ io }) => {
           const domain = getSocketIODomain();
           const basePath = getSocketIOBasePath();
+          const {
+            channel: currentChannel,
+            options: currentOptions,
+            listeners: currentListeners
+          } = configRef.current;
 
-          // 構建 path
-          const path =
-            channel === '/'
-              ? basePath
-              : channel.startsWith('/')
-                ? basePath + channel
-                : basePath + '/' + channel;
+          // Socket.IO 的 path 是伺服器端路徑（固定為 /socket.io）
+          // namespace 是命名空間（如 /、/socket.io、/socket.io/room）
+          // 連線 URL = domain + namespace
+          const namespace = currentChannel;
+          const socketUrl = domain + namespace;
 
-          // 構建完整 URL
-          const socketUrl = domain + path;
-
-          // 構建 Socket.IO path 選項
-          const socketPath = channelAsPath
-            ? path.includes('?')
-              ? path.substring(0, path.indexOf('?'))
-              : path
-            : undefined;
-
-          console.log('[Socket.IO Client] Connecting to:', socketUrl);
+          console.log(
+            '[Socket.IO Client] Connecting to:',
+            socketUrl,
+            'with path:',
+            basePath
+          );
 
           const newSocket = io(socketUrl, {
-            path: socketPath,
+            path: basePath, // 伺服器端的 Socket.IO 路徑
             autoConnect: false,
             transports: ['websocket'],
-            ...options
+            ...currentOptions
           });
 
           newSocket.on('connect', () => {
@@ -145,8 +152,8 @@ export function useSocketIoClient(
             setError(null);
 
             // 觸發自定義 connect listener
-            if (typeof listeners.connect === 'function') {
-              listeners.connect();
+            if (typeof currentListeners.connect === 'function') {
+              currentListeners.connect();
             }
           });
 
@@ -155,8 +162,8 @@ export function useSocketIoClient(
             setIsConnected(false);
 
             // 觸發自定義 disconnect listener
-            if (typeof listeners.disconnect === 'function') {
-              listeners.disconnect();
+            if (typeof currentListeners.disconnect === 'function') {
+              currentListeners.disconnect();
             }
           });
 
@@ -167,10 +174,10 @@ export function useSocketIoClient(
           });
 
           // 註冊其他自定義 listeners
-          Object.keys(listeners).forEach((eventName) => {
+          Object.keys(currentListeners).forEach((eventName) => {
             if (!['connect', 'disconnect'].includes(eventName)) {
-              if (typeof listeners[eventName] === 'function') {
-                newSocket.on(eventName, listeners[eventName]);
+              if (typeof currentListeners[eventName] === 'function') {
+                newSocket.on(eventName, currentListeners[eventName]);
               }
             }
           });
@@ -192,6 +199,7 @@ export function useSocketIoClient(
           newSocket.connect();
         })
         .catch((err) => {
+          initializedRef.current = false;
           setError(
             new Error(
               'socket.io-client not installed. Run: npm install socket.io-client'
@@ -200,15 +208,17 @@ export function useSocketIoClient(
           console.error('Failed to load socket.io-client:', err);
         });
     } catch (err) {
+      initializedRef.current = false;
       setError(err as Error);
     }
-  }, [channel, channelAsPath, options, listeners]);
+  }, []); // 移除所有依賴，使用 configRef
 
   const disconnect = useCallback(() => {
     if (socketRef.current) {
       socketRef.current.disconnect();
       socketRef.current = null;
       setIsConnected(false);
+      initializedRef.current = false; // 重置初始化狀態以允許重新連線
     }
   }, []);
 

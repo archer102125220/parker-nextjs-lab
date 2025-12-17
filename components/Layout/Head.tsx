@@ -1,10 +1,11 @@
 'use client';
 import type { ReactNode } from 'react';
 
-export function Head(): ReactNode {
+export function Head({ nonce }: { nonce: string }): ReactNode {
   return (
     // eslint-disable-next-line @next/next/no-head-element
     <head>
+      <meta property="csp-nonce" content={nonce} />
       <meta charSet="utf-8" />
       <meta
         name="viewport"

@@ -30,7 +30,7 @@ export function contentSecurityPolicyMiddleware(
   //   object-src 'none';
   //   script-src 'self' 'nonce-${nonce}' 'sha256-${nonce}' 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https://connect.facebook.net https://www.googletagmanager.com https://va.vercel-scripts.com;
   //   style-src 'self' 'nonce-${nonce}' 'sha256-${nonce}' 'unsafe-inline' https://fonts.googleapis.com;
-  //   connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://firebase.googleapis.com https://www.google-analytics.com;
+  //   connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://firebase.googleapis.com https://www.google-analytics.com https://firebaseinstallations.googleapis.com https://fcmregistrations.googleapis.com https://api.github.com ws://localhost:3002 wss://localhost:3002 http://localhost:3002 https://localhost:3002;
   //   frame-src 'self' https://www.youtube.com https://www.googletagmanager.com;
   //   upgrade-insecure-requests;
   // `;
@@ -44,7 +44,7 @@ export function contentSecurityPolicyMiddleware(
     object-src 'none';
     script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://www.googletagmanager.com https://va.vercel-scripts.com https://*.youtube.com;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://firebase.googleapis.com https://www.google-analytics.com https://firebaseinstallations.googleapis.com https://fcmregistrations.googleapis.com https://api.github.com;
+    connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://firebase.googleapis.com https://www.google-analytics.com https://firebaseinstallations.googleapis.com https://fcmregistrations.googleapis.com https://api.github.com ws://localhost:3002 wss://localhost:3002 http://localhost:3002 https://localhost:3002;
     frame-src 'self' https://www.youtube.com https://www.googletagmanager.com;
     upgrade-insecure-requests;
   `;

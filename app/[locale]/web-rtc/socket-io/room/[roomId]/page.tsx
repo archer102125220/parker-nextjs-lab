@@ -20,6 +20,9 @@ import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
 import CallEndIcon from '@mui/icons-material/CallEnd';
 
+import { useSocketIoClient } from '@/hooks/useSocketIoClient';
+import { useWebRTC } from '@/hooks/useWebRTC';
+
 import '@/app/[locale]/web-rtc/web-rtc.scss';
 
 export default function WebRTCSocketIORoomPage(): React.ReactNode {
@@ -31,14 +34,91 @@ export default function WebRTCSocketIORoomPage(): React.ReactNode {
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
-  const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
+  const isOfferRef = useRef(false);
 
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
-  const [isConnected, setIsConnected] = useState(false);
+  const [localStream, setLocalStream] = useState<MediaStream | null>(null);
   const [copiedId, setCopiedId] = useState(false);
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Socket.IO signaling
+  const {
+    isConnected: isSocketConnected,
+    emit,
+    getSocket
+  } = useSocketIoClient({
+    channel: '/socket.io/web-rtc',
+    autoConnect: true,
+    listeners: {
+      connect: () => {
+        console.log('[WebRTC] Socket.IO connected, joining room:', roomId);
+        const socket = getSocket();
+        if (socket) {
+          socket.emit('webrtcJoin', roomId);
+        }
+      },
+      webrtcJoined: (payload: { isOffer: boolean }) => {
+        console.log('[WebRTC] Joined room, isOffer:', payload.isOffer);
+        isOfferRef.current = payload.isOffer;
+      },
+      webrtcNewUser: async () => {
+        console.log('[WebRTC] New user joined, creating offer');
+        if (isOfferRef.current) {
+          const offer = await createOffer();
+          if (offer) {
+            emit('webrtcDescription', offer);
+          }
+        }
+      },
+      webrtcDescription: async (payload: RTCSessionDescriptionInit) => {
+        console.log('[WebRTC] Received description:', payload.type);
+        await setRemoteDescription(payload);
+
+        if (payload.type === 'offer') {
+          const answer = await createAnswer();
+          if (answer) {
+            emit('webrtcDescription', answer);
+          }
+        }
+      },
+      webrtcCandidate: async (payload: RTCIceCandidateInit) => {
+        console.log('[WebRTC] Received ICE candidate');
+        await addIceCandidate(payload);
+      }
+    }
+  });
+
+  // WebRTC
+  const {
+    iceConnectionState,
+    createOffer,
+    createAnswer,
+    setRemoteDescription,
+    addIceCandidate,
+    addLocalStream,
+    remoteStreams,
+    close: closeWebRTC
+  } = useWebRTC({
+    localStream,
+    onIceCandidate: (candidate) => {
+      console.log('[WebRTC] Sending ICE candidate');
+      emit('webrtcCandidate', candidate.toJSON());
+    },
+    onRemoteStream: (stream) => {
+      console.log('[WebRTC] Remote stream received');
+      if (remoteVideoRef.current) {
+        remoteVideoRef.current.srcObject = stream;
+      }
+    },
+    onIceConnectionStateChange: (state) => {
+      console.log('[WebRTC] ICE connection state:', state);
+    }
+  });
+
+  const isPeerConnected =
+    iceConnectionState === 'connected' || iceConnectionState === 'completed';
 
   const initCamera = useCallback(async () => {
     try {
@@ -47,6 +127,7 @@ export default function WebRTCSocketIORoomPage(): React.ReactNode {
         audio: true
       });
       localStreamRef.current = stream;
+      setLocalStream(stream);
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = stream;
       }
@@ -54,46 +135,6 @@ export default function WebRTCSocketIORoomPage(): React.ReactNode {
       console.error('Camera access error:', err);
       setError('無法存取相機/麥克風。請確保已授予權限且使用 HTTPS/localhost。');
     }
-  }, []);
-
-  const initPeerConnection = useCallback(() => {
-    const config: RTCConfiguration = {
-      iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' }
-      ]
-    };
-
-    const pc = new RTCPeerConnection(config);
-
-    pc.onicecandidate = (event) => {
-      if (event.candidate) {
-        console.log('ICE candidate:', event.candidate);
-      }
-    };
-
-    pc.oniceconnectionstatechange = () => {
-      console.log('ICE connection state:', pc.iceConnectionState);
-      setIsConnected(pc.iceConnectionState === 'connected');
-    };
-
-    pc.ontrack = (event) => {
-      console.log('Remote track received');
-      if (remoteVideoRef.current && event.streams[0]) {
-        remoteVideoRef.current.srcObject = event.streams[0];
-      }
-    };
-
-    if (localStreamRef.current) {
-      localStreamRef.current.getTracks().forEach((track) => {
-        if (localStreamRef.current) {
-          pc.addTrack(track, localStreamRef.current);
-        }
-      });
-    }
-
-    peerConnectionRef.current = pc;
-    return pc;
   }, []);
 
   const handleCopyId = async () => {
@@ -142,28 +183,33 @@ export default function WebRTCSocketIORoomPage(): React.ReactNode {
     if (localStreamRef.current) {
       localStreamRef.current.getTracks().forEach((track) => track.stop());
     }
-    if (peerConnectionRef.current) {
-      peerConnectionRef.current.close();
-    }
+    closeWebRTC();
     router.push(`/${locale}/web-rtc/socket-io`);
   };
 
   useEffect(() => {
-    const init = async () => {
-      await initCamera();
-      initPeerConnection();
-    };
-    init();
+    initCamera();
 
     return () => {
       if (localStreamRef.current) {
         localStreamRef.current.getTracks().forEach((track) => track.stop());
       }
-      if (peerConnectionRef.current) {
-        peerConnectionRef.current.close();
-      }
     };
-  }, [initCamera, initPeerConnection]);
+  }, [initCamera]);
+
+  // 當本地串流準備好時，加入 WebRTC
+  useEffect(() => {
+    if (localStream) {
+      addLocalStream(localStream);
+    }
+  }, [localStream, addLocalStream]);
+
+  // 設置遠端視訊
+  useEffect(() => {
+    if (remoteStreams.length > 0 && remoteVideoRef.current) {
+      remoteVideoRef.current.srcObject = remoteStreams[0];
+    }
+  }, [remoteStreams]);
 
   return (
     <section className="web_rtc_room_page">
@@ -196,8 +242,20 @@ export default function WebRTCSocketIORoomPage(): React.ReactNode {
         </Typography>
         <Chip
           size="small"
-          label={isConnected ? '已連線' : '等待連線'}
-          color={isConnected ? 'success' : 'default'}
+          label={
+            isPeerConnected
+              ? '通話中'
+              : isSocketConnected
+                ? '等待連線'
+                : 'Socket 連線中...'
+          }
+          color={
+            isPeerConnected
+              ? 'success'
+              : isSocketConnected
+                ? 'primary'
+                : 'default'
+          }
         />
         <Tooltip title={copiedId ? '已複製!' : '複製 ID'}>
           <IconButton

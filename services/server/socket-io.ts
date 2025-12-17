@@ -1,5 +1,11 @@
 import { Server as SocketIOServer } from 'socket.io';
-import { Server as HttpServer } from 'http';
+import { createServer as createHttpServer, Server as HttpServer } from 'http';
+import {
+  createServer as createHttpsServer,
+  Server as HttpsServer
+} from 'https';
+import { readFileSync, existsSync } from 'fs';
+import { join } from 'path';
 
 /**
  * Socket.IO Server Singleton
@@ -12,7 +18,7 @@ import { Server as HttpServer } from 'http';
 // 使用 globalThis 來確保 hot reload 時不會重新建立實例
 const globalForSocketIO = globalThis as unknown as {
   socketIO: SocketIOServer | undefined;
-  httpServer: HttpServer | undefined;
+  httpServer: HttpServer | HttpsServer | undefined;
 };
 
 export function getSocketIOServer(): SocketIOServer | null {
@@ -23,16 +29,52 @@ export function setSocketIOServer(io: SocketIOServer): void {
   globalForSocketIO.socketIO = io;
 }
 
-export function getHttpServer(): HttpServer | null {
+export function getHttpServer(): HttpServer | HttpsServer | null {
   return globalForSocketIO.httpServer ?? null;
 }
 
-export function setHttpServer(server: HttpServer): void {
+export function setHttpServer(server: HttpServer | HttpsServer): void {
   globalForSocketIO.httpServer = server;
 }
 
 export function isSocketIOInitialized(): boolean {
   return globalForSocketIO.socketIO !== undefined;
+}
+
+/**
+ * 取得 SSL 憑證設定
+ */
+function getSSLOptions(): { key: Buffer; cert: Buffer } | null {
+  // 生產環境: 從環境變數取得憑證路徑
+  if (process.env.NODE_ENV === 'production') {
+    const keyPath = process.env.SOCKET_IO_SSL_KEY_PATH;
+    const certPath = process.env.SOCKET_IO_SSL_CERT_PATH;
+
+    if (keyPath && certPath && existsSync(keyPath) && existsSync(certPath)) {
+      console.log('[Socket.IO] Using production SSL certificates');
+      return {
+        key: readFileSync(keyPath),
+        cert: readFileSync(certPath)
+      };
+    }
+    console.log('[Socket.IO] No production SSL certificates found');
+    return null;
+  }
+
+  // 開發環境: 使用 Next.js 開發用憑證
+  const devKeyPath = join(process.cwd(), 'certificates', 'localhost-key.pem');
+  const devCertPath = join(process.cwd(), 'certificates', 'localhost.pem');
+
+  if (existsSync(devKeyPath) && existsSync(devCertPath)) {
+    console.log('[Socket.IO] Using development SSL certificates');
+    return {
+      key: readFileSync(devKeyPath),
+      cert: readFileSync(devCertPath)
+    };
+  }
+
+  console.log('[Socket.IO] No development SSL certificates found');
+  return null;
 }
 
 /**
@@ -47,13 +89,25 @@ export function initializeSocketIOServer(port: number = 3002): SocketIOServer {
     return globalForSocketIO.socketIO;
   }
 
-  const httpServer = new HttpServer();
+  // 嘗試取得 SSL 憑證
+  const sslOptions = getSSLOptions();
+  const isHttps = sslOptions !== null;
+
+  // 創建 HTTP 或 HTTPS 伺服器
+  const httpServer: HttpServer | HttpsServer = isHttps
+    ? createHttpsServer(sslOptions)
+    : createHttpServer();
+
+  const protocol = isHttps ? 'wss' : 'ws';
+  const httpProtocol = isHttps ? 'https' : 'http';
+
   const io = new SocketIOServer(httpServer, {
     cors: {
       origin: [
         'http://localhost:3000',
         'http://localhost:3001',
-        'https://localhost:3000'
+        'https://localhost:3000',
+        'https://localhost:3001'
       ],
       methods: ['GET', 'POST'],
       credentials: true
@@ -134,17 +188,33 @@ export function initializeSocketIOServer(port: number = 3002): SocketIOServer {
   });
 
   // WebRTC 信令命名空間
-  io.of('/socket.io/web-rtc').on('connection', (socket) => {
+  const webRtcNamespace = io.of('/socket.io/web-rtc');
+
+  webRtcNamespace.on('connection', (socket) => {
     console.log('[Socket.IO /socket.io/web-rtc] Client connected:', socket.id);
     let webRtcRoom = '';
 
-    socket.on('webrtcJoin', (roomId: string) => {
+    socket.on('webrtcJoin', async (roomId: string) => {
       console.log('[Socket.IO /socket.io/web-rtc] Join room:', roomId);
       if (webRtcRoom) {
         socket.leave(webRtcRoom);
       }
       webRtcRoom = roomId;
       socket.join(roomId);
+
+      // 檢查房間中有多少人，決定誰是 offer 方
+      const socketsInRoom = await webRtcNamespace.in(roomId).fetchSockets();
+      const isOffer = socketsInRoom.length === 1; // 第一個人是 offer 方
+
+      console.log(
+        `[Socket.IO /socket.io/web-rtc] Room ${roomId} has ${socketsInRoom.length} clients, isOffer: ${isOffer}`
+      );
+
+      // 通知客戶端
+      socket.emit('webrtcJoined', { isOffer });
+
+      // 通知房間內其他人有新用戶加入
+      socket.to(roomId).emit('webrtcNewUser', { socketId: socket.id });
     });
 
     socket.on('webrtcDescription', (payload) => {
@@ -169,7 +239,9 @@ export function initializeSocketIOServer(port: number = 3002): SocketIOServer {
   });
 
   httpServer.listen(port, () => {
-    console.log(`[Socket.IO] Server started on port ${port}`);
+    console.log(
+      `[Socket.IO] Server started on ${httpProtocol}://localhost:${port} (${protocol})`
+    );
   });
 
   globalForSocketIO.socketIO = io;

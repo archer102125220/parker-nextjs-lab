@@ -15,7 +15,25 @@ export function GET_getMessageTokens(
 // TODO
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function POST_registerMessageToken(payload: any) {
+  console.log({ ['request.baseURL']: request.baseURL });
+  if (typeof request.baseURL === 'undefined') {
+    return POST_registerMessageTokenRetry(payload);
+  }
   return request.post(`${prefix}/register-push-notification-token`, payload);
+}
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function POST_registerMessageTokenRetry(payload: any) {
+  return new Promise((resolve, reject) => {
+    setTimeout(async function () {
+      try {
+        const response = await POST_registerMessageToken(payload);
+        resolve(response);
+      } catch (error) {
+        reject(error);
+      }
+    }, 100);
+  });
 }
 
 // TODO
