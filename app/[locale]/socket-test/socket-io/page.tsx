@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import {
   Typography,
   Paper,
@@ -16,33 +16,29 @@ export default function SocketIoPage(): React.ReactNode {
   const [messageList, setMessageList] = useState<unknown[]>([]);
   const [inputMessage, setInputMessage] = useState('');
 
-  const handleMessage = useCallback((payload: unknown) => {
-    console.log('Received:', payload);
-    setMessageList((prev) => [...prev, payload]);
+  const handleSocketIoTest = useCallback((payload: unknown) => {
+    console.log('Received socket.io-test:', payload);
+    setMessageList((prev) => [
+      ...prev,
+      { event: 'socket.io-test', data: payload }
+    ]);
   }, []);
 
-  // Get the URL for Socket.IO server
-  const socketUrl =
-    typeof window !== 'undefined'
-      ? `${window.location.protocol}//${window.location.host}`
-      : 'http://localhost:3001';
+  const handleMessage = useCallback((payload: unknown) => {
+    console.log('Received message:', payload);
+    setMessageList((prev) => [...prev, { event: 'message', data: payload }]);
+  }, []);
 
-  const { isConnected, connect, disconnect, emit, on, off, error } =
-    useSocketIoClient({
-      url: socketUrl,
-      autoConnect: true
-    });
-
-  // Set up event listeners
-  useEffect(() => {
-    on('socket.io-test', handleMessage);
-    on('message', handleMessage);
-
-    return () => {
-      off('socket.io-test', handleMessage);
-      off('message', handleMessage);
-    };
-  }, [on, off, handleMessage]);
+  const { isConnected, connect, disconnect, emit, error } = useSocketIoClient({
+    channel: '/socket.io',
+    autoConnect: true,
+    listeners: {
+      'socket.io-test': handleSocketIoTest,
+      message: handleMessage,
+      connect: () => console.log('[SocketIoPage] Connected'),
+      disconnect: () => console.log('[SocketIoPage] Disconnected')
+    }
+  });
 
   const handleSendMessage = () => {
     if (!inputMessage.trim()) return;

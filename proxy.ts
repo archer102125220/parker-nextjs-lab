@@ -11,7 +11,7 @@ import {
   exactProxy as exactMiddlewareOne
 } from '@/app/[locale]/one/proxy';
 
-import { proxy as webRtcMiddleware } from '@/app/[locale]/web-rtc/proxy';
+import generateParamsUuidMiddleware from '@/proxy/generateParamsUuid';
 
 // 靜態檔案相關設定
 const STATIC_FILE_EXTENSIONS: RegExp =
@@ -34,7 +34,8 @@ const POLICY_MIDDLEWARE_SETTINGS: Array<Function> = [
 const GLOBAL_MIDDLEWARE_SETTINGS: Array<Function> = [
   globalTestMiddleware,
   i18nMiddleware,
-  logMiddleware
+  logMiddleware,
+  generateParamsUuidMiddleware
 ];
 
 type MiddlewareSetting = {
@@ -51,10 +52,6 @@ const MIDDLEWARE_SETTINGS: Array<MiddlewareSetting> = [
   {
     patch: '/one',
     handler: middlewareOne
-  },
-  {
-    patch: '/web-rtc',
-    handler: webRtcMiddleware
   }
 ];
 

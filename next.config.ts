@@ -19,7 +19,9 @@ const nextConfig: NextConfig = withSerwist(
     sassOptions: {
       additionalData:
         '@use "@/styles/variable.scss" as *; @use "@/styles/mixin.scss" as *;'
-    }
+    },
+    // Socket.IO needs to be external for server-side
+    serverExternalPackages: ['socket.io', 'engine.io']
   })
 );
 
