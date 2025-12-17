@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
-import { nanoid } from 'nanoid';
 import {
   Typography,
   Alert,
@@ -28,7 +27,6 @@ export default function WebRTCSocketIORoomPage(): React.ReactNode {
   const router = useRouter();
   const locale = useLocale();
   const roomId = params?.roomId as string;
-  const userId = useRef(nanoid());
 
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
@@ -151,9 +149,11 @@ export default function WebRTCSocketIORoomPage(): React.ReactNode {
   };
 
   useEffect(() => {
-    initCamera().then(() => {
+    const init = async () => {
+      await initCamera();
       initPeerConnection();
-    });
+    };
+    init();
 
     return () => {
       if (localStreamRef.current) {

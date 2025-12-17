@@ -37,36 +37,32 @@
 
 ### Stage 6.3: WebRTC
 
-#### WebRTC Pages (`app/[locale]/web-rtc/`)
+#### WebRTC SSE (`app/[locale]/web-rtc/server-sent-event/`)
+| 項目 | 狀態 | 說明 |
+|------|------|------|
+| ✅ Signaling API | 已完成 | 使用 Upstash Redis + SSE |
+| ✅ ICE 候選交換 | 已完成 | `/api/web-rtc/candidate-list` |
+| ✅ Offer/Answer 交換 | 已完成 | `/api/web-rtc/description` |
+| ✅ 房間管理 | 已完成 | `/api/web-rtc/join-room` |
+| ✅ SSE 訂閱 | 已完成 | `/api/web-rtc/subscription/[roomId]` |
+
+#### WebRTC Socket.IO/WebSocket (`socket-io/`, `websocket/`)
 | 項目 | 簡化說明 | 後續需要 |
 |------|----------|----------|
-| Signaling 伺服器 | ❌ 無 Signaling 實作 | 需建立 Signaling API (SSE/WebSocket) |
-| ICE 候選交換 | 僅 console.log，無實際傳送 | 需透過 Signaling 伺服器交換 |
-| Offer/Answer 交換 | 未實作 | 需透過 Signaling 伺服器交換 |
-| 房間管理 | 無實際房間邏輯 | 需後端維護房間狀態 |
-| ⚠️ 核心功能 | 僅本地視訊預覽，無法 P2P 連線 | 需完整 Signaling 實作 |
-
-**待建立的 API:**
-- `app/api/web-rtc/join-room/route.ts` - 加入房間
-- `app/api/web-rtc/candidate/route.ts` - ICE 候選交換
-- `app/api/web-rtc/description/route.ts` - Offer/Answer 交換
-- `app/api/web-rtc/subscription/[roomId]/route.ts` - SSE 訂閱
+| Signaling 伺服器 | ⚠️ 僅本地視訊預覽 | 需整合 SSE Signaling 或建立 WebSocket 伺服器 |
+| ⚠️ 核心功能 | 未整合 Signaling | 可複製 SSE 版邏輯 |
 
 ---
 
 ### Stage 6.4: AI/ML 功能
 
 #### Face Swap (`app/[locale]/face-swap/`)
-| 項目 | 簡化說明 | 後續需要 |
-|------|----------|----------|
-| face-api.js | 動態 import，需安裝套件 | ✅ 已規劃安裝 |
-| AI 模型檔案 | 需從 Nuxt 專案複製 | ✅ 已規劃複製 |
-| 後端 API | 僅 UI，API 未建立 | 需建立 `/api/face-swap/process` |
-| 前端換臉 | 基本 Canvas 融合，效果較粗糙 | 可優化融合演算法 |
-| ⚠️ 核心功能 | 需模型檔案才能運作 | 安裝依賴和複製模型後可用 |
-
-**待建立的 API:**
-- `app/api/face-swap/process/route.ts` - 後端換臉處理
+| 項目 | 狀態 | 說明 |
+|------|------|------|
+| ✅ face-api.js | 已安裝 | `face-api.js@0.22.2` |
+| ✅ AI 模型檔案 | 已複製 | `/public/ai_models/` (18個檔案) |
+| ⚠️ 後端 API | 待建立 | 需建立 `/api/face-swap/process` |
+| ✅ 前端換臉 | 已完成 | 基本 Canvas 融合 |
 
 ---
 
@@ -75,11 +71,11 @@
 ### 高優先 (需立即處理)
 1. ✅ 安裝 `face-api.js` 套件
 2. ✅ 複製 AI 模型檔案到 `/public/ai_models/`
-3. 建立 WebRTC Signaling API
+3. ✅ 建立 WebRTC Signaling API (SSE 版)
 
 ### 中優先 (功能完善)
 4. 建立 Face Swap 後端 API
-5. 建立 Socket.IO/WebSocket 伺服器支援
+5. 整合 Socket.IO/WebSocket 房間頁面使用 SSE Signaling
 6. WebAuthn 憑證持久化儲存
 
 ### 低優先 (優化改進)

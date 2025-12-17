@@ -4,9 +4,9 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { nanoid } from 'nanoid';
+import _debounce from 'lodash/debounce';
 import {
   Typography,
-  Button,
   Alert,
   Paper,
   Chip,
@@ -24,23 +24,48 @@ import CallEndIcon from '@mui/icons-material/CallEnd';
 
 import '@/app/[locale]/web-rtc/web-rtc.scss';
 
+interface MemberCandidate {
+  userId: string;
+  candidateList: RTCIceCandidateInit[];
+}
+
+interface MemberDescription {
+  userId: string;
+  description: RTCSessionDescriptionInit;
+}
+
+interface WebRTCSettings {
+  roomId: string;
+  userId: string;
+  memberCandidateList: MemberCandidate[];
+  memberDescriptionList: MemberDescription[];
+  isOffer?: boolean;
+  isAnswer?: boolean;
+}
+
 export default function WebRTCSSERoomPage(): React.ReactNode {
   const params = useParams();
   const router = useRouter();
   const locale = useLocale();
   const roomId = params?.roomId as string;
-  const userId = useRef(nanoid());
+  const userIdRef = useRef(nanoid());
+  const userId = userIdRef.current;
 
   // Video/Audio refs
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
+  const iceCandidatesRef = useRef<RTCIceCandidate[]>([]);
+  const eventSourceRef = useRef<EventSource | null>(null);
+  const remoteDescriptionSetRef = useRef(false);
 
   // State
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [isConnected, setIsConnected] = useState(false);
+  const [connectionState, setConnectionState] = useState<string>('new');
+  const [isOffer, setIsOffer] = useState<boolean | undefined>(undefined);
   const [copiedId, setCopiedId] = useState(false);
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -56,11 +81,81 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = stream;
       }
+      return stream;
     } catch (err) {
       console.error('Camera access error:', err);
       setError('無法存取相機/麥克風。請確保已授予權限且使用 HTTPS/localhost。');
+      return null;
     }
   }, []);
+
+  // Send ICE candidates to server (debounced) - using ref to avoid render-time access
+  const sendCandidatesToServerRef = useRef(
+    _debounce(
+      async (
+        candidates: RTCIceCandidate[],
+        roomIdVal: string,
+        userIdVal: string
+      ) => {
+        if (candidates.length === 0) return;
+        try {
+          await fetch('/api/web-rtc/candidate-list', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              roomId: roomIdVal,
+              userId: userIdVal,
+              candidateList: candidates.map((c) => c.toJSON())
+            })
+          });
+        } catch {
+          console.error('Failed to send candidates');
+        }
+      },
+      200
+    )
+  );
+
+  // Send description to server (debounced)
+  const sendDescriptionToServerRef = useRef(
+    _debounce(
+      async (
+        description: RTCSessionDescriptionInit,
+        roomIdVal: string,
+        userIdVal: string
+      ) => {
+        try {
+          await fetch('/api/web-rtc/description', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              roomId: roomIdVal,
+              userId: userIdVal,
+              description
+            })
+          });
+        } catch {
+          console.error('Failed to send description');
+        }
+      },
+      200
+    )
+  );
+
+  // Wrapper functions that pass current values
+  const sendCandidatesToServer = useCallback(
+    (candidates: RTCIceCandidate[]) => {
+      sendCandidatesToServerRef.current(candidates, roomId, userId);
+    },
+    [roomId, userId]
+  );
+
+  const sendDescriptionToServer = useCallback(
+    (description: RTCSessionDescriptionInit) => {
+      sendDescriptionToServerRef.current(description, roomId, userId);
+    },
+    [roomId, userId]
+  );
 
   // Initialize WebRTC peer connection
   const initPeerConnection = useCallback(() => {
@@ -76,12 +171,14 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
     pc.onicecandidate = (event) => {
       if (event.candidate) {
         console.log('ICE candidate:', event.candidate);
-        // TODO: Send candidate to signaling server
+        iceCandidatesRef.current.push(event.candidate);
+        sendCandidatesToServer(iceCandidatesRef.current);
       }
     };
 
     pc.oniceconnectionstatechange = () => {
       console.log('ICE connection state:', pc.iceConnectionState);
+      setConnectionState(pc.iceConnectionState);
       setIsConnected(pc.iceConnectionState === 'connected');
     };
 
@@ -103,7 +200,105 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
 
     peerConnectionRef.current = pc;
     return pc;
-  }, []);
+  }, [sendCandidatesToServer]);
+
+  // Handle WebRTC signaling message
+  const handleWebRTCSettings = useCallback(
+    async (settings: WebRTCSettings) => {
+      const pc = peerConnectionRef.current;
+      if (!pc) return;
+
+      // Set isOffer/isAnswer
+      if (settings.isOffer !== undefined && isOffer === undefined) {
+        setIsOffer(settings.isOffer);
+
+        // If we're the offerer, create offer
+        if (settings.isOffer === true) {
+          try {
+            const offer = await pc.createOffer();
+            await pc.setLocalDescription(offer);
+            sendDescriptionToServer(offer);
+          } catch (err) {
+            console.error('Failed to create offer:', err);
+          }
+        }
+      }
+
+      // Process remote descriptions
+      for (const member of settings.memberDescriptionList) {
+        if (member.userId === userId) continue;
+        if (remoteDescriptionSetRef.current) continue;
+
+        try {
+          console.log('Setting remote description:', member.description.type);
+          await pc.setRemoteDescription(
+            new RTCSessionDescription(member.description)
+          );
+          remoteDescriptionSetRef.current = true;
+
+          // If we received an offer, create answer
+          if (member.description.type === 'offer') {
+            const answer = await pc.createAnswer();
+            await pc.setLocalDescription(answer);
+            sendDescriptionToServer(answer);
+          }
+        } catch (err) {
+          console.error('Failed to set remote description:', err);
+        }
+      }
+
+      // Process remote candidates
+      for (const member of settings.memberCandidateList) {
+        if (member.userId === userId) continue;
+
+        for (const candidate of member.candidateList) {
+          try {
+            await pc.addIceCandidate(new RTCIceCandidate(candidate));
+          } catch {
+            // Ignore duplicate candidates
+          }
+        }
+      }
+    },
+    [userId, isOffer, sendDescriptionToServer]
+  );
+
+  // Join room and connect to SSE
+  const joinRoom = useCallback(async () => {
+    try {
+      // Join room via API
+      const response = await fetch('/api/web-rtc/join-room', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ roomId, userId })
+      });
+      const data = await response.json();
+      console.log('Joined room:', data);
+
+      // Connect to SSE for signaling
+      const eventSource = new EventSource(
+        `/api/web-rtc/subscription/${roomId}?userId=${userId}`
+      );
+
+      eventSource.addEventListener('webrtc', (event) => {
+        try {
+          const settings: WebRTCSettings = JSON.parse(event.data);
+          handleWebRTCSettings(settings);
+        } catch (err) {
+          console.error('Failed to parse WebRTC settings:', err);
+        }
+      });
+
+      eventSource.onerror = (err) => {
+        console.error('SSE error:', err);
+      };
+
+      eventSourceRef.current = eventSource;
+    } catch (err) {
+      console.error('Failed to join room:', err);
+      setError('無法加入房間');
+    }
+  }, [roomId, userId, handleWebRTCSettings]);
 
   // Copy functions
   const handleCopyId = async () => {
@@ -159,14 +354,20 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
     if (peerConnectionRef.current) {
       peerConnectionRef.current.close();
     }
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close();
+    }
     router.push(`/${locale}/web-rtc/server-sent-event`);
   };
 
   // Initialize on mount
   useEffect(() => {
-    initCamera().then(() => {
+    const init = async () => {
+      await initCamera();
       initPeerConnection();
-    });
+      await joinRoom();
+    };
+    init();
 
     return () => {
       if (localStreamRef.current) {
@@ -175,8 +376,11 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
       if (peerConnectionRef.current) {
         peerConnectionRef.current.close();
       }
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+      }
     };
-  }, [initCamera, initPeerConnection]);
+  }, [initCamera, initPeerConnection, joinRoom]);
 
   return (
     <section className="web_rtc_room_page">
@@ -189,7 +393,7 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
         color="text.secondary"
         className="web_rtc_room_page-description"
       >
-        配合 Server-Sent Events 及 @upstash/redis 實作
+        配合 Server-Sent Events 及 Upstash Redis 實作
       </Typography>
 
       {error && (
@@ -198,11 +402,6 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
         </Alert>
       )}
 
-      <Alert severity="info" sx={{ mb: 2 }}>
-        此為 WebRTC 示範頁面。完整的 Signaling 實作需要後端 API 支援。
-        目前僅展示本地視訊預覽和基本控制功能。
-      </Alert>
-
       {/* Room Info */}
       <Paper className="web_rtc_room_page-room_info" onClick={handleCopyUrl}>
         <Typography variant="body2">
@@ -210,8 +409,20 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
         </Typography>
         <Chip
           size="small"
-          label={isConnected ? '已連線' : '等待連線'}
+          label={isConnected ? '已連線' : `狀態: ${connectionState}`}
           color={isConnected ? 'success' : 'default'}
+        />
+        <Chip
+          size="small"
+          label={
+            isOffer === true
+              ? 'Offerer'
+              : isOffer === false
+                ? 'Answerer'
+                : '等待中'
+          }
+          color="info"
+          variant="outlined"
         />
         <Tooltip title={copiedId ? '已複製!' : '複製 ID'}>
           <IconButton
