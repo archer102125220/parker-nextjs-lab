@@ -26,7 +26,21 @@ const getSocketIOBasePath = (): string => {
   return process.env.NEXT_PUBLIC_SOCKET_IO_BASE_PATH || '/socket.io';
 };
 
-export interface UseSocketIoClientOptions {
+/**
+ * 事件監聽器的基礎類型
+ * 支援同步和異步函數
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type EventListener = (...args: any[]) => void | Promise<void>;
+
+/**
+ * 預設的監聽器類型
+ */
+type DefaultListeners = Record<string, EventListener>;
+
+export interface UseSocketIoClientOptions<
+  TListeners extends DefaultListeners = DefaultListeners
+> {
   /**
    * Socket.IO 命名空間頻道
    * @default '/'
@@ -48,9 +62,17 @@ export interface UseSocketIoClientOptions {
    */
   autoConnect?: boolean;
   /**
-   * 事件監聽器
+   * 事件監聯器
+   * Key 是事件名稱，Value 是處理函數
+   *
+   * @example
+   * listeners: {
+   *   connect: () => console.log('connected'),
+   *   message: (data: string) => console.log(data),
+   *   webrtcJoined: (payload: { isOffer: boolean }) => { ... }
+   * }
    */
-  listeners?: Record<string, (...args: unknown[]) => void>;
+  listeners?: TListeners;
 }
 
 export interface UseSocketIoClientReturn {
@@ -68,10 +90,11 @@ export interface UseSocketIoClientReturn {
  * Hook to manage Socket.IO client connection
  * Note: Requires socket.io-client to be installed: npm install socket.io-client
  *
- * @param config - Socket.IO configuration
+ * @param config - Socket.IO configuration with generic listener types
  * @returns Socket getter and connection utilities
  *
  * @example
+ * // 基本使用
  * const { getSocket, isConnected, emit, on } = useSocketIoClient({
  *   channel: '/socket.io',
  *   autoConnect: true,
@@ -80,17 +103,28 @@ export interface UseSocketIoClientReturn {
  *   }
  * });
  *
- * // Get socket instance when needed
- * const socket = getSocket();
+ * @example
+ * // 帶類型的監聽器
+ * const { emit } = useSocketIoClient({
+ *   channel: '/socket.io/web-rtc',
+ *   listeners: {
+ *     webrtcJoined: (payload: { isOffer: boolean }) => {
+ *       console.log('isOffer:', payload.isOffer);
+ *     },
+ *     webrtcDescription: async (payload: RTCSessionDescriptionInit) => {
+ *       await handleDescription(payload);
+ *     }
+ *   }
+ * });
  */
-export function useSocketIoClient(
-  config: UseSocketIoClientOptions = {}
-): UseSocketIoClientReturn {
+export function useSocketIoClient<
+  TListeners extends DefaultListeners = DefaultListeners
+>(config: UseSocketIoClientOptions<TListeners> = {}): UseSocketIoClientReturn {
   const {
     channel = '/',
     options = {},
     autoConnect = true,
-    listeners = {}
+    listeners = {} as TListeners
   } = config;
 
   const socketRef = useRef<Socket | null>(null);

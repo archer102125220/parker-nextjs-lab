@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import {
@@ -43,54 +43,7 @@ export default function WebRTCSocketIORoomPage(): React.ReactNode {
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Socket.IO signaling
-  const {
-    isConnected: isSocketConnected,
-    emit,
-    getSocket
-  } = useSocketIoClient({
-    channel: '/socket.io/web-rtc',
-    autoConnect: true,
-    listeners: {
-      connect: () => {
-        console.log('[WebRTC] Socket.IO connected, joining room:', roomId);
-        const socket = getSocket();
-        if (socket) {
-          socket.emit('webrtcJoin', roomId);
-        }
-      },
-      webrtcJoined: (payload: { isOffer: boolean }) => {
-        console.log('[WebRTC] Joined room, isOffer:', payload.isOffer);
-        isOfferRef.current = payload.isOffer;
-      },
-      webrtcNewUser: async () => {
-        console.log('[WebRTC] New user joined, creating offer');
-        if (isOfferRef.current) {
-          const offer = await createOffer();
-          if (offer) {
-            emit('webrtcDescription', offer);
-          }
-        }
-      },
-      webrtcDescription: async (payload: RTCSessionDescriptionInit) => {
-        console.log('[WebRTC] Received description:', payload.type);
-        await setRemoteDescription(payload);
-
-        if (payload.type === 'offer') {
-          const answer = await createAnswer();
-          if (answer) {
-            emit('webrtcDescription', answer);
-          }
-        }
-      },
-      webrtcCandidate: async (payload: RTCIceCandidateInit) => {
-        console.log('[WebRTC] Received ICE candidate');
-        await addIceCandidate(payload);
-      }
-    }
-  });
-
-  // WebRTC
+  // WebRTC - 先定義，讓 Socket.IO listeners 可以使用
   const {
     iceConnectionState,
     createOffer,
@@ -104,7 +57,7 @@ export default function WebRTCSocketIORoomPage(): React.ReactNode {
     localStream,
     onIceCandidate: (candidate) => {
       console.log('[WebRTC] Sending ICE candidate');
-      emit('webrtcCandidate', candidate.toJSON());
+      socketRef.current?.emit('webrtcCandidate', candidate.toJSON());
     },
     onRemoteStream: (stream) => {
       console.log('[WebRTC] Remote stream received');
@@ -117,25 +70,95 @@ export default function WebRTCSocketIORoomPage(): React.ReactNode {
     }
   });
 
+  // 保存 WebRTC 函數的 refs，讓 Socket listeners 可以動態獲取
+  const webRTCRef = useRef({
+    createOffer,
+    createAnswer,
+    setRemoteDescription,
+    addIceCandidate
+  });
+
+  // 在 effect 中更新 ref 以避免 render 期間更新
+  useEffect(() => {
+    webRTCRef.current = {
+      createOffer,
+      createAnswer,
+      setRemoteDescription,
+      addIceCandidate
+    };
+  }, [createOffer, createAnswer, setRemoteDescription, addIceCandidate]);
+
+  // Socket ref for ICE candidate sending
+  const socketRef =
+    useRef<
+      ReturnType<typeof useSocketIoClient>['getSocket'] extends () => infer T
+        ? T
+        : never
+    >(null);
+
+  // Socket.IO signaling
+  const {
+    isConnected: isSocketConnected,
+    emit,
+    getSocket
+  } = useSocketIoClient({
+    channel: '/socket.io/web-rtc',
+    autoConnect: true,
+    listeners: {
+      connect: () => {
+        console.log('[WebRTC] Socket.IO connected, joining room:', roomId);
+        const socket = getSocket();
+        socketRef.current = socket;
+        if (socket) {
+          socket.emit('webrtcJoin', roomId);
+        }
+      },
+      webrtcJoined: (payload: { isOffer: boolean }) => {
+        console.log('[WebRTC] Joined room, isOffer:', payload.isOffer);
+        isOfferRef.current = payload.isOffer;
+      },
+      webrtcNewUser: async () => {
+        console.log('[WebRTC] New user joined, isOffer:', isOfferRef.current);
+        if (isOfferRef.current) {
+          console.log('[WebRTC] Creating offer...');
+          const offer = await webRTCRef.current.createOffer();
+          if (offer) {
+            console.log('[WebRTC] Sending offer:', offer.type);
+            emit('webrtcDescription', offer);
+          } else {
+            console.error('[WebRTC] Failed to create offer');
+          }
+        }
+      },
+      webrtcDescription: async (payload: RTCSessionDescriptionInit) => {
+        console.log('[WebRTC] Received description:', payload.type);
+        await webRTCRef.current.setRemoteDescription(payload);
+
+        if (payload.type === 'offer') {
+          console.log('[WebRTC] Creating answer...');
+          const answer = await webRTCRef.current.createAnswer();
+          if (answer) {
+            console.log('[WebRTC] Sending answer:', answer.type);
+            emit('webrtcDescription', answer);
+          } else {
+            console.error('[WebRTC] Failed to create answer');
+          }
+        }
+      },
+      webrtcCandidate: async (payload: RTCIceCandidateInit) => {
+        console.log('[WebRTC] Received ICE candidate');
+        await webRTCRef.current.addIceCandidate(payload);
+      }
+    }
+  });
+
+  // 更新 socketRef
+  useEffect(() => {
+    socketRef.current = getSocket();
+  }, [getSocket, isSocketConnected]);
+
   const isPeerConnected =
     iceConnectionState === 'connected' || iceConnectionState === 'completed';
-
-  const initCamera = useCallback(async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true
-      });
-      localStreamRef.current = stream;
-      setLocalStream(stream);
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = stream;
-      }
-    } catch (err) {
-      console.error('Camera access error:', err);
-      setError('無法存取相機/麥克風。請確保已授予權限且使用 HTTPS/localhost。');
-    }
-  }, []);
 
   const handleCopyId = async () => {
     if (copiedId) return;
@@ -187,15 +210,45 @@ export default function WebRTCSocketIORoomPage(): React.ReactNode {
     router.push(`/${locale}/web-rtc/socket-io`);
   };
 
+  // 初始化相機
   useEffect(() => {
-    initCamera();
+    let mounted = true;
+
+    const startCamera = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true
+        });
+
+        if (mounted) {
+          localStreamRef.current = stream;
+          setLocalStream(stream);
+          if (localVideoRef.current) {
+            localVideoRef.current.srcObject = stream;
+          }
+        } else {
+          stream.getTracks().forEach((track) => track.stop());
+        }
+      } catch (err) {
+        console.error('Camera access error:', err);
+        if (mounted) {
+          setError(
+            '無法存取相機/麥克風。請確保已授予權限且使用 HTTPS/localhost。'
+          );
+        }
+      }
+    };
+
+    startCamera();
 
     return () => {
+      mounted = false;
       if (localStreamRef.current) {
         localStreamRef.current.getTracks().forEach((track) => track.stop());
       }
     };
-  }, [initCamera]);
+  }, []);
 
   // 當本地串流準備好時，加入 WebRTC
   useEffect(() => {
