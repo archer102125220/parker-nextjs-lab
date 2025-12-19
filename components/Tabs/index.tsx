@@ -213,6 +213,16 @@ export function Tabs({
     return () => window.removeEventListener('resize', handleResize);
   }, [updateIndicator, updateNavigationVisibility]);
 
+  // Initial check on mount
+  useEffect(() => {
+    // Small delay to ensure DOM is ready
+    const timer = setTimeout(() => {
+      updateIndicator();
+      updateNavigationVisibility();
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [updateIndicator, updateNavigationVisibility]);
+
   // Sync controlled value (this is intentional for controlled components)
   useEffect(() => {
     if (value !== undefined && value !== activeTab) {
@@ -226,8 +236,9 @@ export function Tabs({
   // Only applies when isNavigationAbsolute is true
   useEffect(() => {
     if (!isNavigationAbsolute) {
-      // When not absolute, show/hide immediately (no delay)
-      setShowPrev(prevOpacity === 1);
+      // When not absolute, always show buttons (opacity controls visibility)
+      setShowPrev(true);
+      setShowNext(true);
       return;
     }
 
@@ -247,8 +258,8 @@ export function Tabs({
 
   useEffect(() => {
     if (!isNavigationAbsolute) {
-      // When not absolute, show/hide immediately (no delay)
-      setShowNext(nextOpacity === 1);
+      // When not absolute, always show buttons (opacity controls visibility)
+      setShowNext(true);
       return;
     }
 
@@ -323,12 +334,13 @@ export function Tabs({
       style={cssVariables}
     >
       <div className={`tabs-header ${vertical ? 'tabs-header_vertical' : ''}`}>
-        {/* Prev Navigation Button - only render when hasNavigation AND showPrev */}
+        {/* Prev Navigation Button */}
         {hasNavigation && showPrev && (
           <button
             className={`tabs-nav tabs-nav_prev ${vertical ? 'tabs-nav_vertical' : ''}`}
             onClick={handlePrevScroll}
             aria-label={vertical ? "Previous tabs (scroll up)" : "Previous tabs"}
+            style={{ pointerEvents: prevOpacity === 0 ? 'none' : 'auto' }}
           >
             {vertical ? '▲' : '‹'}
           </button>
@@ -362,12 +374,13 @@ export function Tabs({
           <div className="tabs-header-indicator" />
         </div>
 
-        {/* Next Navigation Button - only render when hasNavigation AND showNext */}
+        {/* Next Navigation Button */}
         {hasNavigation && showNext && (
           <button
             className={`tabs-nav tabs-nav_next ${vertical ? 'tabs-nav_vertical' : ''}`}
             onClick={handleNextScroll}
             aria-label={vertical ? "Next tabs (scroll down)" : "Next tabs"}
+            style={{ pointerEvents: nextOpacity === 0 ? 'none' : 'auto' }}
           >
             {vertical ? '▼' : '›'}
           </button>

@@ -154,7 +154,7 @@ export default function TabTestPage() {
           設定 vertical=true 可切換為垂直布局，配合 isNavigationAbsolute 讓導航按鈕懸浮
         </Typography>
         <Tabs
-          tabs={manyTabs.slice(0, 8)}
+          tabs={manyTabs}
           vertical
           isNavigationAbsolute
           indicatorColor="#ff5722"
@@ -185,7 +185,7 @@ export default function TabTestPage() {
           垂直布局 + 相對定位，導航按鈕保留空間
         </Typography>
         <Tabs
-          tabs={manyTabs.slice(0, 8)}
+          tabs={manyTabs}
           vertical
           isNavigationAbsolute={false}
           indicatorColor="#4caf50"
