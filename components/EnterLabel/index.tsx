@@ -25,7 +25,7 @@ export function EnterLabel({
   randomLen = 'en',
   autoStart = true,
   label,
-  speed = 50,
+  speed = 10,
   value = false,
   animationEnd = false,
   onValueChange,
@@ -54,6 +54,12 @@ export function EnterLabel({
   const revealedCharsRef = useRef(0); // Track how many characters have been revealed
   const iterationCountRef = useRef(0); // Track iterations for current character
   const maxIterationsPerChar = 5; // Number of random chars to show before revealing real char
+  
+  // Calculate delay per frame: speed is the total time per character
+  // Divide by iterations to get time per frame
+  const getFrameDelay = () => {
+    return Math.floor(speedRef.current / maxIterationsPerChar);
+  };
   
   // Use refs to avoid callback recreation
   const labelRef = useRef(label);
@@ -119,7 +125,7 @@ export function EnterLabel({
       animationFrameRef.current = window.requestAnimationFrame(() => {
         handleEnterLabelRef.current?.();
       });
-    }, speedRef.current);
+    }, getFrameDelay());
   }, []); // Empty dependency array - callback never recreated
 
   // Update ref to point to latest callback

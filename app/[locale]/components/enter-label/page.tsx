@@ -76,7 +76,7 @@ export default function EnterLabelTestPage() {
         <Box sx={{ mb: 2, minHeight: '40px', display: 'flex', alignItems: 'center' }}>
           <EnterLabel
             label="Fast Animation"
-            speed={30}
+            speed={5}
             autoStart={false}
             value={isAnimating2}
             onValueChange={setIsAnimating2}
@@ -98,7 +98,7 @@ export default function EnterLabelTestPage() {
         <Box sx={{ mb: 2, minHeight: '40px', display: 'flex', alignItems: 'center' }}>
           <EnterLabel
             label="Slow Animation"
-            speed={150}
+            speed={30}
             autoStart={false}
             value={isAnimating3}
             onValueChange={setIsAnimating3}
@@ -181,7 +181,7 @@ export default function EnterLabelTestPage() {
 // 自訂速度和標籤
 <EnterLabel
   label="Custom Speed"
-  speed={100}
+  speed={20}
   tagName="h1"
 />`}
         </Box>
