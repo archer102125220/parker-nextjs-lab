@@ -21,15 +21,8 @@ const {
   permanentRedirect
 } = createNavigation(routing);
 
-// Original exports (for backward compatibility)
-export {
-  Link,
-  redirect,
-  usePathname,
-  useRouter,
-  getPathname,
-  permanentRedirect
-};
+// Exports without conflicts - use directly
+export { Link, getPathname, permanentRedirect };
 
 // ==========================================
 // Aliases for conflicting exports only

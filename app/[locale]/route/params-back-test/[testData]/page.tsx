@@ -1,12 +1,13 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { useNextRouter } from '@/i18n/navigation';
 import { Typography, Button, Box, Paper, Alert } from '@mui/material';
 
 import '@/app/[locale]/route/params-back-test/params-back-test.scss';
 
 export default function ParamsBackTestPage(): React.ReactNode {
-  const router = useRouter();
+  const router = useNextRouter();
   const params = useParams<{ locale: string; testData: string }>();
 
   const testDataValue = params.testData;

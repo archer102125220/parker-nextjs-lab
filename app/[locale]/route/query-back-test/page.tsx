@@ -1,13 +1,13 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import { usePathnameWithLocale } from '@/i18n/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useNextRouter, usePathnameWithLocale } from '@/i18n/navigation';
 import { Typography, Button, Box, Paper, Alert } from '@mui/material';
 
 import '@/app/[locale]/route/query-back-test/query-back-test.scss';
 
 export default function QueryBackTestPage(): React.ReactNode {
-  const router = useRouter();
+  const router = useNextRouter();
   const pathname = usePathnameWithLocale(); // Includes locale: /zh-tw/route/query-back-test
   const searchParams = useSearchParams();
 
