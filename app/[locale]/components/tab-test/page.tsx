@@ -79,15 +79,16 @@ export default function TabTestPage() {
       {/* 多個 Tabs - 展示導航功能 */}
       <Paper sx={{ p: 3, mb: 4 }}>
         <Typography variant="h6" gutterBottom>
-          2. 多個 Tabs - 自動導航按鈕
+          2. 多個 Tabs - 自動導航按鈕（絕對定位）
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          當 Tabs 過多時，會自動顯示左右導航按鈕。試試滾動或點擊導航按鈕！
+          當 Tabs 過多時，會自動顯示左右導航按鈕。設定 isNavigationAbsolute=true 讓按鈕懸浮，不佔用空間！
         </Typography>
         <Tabs
           tabs={manyTabs}
           value={activeTab2}
           onChange={(value) => setActiveTab2(Number(value))}
+          isNavigationAbsolute
         />
         <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
           當前選中: Tab {activeTab2 + 1}
@@ -144,51 +145,67 @@ export default function TabTestPage() {
         />
       </Paper>
 
-      {/* 使用說明 */}
-      <Paper sx={{ p: 3 }}>
+      {/* 垂直模式 */}
+      <Paper sx={{ p: 3, mb: 4 }}>
         <Typography variant="h6" gutterBottom>
-          使用說明
+          6. 垂直模式（絕對定位）
         </Typography>
-        <Box
-          component="pre"
-          sx={{
-            backgroundColor: '#f5f5f5',
-            p: 2,
-            borderRadius: 1,
-            overflow: 'auto',
-            fontSize: '13px'
-          }}
-        >
-          {`// 基本用法
-<Tabs
-  tabs={[
-    { label: 'Tab 1', value: 0 },
-    { label: 'Tab 2', value: 1 },
-    { label: 'Disabled', value: 2, disabled: true }
-  ]}
-  value={activeTab}
-  onChange={(value) => setActiveTab(value)}
-/>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          設定 vertical=true 可切換為垂直布局，配合 isNavigationAbsolute 讓導航按鈕懸浮
+        </Typography>
+        <Tabs
+          tabs={manyTabs.slice(0, 8)}
+          vertical
+          isNavigationAbsolute
+          indicatorColor="#ff5722"
+          selectedColor="#ff5722"
+        />
+      </Paper>
 
-// Full Width 模式
-<Tabs
-  tabs={tabs}
-  variant="fullWidth"
-/>
+      {/* 相對定位導航 */}
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          7. 相對定位導航（水平）
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          默認模式下，導航按鈕在文檔流中，會保留空白空間
+        </Typography>
+        <Tabs
+          tabs={manyTabs.slice(0, 10)}
+          isNavigationAbsolute={false}
+        />
+      </Paper>
 
-// 自訂顏色
-<Tabs
-  tabs={tabs}
-  indicatorColor="#9c27b0"
-  selectedColor="#9c27b0"
-/>
+      {/* 垂直模式 - 相對定位 */}
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          8. 垂直模式（相對定位）
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          垂直布局 + 相對定位，導航按鈕保留空間
+        </Typography>
+        <Tabs
+          tabs={manyTabs.slice(0, 8)}
+          vertical
+          isNavigationAbsolute={false}
+          indicatorColor="#4caf50"
+          selectedColor="#4caf50"
+        />
+      </Paper>
 
-// 禁用導航按鈕
-<Tabs
-  tabs={tabs}
-  hasNavigation={false}
-/>`}
-        </Box>
+      {/* Full Width + 導航 */}
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          9. Full Width + 導航按鈕
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Full Width 模式配合導航按鈕（需要較多 tabs）
+        </Typography>
+        <Tabs
+          tabs={manyTabs.slice(0, 12)}
+          variant="fullWidth"
+          isNavigationAbsolute
+        />
       </Paper>
     </Box>
   );

@@ -2,6 +2,36 @@
     /* Display & Box Model */
     width: 100%;
 
+    &_vertical {
+        display: flex;
+        height: 400px; // Default height for vertical tabs
+
+        .tabs-header {
+            flex-direction: column;
+            height: 100%;
+            width: auto;
+        }
+
+        .tabs-header-list {
+            flex-direction: column;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-bottom: none;
+            border-right: 1px solid #e0e0e0;
+            height: 100%;
+        }
+
+        .tabs-header-indicator {
+            left: auto;
+            right: 0;
+            top: var(--indicator-top, 0);
+            bottom: auto;
+            width: var(--indicator-width, 2px);
+            height: var(--indicator-height, 0);
+            transition: top 0.3s ease-in-out, height 0.3s ease-in-out;
+        }
+    }
+
     &-header {
         /* Positioning */
         position: relative;
@@ -10,6 +40,14 @@
         display: flex;
         align-items: center;
         gap: 8px;
+
+        /* Animation */
+        transform: translateZ(0); // Force GPU acceleration
+        will-change: contents; // Hint browser about dynamic content changes
+
+        &_vertical {
+            flex-direction: column;
+        }
 
         &-list {
             /* Positioning */
@@ -44,6 +82,13 @@
                     flex: 1;
                     text-align: center;
                 }
+            }
+
+            &_vertical {
+                flex-direction: column;
+                overflow-x: hidden;
+                overflow-y: auto;
+                width: 100%;
             }
         }
 
@@ -87,26 +132,34 @@
             position: absolute;
             bottom: 0;
             left: var(--indicator-left, 0);
+            top: var(--indicator-top, auto);
 
             /* Display & Box Model */
-            height: 2px;
+            height: var(--indicator-height, 2px);
             width: var(--indicator-width, 0);
 
             /* Visual */
             background-color: var(--indicator-color, #1976d2);
 
             /* Animation */
-            transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
+            transition: left 0.3s ease-in-out, width 0.3s ease-in-out,
+                top 0.3s ease-in-out, height 0.3s ease-in-out;
         }
     }
 
     &-nav {
+        /* Positioning */
+        position: var(--navigation-position, relative);
+        z-index: 1;
+
         /* Display & Box Model */
         display: flex;
         align-items: center;
         justify-content: center;
         width: 32px;
         height: 40px;
+        min-width: 32px; // Prevent collapse during opacity transition
+        min-height: 40px; // Prevent collapse during opacity transition
         padding: 0;
         border: 1px solid #e0e0e0;
         border-radius: 4px;
@@ -124,7 +177,24 @@
         user-select: none;
 
         /* Animation */
-        transition: all 0.2s;
+        transition: all 0.2s, opacity 0.3s ease-in-out;
+        will-change: opacity; // GPU acceleration for smooth opacity changes
+
+        &_prev {
+            opacity: var(--prev-opacity, 1);
+            left: var(--prev-left, auto);
+            top: var(--prev-top, auto);
+            transform: var(--prev-transform, none);
+        }
+
+        &_next {
+            opacity: var(--next-opacity, 1);
+            right: var(--next-right, auto);
+            bottom: var(--next-bottom, auto);
+            top: var(--next-top, auto);
+            left: var(--next-left, auto);
+            transform: var(--next-transform, none);
+        }
 
         &:hover {
             color: var(--selected-color, #1976d2);
@@ -133,7 +203,22 @@
         }
 
         &:active {
-            transform: scale(0.95);
+
+            // Combine scale with existing transform to prevent override
+            &.tabs-nav_prev {
+                transform: var(--prev-transform, none) scale(0.95);
+            }
+
+            &.tabs-nav_next {
+                transform: var(--next-transform, none) scale(0.95);
+            }
+        }
+
+        &_vertical {
+            width: 40px;
+            height: 32px;
+            min-width: 40px;
+            min-height: 32px;
         }
     }
 }
