@@ -1,3 +1,5 @@
+'use client';
+
 import { createNavigation } from 'next-intl/navigation';
 import {
   usePathname as usePathnameNext,
