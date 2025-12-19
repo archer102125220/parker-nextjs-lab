@@ -9,10 +9,10 @@ import {
   Button,
   Paper,
   Box,
-  Alert,
   Divider
 } from '@mui/material';
 
+import { useAppDispatch } from '@/store';
 import '@/app/[locale]/web-authn/web-authn.scss';
 
 interface CredentialData {
@@ -22,6 +22,8 @@ interface CredentialData {
 }
 
 export default function WebAuthnPage(): React.ReactNode {
+  const dispatch = useAppDispatch();
+
   // Register form state
   const [registerId, setRegisterId] = useState('testId');
   const [registerAccount, setRegisterAccount] = useState('testAccount');
@@ -38,8 +40,6 @@ export default function WebAuthnPage(): React.ReactNode {
   const credentialDataRef = useRef<CredentialData | null>(null);
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
 
   // Generate challenge from server
   const generateChallenge = async (): Promise<string> => {
@@ -69,14 +69,16 @@ export default function WebAuthnPage(): React.ReactNode {
           id: rpId
         },
         pubKeyCredParams: [
-          { type: 'public-key', alg: -7 }, // ES256
-          { type: 'public-key', alg: -257 } // RS256
+          { type: 'public-key', alg: -257 }, // RS256 (TPM compatible, prioritized)
+          { type: 'public-key', alg: -7 },   // ES256
+          { type: 'public-key', alg: -37 }   // PS256 (RSA-PSS)
         ],
         authenticatorSelection: {
-          requireResidentKey: true
+          requireResidentKey: true,
+          userVerification: 'preferred'
         },
         timeout: 60000,
-        attestation: 'direct',
+        attestation: 'none', // Changed from 'direct' to avoid TPM algorithm issues
         user: {
           id: new Uint8Array(0), // Will be set in register function
           name: '',
@@ -93,8 +95,6 @@ export default function WebAuthnPage(): React.ReactNode {
     if (loading) return;
 
     setLoading(true);
-    setError(null);
-    setSuccess(null);
 
     try {
       const { publicKeyCredentialCreationOptions, challengeString } =
@@ -162,11 +162,14 @@ export default function WebAuthnPage(): React.ReactNode {
 
       if (serverData.base64URLServerSaveData) {
         credentialDataRef.current = serverData.base64URLServerSaveData;
-        setSuccess('憑證註冊成功！');
+        dispatch({ type: 'system/message_success', payload: '憑證註冊成功！' });
       }
     } catch (err) {
       console.error('Registration error:', err);
-      setError(err instanceof Error ? err.message : '註冊失敗');
+      dispatch({
+        type: 'system/message_error',
+        payload: err instanceof Error ? err.message : '註冊失敗'
+      });
     } finally {
       setLoading(false);
     }
@@ -178,13 +181,11 @@ export default function WebAuthnPage(): React.ReactNode {
     if (loading) return;
 
     if (!credentialDataRef.current) {
-      setError('請先完成註冊');
+      dispatch({ type: 'system/message_error', payload: '請先完成註冊' });
       return;
     }
 
     setLoading(true);
-    setError(null);
-    setSuccess(null);
 
     try {
       const { publicKeyCredentialCreationOptions, challengeString } =
@@ -263,13 +264,16 @@ export default function WebAuthnPage(): React.ReactNode {
       setLoginOutput(JSON.stringify(serverData, null, 2));
 
       if (serverData.verified) {
-        setSuccess('登入驗證成功！');
+        dispatch({ type: 'system/message_success', payload: '登入驗證成功！' });
       } else {
-        setError('驗證失敗');
+        dispatch({ type: 'system/message_error', payload: '驗證失敗' });
       }
     } catch (err) {
       console.error('Login error:', err);
-      setError(err instanceof Error ? err.message : '驗證失敗');
+      dispatch({
+        type: 'system/message_error',
+        payload: err instanceof Error ? err.message : '驗證失敗'
+      });
     } finally {
       setLoading(false);
     }
@@ -310,18 +314,6 @@ export default function WebAuthnPage(): React.ReactNode {
         }}
         priority
       />
-
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
-
-      {success && (
-        <Alert severity="success" sx={{ mb: 2 }}>
-          {success}
-        </Alert>
-      )}
 
       {/* Registration Section */}
       <Paper className="web_authn_page-register" elevation={2}>
