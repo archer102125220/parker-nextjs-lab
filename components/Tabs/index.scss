@@ -221,4 +221,46 @@
             min-height: 32px;
         }
     }
+
+    // Gradient shadows for scroll indicators
+    &-shadow {
+        /* Positioning */
+        position: absolute;
+        z-index: 0; // Below navigation buttons (which have z-index: 1)
+        pointer-events: none;
+
+        /* Display & Box Model */
+        width: 60px;
+        height: 100%;
+
+        /* Animation */
+        transition: opacity 0.3s ease-in-out;
+
+        &_first {
+            left: 0;
+            top: 0;
+            background: linear-gradient(to right, rgba(157, 156, 156, 0.22), transparent);
+        }
+
+        &_last {
+            right: 0;
+            top: 0;
+            background: linear-gradient(to left, rgba(157, 156, 156, 0.22), transparent);
+        }
+
+        &_vertical {
+            width: 100%;
+            height: 60px;
+
+            &.tabs-shadow_first {
+                background: linear-gradient(to bottom, rgba(157, 156, 156, 0.22), transparent);
+            }
+
+            &.tabs-shadow_last {
+                top: auto;
+                bottom: 0;
+                background: linear-gradient(to top, rgba(157, 156, 156, 0.22), transparent);
+            }
+        }
+    }
 }

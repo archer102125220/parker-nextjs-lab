@@ -207,6 +207,49 @@ export default function TabTestPage() {
           isNavigationAbsolute
         />
       </Paper>
+
+      {/* 滾動事件 */}
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          10. 滾動事件監聽 ⭐ NEW
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          監聽滾動事件（打開控制台查看）
+        </Typography>
+        <Tabs
+          tabs={manyTabs}
+          onScroll={(e) => console.log('Scrolling:', e.scrollLeft)}
+          onScrollEnd={(e) => console.log('Scroll ended at:', e.scrollLeft)}
+        />
+      </Paper>
+
+      {/* 漸變陰影 */}
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          11. 漸變陰影提示 ⭐ NEW
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          邊緣漸變陰影提示可滾動區域（默認開啟）
+        </Typography>
+        <Tabs
+          tabs={manyTabs}
+          limitShadow={true}
+        />
+      </Paper>
+
+      {/* 禁用滾動 */}
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          12. 禁用滾動功能
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          禁用滾輪和拖動滾動
+        </Typography>
+        <Tabs
+          tabs={manyTabs.slice(0, 10)}
+          scrollDisable={true}
+        />
+      </Paper>
     </Box>
   );
 }

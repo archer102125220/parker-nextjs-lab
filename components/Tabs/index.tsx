@@ -21,6 +21,10 @@ export interface TabsProps {
   indicatorColor?: string;
   selectedColor?: string;
   vertical?: boolean;
+  onScroll?: (event: { scrollLeft: number; scrollTop: number }) => void;
+  onScrollEnd?: (event: { scrollLeft: number; scrollTop: number }) => void;
+  scrollDisable?: boolean;
+  limitShadow?: boolean;
 }
 
 const SCROLL_STEP = 150;
@@ -35,13 +39,19 @@ export function Tabs({
   isNavigationAbsolute = false,
   indicatorColor,
   selectedColor,
-  vertical = false
+  vertical = false,
+  onScroll,
+  onScrollEnd,
+  scrollDisable = false,
+  limitShadow = true
 }: TabsProps) {
   const [activeTab, setActiveTab] = useState(value ?? tabs[0]?.value ?? 0);
   const [showPrev, setShowPrev] = useState(false);
   const [showNext, setShowNext] = useState(false);
   const [prevOpacity, setPrevOpacity] = useState(0);
   const [nextOpacity, setNextOpacity] = useState(0);
+  const [showFirstShadow, setShowFirstShadow] = useState(false);
+  const [showLastShadow, setShowLastShadow] = useState(false);
   const [indicatorStyle, setIndicatorStyle] = useState({ 
     left: 0, 
     top: 0,
@@ -63,6 +73,89 @@ export function Tabs({
     // Scroll active tab into view
     scrollToTab(index);
   };
+
+  // Mouse wheel scroll handler
+  const handleWheel = useCallback((e: WheelEvent) => {
+    if (scrollDisable || !tabsListRef.current) return;
+    
+    // In horizontal mode, convert vertical wheel to horizontal scroll
+    if (!vertical) {
+      e.preventDefault();
+      const delta = e.deltaY || e.deltaX;
+      tabsListRef.current.scrollBy({
+        left: delta,
+        behavior: 'auto'
+      });
+    }
+    // In vertical mode, allow natural scrolling (don't prevent default)
+  }, [vertical, scrollDisable]);
+
+  // Drag scroll state
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef({ x: 0, y: 0, scrollLeft: 0, scrollTop: 0 });
+
+  // Drag scroll handlers
+  const handleDragStart = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    if (scrollDisable || !tabsListRef.current) return;
+    
+    setIsDragging(true);
+    const container = tabsListRef.current;
+    
+    if ('touches' in e) {
+      // Touch event
+      dragStartRef.current = {
+        x: e.touches[0].pageX,
+        y: e.touches[0].pageY,
+        scrollLeft: container.scrollLeft,
+        scrollTop: container.scrollTop
+      };
+    } else {
+      // Mouse event
+      dragStartRef.current = {
+        x: e.pageX,
+        y: e.pageY,
+        scrollLeft: container.scrollLeft,
+        scrollTop: container.scrollTop
+      };
+    }
+    
+    container.style.cursor = 'grabbing';
+    container.style.userSelect = 'none';
+  }, [scrollDisable]);
+
+  const handleDragMove = useCallback((e: MouseEvent | TouchEvent) => {
+    if (!isDragging || !tabsListRef.current) return;
+    
+    e.preventDefault();
+    const container = tabsListRef.current;
+    
+    let currentX: number, currentY: number;
+    if ('touches' in e) {
+      currentX = e.touches[0].pageX;
+      currentY = e.touches[0].pageY;
+    } else {
+      currentX = e.pageX;
+      currentY = e.pageY;
+    }
+    
+    const deltaX = currentX - dragStartRef.current.x;
+    const deltaY = currentY - dragStartRef.current.y;
+    
+    if (vertical) {
+      container.scrollTop = dragStartRef.current.scrollTop - deltaY;
+    } else {
+      container.scrollLeft = dragStartRef.current.scrollLeft - deltaX;
+    }
+  }, [isDragging, vertical]);
+
+  const handleDragEnd = useCallback(() => {
+    if (!tabsListRef.current) return;
+    
+    setIsDragging(false);
+    const container = tabsListRef.current;
+    container.style.cursor = '';
+    container.style.userSelect = '';
+  }, []);
 
   // Update indicator position based on active tab
   const updateIndicator = useCallback(() => {
@@ -126,6 +219,12 @@ export function Tabs({
       // Only update opacity here, showPrev/showNext will be updated by useEffect with delay
       setPrevOpacity(canScrollUp ? 1 : 0);
       setNextOpacity(canScrollDown ? 1 : 0);
+      
+      // Update shadow visibility
+      if (limitShadow) {
+        setShowFirstShadow(canScrollUp);
+        setShowLastShadow(canScrollDown);
+      }
     } else {
       const { scrollLeft, scrollWidth, clientWidth } = container;
       const canScrollLeft = scrollLeft > 0;
@@ -134,8 +233,14 @@ export function Tabs({
       // Only update opacity here, showPrev/showNext will be updated by useEffect with delay
       setPrevOpacity(canScrollLeft ? 1 : 0);
       setNextOpacity(canScrollRight ? 1 : 0);
+      
+      // Update shadow visibility
+      if (limitShadow) {
+        setShowFirstShadow(canScrollLeft);
+        setShowLastShadow(canScrollRight);
+      }
     }
-  }, [hasNavigation, vertical]);
+  }, [hasNavigation, vertical, limitShadow]);
 
   // Scroll to specific tab
   const scrollToTab = (index: number) => {
@@ -193,14 +298,38 @@ export function Tabs({
     const container = tabsListRef.current;
     if (!container) return;
 
+    let scrollEndTimer: NodeJS.Timeout;
+
     const handleScroll = () => {
       updateNavigationVisibility();
       updateIndicator();
+      
+      // Emit scroll event
+      if (onScroll) {
+        onScroll({
+          scrollLeft: container.scrollLeft,
+          scrollTop: container.scrollTop
+        });
+      }
+
+      // Debounced scroll end detection
+      clearTimeout(scrollEndTimer);
+      scrollEndTimer = setTimeout(() => {
+        if (onScrollEnd) {
+          onScrollEnd({
+            scrollLeft: container.scrollLeft,
+            scrollTop: container.scrollTop
+          });
+        }
+      }, 150);
     };
 
     container.addEventListener('scroll', handleScroll);
-    return () => container.removeEventListener('scroll', handleScroll);
-  }, [updateIndicator, updateNavigationVisibility]);
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+      clearTimeout(scrollEndTimer);
+    };
+  }, [updateIndicator, updateNavigationVisibility, onScroll, onScrollEnd]);
 
   // Update on window resize
   useEffect(() => {
@@ -222,6 +351,35 @@ export function Tabs({
     }, 100);
     return () => clearTimeout(timer);
   }, [updateIndicator, updateNavigationVisibility]);
+
+  // Add wheel event listener
+  useEffect(() => {
+    const container = tabsListRef.current;
+    if (!container || scrollDisable) return;
+
+    container.addEventListener('wheel', handleWheel as EventListener, { passive: false });
+    return () => container.removeEventListener('wheel', handleWheel as EventListener);
+  }, [handleWheel, scrollDisable]);
+
+  // Add drag event listeners
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handleMove = (e: MouseEvent | TouchEvent) => handleDragMove(e);
+    const handleEnd = () => handleDragEnd();
+
+    document.addEventListener('mousemove', handleMove);
+    document.addEventListener('mouseup', handleEnd);
+    document.addEventListener('touchmove', handleMove, { passive: false });
+    document.addEventListener('touchend', handleEnd);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMove);
+      document.removeEventListener('mouseup', handleEnd);
+      document.removeEventListener('touchmove', handleMove);
+      document.removeEventListener('touchend', handleEnd);
+    };
+  }, [isDragging, handleDragMove, handleDragEnd]);
 
   // Sync controlled value (this is intentional for controlled components)
   useEffect(() => {
@@ -346,12 +504,20 @@ export function Tabs({
           </button>
         )}
 
+        {/* First gradient shadow */}
+        {limitShadow && showFirstShadow && (
+          <div className={`tabs-shadow tabs-shadow_first ${vertical ? 'tabs-shadow_vertical' : ''}`} />
+        )}
+
         {/* Tabs List */}
         <div
           ref={tabsListRef}
           className={`tabs-header-list tabs-header-list_${variant} ${
             vertical ? 'tabs-header-list_vertical' : ''
           }`}
+          onMouseDown={handleDragStart}
+          onTouchStart={handleDragStart}
+          style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
         >
           {tabs.map((tab, index) => (
             <div
@@ -373,6 +539,11 @@ export function Tabs({
           {/* Indicator */}
           <div className="tabs-header-indicator" />
         </div>
+
+        {/* Last gradient shadow */}
+        {limitShadow && showLastShadow && (
+          <div className={`tabs-shadow tabs-shadow_last ${vertical ? 'tabs-shadow_vertical' : ''}`} />
+        )}
 
         {/* Next Navigation Button */}
         {hasNavigation && showNext && (
