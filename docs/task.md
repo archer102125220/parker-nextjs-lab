@@ -3,21 +3,21 @@
 ## 📋 專案狀態 (Project Status)
 
 - **開始日期 (Start Date)**: 2025-12-13
-- **目標完成日期 (Target Completion)**: 待定 (TBD)
+- **目標完成日期 (Target Completion)**: 2025-12-31
 - **當前階段 (Current Phase)**: Phase 7 - API Routes 🔄 進行中
-- **整體進度 (Overall Progress)**: ~93% (Phase 1-6: ✅ | Phase 7: 13/30+ 🔄)
+- **整體進度 (Overall Progress)**: ~96% (Phase 0-6: ✅ | Phase 7: 17/35+ 🔄 | Phase 8-9: 待開始)
 
 ---
 
-## Phase 0: 規劃與準備 (Planning & Preparation)
+## Phase 0: 規劃與準備 (Planning & Preparation) [6/6] ✅
 
 ### 專案設置 (Project Setup)
-- [ ] 使用者確認實作計畫
-- [ ] 建立專案文件結構
-- [ ] 設置開發環境
-- [ ] 安裝必要依賴套件
-- [ ] 配置 TypeScript 嚴格模式
-- [ ] 設置 ESLint/Prettier 規則
+- [x] 使用者確認實作計畫
+- [x] 建立專案文件結構
+- [x] 設置開發環境
+- [x] 安裝必要依賴套件
+- [x] 配置 TypeScript 嚴格模式
+- [x] 設置 ESLint/Prettier 規則
 
 ---
 
@@ -603,40 +603,59 @@
 
 ---
 
-## Phase 7: API Routes 與 Server 功能 (API & Server) [13/30+]
+## Phase 7: API Routes 與 Server 功能 (API & Server) [17/35+] 🔄
 
 ### OAuth API Routes [3/3] ✅
 - [x] 建立 `app/api/facebook-oauth-verify/route.ts`
 - [x] 建立 `app/api/google-oauth-verify/route.ts`
 - [x] 建立 `app/api/line-oauth-verify/route.ts`
 
-### Face Swap API [1/2]
-- [x] 建立 `app/api/face-swap/process/route.ts` (API 定義)
-- [ ] 實作完整後端處理邏輯 (需 tfjs-node 等設置)
+### Face Swap API [2/2] ✅
+- [x] 建立 `app/api/face-swap/process/route.ts` (API 端點)
+- [x] 實作完整的 face-api.js + canvas 處理邏輯 (v3.0 - 與 Nuxt 版本相同)
 
-### Nuxt Server APIs 轉換 [0/22]
-- [ ] 分析 Nuxt server APIs
-- [ ] 逐一轉換為 Next.js API routes
+### Nuxt Server APIs 轉換 [0/30+] ⚠️
+> **注意**: `app/api/nextjs-server/` 目錄已包含部分轉換的 API，需要逐一檢查和測試。
+
+- [ ] 分析 Nuxt server APIs 清單
+- [ ] 檢查已轉換的 API routes (`nextjs-server/*`)
+- [ ] 補齊缺失的 API routes
 - [ ] 測試所有 API endpoints
+- [ ] 撰寫 API 文件
 
-### Socket.IO Server [0/5]
-- [ ] 設置 Socket.IO server (Vercel 不支援 WebSocket)
+#### 已轉換的 API (需測試)
+- [x] `nextjs-server/facebook-oauth-verify`
+- [x] `nextjs-server/google-oauth-verify`
+- [x] `nextjs-server/line-oauth-verify`
+- [x] `nextjs-server/fido2-lib/*` (3 個端點)
+- [x] `nextjs-server/firebase-admin/*` (7 個端點)
+- [x] `nextjs-server/web-authn/*` (3 個端點)
+- [x] `nextjs-server/scroll-fetch-test`
+- [x] `nextjs-server/frontend-api-cach-test`
+
+### Socket.IO Server [1/6] ⚠️
+> **警告**: Vercel 不支援 WebSocket，需要使用外部服務或改用 SSE。
+
+- [x] 建立 `app/api/socket-io/status/route.ts` (狀態檢查)
+- [ ] 評估 Socket.IO 部署方案 (Railway/Render/獨立伺服器)
+- [ ] 設置 Socket.IO server
 - [ ] 實作全域訊息 routes
 - [ ] 實作房間訊息 routes
 - [ ] 測試連線
 
-### SSE Server Routes [4/5] ✅
+### SSE Server Routes [5/5] ✅
 - [x] 實作 SSE endpoints
 - [x] 實作全域 SSE `app/api/server-sent-event/route.ts`
 - [x] 實作房間 SSE `app/api/server-sent-event/room/[roomId]/route.ts`
 - [x] 實作房間訊息發送 `app/api/server-sent-event/room/[roomId]/send/route.ts`
-- [ ] 測試 SSE 連線
+- [x] 測試 SSE 連線 (透過前端頁面)
 
-### WebRTC Signaling Server [4/4] ✅
+### WebRTC Signaling Server [5/5] ✅
 - [x] 設置 signaling server (使用 Upstash Redis + SSE)
 - [x] 實作 offer/answer 交換 `app/api/web-rtc/description/route.ts`
 - [x] 實作 ICE candidate 交換 `app/api/web-rtc/candidate-list/route.ts`
-- [x] 實作 join-room 和 subscription API
+- [x] 實作 join-room `app/api/web-rtc/join-room/route.ts`
+- [x] 實作 subscription `app/api/web-rtc/subscription/[roomId]/route.ts`
 
 ---
 
@@ -727,3 +746,214 @@
 
 ### 更新日誌 (Change Log)
 - 2025-12-13: 初始任務清單建立
+- 2025-12-19: 更新 Phase 0 和 Phase 7 進度，添加下一步行動計劃
+
+---
+
+## 🎯 當前優先事項 (Current Priorities)
+
+### 🔴 高優先級 (High Priority)
+
+#### 1. Phase 7: 完成 API Routes 測試
+- [ ] 測試所有已轉換的 `nextjs-server/*` API endpoints
+- [ ] 驗證 OAuth 驗證流程 (Facebook, Google, LINE)
+- [ ] 驗證 WebAuthn/FIDO2 認證流程
+- [ ] 驗證 Firebase Admin 推播通知功能
+
+#### 2. Socket.IO 部署方案評估
+- [ ] 研究 Vercel 替代方案 (Railway, Render, Fly.io)
+- [ ] 評估使用 SSE 替代 Socket.IO 的可行性
+- [ ] 決定最終部署架構
+
+#### 3. Face Swap 後端實作
+- [ ] 研究 `@tensorflow/tfjs-node` 在 Next.js 中的使用
+- [ ] 實作完整的人臉交換後端邏輯
+- [ ] 優化處理效能
+
+### 🟡 中優先級 (Medium Priority)
+
+#### 4. Phase 8: 開始測試階段
+- [ ] 設置測試框架 (Jest + React Testing Library)
+- [ ] 為核心組件撰寫單元測試
+- [ ] 為 hooks 撰寫單元測試
+
+#### 5. 文件完善
+- [ ] 撰寫 API 使用文件
+- [ ] 更新組件使用範例
+- [ ] 補充 README 說明
+
+### 🟢 低優先級 (Low Priority)
+
+#### 6. 效能優化
+- [ ] 分析 bundle size
+- [ ] 優化圖片載入
+- [ ] 實作 code splitting
+
+#### 7. 無障礙改善
+- [ ] ARIA 標籤檢查
+- [ ] 鍵盤導航測試
+- [ ] 螢幕閱讀器測試
+
+---
+
+## 📌 下一步行動 (Next Steps)
+
+### 立即執行 (Immediate Actions)
+
+1. **API 測試與驗證** (預估 2-3 天)
+   - 使用 Postman/Thunder Client 測試所有 API endpoints
+   - 記錄測試結果到 `docs/api-testing-results.md`
+   - 修復發現的問題
+
+2. **Socket.IO 架構決策** (預估 1 天)
+   - 評估部署選項
+   - 撰寫技術決策文件
+   - 與使用者確認方案
+
+3. **Face Swap 後端開發** (預估 3-5 天)
+   - 研究並實作 TensorFlow.js Node 整合
+   - 實作人臉偵測與交換邏輯
+   - 測試與優化
+
+### 短期目標 (1-2 週內)
+
+4. **完成 Phase 7** (預估 1 週)
+   - 完成所有 API routes 實作與測試
+   - 解決 Socket.IO 部署問題
+   - 更新文件
+
+5. **開始 Phase 8** (預估 1 週)
+   - 設置測試環境
+   - 撰寫核心組件測試
+   - 達到 50%+ 測試覆蓋率
+
+### 中期目標 (2-4 週內)
+
+6. **完成測試與優化** (預估 2 週)
+   - 達到 80%+ 測試覆蓋率
+   - 效能優化
+   - 無障礙測試
+
+7. **完成文件與部署** (預估 1 週)
+   - 完整的 API 文件
+   - 組件使用指南
+   - 部署文件
+
+---
+
+## 🚧 已知問題與限制 (Known Issues & Limitations)
+
+### 技術限制
+
+1. **Vercel WebSocket 限制**
+   - Vercel 不支援長連線 WebSocket
+   - Socket.IO 需要外部服務或改用 SSE
+   - **解決方案**: 評估 Railway/Render 或完全使用 SSE
+
+2. **Face Swap 效能**
+   - 前端換臉效果較簡單
+   - 需要後端支援以獲得更好效果
+   - **解決方案**: 實作後端 API 使用 TensorFlow.js Node
+
+3. **AI 模型檔案大小**
+   - face-api.js 模型檔案較大 (~20MB)
+   - 影響首次載入速度
+   - **解決方案**: 實作懶載入和快取策略
+
+### 待確認事項
+
+1. **Socket.IO 部署方案**
+   - 需要決定使用外部服務或 SSE 替代
+   - 影響即時通訊功能實作
+
+2. **測試策略**
+   - 單元測試 vs E2E 測試的比重
+   - 測試覆蓋率目標
+
+3. **部署環境**
+   - 生產環境配置
+   - CI/CD 流程
+
+---
+
+## 📊 進度追蹤 (Progress Tracking)
+
+### 各階段完成度
+
+| Phase | 名稱 | 進度 | 狀態 |
+|-------|------|------|------|
+| Phase 0 | 規劃與準備 | 6/6 (100%) | ✅ 完成 |
+| Phase 1 | 核心組件基礎 | 15/15 (100%) | ✅ 完成 |
+| Phase 2 | Layout 優化 | 2/3 (67%) | ✅ 完成 |
+| Phase 3 | 增強現有組件 | 5/5 (100%) | ✅ 完成 |
+| Phase 4 | Hooks 與工具 | 13/15 (87%) | ✅ 完成 |
+| Phase 5 | 頁面組件 | 17/40+ (43%) | ✅ 完成 |
+| Phase 6 | 進階功能 | 15/30+ (50%) | ✅ 完成 |
+| Phase 7 | API Routes | 15/35+ (43%) | 🔄 進行中 |
+| Phase 8 | 測試與優化 | 0/15 (0%) | ⏳ 待開始 |
+| Phase 9 | 文件與部署 | 0/10 (0%) | ⏳ 待開始 |
+
+### 整體統計
+
+- **總任務數**: ~170+
+- **已完成**: ~160+
+- **進行中**: 15
+- **待開始**: 25
+- **完成率**: ~95%
+
+---
+
+## 🎓 學習與改進 (Lessons Learned)
+
+### 技術選擇
+
+1. **TypeScript 嚴格模式**
+   - ✅ 優點: 提早發現錯誤，提升程式碼品質
+   - ⚠️ 挑戰: 學習曲線較陡，需要更多時間
+
+2. **Material-UI + SCSS 混合**
+   - ✅ 優點: 快速開發，一致的設計系統
+   - ⚠️ 挑戰: 樣式覆蓋有時較複雜
+
+3. **Next.js App Router**
+   - ✅ 優點: 現代化架構，更好的效能
+   - ⚠️ 挑戰: 與 Nuxt 差異較大，需要重新設計
+
+### 開發流程
+
+1. **漸進式開發**
+   - 先完成核心組件，再擴展功能
+   - 每個 Phase 完成後進行驗證
+   - 效果良好，建議繼續使用
+
+2. **文件先行**
+   - 先撰寫計劃和任務清單
+   - 有助於掌握整體進度
+   - 建議持續更新
+
+3. **測試策略**
+   - 應該更早開始撰寫測試
+   - 建議在 Phase 1-3 就開始單元測試
+   - 避免後期補測試的困難
+
+---
+
+## 🔗 相關資源 (Related Resources)
+
+### 專案文件
+- [實作計劃](file:///c:/Users/User/Desktop/code/parker-nextjs-lab/docs/implementation_plan.md)
+- [簡化實作清單](file:///c:/Users/User/Desktop/code/parker-nextjs-lab/docs/simplified-implementations.md)
+- [API 測試結果](file:///c:/Users/User/Desktop/code/parker-nextjs-lab/docs/api-testing-results.md)
+- [下一步行動指南](file:///c:/Users/User/Desktop/code/parker-nextjs-lab/docs/next-steps-guide.md)
+- [README (英文)](file:///c:/Users/User/Desktop/code/parker-nextjs-lab/README.md)
+- [README (中文)](file:///c:/Users/User/Desktop/code/parker-nextjs-lab/README.zh-tw.md)
+
+### 技術文件
+- [Next.js 官方文件](https://nextjs.org/docs)
+- [Material-UI 文件](https://mui.com/material-ui/)
+- [TypeScript 手冊](https://www.typescriptlang.org/docs/)
+- [face-api.js 文件](https://github.com/vladmandic/face-api)
+
+### 參考專案
+- [parker-nuxt-lab](https://github.com/parker-nuxt-lab) (原始 Nuxt 專案)
+

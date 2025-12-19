@@ -231,6 +231,119 @@
 | `useFirebase` | Firebase 工具 |
 | `useGTMTrack` | GTM 事件追蹤 |
 
+## 💎 TypeScript 最佳實踐
+
+本專案採用**嚴格的型別安全**標準，完全避免使用 `any` 型別。
+
+### 核心原則
+
+#### ❌ 避免使用 `any`
+```typescript
+// ❌ 不好的做法
+function processData(data: any) {
+  return data.value;
+}
+
+// ✅ 好的做法
+function processData<T extends { value: unknown }>(data: T) {
+  return data.value;
+}
+```
+
+#### ✅ 使用精確的型別定義
+```typescript
+// ✅ 使用官方型別定義
+import type * as faceApi from 'face-api.js';
+
+export async function detectFace(
+  image: faceApi.TNetInput
+): Promise<faceApi.WithFaceLandmarks<...> | null>
+```
+
+#### ✅ 型別斷言使用 `as unknown as`
+```typescript
+// ✅ 雙重斷言（比 as any 更安全）
+const element = document.getElementById('id') as unknown as CustomElement;
+
+// ❌ 避免直接使用 as any
+const element = document.getElementById('id') as any;
+```
+
+### 實際應用範例
+
+#### Face Swap API 型別安全實作
+
+```typescript
+// utils/third-party/face-swap.ts
+
+// 1. 使用官方型別定義
+import type * as faceApi from 'face-api.js';
+
+// 2. 明確的函式簽名
+export async function detectFace(
+  image: faceApi.TNetInput
+): Promise<faceApi.WithFaceLandmarks<
+  { detection: faceApi.FaceDetection },
+  faceApi.FaceLandmarks68
+> | null> {
+  const detection = await faceapi
+    .detectSingleFace(image)
+    .withFaceLandmarks();
+  
+  return detection || null;
+}
+
+// 3. 型別斷言需要時使用 as unknown as
+// 原因：node-canvas 型別與瀏覽器型別不同，但執行時相容
+faceapi.env.monkeyPatch({
+  Canvas: Canvas as unknown as typeof HTMLCanvasElement,
+  Image: Image as unknown as typeof HTMLImageElement,
+  ImageData: ImageData as unknown as typeof globalThis.ImageData
+});
+```
+
+### 為什麼避免 `any`？
+
+| 使用 `any` | 使用精確型別 |
+|-----------|------------|
+| ❌ 失去型別檢查 | ✅ 編譯時錯誤偵測 |
+| ❌ 無法自動完成 | ✅ IDE 智能提示 |
+| ❌ 重構困難 | ✅ 安全重構 |
+| ❌ 執行時錯誤 | ✅ 編譯時錯誤 |
+
+### 型別斷言指南
+
+#### 何時使用型別斷言？
+
+1. **第三方庫型別不匹配**（如 node-canvas vs 瀏覽器 Canvas）
+2. **DOM 操作**（需要特定元素型別）
+3. **動態載入模組**（型別定義不完整）
+
+#### 如何安全地使用？
+
+```typescript
+// ✅ 使用 as unknown as（雙重斷言）
+const value = input as unknown as TargetType;
+
+// ✅ 添加註解說明原因
+// Type assertion: node-canvas Image is compatible with TNetInput at runtime
+const detection = await detectFace(img as unknown as faceApi.TNetInput);
+
+// ✅ 使用型別守衛
+function isCustomType(value: unknown): value is CustomType {
+  return typeof value === 'object' && value !== null && 'property' in value;
+}
+```
+
+### 專案中的型別安全實例
+
+- ✅ **Face Swap API**: 完全型別安全，無 `any` 使用
+- ✅ **Custom Hooks**: 所有 hooks 都有明確的泛型定義
+- ✅ **API Routes**: 使用 TypeScript 介面定義請求/回應
+- ✅ **Components**: Props 使用介面定義，支援 IntelliSense
+
+
+
 ## 🔀 Middleware 架構
 
 本專案實現了受 Nuxt.js 啟發的模組化 middleware 系統。

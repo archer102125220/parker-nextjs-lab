@@ -231,6 +231,119 @@ Translation files are located in `i18n/locales/` and can be managed through Goog
 | `useFirebase` | Firebase utilities |
 | `useGTMTrack` | GTM event tracking |
 
+## 💎 TypeScript Best Practices
+
+This project follows **strict type safety** standards, completely avoiding the use of `any` types.
+
+### Core Principles
+
+#### ❌ Avoid Using `any`
+```typescript
+// ❌ Bad practice
+function processData(data: any) {
+  return data.value;
+}
+
+// ✅ Good practice
+function processData<T extends { value: unknown }>(data: T) {
+  return data.value;
+}
+```
+
+#### ✅ Use Precise Type Definitions
+```typescript
+// ✅ Use official type definitions
+import type * as faceApi from 'face-api.js';
+
+export async function detectFace(
+  image: faceApi.TNetInput
+): Promise<faceApi.WithFaceLandmarks<...> | null>
+```
+
+#### ✅ Type Assertions with `as unknown as`
+```typescript
+// ✅ Double assertion (safer than as any)
+const element = document.getElementById('id') as unknown as CustomElement;
+
+// ❌ Avoid direct as any
+const element = document.getElementById('id') as any;
+```
+
+### Real-World Examples
+
+#### Face Swap API Type-Safe Implementation
+
+```typescript
+// utils/third-party/face-swap.ts
+
+// 1. Use official type definitions
+import type * as faceApi from 'face-api.js';
+
+// 2. Explicit function signatures
+export async function detectFace(
+  image: faceApi.TNetInput
+): Promise<faceApi.WithFaceLandmarks<
+  { detection: faceApi.FaceDetection },
+  faceApi.FaceLandmarks68
+> | null> {
+  const detection = await faceapi
+    .detectSingleFace(image)
+    .withFaceLandmarks();
+  
+  return detection || null;
+}
+
+// 3. Type assertions when necessary with as unknown as
+// Reason: node-canvas types differ from browser types, but are runtime compatible
+faceapi.env.monkeyPatch({
+  Canvas: Canvas as unknown as typeof HTMLCanvasElement,
+  Image: Image as unknown as typeof HTMLImageElement,
+  ImageData: ImageData as unknown as typeof globalThis.ImageData
+});
+```
+
+### Why Avoid `any`?
+
+| Using `any` | Using Precise Types |
+|------------|---------------------|
+| ❌ Loses type checking | ✅ Compile-time error detection |
+| ❌ No autocomplete | ✅ IDE IntelliSense |
+| ❌ Difficult refactoring | ✅ Safe refactoring |
+| ❌ Runtime errors | ✅ Compile-time errors |
+
+### Type Assertion Guidelines
+
+#### When to Use Type Assertions?
+
+1. **Third-party library type mismatches** (e.g., node-canvas vs browser Canvas)
+2. **DOM operations** (requiring specific element types)
+3. **Dynamic module loading** (incomplete type definitions)
+
+#### How to Use Safely?
+
+```typescript
+// ✅ Use as unknown as (double assertion)
+const value = input as unknown as TargetType;
+
+// ✅ Add comments explaining why
+// Type assertion: node-canvas Image is compatible with TNetInput at runtime
+const detection = await detectFace(img as unknown as faceApi.TNetInput);
+
+// ✅ Use type guards
+function isCustomType(value: unknown): value is CustomType {
+  return typeof value === 'object' && value !== null && 'property' in value;
+}
+```
+
+### Type Safety Examples in This Project
+
+- ✅ **Face Swap API**: Fully type-safe, zero `any` usage
+- ✅ **Custom Hooks**: All hooks have explicit generic definitions
+- ✅ **API Routes**: TypeScript interfaces for request/response
+- ✅ **Components**: Props defined with interfaces, full IntelliSense support
+
+
+
 ## 🔀 Middleware Architecture
 
 The project implements a modular middleware system inspired by Nuxt.js.

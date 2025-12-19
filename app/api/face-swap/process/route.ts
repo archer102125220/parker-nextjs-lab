@@ -1,15 +1,17 @@
 import { NextResponse } from 'next/server';
+import { performFaceSwap } from '@/utils/third-party/face-swap';
 
 /**
  * Face Swap Process API
  *
- * 處理前端上傳的來源臉和目標臉圖片，執行換臉處理
+ * 使用 face-api.js + canvas 進行人臉替換
+ * 參考 parker-nuxt-lab 的實作方式
  *
- * 注意：此 API 為簡化實作，實際的臉部偵測和換臉處理較為複雜
- * - face-api.js 在 Node.js 環境需要額外設置 (tfjs-node, canvas)
- * - 完整實作需要 @vladmandic/face-api 或類似的 Node.js 相容版本
- *
- * 目前此 API 提供接口定義，前端應優先使用 client-side 處理
+ * 功能：
+ * - 接收 Base64 編碼的圖片
+ * - 使用 face-api.js 偵測人臉
+ * - 使用 canvas 進行人臉區域替換
+ * - 返回處理後的圖片
  */
 
 interface ProcessRequest {
@@ -22,11 +24,14 @@ interface ProcessResponse {
   resultImage?: string;
   error?: string;
   message?: string;
+  processingTime?: number;
 }
 
 export async function POST(
   request: Request
 ): Promise<NextResponse<ProcessResponse>> {
+  const startTime = Date.now();
+
   try {
     const body: ProcessRequest = await request.json();
     const { sourceImage, targetImage } = body;
@@ -34,60 +39,64 @@ export async function POST(
     // Validate inputs
     if (!sourceImage) {
       return NextResponse.json(
-        { success: false, error: '來源圖片為必填' },
+        { success: false, error: '缺少來源圖片 (sourceImage)' },
         { status: 400 }
       );
     }
 
     if (!targetImage) {
       return NextResponse.json(
-        { success: false, error: '目標圖片為必填' },
+        { success: false, error: '缺少目標圖片 (targetImage)' },
         { status: 400 }
       );
     }
 
-    // Check if images are valid base64
-    const base64Pattern = /^data:image\/(png|jpeg|jpg|webp);base64,/;
-    if (!base64Pattern.test(sourceImage) || !base64Pattern.test(targetImage)) {
+    // Perform face swap using face-api.js
+    const resultImage = await performFaceSwap(sourceImage, targetImage);
+
+    const processingTime = Date.now() - startTime;
+
+    return NextResponse.json({
+      success: true,
+      resultImage,
+      processingTime
+    });
+  } catch (error) {
+    console.error('Face swap error:', error);
+
+    const processingTime = Date.now() - startTime;
+
+    // Handle known errors (face detection failures)
+    if (
+      error instanceof Error &&
+      (error.message.includes('無法在') ||
+        error.message.includes('Cannot detect'))
+    ) {
       return NextResponse.json(
         {
           success: false,
-          error: '圖片格式無效，請上傳 PNG, JPEG 或 WebP 格式'
+          error: error.message,
+          processingTime
         },
         { status: 400 }
       );
     }
 
-    /**
-     * 注意：完整的後端換臉處理需要：
-     * 1. 安裝 @tensorflow/tfjs-node 和 canvas
-     * 2. 設置 face-api.js 或 @vladmandic/face-api 用於 Node.js
-     * 3. 載入臉部偵測模型
-     * 4. 實作臉部偵測、對齊、融合邏輯
-     *
-     * 由於 Vercel serverless 環境限制，建議使用前端處理
-     * 或使用專門的 AI 平台 API (如 AWS Rekognition, Azure Face API)
-     */
-
-    // 目前返回提示訊息，指引使用前端處理
-    return NextResponse.json({
-      success: false,
-      message: '後端換臉 API 尚未完整實作。請使用前端版本進行換臉處理。',
-      error: 'BACKEND_NOT_IMPLEMENTED'
-    });
-  } catch (error) {
-    console.error('Face Swap process error:', error);
-
     // Handle JSON parse errors
     if (error instanceof SyntaxError) {
       return NextResponse.json(
-        { success: false, error: '請求格式錯誤' },
+        { success: false, error: '請求格式錯誤', processingTime },
         { status: 400 }
       );
     }
 
+    // Handle unexpected errors
     return NextResponse.json(
-      { success: false, error: '伺服器內部錯誤' },
+      {
+        success: false,
+        error: error instanceof Error ? error.message : '人臉替換處理失敗',
+        processingTime
+      },
       { status: 500 }
     );
   }
@@ -99,22 +108,47 @@ export async function POST(
 export async function GET(): Promise<NextResponse> {
   return NextResponse.json({
     name: 'Face Swap Process API',
-    version: '1.0.0',
-    description: '換臉處理 API',
-    status: 'partial',
-    note: '目前僅提供 API 接口定義，完整處理請使用前端版本',
+    version: '3.0.0',
+    description: '換臉處理 API (face-api.js + canvas 實作)',
+    status: 'functional',
+    note: '後端使用 face-api.js 進行人臉偵測和 canvas 進行圖片處理',
+    features: [
+      '✅ 使用 face-api.js 自動偵測人臉',
+      '✅ 使用 canvas 進行圖片處理',
+      '✅ 橢圓形遮罩平滑融合',
+      '✅ 自動調整人臉大小和位置',
+      '✅ 完整的錯誤處理'
+    ],
+    models: [
+      'ssdMobilenetv1 - 人臉偵測',
+      'faceLandmark68Net - 人臉特徵點',
+      'faceRecognitionNet - 人臉識別'
+    ],
+    limitations: [
+      '需要在圖片中偵測到清晰的人臉',
+      '每張圖片只處理一張人臉',
+      'Serverless 環境有執行時間限制'
+    ],
     endpoints: {
       POST: {
         description: '處理換臉請求',
         body: {
-          sourceImage: 'Base64 encoded 來源臉圖片',
-          targetImage: 'Base64 encoded 目標臉圖片'
+          sourceImage: 'Base64 encoded 來源臉圖片 (必填)',
+          targetImage: 'Base64 encoded 目標臉圖片 (必填)'
         },
         response: {
           success: 'boolean',
           resultImage: 'Base64 encoded 結果圖片 (當成功時)',
-          error: '錯誤訊息 (當失敗時)'
+          error: '錯誤訊息 (當失敗時)',
+          processingTime: '處理時間 (毫秒)'
+        },
+        validation: {
+          imageFormat: 'PNG, JPEG, JPG, WebP (Base64 encoded)',
+          faceDetection: '自動偵測，無需提供座標'
         }
+      },
+      GET: {
+        description: '取得 API 文件'
       }
     }
   });
