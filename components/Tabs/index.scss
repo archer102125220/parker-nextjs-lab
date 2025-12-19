@@ -263,4 +263,31 @@
             }
         }
     }
+
+    // Ripple effect
+    &-ripple {
+        position: absolute;
+        border-radius: 50%;
+        // Background color set via inline style
+        transform: scale(0);
+        animation: ripple-animation 0.6s ease-out;
+        pointer-events: none;
+    }
+
+    // Hover indicator
+    &-hover-indicator {
+        position: absolute;
+        bottom: 0; // Same as main indicator
+        background-color: var(--indicator-color, #1976d2);
+        transition: all 0.3s ease-in-out;
+        pointer-events: none;
+        z-index: 0;
+    }
+}
+
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
 }

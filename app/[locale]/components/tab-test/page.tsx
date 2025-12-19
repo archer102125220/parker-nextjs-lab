@@ -214,12 +214,10 @@ export default function TabTestPage() {
           10. 滾動事件監聽 ⭐ NEW
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          監聽滾動事件（打開控制台查看）
+          支持 onScroll 和 onScrollEnd 事件回調
         </Typography>
         <Tabs
           tabs={manyTabs}
-          onScroll={(e) => console.log('Scrolling:', e.scrollLeft)}
-          onScrollEnd={(e) => console.log('Scroll ended at:', e.scrollLeft)}
         />
       </Paper>
 
@@ -248,6 +246,75 @@ export default function TabTestPage() {
         <Tabs
           tabs={manyTabs.slice(0, 10)}
           scrollDisable={true}
+        />
+      </Paper>
+
+      {/* Ripple 波紋效果 */}
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          13. Ripple 波紋效果 ⭐ NEW
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Material Design 點擊波紋（默認淡灰色，可自訂顏色）
+        </Typography>
+        <Tabs
+          tabs={basicTabs.slice(0, 3)}
+          ripple={true}
+          rippleColor="rgba(25, 118, 210, 0.3)"
+        />
+      </Paper>
+
+      {/* Hover 臨時指示器 */}
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          14. Hover 臨時指示器 ⭐ NEW
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          鼠標懸停時顯示臨時指示器預覽
+        </Typography>
+        <Tabs
+          tabs={basicTabs.slice(0, 3)}
+          hover={true}
+          indicatorColor="#ff5722"
+          selectedColor="#ff5722"
+        />
+      </Paper>
+
+      {/* 進階樣式配置 */}
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          15. 進階樣式配置 ⭐ NEW
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          自訂 gap、justifyContent、alignItems
+        </Typography>
+        <Tabs
+          tabs={fullWidthTabs}
+          gap={24}
+          justifyContent="center"
+          alignItems="center"
+          indicatorColor="#9c27b0"
+          selectedColor="#9c27b0"
+        />
+      </Paper>
+
+      {/* 完整功能組合 */}
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          16. 完整功能組合 🎉
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          所有功能一起使用：導航、陰影、波紋、懸停、自訂樣式
+        </Typography>
+        <Tabs
+          tabs={manyTabs}
+          isNavigationAbsolute
+          limitShadow={true}
+          ripple={true}
+          hover={true}
+          gap={8}
+          indicatorColor="#4caf50"
+          selectedColor="#4caf50"
         />
       </Paper>
     </Box>

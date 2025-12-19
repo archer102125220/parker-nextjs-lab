@@ -25,6 +25,12 @@ export interface TabsProps {
   onScrollEnd?: (event: { scrollLeft: number; scrollTop: number }) => void;
   scrollDisable?: boolean;
   limitShadow?: boolean;
+  ripple?: boolean;
+  rippleColor?: string;
+  hover?: boolean;
+  gap?: number | string;
+  justifyContent?: string;
+  alignItems?: string;
 }
 
 const SCROLL_STEP = 150;
@@ -43,7 +49,13 @@ export function Tabs({
   onScroll,
   onScrollEnd,
   scrollDisable = false,
-  limitShadow = true
+  limitShadow = true,
+  ripple = true,
+  rippleColor = 'rgba(158, 158, 158, 0.4)',
+  hover = false,
+  gap,
+  justifyContent,
+  alignItems
 }: TabsProps) {
   const [activeTab, setActiveTab] = useState(value ?? tabs[0]?.value ?? 0);
   const [showPrev, setShowPrev] = useState(false);
@@ -52,6 +64,14 @@ export function Tabs({
   const [nextOpacity, setNextOpacity] = useState(0);
   const [showFirstShadow, setShowFirstShadow] = useState(false);
   const [showLastShadow, setShowLastShadow] = useState(false);
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+  const [hoverIndicatorStyle, setHoverIndicatorStyle] = useState({ 
+    left: 0, 
+    top: 0,
+    width: 0,
+    height: 0,
+    opacity: 0
+  });
   const [indicatorStyle, setIndicatorStyle] = useState({ 
     left: 0, 
     top: 0,
@@ -73,6 +93,68 @@ export function Tabs({
     // Scroll active tab into view
     scrollToTab(index);
   };
+
+  // Ripple effect handler
+  const handleRipple = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ripple) return;
+    
+    const button = e.currentTarget;
+    const rippleElement = document.createElement('span');
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = e.clientX - rect.left - size / 2;
+    const y = e.clientY - rect.top - size / 2;
+    
+    rippleElement.style.width = rippleElement.style.height = `${size}px`;
+    rippleElement.style.left = `${x}px`;
+    rippleElement.style.top = `${y}px`;
+    rippleElement.style.backgroundColor = rippleColor;
+    rippleElement.classList.add('tabs-ripple');
+    
+    button.appendChild(rippleElement);
+    
+    setTimeout(() => {
+      rippleElement.remove();
+    }, 600);
+  }, [ripple, rippleColor]);
+
+  // Hover indicator handlers
+  const handleMouseEnter = useCallback((index: number) => {
+    if (!hover || tabs[index]?.disabled) return;
+    
+    setHoverIndex(index);
+    const tabElement = tabRefs.current[index];
+    const containerElement = tabsListRef.current;
+    
+    if (tabElement && containerElement) {
+      const containerRect = containerElement.getBoundingClientRect();
+      const tabRect = tabElement.getBoundingClientRect();
+      
+      if (vertical) {
+        setHoverIndicatorStyle({
+          left: 0,
+          top: tabRect.top - containerRect.top + containerElement.scrollTop,
+          width: 0,
+          height: tabRect.height,
+          opacity: 0.3
+        });
+      } else {
+        setHoverIndicatorStyle({
+          left: tabRect.left - containerRect.left + containerElement.scrollLeft,
+          top: 0,
+          width: tabRect.width,
+          height: 0,
+          opacity: 0.3
+        });
+      }
+    }
+  }, [hover, tabs, vertical]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (!hover) return;
+    setHoverIndex(null);
+    setHoverIndicatorStyle(prev => ({ ...prev, opacity: 0 }));
+  }, [hover]);
 
   // Mouse wheel scroll handler
   const handleWheel = useCallback((e: WheelEvent) => {
@@ -441,6 +523,9 @@ export function Tabs({
     '--prev-opacity': prevOpacity,
     '--next-opacity': nextOpacity,
     '--navigation-position': isNavigationAbsolute ? 'absolute' : 'relative',
+    '--tab-gap': gap ? (typeof gap === 'number' ? `${gap}px` : gap) : '0',
+    '--tab-justify-content': justifyContent || 'flex-start',
+    '--tab-align-items': alignItems || 'center',
     ...(isNavigationAbsolute && vertical
       ? {
           '--prev-top': '0px',
@@ -526,11 +611,17 @@ export function Tabs({
               className={`tabs-header-item ${
                 tab.value === activeTab ? 'tabs-header-item_active' : ''
               } ${tab.disabled ? 'tabs-header-item_disabled' : ''}`}
-              onClick={() => handleTabClick(tab.value, index)}
+              onClick={(e) => {
+                handleTabClick(tab.value, index);
+                handleRipple(e);
+              }}
+              onMouseEnter={() => handleMouseEnter(index)}
+              onMouseLeave={handleMouseLeave}
               role="tab"
               aria-selected={tab.value === activeTab}
               aria-disabled={tab.disabled}
               tabIndex={tab.disabled ? -1 : 0}
+              style={{ position: 'relative', overflow: 'hidden' }}
             >
               {tab.label}
             </div>
@@ -538,6 +629,22 @@ export function Tabs({
           
           {/* Indicator */}
           <div className="tabs-header-indicator" />
+          
+          {/* Hover Indicator */}
+          {hover && hoverIndex !== null && (
+            <div 
+              className="tabs-hover-indicator"
+              style={{
+                left: vertical ? 'auto' : `${hoverIndicatorStyle.left}px`,
+                right: vertical ? 0 : 'auto',
+                top: vertical ? `${hoverIndicatorStyle.top}px` : 'auto',
+                bottom: vertical ? 'auto' : 0,
+                width: vertical ? '2px' : `${hoverIndicatorStyle.width}px`,
+                height: vertical ? `${hoverIndicatorStyle.height}px` : '2px',
+                opacity: hoverIndicatorStyle.opacity
+              }}
+            />
+          )}
         </div>
 
         {/* Last gradient shadow */}
