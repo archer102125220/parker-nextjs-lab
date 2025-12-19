@@ -1,159 +1,203 @@
 'use client';
-import type { ElementType, CSSProperties } from 'react';
-import { useState, useMemo, useEffect, useCallback } from 'react';
 
-import '@/components/Animation/EnterLabel/enter_label.scss';
+import { useState, useEffect, useRef, useCallback, ElementType, CSSProperties } from 'react';
+import './index.scss';
 
-interface EnterLabelCssVariableType extends CSSProperties {
+export interface EnterLabelProps {
+  tagName?: ElementType;
+  randomLen?: 'en' | 'zh' | 'en-zh';
+  autoStart?: boolean;
+  label: string;
+  speed?: number;
+  value?: boolean;
+  animationEnd?: boolean;
+  onValueChange?: (value: boolean) => void;
+  onAnimationEndChange?: (animationEnd: boolean) => void;
+  className?: string;
+}
+
+interface EnterLabelCSSProperties extends CSSProperties {
   '--animation_enter_label_anime'?: string;
 }
 
-export type updateValueType = (newValue: boolean) => void;
-export type updateAnimationEndType = (newValue: boolean) => void;
+export function EnterLabel({
+  tagName: TagName = 'p',
+  randomLen = 'en',
+  autoStart = true,
+  label,
+  speed = 10,
+  value = false,
+  animationEnd = false,
+  onValueChange,
+  onAnimationEndChange,
+  className = ''
+}: EnterLabelProps) {
+  const [enterLabel, setEnterLabel] = useState('');
+  const [isAnimating, setIsAnimating] = useState(value);
+  const [isAnimationEnd, setIsAnimationEnd] = useState(animationEnd);
+  const animationFrameRef = useRef<number | undefined>(undefined);
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
-export interface EnterLabelPropsType {
-  value: boolean;
-  animationEnd: boolean;
-
-  tagName?: ElementType;
-  randomLen?: string;
-  autoStart?: boolean;
-  label?: string;
-  speed?: number;
-
-  change?: updateValueType;
-  updateValue?: updateValueType;
-  updateAnimationEnd?: updateAnimationEndType;
-}
-
-export function EnterLabel(props: EnterLabelPropsType) {
-  const {
-    value = false,
-    animationEnd = false,
-
-    tagName: TagName = 'p',
-    randomLen = 'en',
-    autoStart = true,
-    label = '',
-    speed = 50,
-
-    change,
-    updateValue,
-    updateAnimationEnd
-  } = props;
-
-  const [enterLabel, setEnterLabel] = useState<string>('');
-
-  const cssVariable = useMemo<EnterLabelCssVariableType>(
-    function () {
-      const safeCssVariable: EnterLabelCssVariableType = {};
-
-      if (value === true && animationEnd === false) {
-        safeCssVariable['--animation_enter_label_anime'] =
-          'var(--enter_label_anime)';
-      }
-
-      return safeCssVariable;
-    },
-    [value, animationEnd]
-  );
-
-  const getRandomUppercaseLetter = useCallback(function () {
-    // 隨機生成一個 65-90 之間的數字（A-Z 的 ASCII 碼範圍）
+  // Generate random uppercase letter (A-Z)
+  const getRandomUppercaseLetter = (): string => {
     const randomAscii = Math.floor(Math.random() * 26) + 65;
-
-    // Math.random() 會產生 0 (包含) 到 1 (不包含) 之間的隨機小數
-    // 因此，我們乘以 94 (126 - 33 + 1) 再加上 33，就能得到 33 到 126 之間的隨機整數
-    // const randomAscii = Math.floor(Math.random() * 94) + 33;
-
     return String.fromCharCode(randomAscii);
-  }, []);
+  };
 
-  const generateRandomChineseCharacter = useCallback(function () {
-    // 中文常用字的 Unicode 範圍
-    // const chineseCharRange = '\u4E00-\u9FFF';
-
-    // 隨機生成一個 Unicode 碼點
+  // Generate random Chinese character
+  const generateRandomChineseCharacter = (): string => {
     const randomCodePoint =
       Math.floor(Math.random() * (0x9fff - 0x4e00 + 1)) + 0x4e00;
-
-    // 將 Unicode 碼點轉換為字符
     return String.fromCodePoint(randomCodePoint);
-  }, []);
+  };
 
-  const handleEnterLabel = useCallback(
-    function () {
-      if (enterLabel.length <= label.length) {
-        const safeRandomLen = randomLen || '';
-        const randomLenLowerCase = safeRandomLen.toLowerCase();
-        let randomString = '';
+  const revealedCharsRef = useRef(0); // Track how many characters have been revealed
+  const iterationCountRef = useRef(0); // Track iterations for current character
+  const maxIterationsPerChar = 5; // Number of random chars to show before revealing real char
+  
+  // Calculate delay per frame: speed is the total time per character
+  // Divide by iterations to get time per frame
+  const getFrameDelay = () => {
+    return Math.floor(speedRef.current / maxIterationsPerChar);
+  };
+  
+  // Use refs to avoid callback recreation
+  const labelRef = useRef(label);
+  const randomLenRef = useRef(randomLen);
+  const speedRef = useRef(speed);
+  const onAnimationEndChangeRef = useRef(onAnimationEndChange);
+  const handleEnterLabelRef = useRef<(() => void) | undefined>(undefined);
 
-        for (let i = 0; i <= enterLabel.length + 1; i++) {
-          if (randomLenLowerCase.includes('zh')) {
-            randomString += generateRandomChineseCharacter();
-          } else {
-            randomString += getRandomUppercaseLetter();
-          }
-        }
+  // Update refs when props change
+  useEffect(() => {
+    labelRef.current = label;
+    randomLenRef.current = randomLen;
+    speedRef.current = speed;
+    onAnimationEndChangeRef.current = onAnimationEndChange;
+  }, [label, randomLen, speed, onAnimationEndChange]);
 
-        setEnterLabel(randomString);
+
+  const handleEnterLabel = useCallback(() => {
+    const targetLabel = labelRef.current;
+    const targetLength = targetLabel.length;
+    const currentRevealed = revealedCharsRef.current;
+
+    // All characters revealed - stop animation
+    if (currentRevealed >= targetLength) {
+      setEnterLabel(targetLabel);
+      setIsAnimationEnd(true);
+      onAnimationEndChangeRef.current?.(true);
+      return;
+    }
+
+    // Build the display string
+    let displayString = '';
+    const randomLenLower = randomLenRef.current.toLowerCase();
+
+    // Add already revealed characters (from label)
+    for (let i = 0; i < currentRevealed; i++) {
+      displayString += targetLabel[i];
+    }
+
+    // Add one random character for the position being revealed
+    if (currentRevealed < targetLength) {
+      if (randomLenLower.includes('zh')) {
+        displayString += generateRandomChineseCharacter();
       } else {
-        setEnterLabel(label);
-
-        if (typeof updateAnimationEnd === 'function') {
-          updateAnimationEnd(true);
-        }
+        displayString += getRandomUppercaseLetter();
       }
-    },
-    [
-      enterLabel,
-      label,
-      randomLen,
-      getRandomUppercaseLetter,
-      generateRandomChineseCharacter,
-      updateAnimationEnd
-    ]
-  );
+    }
 
-  useEffect(
-    function () {
-      if (value === true) {
-        // setEnterLabel('');
+    // Update display
+    setEnterLabel(displayString);
 
-        if (typeof updateAnimationEnd === 'function') {
-          updateAnimationEnd(false);
-        }
+    // Increment iteration count
+    iterationCountRef.current++;
 
-        window.requestAnimationFrame(handleEnterLabel);
+    // After enough iterations, reveal the real character
+    if (iterationCountRef.current >= maxIterationsPerChar) {
+      revealedCharsRef.current++;
+      iterationCountRef.current = 0;
+    }
+
+    // Schedule next frame AFTER state update
+    timeoutRef.current = setTimeout(() => {
+      animationFrameRef.current = window.requestAnimationFrame(() => {
+        handleEnterLabelRef.current?.();
+      });
+    }, getFrameDelay());
+  }, []); // Empty dependency array - callback never recreated
+
+  // Update ref to point to latest callback
+  useEffect(() => {
+    handleEnterLabelRef.current = handleEnterLabel;
+  }, [handleEnterLabel]);
+
+  // Reset animation state when label changes
+  useEffect(() => {
+    if (isAnimating) {
+      revealedCharsRef.current = 0;
+      iterationCountRef.current = 0;
+      setEnterLabel('');
+    }
+  }, [label, isAnimating]);
+
+  // Watch value changes
+  useEffect(() => {
+    if (isAnimating) {
+      setEnterLabel('');
+      setIsAnimationEnd(false);
+      onAnimationEndChange?.(false);
+      revealedCharsRef.current = 0;
+      iterationCountRef.current = 0;
+      handleEnterLabel();
+    }
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
       }
-    },
-    [value, label, updateAnimationEnd, handleEnterLabel]
-  );
-
-  useEffect(
-    function () {
-      setTimeout(() => window.requestAnimationFrame(handleEnterLabel), speed);
-    },
-    [enterLabel, handleEnterLabel, speed]
-  );
-
-  useEffect(
-    function () {
-      if (animationEnd === true) {
-        if (typeof updateValue === 'function') {
-          updateValue(true);
-        }
-        if (typeof change === 'function') {
-          change(true);
-        }
-        window.requestAnimationFrame(() => setEnterLabel(label));
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
-    },
-    [animationEnd, updateValue, change, label]
-  );
+    };
+  }, [isAnimating, handleEnterLabel, onAnimationEndChange]);
+
+  // Watch animationEnd changes
+  useEffect(() => {
+    if (isAnimationEnd) {
+      setIsAnimating(true);
+      onValueChange?.(true);
+      setEnterLabel(label);
+    }
+  }, [isAnimationEnd, label, onValueChange]);
+
+  // Handle controlled value prop
+  useEffect(() => {
+    setIsAnimating(value);
+  }, [value]);
+
+  // Auto start on mount
+  useEffect(() => {
+    if (animationEnd) {
+      setEnterLabel(label);
+    } else if (autoStart || value) {
+      if (value) {
+        handleEnterLabel();
+      } else {
+        setIsAnimating(true);
+        onValueChange?.(true);
+      }
+    }
+  }, [animationEnd, autoStart, value, label, handleEnterLabel, onValueChange]);
+
+  const cssVariables: EnterLabelCSSProperties = {
+    '--animation_enter_label_anime':
+      isAnimating && !isAnimationEnd ? 'var(--enter_label_anime)' : undefined
+  };
 
   return (
-    <TagName class="animation_enter_label" style={cssVariable}>
+    <TagName className={`animation_enter_label ${className}`} style={cssVariables}>
       {enterLabel}
     </TagName>
   );

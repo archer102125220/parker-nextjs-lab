@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import EnterLabel from '@/components/EnterLabel';
+import EnterLabel from '@/components/Animation/EnterLabel';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
