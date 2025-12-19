@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { useNextRouter } from '@/i18n/navigation';
 import { useLocale } from 'next-intl';
 import { nanoid } from 'nanoid';
 import _debounce from 'lodash/debounce';
@@ -45,7 +46,7 @@ interface WebRTCSettings {
 
 export default function WebRTCSSERoomPage(): React.ReactNode {
   const params = useParams();
-  const router = useRouter();
+  const router = useNextRouter();
   const locale = useLocale();
   const roomId = params?.roomId as string;
   const userIdRef = useRef(nanoid());

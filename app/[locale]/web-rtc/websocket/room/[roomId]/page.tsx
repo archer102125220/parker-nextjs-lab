@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { useNextRouter } from '@/i18n/navigation';
 import { useLocale } from 'next-intl';
 import {
   Typography,
@@ -24,7 +25,7 @@ import '@/app/[locale]/web-rtc/web-rtc.scss';
 
 export default function WebRTCWebSocketRoomPage(): React.ReactNode {
   const params = useParams();
-  const router = useRouter();
+  const router = useNextRouter();
   const locale = useLocale();
   const roomId = params?.roomId as string;
 

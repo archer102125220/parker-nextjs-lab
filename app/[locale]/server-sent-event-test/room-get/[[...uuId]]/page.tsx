@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { useNextRouter } from '@/i18n/navigation';
 import { useLocale } from 'next-intl';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -15,8 +16,8 @@ import {
 
 import { useEventSource } from '@/hooks/useEventSource';
 
-export default function SSERoomGetPage(): React.ReactNode {
-  const router = useRouter();
+export default function SSETestRoomGetPage(): React.ReactNode {
+  const router = useNextRouter();
   const params = useParams();
   const locale = useLocale();
   const uuIdParam = params?.uuId;

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNextRouter } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import {
   Container,
@@ -25,7 +25,7 @@ import '@/app/[locale]/offline/offline.scss';
 
 export default function OfflinePage(): React.ReactNode {
   const t = useTranslations('offline');
-  const router = useRouter();
+  const router = useNextRouter();
   const [isOnline, setIsOnline] = useState(() => {
     if (typeof window !== 'undefined') {
       return navigator.onLine;

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNextRouter } from '@/i18n/navigation';
 import { useLocale } from 'next-intl';
 import { v4 as uuidv4 } from 'uuid';
 import { Typography, Paper, Button, TextField, Alert } from '@mui/material';
@@ -13,7 +13,7 @@ const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export default function WebRTCSSEPage(): React.ReactNode {
-  const router = useRouter();
+  const router = useNextRouter();
   const locale = useLocale();
   const [roomId, setRoomId] = useState('');
 
