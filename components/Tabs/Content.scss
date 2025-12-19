@@ -1,0 +1,56 @@
+.tabs-content {
+    /* Positioning */
+    position: relative;
+
+    /* Display & Box Model */
+    flex: 1;
+    height: var(--tabs-content-height, 100%);
+    overflow: hidden;
+
+    &-swiper {
+        /* Positioning */
+        position: relative;
+
+        /* Display & Box Model */
+        height: var(--tabs-content-swiper-height, 100%);
+        width: 100%;
+
+        &_transitioning {
+            /* Misc */
+            pointer-events: none;
+        }
+    }
+
+    &-panel {
+        /* Positioning */
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        /* Display & Box Model */
+        height: 100%;
+        width: 100%;
+        overflow: auto;
+
+        /* Animation */
+        transition: opacity 0.3s ease-in-out;
+
+        &_active {
+            /* Positioning */
+            position: relative;
+
+            /* Display & Box Model */
+            display: block;
+        }
+
+        &_animated {
+            /* Animation */
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        &[hidden] {
+            /* Display & Box Model */
+            display: none;
+        }
+    }
+}

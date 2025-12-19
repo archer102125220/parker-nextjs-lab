@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Tabs from '@/components/Tabs';
-import TabPanel from '@/components/Tabs/TabPanel';
+import { TabsBar, TabsContent } from '@/components/Tabs';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
@@ -44,36 +43,32 @@ export default function TabTestPage() {
       {/* 基本用法 */}
       <Paper sx={{ p: 3, mb: 4 }}>
         <Typography variant="h6" gutterBottom>
-          1. 基本用法 - 標準模式
+          1. 基本用法 - Bar + Content 組合
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          基本的 Tab 切換，包含禁用狀態
+          TabsBar 負責導航，TabsContent 負責內容顯示（函數式 children）
         </Typography>
-        <Tabs
+        <TabsBar
           tabs={basicTabs}
           value={activeTab1}
           onChange={(value) => setActiveTab1(Number(value))}
         />
-        <Box sx={{ mt: 2 }}>
-          <TabPanel value={0} activeValue={activeTab1}>
+        <TabsContent
+          tabs={basicTabs}
+          value={activeTab1}
+          onChange={(value) => setActiveTab1(Number(value))}
+          height="200px"
+        >
+          {(tab, index, isActive) => (
             <Box sx={{ p: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
-              <Typography variant="h6">Tab 1 內容</Typography>
-              <Typography>這是第一個 Tab 的內容區域</Typography>
+              <Typography variant="h6">{tab.label} 內容</Typography>
+              <Typography>這是第 {index + 1} 個 Tab 的內容區域</Typography>
+              <Typography variant="caption" color="text.secondary">
+                狀態: {isActive ? '✅ 活躍' : '⚪ 非活躍'}
+              </Typography>
             </Box>
-          </TabPanel>
-          <TabPanel value={1} activeValue={activeTab1}>
-            <Box sx={{ p: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
-              <Typography variant="h6">Tab 2 內容</Typography>
-              <Typography>這是第二個 Tab 的內容區域</Typography>
-            </Box>
-          </TabPanel>
-          <TabPanel value={2} activeValue={activeTab1}>
-            <Box sx={{ p: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
-              <Typography variant="h6">Tab 3 內容</Typography>
-              <Typography>這是第三個 Tab 的內容區域</Typography>
-            </Box>
-          </TabPanel>
-        </Box>
+          )}
+        </TabsContent>
       </Paper>
 
       {/* 多個 Tabs - 展示導航功能 */}
@@ -82,9 +77,10 @@ export default function TabTestPage() {
           2. 多個 Tabs - 自動導航按鈕（絕對定位）
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          當 Tabs 過多時，會自動顯示左右導航按鈕。設定 isNavigationAbsolute=true 讓按鈕懸浮，不佔用空間！
+          當 Tabs 過多時，會自動顯示左右導航按鈕。設定 isNavigationAbsolute=true
+          讓按鈕懸浮，不佔用空間！
         </Typography>
-        <Tabs
+        <TabsBar
           tabs={manyTabs}
           value={activeTab2}
           onChange={(value) => setActiveTab2(Number(value))}
@@ -103,14 +99,14 @@ export default function TabTestPage() {
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           Tabs 平均分配寬度，適合固定數量的選項
         </Typography>
-        <Tabs
+        <TabsBar
           tabs={fullWidthTabs}
           value={activeTab3}
           onChange={(value) => setActiveTab3(Number(value))}
           variant="fullWidth"
         />
         <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-          當前選中: {fullWidthTabs.find(t => t.value === activeTab3)?.label}
+          當前選中: {fullWidthTabs.find((t) => t.value === activeTab3)?.label}
         </Typography>
       </Paper>
 
@@ -122,7 +118,7 @@ export default function TabTestPage() {
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           可自訂指示器顏色和選中文字顏色
         </Typography>
-        <Tabs
+        <TabsBar
           tabs={basicTabs.slice(0, 3)}
           value={activeTab4}
           onChange={(value) => setActiveTab4(Number(value))}
@@ -139,10 +135,7 @@ export default function TabTestPage() {
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           設定 hasNavigation=false 可隱藏導航按鈕
         </Typography>
-        <Tabs
-          tabs={manyTabs.slice(0, 10)}
-          hasNavigation={false}
-        />
+        <TabsBar tabs={manyTabs.slice(0, 10)} hasNavigation={false} />
       </Paper>
 
       {/* 垂直模式 */}
@@ -151,9 +144,10 @@ export default function TabTestPage() {
           6. 垂直模式（絕對定位）
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          設定 vertical=true 可切換為垂直布局，配合 isNavigationAbsolute 讓導航按鈕懸浮
+          設定 vertical=true 可切換為垂直布局，配合 isNavigationAbsolute
+          讓導航按鈕懸浮
         </Typography>
-        <Tabs
+        <TabsBar
           tabs={manyTabs}
           vertical
           isNavigationAbsolute
@@ -170,10 +164,7 @@ export default function TabTestPage() {
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           默認模式下，導航按鈕在文檔流中，會保留空白空間
         </Typography>
-        <Tabs
-          tabs={manyTabs.slice(0, 10)}
-          isNavigationAbsolute={false}
-        />
+        <TabsBar tabs={manyTabs.slice(0, 10)} isNavigationAbsolute={false} />
       </Paper>
 
       {/* 垂直模式 - 相對定位 */}
@@ -184,7 +175,7 @@ export default function TabTestPage() {
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           垂直布局 + 相對定位，導航按鈕保留空間
         </Typography>
-        <Tabs
+        <TabsBar
           tabs={manyTabs}
           vertical
           isNavigationAbsolute={false}
@@ -201,7 +192,7 @@ export default function TabTestPage() {
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           Full Width 模式配合導航按鈕（需要較多 tabs）
         </Typography>
-        <Tabs
+        <TabsBar
           tabs={manyTabs.slice(0, 12)}
           variant="fullWidth"
           isNavigationAbsolute
@@ -216,9 +207,7 @@ export default function TabTestPage() {
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           支持 onScroll 和 onScrollEnd 事件回調
         </Typography>
-        <Tabs
-          tabs={manyTabs}
-        />
+        <TabsBar tabs={manyTabs} />
       </Paper>
 
       {/* 漸變陰影 */}
@@ -229,10 +218,7 @@ export default function TabTestPage() {
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           邊緣漸變陰影提示可滾動區域（默認開啟）
         </Typography>
-        <Tabs
-          tabs={manyTabs}
-          limitShadow={true}
-        />
+        <TabsBar tabs={manyTabs} limitShadow={true} />
       </Paper>
 
       {/* 禁用滾動 */}
@@ -243,10 +229,7 @@ export default function TabTestPage() {
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           禁用滾輪和拖動滾動
         </Typography>
-        <Tabs
-          tabs={manyTabs.slice(0, 10)}
-          scrollDisable={true}
-        />
+        <TabsBar tabs={manyTabs.slice(0, 10)} scrollDisable={true} />
       </Paper>
 
       {/* Ripple 波紋效果 */}
@@ -257,7 +240,7 @@ export default function TabTestPage() {
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           Material Design 點擊波紋（默認淡灰色，可自訂顏色）
         </Typography>
-        <Tabs
+        <TabsBar
           tabs={basicTabs.slice(0, 3)}
           ripple={true}
           rippleColor="rgba(25, 118, 210, 0.3)"
@@ -272,7 +255,7 @@ export default function TabTestPage() {
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           鼠標懸停時顯示臨時指示器預覽
         </Typography>
-        <Tabs
+        <TabsBar
           tabs={basicTabs.slice(0, 3)}
           hover={true}
           indicatorColor="#ff5722"
@@ -288,7 +271,7 @@ export default function TabTestPage() {
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           自訂 gap、justifyContent、alignItems
         </Typography>
-        <Tabs
+        <TabsBar
           tabs={fullWidthTabs}
           gap={24}
           justifyContent="center"
@@ -301,12 +284,125 @@ export default function TabTestPage() {
       {/* 完整功能組合 */}
       <Paper sx={{ p: 3, mb: 4 }}>
         <Typography variant="h6" gutterBottom>
-          16. 完整功能組合 🎉
+          16. TabsContent 靜態內容 ⭐ NEW
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          使用 tab.content 屬性提供靜態內容
+        </Typography>
+        <TabsBar
+          tabs={[
+            {
+              label: '介紹',
+              value: 'intro',
+              content: (
+                <Box sx={{ p: 3 }}>
+                  <Typography variant="h5" gutterBottom>
+                    歡迎使用 Tabs 組件
+                  </Typography>
+                  <Typography>
+                    這是一個功能完整的 Tabs 組件，支持多種模式和配置。
+                  </Typography>
+                </Box>
+              )
+            },
+            {
+              label: '功能',
+              value: 'features',
+              content: (
+                <Box sx={{ p: 3 }}>
+                  <Typography variant="h5" gutterBottom>
+                    主要功能
+                  </Typography>
+                  <ul>
+                    <li>導航按鈕自動顯示/隱藏</li>
+                    <li>滾輪和拖動滾動</li>
+                    <li>Ripple 波紋效果</li>
+                    <li>Hover 臨時指示器</li>
+                  </ul>
+                </Box>
+              )
+            },
+            {
+              label: '文檔',
+              value: 'docs',
+              content: (
+                <Box sx={{ p: 3 }}>
+                  <Typography variant="h5" gutterBottom>
+                    使用文檔
+                  </Typography>
+                  <Typography>
+                    查看完整的 API 文檔和使用示例。
+                  </Typography>
+                </Box>
+              )
+            }
+          ]}
+          value={activeTab2}
+          onChange={(value) => setActiveTab2(Number(value))}
+        />
+        <TabsContent
+          tabs={[
+            {
+              label: '介紹',
+              value: 'intro',
+              content: (
+                <Box sx={{ p: 3 }}>
+                  <Typography variant="h5" gutterBottom>
+                    歡迎使用 Tabs 組件
+                  </Typography>
+                  <Typography>
+                    這是一個功能完整的 Tabs 組件，支持多種模式和配置。
+                  </Typography>
+                </Box>
+              )
+            },
+            {
+              label: '功能',
+              value: 'features',
+              content: (
+                <Box sx={{ p: 3 }}>
+                  <Typography variant="h5" gutterBottom>
+                    主要功能
+                  </Typography>
+                  <ul>
+                    <li>導航按鈕自動顯示/隱藏</li>
+                    <li>滾輪和拖動滾動</li>
+                    <li>Ripple 波紋效果</li>
+                    <li>Hover 臨時指示器</li>
+                  </ul>
+                </Box>
+              )
+            },
+            {
+              label: '文檔',
+              value: 'docs',
+              content: (
+                <Box sx={{ p: 3 }}>
+                  <Typography variant="h5" gutterBottom>
+                    使用文檔
+                  </Typography>
+                  <Typography>
+                    查看完整的 API 文檔和使用示例。
+                  </Typography>
+                </Box>
+              )
+            }
+          ]}
+          value={activeTab2}
+          onChange={(value) => setActiveTab2(Number(value))}
+          height="300px"
+        />
+      </Paper>
+
+      {/* 完整功能組合 */}
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          17. 完整功能組合 🎉
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           所有功能一起使用：導航、陰影、波紋、懸停、自訂樣式
         </Typography>
-        <Tabs
+        <TabsBar
           tabs={manyTabs}
           isNavigationAbsolute
           limitShadow={true}
