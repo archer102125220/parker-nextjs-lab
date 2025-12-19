@@ -328,6 +328,123 @@ const value = input as unknown as TargetType;
 // ✅ 添加註解說明原因
 // Type assertion: node-canvas Image is compatible with TNetInput at runtime
 const detection = await detectFace(img as unknown as faceApi.TNetInput);
+```
+
+本專案所有程式碼都遵循這些型別安全原則，確保程式碼品質與可維護性。
+
+## 🎨 CSS 開發規範
+
+### CSS 屬性順序規範
+
+專案遵循主流 CSS 屬性排序標準，以確保代碼一致性與可維護性：
+
+1. **Positioning** (position, top, left, z-index...)
+2. **Display & Box Model** (display, flex, width, margin, padding, border...)
+3. **Typography** (font, color, text-align...)
+4. **Visual** (background, box-shadow, opacity...)
+5. **Animation** (transition, animation...)
+6. **Misc** (cursor, content...)
+
+**範例**：
+```scss
+.example {
+  /* Positioning */
+  position: relative;
+  top: 0;
+  z-index: 10;
+
+  /* Display & Box Model */
+  display: flex;
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #ccc;
+
+  /* Typography */
+  font-size: 16px;
+  color: #333;
+
+  /* Visual */
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  /* Animation */
+  transition: all 0.3s;
+
+  /* Misc */
+  cursor: pointer;
+}
+```
+
+### CSS 命名規範
+
+專案採用**改良式 BEM 命名法**，巧妙地犧牲了標準 BEM 的視覺符號（`__`），以換取更高的開發工具雙擊選取效率，並透過 SCSS 拼接和 HTML 屬性來確保其 CSS 權重和狀態管理的語義完整性。
+
+#### 命名結構
+
+- **Block（區塊）**: 使用單一名稱，如 `.countdown`
+- **Element（元素）**: 使用單個連字符 `-` 連接 Block 與 Element，如 `.countdown-down_enter`、`.countdown-up_leave`
+- **Sub-Element（子元素）**: 使用單個連字符 `-` 連接父元素與子元素，元素名稱內部使用底線 `_` 分隔語義單詞，如：
+  - `.countdown-down_enter-down_enter_up`
+  - `.image_upload_preview_img`
+- **狀態修飾**: 透過 HTML 屬性選擇器管理狀態，如 `[css-is-anime-start='true']`、`[css-is-active='true']`
+
+#### 優勢
+
+1. ✅ **雙擊選取** - 無 `__` 中斷，可完整選取類別名稱
+2. ✅ **SCSS 巢狀** - 透過 `&-element` 維持語義層級關係
+3. ✅ **語義清晰** - 使用底線分隔多個語義單詞
+4. ✅ **狀態管理** - 使用 HTML 屬性而非 modifier 類別來管理狀態，減少類別數量
+5. ✅ **可維護性** - 保持良好的可讀性與維護性
+
+#### 範例
+
+```scss
+.countdown {
+  &-down_enter {
+    // .countdown-down_enter
+    &-down_enter_up {
+      // .countdown-down_enter-down_enter_up
+      &[css-is-anime-start='true'] {
+        animation: flip-up 1s;
+      }
+    }
+  }
+}
+
+.image_upload {
+  &_preview {
+    // .image_upload_preview
+    &_img {
+      // .image_upload_preview_img
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+  
+  &_mask {
+    // .image_upload_mask
+    &[css-is-dragging='true'] {
+      opacity: 0.8;
+    }
+  }
+}
+```
+
+#### HTML 使用範例
+
+```tsx
+<div className="image_upload">
+  <div className="image_upload_preview">
+    <img className="image_upload_preview_img" src="..." />
+  </div>
+  <div className="image_upload_mask" css-is-dragging="true">
+    <p>拖拉圖片到此</p>
+  </div>
+</div>
+```
+
+本專案所有組件都遵循這些 CSS 規範，確保代碼風格一致性。
 
 // ✅ 使用型別守衛
 function isCustomType(value: unknown): value is CustomType {

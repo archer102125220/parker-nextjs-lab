@@ -137,15 +137,16 @@ export function PhoneInput({
     }
   };
 
-  const emitValue = () => {
-    const fullNumber = `+${selectedCountry?.phoneCode || ''}${phoneNumber}`;
+  const emitValue = (currentPhoneNumber?: string) => {
+    const phoneNumberValue = currentPhoneNumber !== undefined ? currentPhoneNumber : phoneNumber;
+    const fullNumber = `+${selectedCountry?.phoneCode || ''}${phoneNumberValue}`;
 
     if (returnObject) {
       const valueObj: PhoneInputValue = {
         countryCode: selectedCountry?.countryCode || '',
         countryName: selectedCountry?.countryName || '',
         phoneCode: selectedCountry?.phoneCode || '',
-        phoneNumber,
+        phoneNumber: phoneNumberValue,
         fullNumber
       };
       onChange?.(valueObj);
@@ -172,7 +173,8 @@ export function PhoneInput({
       setShowError(false);
     }
 
-    emitValue();
+    // Pass new value directly to avoid using stale state
+    emitValue(newValue);
   };
 
   const handleFocus = () => {

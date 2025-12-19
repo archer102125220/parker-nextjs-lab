@@ -335,6 +335,123 @@ function isCustomType(value: unknown): value is CustomType {
 }
 ```
 
+All code in this project follows these type safety principles to ensure code quality and maintainability.
+
+## 🎨 CSS Development Standards
+
+### CSS Property Order Convention
+
+The project follows mainstream CSS property ordering standards to ensure code consistency and maintainability:
+
+1. **Positioning** (position, top, left, z-index...)
+2. **Display & Box Model** (display, flex, width, margin, padding, border...)
+3. **Typography** (font, color, text-align...)
+4. **Visual** (background, box-shadow, opacity...)
+5. **Animation** (transition, animation...)
+6. **Misc** (cursor, content...)
+
+**Example**:
+```scss
+.example {
+  /* Positioning */
+  position: relative;
+  top: 0;
+  z-index: 10;
+
+  /* Display & Box Model */
+  display: flex;
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #ccc;
+
+  /* Typography */
+  font-size: 16px;
+  color: #333;
+
+  /* Visual */
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  /* Animation */
+  transition: all 0.3s;
+
+  /* Misc */
+  cursor: pointer;
+}
+```
+
+### CSS Naming Convention
+
+The project adopts a **Modified BEM Naming Convention**, cleverly sacrificing standard BEM's visual symbols (`__`) for better double-click selection efficiency in development tools, while maintaining CSS specificity and state management semantic integrity through SCSS concatenation and HTML attributes.
+
+#### Naming Structure
+
+- **Block**: Single name, e.g., `.countdown`
+- **Element**: Single hyphen `-` connecting Block and Element, e.g., `.countdown-down_enter`, `.countdown-up_leave`
+- **Sub-Element**: Single hyphen `-` connecting parent and child elements, with underscores `_` separating semantic words within element names, e.g.:
+  - `.countdown-down_enter-down_enter_up`
+  - `.image_upload_preview_img`
+- **State Modifiers**: Managed through HTML attribute selectors, e.g., `[css-is-anime-start='true']`, `[css-is-active='true']`
+
+#### Advantages
+
+1. ✅ **Double-click Selection** - No `__` interruption, complete class name selection
+2. ✅ **SCSS Nesting** - Maintains semantic hierarchy through `&-element`
+3. ✅ **Semantic Clarity** - Underscores separate multiple semantic words
+4. ✅ **State Management** - Uses HTML attributes instead of modifier classes, reducing class count
+5. ✅ **Maintainability** - Preserves good readability and maintainability
+
+#### Examples
+
+```scss
+.countdown {
+  &-down_enter {
+    // .countdown-down_enter
+    &-down_enter_up {
+      // .countdown-down_enter-down_enter_up
+      &[css-is-anime-start='true'] {
+        animation: flip-up 1s;
+      }
+    }
+  }
+}
+
+.image_upload {
+  &_preview {
+    // .image_upload_preview
+    &_img {
+      // .image_upload_preview_img
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+  
+  &_mask {
+    // .image_upload_mask
+    &[css-is-dragging='true'] {
+      opacity: 0.8;
+    }
+  }
+}
+```
+
+#### HTML Usage Example
+
+```tsx
+<div className="image_upload">
+  <div className="image_upload_preview">
+    <img className="image_upload_preview_img" src="..." />
+  </div>
+  <div className="image_upload_mask" css-is-dragging="true">
+    <p>Drop image here</p>
+  </div>
+</div>
+```
+
+All components in this project follow these CSS conventions to ensure code style consistency.
+```
+
 ### Type Safety Examples in This Project
 
 - ✅ **Face Swap API**: Fully type-safe, zero `any` usage

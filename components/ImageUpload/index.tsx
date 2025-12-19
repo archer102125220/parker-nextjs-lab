@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, DragEvent, ChangeEvent } from 'react';
+import ButtonBase from '@mui/material/ButtonBase';
 import './index.scss';
 
 export interface ImageUploadProps {
@@ -111,54 +112,65 @@ export function ImageUpload({
   } as React.CSSProperties;
 
   return (
-    <div
-      className={`image_upload ${className}`}
-      style={cssVariables}
+    <ButtonBase
+      component="div"
+      className={`image_upload_wrapper ${className}`}
       onClick={handleClick}
       onDragEnter={handleDragEnter}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
+      disabled={disabled}
+      disableRipple={disabled}
+      sx={{
+        width: '100%',
+        height: '100%',
+        minHeight: '200px',
+        borderRadius: '8px',
+        overflow: 'hidden'
+      }}
     >
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept={accept}
-        onChange={handleFileChange}
-        style={{ display: 'none' }}
-        disabled={disabled}
-      />
+      <div className="image_upload" style={cssVariables}>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept={accept}
+          onChange={handleFileChange}
+          style={{ display: 'none' }}
+          disabled={disabled}
+        />
 
-      {!previewUrl && (
-        <>
-          <button
-            className="image_upload-btn"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleClick();
-            }}
-            disabled={disabled}
-          >
-            {btnLabel}
-          </button>
-          <label className="image_upload-label">{label}</label>
-        </>
-      )}
-
-      <div className="image_upload-preview">
-        {previewUrl && (
-          <img
-            src={previewUrl}
-            alt="Preview"
-            className="image_upload-preview-img"
-          />
+        {!previewUrl && (
+          <>
+            <button
+              className="image_upload-btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClick();
+              }}
+              disabled={disabled}
+            >
+              {btnLabel}
+            </button>
+            <label className="image_upload-label">{label}</label>
+          </>
         )}
-      </div>
 
-      <div className="image_upload-mask">
-        <p>{maskLabel}</p>
+        <div className="image_upload_preview">
+          {previewUrl && (
+            <img
+              src={previewUrl}
+              alt="Preview"
+              className="image_upload_preview_img"
+            />
+          )}
+        </div>
+
+        <div className="image_upload_mask">
+          <p>{maskLabel}</p>
+        </div>
       </div>
-    </div>
+    </ButtonBase>
   );
 }
 
