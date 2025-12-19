@@ -2,163 +2,190 @@
 
 import { useState } from 'react';
 import EnterLabel from '@/components/EnterLabel';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
 import '../page.scss';
 
 export default function EnterLabelTestPage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [phone, setPhone] = useState('');
-  const [disabledValue, setDisabledValue] = useState('此欄位已禁用');
-  const [errorField, setErrorField] = useState('');
-
-  const validateEmail = (value: string) => {
-    if (!value) return '';
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(value) ? '' : '請輸入有效的電子郵件地址';
-  };
-
-  const validatePassword = (value: string) => {
-    if (!value) return '';
-    return value.length >= 6 ? '' : '密碼至少需要 6 個字元';
-  };
+  const [isAnimating1, setIsAnimating1] = useState(false);
+  const [isAnimating2, setIsAnimating2] = useState(false);
+  const [isAnimating3, setIsAnimating3] = useState(false);
+  const [isAnimating4, setIsAnimating4] = useState(false);
 
   return (
-    <div style={{ padding: '40px 20px', maxWidth: '600px', margin: '0 auto' }}>
-      <h1>Enter Label 浮動標籤測試</h1>
-      <p style={{ marginBottom: '30px', color: '#666' }}>
-        Material Design 風格的浮動標籤輸入框
-      </p>
+    <Box sx={{ padding: '40px 20px', maxWidth: '800px', margin: '0 auto' }}>
+      <Typography variant="h4" component="h1" gutterBottom>
+        EnterLabel 打字機動畫測試
+      </Typography>
+      <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+        展示隨機字符逐漸變成目標文字的打字機動畫效果
+      </Typography>
 
-      <div style={{ marginBottom: '40px' }}>
-        <h2>基本示範</h2>
-        <div style={{ marginBottom: '20px' }}>
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          基本示範 - 英文動畫
+        </Typography>
+        <Box sx={{ mb: 2, minHeight: '40px', display: 'flex', alignItems: 'center' }}>
+          <EnterLabel label="Hello World!" tagName="h2" />
+        </Box>
+        <Typography variant="caption" color="text.secondary">
+          自動開始，使用隨機英文大寫字母
+        </Typography>
+      </Paper>
+
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          中文動畫
+        </Typography>
+        <Box sx={{ mb: 2, minHeight: '40px', display: 'flex', alignItems: 'center' }}>
+          <EnterLabel label="你好世界！" randomLen="zh" tagName="h2" />
+        </Box>
+        <Typography variant="caption" color="text.secondary">
+          使用隨機中文字符
+        </Typography>
+      </Paper>
+
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          手動觸發動畫
+        </Typography>
+        <Box sx={{ mb: 2, minHeight: '40px', display: 'flex', alignItems: 'center' }}>
           <EnterLabel
-            label="姓名"
-            value={name}
-            onChange={setName}
-            placeholder="請輸入您的姓名"
-            required
+            label="Click the button to start!"
+            autoStart={false}
+            value={isAnimating1}
+            onValueChange={setIsAnimating1}
+            tagName="h3"
           />
-        </div>
+        </Box>
+        <Button
+          variant="contained"
+          onClick={() => setIsAnimating1(true)}
+          disabled={isAnimating1}
+        >
+          開始動畫
+        </Button>
+      </Paper>
 
-        <div style={{ marginBottom: '20px' }}>
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          自訂速度 - 快速
+        </Typography>
+        <Box sx={{ mb: 2, minHeight: '40px', display: 'flex', alignItems: 'center' }}>
           <EnterLabel
-            label="電子郵件"
-            value={email}
-            onChange={setEmail}
-            type="email"
-            placeholder="example@email.com"
-            error={validateEmail(email)}
-            required
+            label="Fast Animation"
+            speed={30}
+            autoStart={false}
+            value={isAnimating2}
+            onValueChange={setIsAnimating2}
           />
-        </div>
+        </Box>
+        <Button
+          variant="contained"
+          onClick={() => setIsAnimating2(true)}
+          disabled={isAnimating2}
+        >
+          開始快速動畫
+        </Button>
+      </Paper>
 
-        <div style={{ marginBottom: '20px' }}>
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          自訂速度 - 慢速
+        </Typography>
+        <Box sx={{ mb: 2, minHeight: '40px', display: 'flex', alignItems: 'center' }}>
           <EnterLabel
-            label="密碼"
-            value={password}
-            onChange={setPassword}
-            type="password"
-            placeholder="至少 6 個字元"
-            error={validatePassword(password)}
-            required
+            label="Slow Animation"
+            speed={150}
+            autoStart={false}
+            value={isAnimating3}
+            onValueChange={setIsAnimating3}
           />
-        </div>
+        </Box>
+        <Button
+          variant="contained"
+          onClick={() => setIsAnimating3(true)}
+          disabled={isAnimating3}
+        >
+          開始慢速動畫
+        </Button>
+      </Paper>
 
-        <div style={{ marginBottom: '20px' }}>
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          自訂標籤元素
+        </Typography>
+        <Box sx={{ mb: 2, minHeight: '40px', display: 'flex', alignItems: 'center' }}>
           <EnterLabel
-            label="電話號碼"
-            value={phone}
-            onChange={setPhone}
-            type="tel"
-            placeholder="0912-345-678"
+            label="This is a paragraph element"
+            tagName="p"
+            autoStart={false}
+            value={isAnimating4}
+            onValueChange={setIsAnimating4}
           />
-        </div>
-      </div>
+        </Box>
+        <Button
+          variant="contained"
+          onClick={() => setIsAnimating4(true)}
+          disabled={isAnimating4}
+        >
+          開始動畫
+        </Button>
+      </Paper>
 
-      <div style={{ marginBottom: '40px' }}>
-        <h2>狀態展示</h2>
-        
-        <div style={{ marginBottom: '20px' }}>
-          <h3 style={{ fontSize: '16px', marginBottom: '12px' }}>禁用狀態</h3>
-          <EnterLabel
-            label="禁用欄位"
-            value={disabledValue}
-            onChange={setDisabledValue}
-            disabled
-          />
-        </div>
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          功能說明
+        </Typography>
+        <Box component="ul" sx={{ pl: 2 }}>
+          <li>✅ 打字機動畫效果</li>
+          <li>✅ 隨機字符逐漸變成目標文字</li>
+          <li>✅ 支援英文和中文隨機字符</li>
+          <li>✅ 可自訂動畫速度</li>
+          <li>✅ 可自訂 HTML 標籤</li>
+          <li>✅ 閃爍游標效果</li>
+          <li>✅ 支援自動開始或手動觸發</li>
+        </Box>
+      </Paper>
 
-        <div style={{ marginBottom: '20px' }}>
-          <h3 style={{ fontSize: '16px', marginBottom: '12px' }}>錯誤狀態</h3>
-          <EnterLabel
-            label="錯誤欄位"
-            value={errorField}
-            onChange={setErrorField}
-            error="此欄位有錯誤"
-            placeholder="輸入任何內容"
-          />
-        </div>
-      </div>
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          使用範例
+        </Typography>
+        <Box
+          component="pre"
+          sx={{
+            backgroundColor: '#f5f5f5',
+            p: 2,
+            borderRadius: 1,
+            overflow: 'auto',
+            fontSize: '13px'
+          }}
+        >
+          {`// 基本用法 - 自動開始
+<EnterLabel label="Hello World" />
 
-      <div style={{ marginBottom: '40px' }}>
-        <h2>表單預覽</h2>
-        <div style={{ padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
-          <h3 style={{ marginTop: 0 }}>當前表單值</h3>
-          <pre style={{ 
-            backgroundColor: '#fff', 
-            padding: '12px', 
-            borderRadius: '4px',
-            fontSize: '14px',
-            overflow: 'auto'
-          }}>
-            {JSON.stringify({
-              name,
-              email,
-              password: password ? '••••••' : '',
-              phone
-            }, null, 2)}
-          </pre>
-        </div>
-      </div>
+// 中文動畫
+<EnterLabel label="你好世界" randomLen="zh" />
 
-      <div style={{ marginBottom: '40px' }}>
-        <h2>功能說明</h2>
-        <ul>
-          <li>✅ 浮動標籤動畫效果</li>
-          <li>✅ 聚焦時標籤上移並縮小</li>
-          <li>✅ 支援錯誤狀態顯示</li>
-          <li>✅ 支援禁用狀態</li>
-          <li>✅ 支援必填標記 (*)</li>
-          <li>✅ 支援多種輸入類型 (text, email, password, tel, number)</li>
-          <li>✅ Material Design 風格</li>
-        </ul>
-      </div>
-
-      <div style={{ marginBottom: '40px' }}>
-        <h2>使用範例</h2>
-        <div style={{ backgroundColor: '#f5f5f5', padding: '16px', borderRadius: '8px', overflow: 'auto' }}>
-          <pre style={{ margin: 0, fontSize: '13px' }}>
-{`<EnterLabel
-  label="姓名"
-  value={name}
-  onChange={setName}
-  placeholder="請輸入您的姓名"
-  required
+// 手動觸發
+<EnterLabel
+  label="Manual Start"
+  autoStart={false}
+  value={isAnimating}
+  onValueChange={setIsAnimating}
 />
 
+// 自訂速度和標籤
 <EnterLabel
-  label="電子郵件"
-  value={email}
-  onChange={setEmail}
-  type="email"
-  error={emailError}
-  required
+  label="Custom Speed"
+  speed={100}
+  tagName="h1"
 />`}
-          </pre>
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Paper>
+    </Box>
   );
 }
