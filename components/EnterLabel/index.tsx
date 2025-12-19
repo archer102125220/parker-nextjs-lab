@@ -54,65 +54,87 @@ export function EnterLabel({
   const revealedCharsRef = useRef(0); // Track how many characters have been revealed
   const iterationCountRef = useRef(0); // Track iterations for current character
   const maxIterationsPerChar = 5; // Number of random chars to show before revealing real char
+  
+  // Use refs to avoid callback recreation
+  const labelRef = useRef(label);
+  const randomLenRef = useRef(randomLen);
+  const speedRef = useRef(speed);
+  const onAnimationEndChangeRef = useRef(onAnimationEndChange);
   const handleEnterLabelRef = useRef<(() => void) | undefined>(undefined);
 
-  const handleEnterLabel = useCallback(() => {
-    setEnterLabel((currentLabel) => {
-      const targetLength = label.length;
-      const currentRevealed = revealedCharsRef.current;
-
-      // All characters revealed
-      if (currentRevealed >= targetLength) {
-        if (currentLabel !== label) {
-          setIsAnimationEnd(true);
-          onAnimationEndChange?.(true);
-          return label;
-        }
-        return currentLabel;
-      }
-
-      // Build the display string
-      let displayString = '';
-      const randomLenLower = randomLen.toLowerCase();
-
-      // Add already revealed characters (from label)
-      for (let i = 0; i < currentRevealed; i++) {
-        displayString += label[i];
-      }
-
-      // Add one random character for the position being revealed
-      if (currentRevealed < targetLength) {
-        if (randomLenLower.includes('zh')) {
-          displayString += generateRandomChineseCharacter();
-        } else {
-          displayString += getRandomUppercaseLetter();
-        }
-      }
-
-      // Increment iteration count
-      iterationCountRef.current++;
-
-      // After enough iterations, reveal the real character
-      if (iterationCountRef.current >= maxIterationsPerChar) {
-        revealedCharsRef.current++;
-        iterationCountRef.current = 0;
-      }
-
-      // Schedule next frame
-      timeoutRef.current = setTimeout(() => {
-        animationFrameRef.current = window.requestAnimationFrame(() => {
-          handleEnterLabelRef.current?.();
-        });
-      }, speed);
-
-      return displayString;
-    });
+  // Update refs when props change
+  useEffect(() => {
+    labelRef.current = label;
+    randomLenRef.current = randomLen;
+    speedRef.current = speed;
+    onAnimationEndChangeRef.current = onAnimationEndChange;
   }, [label, randomLen, speed, onAnimationEndChange]);
 
-  // Update ref when callback changes
+
+  const handleEnterLabel = useCallback(() => {
+    const targetLabel = labelRef.current;
+    const targetLength = targetLabel.length;
+    const currentRevealed = revealedCharsRef.current;
+
+    // All characters revealed - stop animation
+    if (currentRevealed >= targetLength) {
+      setEnterLabel(targetLabel);
+      setIsAnimationEnd(true);
+      onAnimationEndChangeRef.current?.(true);
+      return;
+    }
+
+    // Build the display string
+    let displayString = '';
+    const randomLenLower = randomLenRef.current.toLowerCase();
+
+    // Add already revealed characters (from label)
+    for (let i = 0; i < currentRevealed; i++) {
+      displayString += targetLabel[i];
+    }
+
+    // Add one random character for the position being revealed
+    if (currentRevealed < targetLength) {
+      if (randomLenLower.includes('zh')) {
+        displayString += generateRandomChineseCharacter();
+      } else {
+        displayString += getRandomUppercaseLetter();
+      }
+    }
+
+    // Update display
+    setEnterLabel(displayString);
+
+    // Increment iteration count
+    iterationCountRef.current++;
+
+    // After enough iterations, reveal the real character
+    if (iterationCountRef.current >= maxIterationsPerChar) {
+      revealedCharsRef.current++;
+      iterationCountRef.current = 0;
+    }
+
+    // Schedule next frame AFTER state update
+    timeoutRef.current = setTimeout(() => {
+      animationFrameRef.current = window.requestAnimationFrame(() => {
+        handleEnterLabelRef.current?.();
+      });
+    }, speedRef.current);
+  }, []); // Empty dependency array - callback never recreated
+
+  // Update ref to point to latest callback
   useEffect(() => {
     handleEnterLabelRef.current = handleEnterLabel;
   }, [handleEnterLabel]);
+
+  // Reset animation state when label changes
+  useEffect(() => {
+    if (isAnimating) {
+      revealedCharsRef.current = 0;
+      iterationCountRef.current = 0;
+      setEnterLabel('');
+    }
+  }, [label, isAnimating]);
 
   // Watch value changes
   useEffect(() => {
@@ -133,7 +155,7 @@ export function EnterLabel({
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [isAnimating, label, handleEnterLabel, onAnimationEndChange]);
+  }, [isAnimating, handleEnterLabel, onAnimationEndChange]);
 
   // Watch animationEnd changes
   useEffect(() => {
