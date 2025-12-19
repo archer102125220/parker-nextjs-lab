@@ -6,7 +6,7 @@ import {
   // useTranslations
 } from 'next-intl';
 
-import { usePathname } from 'next/navigation';
+import { usePathnameWithLocale } from '@/i18n/navigation';
 
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -19,7 +19,7 @@ import LinkButton from '@/components/Link/Button';
 import './i18n_list.scss';
 
 export function I18nList(): ReactNode {
-  const pathname = usePathname();
+  const pathname = usePathnameWithLocale(); // Includes locale: /zh-tw/...
   const locale = useLocale();
   // const t = useTranslations();
   const nonce = useAppSelector<string>((state) => state.system.nonce);

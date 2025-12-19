@@ -1,7 +1,8 @@
 'use client';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { usePathnameWithLocale } from '@/i18n/navigation';
 
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -12,7 +13,7 @@ interface GoBackProps {
   nonce?: string;
 }
 export function GoBack({ nonce }: GoBackProps): ReactNode {
-  const pathname = usePathname();
+  const pathname = usePathnameWithLocale(); // Includes locale for homepage check
   const router = useRouter();
 
   const [clientNonce, setClientNonce] = useState<string>('');

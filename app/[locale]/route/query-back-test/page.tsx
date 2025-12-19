@@ -1,14 +1,14 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { usePathname } from '@/i18n/navigation';
+import { usePathnameWithLocale } from '@/i18n/navigation';
 import { Typography, Button, Box, Paper, Alert } from '@mui/material';
 
 import '@/app/[locale]/route/query-back-test/query-back-test.scss';
 
 export default function QueryBackTestPage(): React.ReactNode {
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathnameWithLocale(); // Includes locale: /zh-tw/route/query-back-test
   const searchParams = useSearchParams();
 
   // Derive state directly from searchParams instead of using useEffect + useState

@@ -7,7 +7,7 @@ import '@/app/[locale]/route/params-back-test/params-back-test.scss';
 
 export default function ParamsBackTestPage(): React.ReactNode {
   const router = useRouter();
-  const params = useParams<{ testData: string }>();
+  const params = useParams<{ locale: string; testData: string }>();
 
   const testDataValue = params.testData;
   const paramsTestData = !isNaN(Number(testDataValue))
@@ -16,12 +16,12 @@ export default function ParamsBackTestPage(): React.ReactNode {
 
   const handleRouteParamsPush = () => {
     const newValue = paramsTestData + 1;
-    router.push(`/route/params-back-test/${newValue}`);
+    router.push(`/${params.locale}/route/params-back-test/${newValue}`);
   };
 
   const handleRouteParamsReplace = () => {
     const newValue = paramsTestData + 1;
-    router.replace(`/route/params-back-test/${newValue}`);
+    router.replace(`/${params.locale}/route/params-back-test/${newValue}`);
   };
 
   return (
