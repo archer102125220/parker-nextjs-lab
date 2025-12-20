@@ -1,16 +1,37 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { TabsBar, TabsContent } from '@/components/Tabs';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
+
+// Define tabs outside component to maintain stable references
+const basicTabs = [
+  { label: 'Tab 1', value: 0 },
+  { label: 'Tab 2', value: 1 },
+  { label: 'Tab 3', value: 2 },
+  { label: 'Tab 4 (Disabled)', value: 3, disabled: true }
+];
+
+const manyTabs = Array.from({ length: 15 }, (_, i) => ({
+  label: `Tab ${i + 1}`,
+  value: i
+}));
+
+const fullWidthTabs = [
+  { label: '首頁', value: 0 },
+  { label: '產品', value: 1 },
+  { label: '服務', value: 2 },
+  { label: '關於', value: 3 }
+];
 
 export default function TabTestPage() {
   const [activeTab1, setActiveTab1] = useState(0);
   const [activeTab2, setActiveTab2] = useState(0);
   const [activeTab3, setActiveTab3] = useState(0);
   const [activeTab4, setActiveTab4] = useState(0);
+  const [activeTabStatic, setActiveTabStatic] = useState<string>('intro'); // For example 16
 
   // ScrollFetch state
   const [scrollFetchLoading, setScrollFetchLoading] = useState(false);
@@ -25,25 +46,6 @@ export default function TabTestPage() {
       content: `這是第 ${i + 1} 項內容`
     }))
   );
-
-  const basicTabs = [
-    { label: 'Tab 1', value: 0 },
-    { label: 'Tab 2', value: 1 },
-    { label: 'Tab 3', value: 2 },
-    { label: 'Tab 4 (Disabled)', value: 3, disabled: true }
-  ];
-
-  const manyTabs = Array.from({ length: 15 }, (_, i) => ({
-    label: `Tab ${i + 1}`,
-    value: i
-  }));
-
-  const fullWidthTabs = [
-    { label: '首頁', value: 0 },
-    { label: '產品', value: 1 },
-    { label: '服務', value: 2 },
-    { label: '關於', value: 3 }
-  ];
 
   return (
     <Box sx={{ p: 4, maxWidth: '1200px', margin: '0 auto' }}>
@@ -65,16 +67,12 @@ export default function TabTestPage() {
         <TabsBar
           tabs={basicTabs}
           value={activeTab1}
-          onChange={useCallback((value: string | number) => {
-            setActiveTab1(Number(value));
-          }, [])}
+          onChange={(value) => setActiveTab1(Number(value))}
         />
         <TabsContent
           tabs={basicTabs}
           value={activeTab1}
-          onChange={useCallback((value: string | number) => {
-            setActiveTab1(Number(value));
-          }, [])}
+          onChange={(value) => setActiveTab1(Number(value))}
           height="200px"
         >
           {(tab, index, isActive) => (
@@ -355,8 +353,8 @@ export default function TabTestPage() {
               )
             }
           ]}
-          value={activeTab2}
-          onChange={(value) => setActiveTab2(Number(value))}
+          value={activeTabStatic}
+          onChange={(value) => setActiveTabStatic(String(value))}
         />
         <TabsContent
           tabs={[
@@ -406,8 +404,8 @@ export default function TabTestPage() {
               )
             }
           ]}
-          value={activeTab2}
-          onChange={(value) => setActiveTab2(Number(value))}
+          value={activeTabStatic}
+          onChange={(value) => setActiveTabStatic(String(value))}
           height="300px"
         />
       </Paper>
