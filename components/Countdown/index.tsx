@@ -172,7 +172,16 @@ export function Countdown({
     isAnimatingRef.current = true;
 
     requestAnimationFrame(() => {
-      // Calculate the next number first
+      // Check if we've already reached the end (Nuxt logic)
+      if (currentNumber === endSecond) {
+        onCountdownEnd?.();
+        onUpdateIsCountdownStart?.(false);
+        isAnimatingRef.current = false;
+        isInProgressRef.current = false;
+        return;
+      }
+
+      // Calculate the next number
       let newCurrentNumber: number;
       
       // Count from large to small (down mode)
@@ -186,17 +195,6 @@ export function Countdown({
       } else {
         // No counting needed if initialSeconds === endSecond
         isAnimatingRef.current = false;
-        return;
-      }
-
-      // Check if we've reached the end
-      if (newCurrentNumber === endSecond) {
-        setCurrentNumber(newCurrentNumber);
-        onCountdownStep?.(newCurrentNumber);
-        onCountdownEnd?.();
-        onUpdateIsCountdownStart?.(false);
-        isAnimatingRef.current = false;
-        isInProgressRef.current = false;
         return;
       }
 
