@@ -19,7 +19,7 @@ function SwiperJsDemoPage(): ReactNode {
   return (
     <section className={pageStyles['swiper_js_page']}>
       <GTMScnOpen />
-      <h1>SwiperJs 元件演示</h1>
+      <h1>SwiperJs 自定義包裝組件</h1>
       <DemoSwiperJs />
     </section>
   );
