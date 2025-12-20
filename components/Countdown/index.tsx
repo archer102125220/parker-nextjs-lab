@@ -43,12 +43,10 @@ export function Countdown({
   onCountdownEnd
 }: CountdownProps) {
   // Initialize with initialSeconds, fallback to modelValue for compatibility
-  const [currentNumber, setCurrentNumber] = useState<number | null>(
-    initialSeconds ?? modelValue ?? null
-  );
-  const isAnimatingRef = useRef(false);
+  const [currentNumber, setCurrentNumber] = useState<number | null>(null);
+  const isInProgressRef = useRef(false);
   const hasStartedRef = useRef(false);
-  const isInProgressRef = useRef(false); // Track if countdown is in progress
+  const isAnimatingRef = useRef(false); // Track if countdown is in progress
 
   // CSS Variables
   const cssVariable = useMemo(() => {
@@ -122,9 +120,12 @@ export function Countdown({
       setCurrentNumber(initialSeconds);
       isInProgressRef.current = true;
       
+      // Wait for next frame to ensure DOM is ready before starting animation
       requestAnimationFrame(() => {
-        onUpdateIsCountdownStart?.(true);
-        onCountdownStart?.();
+        requestAnimationFrame(() => {
+          onUpdateIsCountdownStart?.(true);
+          onCountdownStart?.();
+        });
       });
     } else if (isCountdownStart === false) {
       // Reset the in-progress flag when countdown is stopped
@@ -132,7 +133,7 @@ export function Countdown({
     }
   }, [isCountdownStart, initialSeconds, endSecond, countdownType, onUpdateIsCountdownStart, onCountdownStart]);
 
-  // Initial mount
+  // Initial mount - set ready state after component is mounted
   useEffect(() => {
     if (hasStartedRef.current) return;
     
@@ -145,9 +146,12 @@ export function Countdown({
       hasStartedRef.current = true;
       isInProgressRef.current = true;
       
+      // Wait for next frame to ensure DOM is ready before starting animation
       requestAnimationFrame(() => {
-        onUpdateIsCountdownStart?.(true);
-        onCountdownStart?.();
+        requestAnimationFrame(() => {
+          onUpdateIsCountdownStart?.(true);
+          onCountdownStart?.();
+        });
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
