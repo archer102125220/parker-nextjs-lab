@@ -35,7 +35,7 @@ const COMPONENT_LINKS = [
   { href: '/components/go-top', label: 'GoTop 回到頂部' },
   { href: '/components/youtube-test', label: 'Youtube 播放器' },
   { href: '/components/virtual-scroller', label: 'Virtual Scroller 虛擬滾動' },
-  { href: '/components/enter-label', label: 'Enter Label 浮動標籤' }
+  { href: '/components/enter-label', label: 'Enter Label 打字機動畫' }
 ] as const;
 
 async function ComponentsPage(): Promise<ReactNode> {
