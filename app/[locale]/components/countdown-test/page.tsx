@@ -14,7 +14,7 @@ export default function CountdownTestPage() {
   // Preset examples
   const [countdown10, setCountdown10] = useState(10);
   const [countdown10Running, setCountdown10Running] = useState(true);
-  const [countup10, setCountup10] = useState(0);
+  const [countup10, setCountup10] = useState(10); // Up mode also starts from 10
   const [countup10Running, setCountup10Running] = useState(true);
 
   const handleTestSubmit = (e: React.FormEvent) => {
@@ -25,19 +25,23 @@ export default function CountdownTestPage() {
       return;
     }
     setTestSeconds(seconds);
-    setTestValue(testType === 'down' ? seconds : 0);
+    setTestValue(seconds); // Both modes start from testSeconds
     setTestRunning(true);
   };
 
   const handleRestart = () => {
+    // Force state change by toggling values
     setCountdown10Running(false);
     setCountup10Running(false);
+    setCountdown10(0); // Change value first
+    setCountup10(0);
+    
     setTimeout(() => {
       setCountdown10(10);
-      setCountup10(0);
+      setCountup10(10);
       setCountdown10Running(true);
       setCountup10Running(true);
-    }, 100);
+    }, 50);
   };
 
   return (
@@ -124,8 +128,8 @@ export default function CountdownTestPage() {
           <div style={{ marginTop: '20px', textAlign: 'center' }}>
             <Countdown
               countdownType={testType}
-              initialSeconds={testType === 'down' ? testSeconds : 0}
-              endSecond={testType === 'down' ? 0 : testSeconds}
+              initialSeconds={testSeconds}
+              endSecond={0}
               isCountdownStart={testRunning}
               width={250}
               height={150}
@@ -191,12 +195,12 @@ export default function CountdownTestPage() {
 
           {/* Countup Example */}
           <div>
-            <h3 style={{ marginBottom: '15px' }}>正數計時 (0 → 10)</h3>
+            <h3 style={{ marginBottom: '15px' }}>向上翻動畫 (10 → 0)</h3>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '15px' }}>
               <Countdown
                 countdownType="up"
-                initialSeconds={0}
-                endSecond={10}
+                initialSeconds={10}
+                endSecond={0}
                 isCountdownStart={countup10Running}
                 width={200}
                 height={100}
@@ -204,7 +208,7 @@ export default function CountdownTestPage() {
                 color="#fff"
                 onUpdateModelValue={setCountup10}
                 onUpdateIsCountdownStart={setCountup10Running}
-                onCountdownEnd={() => console.log('計時結束!')}
+                onCountdownEnd={() => console.log('倒數結束!')}
               />
             </div>
             <p style={{ textAlign: 'center', color: '#666', fontSize: '14px' }}>

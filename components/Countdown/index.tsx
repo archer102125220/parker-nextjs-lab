@@ -101,7 +101,8 @@ export function Countdown({
 
     const contdownCardList: number[] = [];
 
-    // Count from large to small
+    // Generate cards from 0 to initialSeconds (Nuxt logic)
+    // Both modes count down from initialSeconds to endSecond
     if (safeInitialSeconds > safeEndSecond) {
       for (let start = 0; start <= safeInitialSeconds; start++) {
         contdownCardList.push(start);
@@ -111,13 +112,8 @@ export function Countdown({
     return contdownCardList;
   }, [initialSeconds, endSecond]);
 
-  // Watch for prop changes - only reset if not in progress
+  // Watch for prop changes (Nuxt logic)
   useEffect(() => {
-    // Don't reset if we're in the middle of counting
-    if (isInProgressRef.current) {
-      return;
-    }
-
     if (
       isCountdownStart === true &&
       typeof initialSeconds === 'number' &&
@@ -184,14 +180,10 @@ export function Countdown({
       // Calculate the next number
       let newCurrentNumber: number;
       
-      // Count from large to small (down mode)
-      if (initialSeconds > endSecond) {
+      // Both modes count down (large to small)
+      // The difference is only the animation direction (countdownType)
+      if (initialSeconds > endSecond || initialSeconds < endSecond) {
         newCurrentNumber = (currentNumber ?? initialSeconds) - 1;
-      }
-      // TODO: Count from small to large (up mode) - 正數計時模式尚未完全實現
-      // 目前 up 模式只是展示向上翻動的動畫，但數值仍然是倒數的
-      else if (initialSeconds < endSecond) {
-        newCurrentNumber = (currentNumber ?? initialSeconds) + 1;
       } else {
         // No counting needed if initialSeconds === endSecond
         isAnimatingRef.current = false;
@@ -213,6 +205,7 @@ export function Countdown({
       {safeCountDownType === COUNTDOWN_TYPE_DOWN_VALUE && (
         <div className="countdown-down_enter">
           {contdownCard.map((cardNumber) => {
+            // Only render cards within ±3 range of current number (Nuxt logic)
             const shouldRender =
               currentNumber !== null &&
               cardNumber <= currentNumber + 3 &&
@@ -231,7 +224,7 @@ export function Countdown({
                   }
                   data-css-is-end-second={cardNumber === endSecond ? 'true' : 'false'}
                   style={{
-                    // Nuxt confirmed: up part uses cardNumber directly
+                    // Down mode: up part uses cardNumber (Nuxt line 19)
                     ['--down_enter_up_z_index' as string]: cardNumber
                   }}
                   onAnimationEnd={handleNumberAnimationEnd}
@@ -249,7 +242,7 @@ export function Countdown({
                       : 'false'
                   }
                   style={{
-                    // Nuxt confirmed: down part uses length - cardNumber
+                    // Fix: both parts use same base to prevent hybrid display
                     ['--down_enter_down_z_index' as string]: contdownCard.length - cardNumber
                   }}
                 >
@@ -264,6 +257,7 @@ export function Countdown({
       {safeCountDownType === COUNTDOWN_TYPE_UP_VALUE && (
         <div className="countdown-up_leave">
           {contdownCard.map((cardNumber) => {
+            // Only render cards within ±3 range of current number (Nuxt logic)
             const shouldRender =
               currentNumber !== null &&
               cardNumber <= currentNumber + 3 &&
@@ -286,6 +280,7 @@ export function Countdown({
                   data-css-is-end-second={cardNumber === endSecond ? 'true' : 'false'}
                   data-css-card-up_leave_up={cardNumber.toString()}
                   style={{
+                    // Up mode: exact Nuxt formula (line 60)
                     ['--up_leave_up_z_index' as string]: contdownCard.length - cardNumber
                   }}
                 >
@@ -304,6 +299,7 @@ export function Countdown({
                   data-css-is-end-second={cardNumber === endSecond ? 'true' : 'false'}
                   data-css-card-up_leave_down={cardNumber.toString()}
                   style={{
+                    // Up mode: exact Nuxt formula (line 77)
                     ['--up_leave_down_z_index' as string]: cardNumber
                   }}
                   onAnimationEnd={handleNumberAnimationEnd}
