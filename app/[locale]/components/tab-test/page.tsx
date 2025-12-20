@@ -12,6 +12,20 @@ export default function TabTestPage() {
   const [activeTab3, setActiveTab3] = useState(0);
   const [activeTab4, setActiveTab4] = useState(0);
 
+  // ScrollFetch state
+  const [scrollFetchLoading, setScrollFetchLoading] = useState(false);
+  const [scrollFetchData, setScrollFetchData] = useState<Array<{
+    id: number;
+    title: string;
+    content: string;
+  }>>(
+    Array.from({ length: 10 }, (_, i) => ({
+      id: i,
+      title: `Item ${i + 1}`,
+      content: `這是第 ${i + 1} 項內容`
+    }))
+  );
+
   const basicTabs = [
     { label: 'Tab 1', value: 0 },
     { label: 'Tab 2', value: 1 },
@@ -412,6 +426,247 @@ export default function TabTestPage() {
           indicatorColor="#4caf50"
           selectedColor="#4caf50"
         />
+      </Paper>
+
+      {/* ScrollFetch 基本示例 */}
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          18. ScrollFetch 基本功能 🔄
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          下拉刷新 + 無限滾動（模擬 API 調用）
+        </Typography>
+        <TabsBar
+          tabs={[
+            { label: '列表 1', value: 0 },
+            { label: '列表 2', value: 1 },
+            { label: '列表 3', value: 2 }
+          ]}
+          value={activeTab4}
+          onChange={(value) => setActiveTab4(Number(value))}
+        />
+        <TabsContent
+          tabs={[
+            { label: '列表 1', value: 0 },
+            { label: '列表 2', value: 1 },
+            { label: '列表 3', value: 2 }
+          ]}
+          value={activeTab4}
+          onChange={(value) => setActiveTab4(Number(value))}
+          scrollFetch={true}
+          loading={scrollFetchLoading}
+          height="400px"
+          refresh={async () => {
+            console.log('Refreshing...');
+            setScrollFetchLoading(true);
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            setScrollFetchData(Array.from({ length: 10 }, (_, i) => ({
+              id: i,
+              title: `Item ${i + 1}`,
+              content: `這是第 ${i + 1} 項內容`
+            })));
+            setScrollFetchLoading(false);
+            console.log('Refresh complete!');
+          }}
+          infinityFetch={async () => {
+            console.log('Loading more...');
+            setScrollFetchLoading(true);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            setScrollFetchData(prev => [
+              ...prev,
+              ...Array.from({ length: 5 }, (_, i) => ({
+                id: prev.length + i,
+                title: `Item ${prev.length + i + 1}`,
+                content: `這是第 ${prev.length + i + 1} 項內容`
+              }))
+            ]);
+            setScrollFetchLoading(false);
+            console.log('Load more complete!');
+          }}
+          infinityDisable={scrollFetchData.length >= 30}
+          pullingLabel="下拉即可重整..."
+          loadingLabel="加載中..."
+          infinityLabel="拉至底部可繼續加載"
+          infinityEndLabel="沒有更多資料了"
+        >
+          {() => (
+            <Box sx={{ p: 2 }}>
+              {scrollFetchData.map((item) => (
+                <Box
+                  key={item.id}
+                  sx={{
+                    p: 2,
+                    mb: 1,
+                    bgcolor: '#f5f5f5',
+                    borderRadius: 1,
+                    border: '1px solid #e0e0e0'
+                  }}
+                >
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    {item.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {item.content}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
+          )}
+        </TabsContent>
+      </Paper>
+
+      {/* ScrollFetch 進階示例 */}
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          19. ScrollFetch 進階功能 ⚙️
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          每個 Tab 獨立的 ScrollFetch 設定 + iOS 風格
+        </Typography>
+        <TabsBar
+          tabs={[
+            { label: 'iOS 風格', value: 0 },
+            { label: '禁用刷新', value: 1 },
+            { label: '無 ScrollFetch', value: 2 }
+          ]}
+          value={activeTab3}
+          onChange={(value) => setActiveTab3(Number(value))}
+        />
+        <TabsContent
+          tabs={[
+            { 
+              label: 'iOS 風格', 
+              value: 0,
+              content: (
+                <Box sx={{ p: 2 }}>
+                  {Array.from({ length: 20 }, (_, i) => (
+                    <Box
+                      key={i}
+                      sx={{
+                        p: 1.5,
+                        mb: 1,
+                        bgcolor: '#f0f0f0',
+                        borderRadius: 1
+                      }}
+                    >
+                      <Typography>iOS 風格項目 {i + 1}</Typography>
+                    </Box>
+                  ))}
+                </Box>
+              )
+            },
+            { 
+              label: '禁用刷新', 
+              value: 1,
+              refreshDisable: true,
+              content: (
+                <Box sx={{ p: 2 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    此 Tab 禁用了下拉刷新功能
+                  </Typography>
+                  {Array.from({ length: 15 }, (_, i) => (
+                    <Box
+                      key={i}
+                      sx={{
+                        p: 1.5,
+                        mb: 1,
+                        bgcolor: '#fff3e0',
+                        borderRadius: 1
+                      }}
+                    >
+                      <Typography>無刷新項目 {i + 1}</Typography>
+                    </Box>
+                  ))}
+                </Box>
+              )
+            },
+            { 
+              label: '無 ScrollFetch', 
+              value: 2,
+              isNotScrollFetch: true,
+              content: (
+                <Box sx={{ p: 2 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    此 Tab 完全不使用 ScrollFetch
+                  </Typography>
+                  <Typography>靜態內容區域</Typography>
+                </Box>
+              )
+            }
+          ]}
+          value={activeTab3}
+          onChange={(value) => setActiveTab3(Number(value))}
+          scrollFetch={true}
+          loading={scrollFetchLoading}
+          height="350px"
+          iosStyle={true}
+          refresh={async () => {
+            console.log('iOS style refresh...');
+            setScrollFetchLoading(true);
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            setScrollFetchLoading(false);
+          }}
+          infinityFetch={async () => {
+            console.log('iOS style load more...');
+            setScrollFetchLoading(true);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            setScrollFetchLoading(false);
+          }}
+        />
+      </Paper>
+
+      {/* ScrollFetch 自訂渲染 */}
+      <Paper sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          20. ScrollFetch 自訂渲染 🎨
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          自訂 loading 指示器 + Tab 頂部內容
+        </Typography>
+        <TabsBar
+          tabs={basicTabs}
+          value={activeTab1}
+          onChange={(value) => setActiveTab1(Number(value))}
+        />
+        <TabsContent
+          tabs={basicTabs}
+          value={activeTab1}
+          onChange={(value) => setActiveTab1(Number(value))}
+          scrollFetch={true}
+          loading={scrollFetchLoading}
+          height="300px"
+          renderTabTop={
+            <Box sx={{ p: 2, bgcolor: '#e3f2fd', borderRadius: 1, mb: 1 }}>
+              <Typography variant="caption" color="primary">
+                📌 這是 Tab 頂部的自訂內容
+              </Typography>
+            </Box>
+          }
+          renderLoading={
+            <Box sx={{ p: 2, textAlign: 'center' }}>
+              <Typography variant="body2" color="primary">
+                🔄 自訂載入指示器...
+              </Typography>
+            </Box>
+          }
+          refresh={async () => {
+            setScrollFetchLoading(true);
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            setScrollFetchLoading(false);
+          }}
+        >
+          {(tab, index, isActive, isTabMoving) => (
+            <Box sx={{ p: 2 }}>
+              <Typography variant="h6">{tab.label}</Typography>
+              <Typography variant="body2" color="text.secondary">
+                活躍狀態: {isActive ? '✅' : '❌'}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                滑動狀態: {isTabMoving ? '🔄 滑動中' : '⏸️ 靜止'}
+              </Typography>
+            </Box>
+          )}
+        </TabsContent>
       </Paper>
     </Box>
   );
