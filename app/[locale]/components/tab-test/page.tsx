@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { TabsBar, TabsContent } from '@/components/Tabs';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -65,12 +65,16 @@ export default function TabTestPage() {
         <TabsBar
           tabs={basicTabs}
           value={activeTab1}
-          onChange={(value) => setActiveTab1(Number(value))}
+          onChange={useCallback((value: string | number) => {
+            setActiveTab1(Number(value));
+          }, [])}
         />
         <TabsContent
           tabs={basicTabs}
           value={activeTab1}
-          onChange={(value) => setActiveTab1(Number(value))}
+          onChange={useCallback((value: string | number) => {
+            setActiveTab1(Number(value));
+          }, [])}
           height="200px"
         >
           {(tab, index, isActive) => (

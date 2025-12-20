@@ -179,7 +179,7 @@ export function TabsContent({
 
       // If scrollFetch is disabled or tab doesn't need it, render directly
       if (scrollFetch === false || isNotScrollFetch(tab)) {
-        return renderContent();
+        return <div style={{ height: '100%' }}>{renderContent()}</div>;
       }
 
       // Wrap with ScrollFetch component
@@ -253,33 +253,36 @@ export function TabsContent({
           slideValue: string | number | object,
           activeIndex?: number
         ) => {
-          if (onChange && activeIndex !== undefined) {
-            // Extract value from object or use directly
-            let actualValue: string | number;
+          if (!onChange || activeIndex === undefined) {
+            return;
+          }
 
-            if (typeof slideValue === 'object' && slideValue !== null) {
-              // Type guard to check if object has value property
-              if ('value' in slideValue) {
-                const val = (slideValue as Record<string, unknown>).value;
-                if (typeof val === 'string' || typeof val === 'number') {
-                  actualValue = val;
-                } else {
-                  actualValue = 0;
-                }
+          // Extract value from object or use directly
+          let actualValue: string | number;
+
+          if (typeof slideValue === 'object' && slideValue !== null) {
+            // Type guard to check if object has value property
+            if ('value' in slideValue) {
+              const val = (slideValue as Record<string, unknown>).value;
+              if (typeof val === 'string' || typeof val === 'number') {
+                actualValue = val;
               } else {
                 actualValue = 0;
               }
-            } else if (
-              typeof slideValue === 'string' ||
-              typeof slideValue === 'number'
-            ) {
-              actualValue = slideValue;
             } else {
               actualValue = 0;
             }
-
-            onChange(actualValue, activeIndex);
+          } else if (
+            typeof slideValue === 'string' ||
+            typeof slideValue === 'number'
+          ) {
+            actualValue = slideValue;
+          } else {
+            actualValue = 0;
           }
+
+          // Always trigger onChange, let parent decide
+          onChange(actualValue, activeIndex);
         }}
         sliderMove={handleSliderMove}
         slidesPerView={1}
