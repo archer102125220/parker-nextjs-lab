@@ -1,4 +1,21 @@
 'use client';
+
+/**
+ * @deprecated This component was created as a workaround during a period when
+ * Swiper's official React components were believed to be unmaintained.
+ *
+ * **Status**: Swiper React is now actively maintained (v12.0.3, Oct 2025)
+ * **Recommendation**: Use official `swiper/react` components instead
+ * **Migration**: See TabsContent component for example of official implementation
+ *
+ * This wrapper will be kept for backward compatibility but should not be used
+ * for new features. It has known issues with React's reconciliation that cause
+ * performance problems and rendering bugs.
+ *
+ * Created: During Swiper React maintenance uncertainty period
+ * Deprecated: 2025-12-20
+ */
+
 import type { ReactNode, ElementType, CSSProperties } from 'react';
 import {
   useRef,

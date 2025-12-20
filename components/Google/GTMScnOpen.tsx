@@ -1,7 +1,7 @@
 'use client';
 import type { ReactNode } from 'react';
 
-import { usePathname } from 'next/navigation';
+import { usePathnameWithLocale } from '@/i18n/navigation';
 
 import useGTMTrack from '@/hooks/useGTMTrack';
 
@@ -10,7 +10,7 @@ interface GTMInitProps {
 }
 
 export function GTMScnOpen({ children }: GTMInitProps): ReactNode {
-  const pathname = usePathname();
+  const pathname = usePathnameWithLocale(); // Full path with locale for GTM tracking
   useGTMTrack({ event: 'scnOpen', url: pathname });
 
   return children;

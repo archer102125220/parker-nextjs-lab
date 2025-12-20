@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 import { Box, Typography, BoxProps } from '@mui/material';
 import { useAppSelector } from '@/store';
 
+import './footer.scss';
+
 interface FooterProps extends BoxProps {
   nonce?: string;
 }
@@ -29,6 +31,7 @@ export function Footer(props: FooterProps): ReactNode {
   return (
     <Box
       component="footer"
+      className="footer"
       sx={{
         py: 3,
         px: 2,
@@ -41,15 +44,19 @@ export function Footer(props: FooterProps): ReactNode {
       nonce={clientNonce}
       {...boxProps}
     >
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        align="center"
-        nonce={clientNonce}
-      >
-        © {new Date().getFullYear()} {systemName}
-      </Typography>
+      <div className="footer-content">
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          align="center"
+          className="footer-text"
+          nonce={clientNonce}
+        >
+          © {new Date().getFullYear()} {systemName}
+        </Typography>
+      </div>
     </Box>
   );
 }
 export default Footer;
+

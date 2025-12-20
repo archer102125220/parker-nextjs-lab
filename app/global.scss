@@ -6,121 +6,121 @@
 // @import 'flag-icons/sass/_flag-icons-base.scss';
 // @import 'flag-icons/sass/_flag-icons-list.scss';
 
-@import 'flag-icons/css/flag-icons.min.css' layer(base);
+@import 'flag-icons/css/flag-icons.min.css'layer(base);
 // @import 'flag-icons/sass/flag-icons.scss';
 
 // https://hackmd.io/@FortesHuang/S1I2iF7v5
-@import 'tailwindcss' layer(base);
+@import 'tailwindcss'layer(base);
 
 @import url('https://fonts.googleapis.com/earlyaccess/notosanstc.css');
 
 @font-face {
-  font-family: TaipeiSansTCBeta-Bold;
-  src: url('/font/TaipeiSansTCBeta-Bold.ttf');
+    font-family: TaipeiSansTCBeta-Bold;
+    src: url('/font/TaipeiSansTCBeta-Bold.ttf');
 }
+
 @font-face {
-  font-family: TaipeiSansTCBeta-Light;
-  src: url('/font/TaipeiSansTCBeta-Light.ttf');
+    font-family: TaipeiSansTCBeta-Light;
+    src: url('/font/TaipeiSansTCBeta-Light.ttf');
 }
+
 @font-face {
-  font-family: TaipeiSansTCBeta-Regular;
-  src: url('/font/TaipeiSansTCBeta-Regular.ttf');
+    font-family: TaipeiSansTCBeta-Regular;
+    src: url('/font/TaipeiSansTCBeta-Regular.ttf');
 }
 
 :root {
-  @include globalcssVariable;
+    @include globalcssVariable;
 }
 
 html {
-  font-family: 'Noto Sans TC', sans-serif;
-  line-height: 1.15;
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  font-size: 16px;
+    font-family: 'Noto Sans TC', sans-serif;
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    font-size: 16px;
 
-  *:not(
-      .wang_editor_view,
-      .wang_editor_view *,
-      .wang_editor,
-      .wang_editor *,
-      .v-icon--size-x-large,
-      .v-icon--size-x-large *,
-      .v-icon--size-large,
-      .v-icon--size-large *,
-      .v-icon--size-small,
-      .v-icon--size-small *,
-      .v-icon--size-x-small,
-      .v-icon--size-x-small *
-    ) {
-    font-size: inherit;
-    font-family: inherit;
-    font-weight: inherit;
-  }
+    *:not(.wang_editor_view,
+        .wang_editor_view *,
+        .wang_editor,
+        .wang_editor *,
+        .v-icon--size-x-large,
+        .v-icon--size-x-large *,
+        .v-icon--size-large,
+        .v-icon--size-large *,
+        .v-icon--size-small,
+        .v-icon--size-small *,
+        .v-icon--size-x-small,
+        .v-icon--size-x-small *) {
+        font-size: inherit;
+        font-family: inherit;
+        font-weight: inherit;
+    }
 }
 
 a {
-  &[target='_blank']::after {
-    content: '';
-    display: inline-block;
-    width: var(--link_blank_width, 16px);
-    height: var(--link_blank_height, 16px);
-    background-image: url('/img/icon/external-link/outbound-link-icon.png');
-    background-size: 100%;
-  }
+    &[target='_blank']::after {
+        content: '';
+        display: inline-block;
+        width: var(--link_blank_width, 16px);
+        height: var(--link_blank_height, 16px);
+        background-image: url('/img/icon/external-link/outbound-link-icon.png');
+        background-size: 100%;
+    }
 }
 
 * {
-  transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
 
 button[disabled] {
-  pointer-events: unset;
-  cursor: not-allowed;
+    pointer-events: unset;
+    cursor: not-allowed;
 }
 
 body {
-  margin: 0;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #212529;
-  text-align: left;
+    margin: 0;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: left;
 }
 
 label {
-  margin: 0;
+    margin: 0;
 }
 
 *,
 :after,
 :before {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 button {
-  border-style: solid;
-  cursor: pointer;
+    border-style: solid;
+    cursor: pointer;
 }
 
 a {
-  text-decoration: none;
-
-  &:hover {
     text-decoration: none;
-  }
+
+    &:hover {
+        text-decoration: none;
+    }
 }
 
 *::-webkit-scrollbar {
-  width: 10px;
+    width: 10px;
 
-  @include mobile {
-    height: 5px;
-  }
+    @include mobile {
+        height: 5px;
+    }
 }
 
 *::-webkit-scrollbar-thumb {
-  border-radius: 4px;
-  background-color: $secondary;
-  border: 1px solid $secondary;
+    border-radius: 4px;
+    background-color: $secondary;
+    border: 1px solid $secondary;
 }
 
 // *::-webkit-scrollbar-button {
@@ -129,14 +129,14 @@ a {
 // }
 
 *::-webkit-scrollbar-track-piece {
-  background-color: #ffffff00;
+    background-color: #ffffff00;
 }
 
 *::-webkit-scrollbar-track {
-  box-shadow: transparent;
+    box-shadow: transparent;
 }
 
 img[src='img/expand.svg'] {
-  min-width: 52px;
-  min-height: 52px;
+    min-width: 52px;
+    min-height: 52px;
 }

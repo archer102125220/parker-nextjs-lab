@@ -1,9 +1,8 @@
-import type { ReactNode } from 'react';
-import { redirect } from 'next/navigation';
+// Root page redirects to default locale
+import { nextRedirect } from '@/i18n/navigation/server';
 
-// This page only renders when the app is built statically (output: 'export')
-function RootPage(): ReactNode {
-  redirect('/zh-tw');
+export default function RootPage() {
+  // Redirect to default locale using i18n-aware redirect
+  // This will automatically redirect to the user's preferred locale
+  nextRedirect('/zh-tw');
 }
-
-export default RootPage;

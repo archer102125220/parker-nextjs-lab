@@ -1,0 +1,32 @@
+@keyframes blink {
+    0% {
+        opacity: 0;
+    }
+
+    25% {
+        border-left: 1px solid #000;
+        opacity: 1;
+    }
+
+    75% {
+        border-left: 1px solid #000;
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.animation_enter_label {
+    --enter_label_anime: blink;
+
+    &:after {
+        /* Animation */
+        animation: var(--animation_enter_label_anime) 1s infinite;
+        transition: none;
+
+        /* Misc */
+        content: '';
+    }
+}

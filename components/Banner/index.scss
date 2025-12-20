@@ -1,0 +1,236 @@
+.banner {
+    /* Positioning */
+    position: relative;
+
+    /* Display & Box Model */
+    width: 100%;
+    height: var(--banner-height, 300px);
+    overflow: hidden;
+
+    /* Misc */
+    user-select: none;
+
+    /* Focus outline */
+    &:focus {
+        outline: 2px solid #1976d2;
+        outline-offset: 2px;
+    }
+
+    &-wrapper {
+        /* Positioning */
+        position: relative;
+
+        /* Display & Box Model */
+        width: 100%;
+        height: 100%;
+    }
+
+    &-track {
+        /* Positioning */
+        position: relative;
+
+        /* Display & Box Model */
+        width: 100%;
+        height: 100%;
+
+        /* Misc */
+        cursor: grab;
+
+        &:active {
+            cursor: grabbing;
+        }
+    }
+
+    &-slide {
+        /* Positioning */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+
+        /* Display & Box Model */
+        width: 100%;
+        height: 100%;
+
+        /* Animation */
+        transition: all var(--banner-transition-duration, 300ms) ease-in-out;
+
+        &-content {
+            /* Positioning */
+            position: relative;
+
+            /* Display & Box Model */
+            width: 100%;
+            height: 100%;
+        }
+
+        &-image {
+            /* Display & Box Model */
+            width: 100%;
+            height: 100%;
+
+            /* Visual */
+            object-fit: cover;
+
+            /* Misc */
+            pointer-events: none;
+        }
+
+        &-text {
+            /* Positioning */
+            position: absolute;
+            bottom: 0;
+            left: 0;
+
+            /* Display & Box Model */
+            width: 100%;
+            padding: 30px;
+
+            /* Visual */
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            color: #fff;
+        }
+
+        &-title {
+            /* Display & Box Model */
+            margin: 0 0 10px 0;
+
+            /* Typography */
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        &-description {
+            /* Display & Box Model */
+            margin: 0;
+
+            /* Typography */
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        &-hidden {
+            opacity: 0;
+            z-index: 0;
+        }
+
+        &-active {
+            transform: translate(-50%, -50%) translateX(var(--banner-drag-offset, 0)) scale(1);
+            z-index: 3;
+            opacity: 1;
+        }
+
+        &-prev {
+            transform: translate(-50%, -50%) translateX(calc(-35% + var(--banner-drag-offset, 0))) scale(0.85);
+            z-index: 1;
+            opacity: 0.7;
+        }
+
+        &-next {
+            transform: translate(-50%, -50%) translateX(calc(35% + var(--banner-drag-offset, 0))) scale(0.85);
+            z-index: 1;
+            opacity: 0.7;
+        }
+    }
+
+    /* 3D Effect for 3+ banners */
+    &-3d &-slide {
+
+        &-prev,
+        &-next {
+            filter: brightness(0.8);
+        }
+    }
+
+    /* Navigation */
+    &-nav {
+        /* Positioning */
+        position: absolute;
+        top: 50%;
+        z-index: 10;
+
+        /* Display & Box Model */
+        transform: translateY(-50%);
+
+        &-prev {
+            left: 20px;
+        }
+
+        &-next {
+            right: 20px;
+        }
+
+        &-btn {
+            /* Display & Box Model */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+
+            /* Typography */
+            font-size: 32px;
+            font-weight: 300;
+            color: #fff;
+
+            /* Visual */
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+
+            /* Misc */
+            cursor: pointer;
+
+            /* Animation */
+            transition: all 0.3s;
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.7);
+                transform: scale(1.1);
+            }
+
+            &:active {
+                transform: scale(0.95);
+            }
+        }
+    }
+
+    /* Indicators */
+    &-indicators {
+        /* Positioning */
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        z-index: 10;
+
+        /* Display & Box Model */
+        display: flex;
+        gap: 10px;
+        transform: translateX(-50%);
+    }
+
+    &-indicator {
+        /* Display & Box Model */
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+
+        /* Visual */
+        background-color: rgba(255, 255, 255, 0.5);
+
+        /* Misc */
+        cursor: pointer;
+
+        /* Animation */
+        transition: all 0.3s;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+            transform: scale(1.2);
+        }
+
+        &-active {
+            background-color: #fff;
+            transform: scale(1.3);
+        }
+    }
+}

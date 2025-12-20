@@ -1,0 +1,352 @@
+$countdownUpLeaveWidth: 250px;
+$countdownUpLeaveHeight: 175px;
+$countdownUpLeavePadding: 20px;
+$countdownUpLeaveTotal: 59;
+
+$countdownDownEnterWidth: 200px;
+$countdownDownEnterHeight: 100px;
+$countdownDownEnterPadding: 10px;
+$countdownDownEnterTotal: 59;
+
+* {
+    box-sizing: border-box;
+}
+
+.conutdow_block {
+    /* Display & Box Model */
+    display: inline-block;
+
+    /* Misc */
+    vertical-align: top;
+}
+
+.number {
+    /* Positioning */
+    position: absolute;
+    left: 0;
+    right: 0;
+
+    /* Display & Box Model */
+    overflow: hidden;
+
+    /* Typography */
+    color: var(--countdown_color);
+    text-align: center;
+
+    /* Misc */
+    backface-visibility: hidden;
+}
+
+.number_up {
+    /* Positioning */
+    top: 0;
+    bottom: 50%;
+
+    /* Visual */
+    background-color: var(--countdown_bg_color);
+
+    /* Animation */
+    transform-origin: 50% 100%;
+}
+
+.number_down {
+    /* Positioning */
+    top: 50%;
+    bottom: 0;
+
+    /* Display & Box Model */
+    border-top: 1px solid;
+
+    /* Typography */
+    line-height: 0px;
+
+    /* Visual */
+    background-color: var(--countdown_bg_color);
+
+    /* Animation */
+    transform-origin: 50% 0%;
+}
+
+.debug_log {
+    /* Positioning */
+    position: relative;
+    z-index: 999999;
+
+    /* Typography */
+    color: #36a300;
+}
+
+.countdown {
+    --countdown_up_leave_width: #{$countdownUpLeaveWidth};
+    --countdown_up_leave_height: #{$countdownUpLeaveHeight};
+    --countdown_up_leave_padding: #{$countdownUpLeavePadding};
+    --countdown_up_leave_total: #{$countdownUpLeaveTotal};
+
+    --countdown_down_enter_width: #{$countdownDownEnterWidth};
+    --countdown_down_enter_height: #{$countdownDownEnterHeight};
+    --countdown_down_enter_padding: #{$countdownDownEnterPadding};
+    --countdown_down_enter_total: #{$countdownDownEnterTotal};
+
+    &-down_enter {
+        @extend .conutdow_block;
+
+        /* Positioning */
+        position: relative;
+
+        /* Display & Box Model */
+        width: var(--countdown_width, var(--countdown_down_enter_width));
+        height: var(--countdown_height, var(--countdown_down_enter_height));
+        padding: var(--countdown_padding, var(--countdown_down_enter_padding));
+
+        /* Visual */
+        background-color: var(--countdown_bg_color);
+
+        /* Misc */
+        perspective: 1000px;
+
+        &-debug_log {
+            @extend .debug_log;
+        }
+
+        &-down_enter_up {
+            @extend .number;
+            @extend .number_up;
+
+            /* Positioning */
+            z-index: var(--down_enter_up_z_index);
+
+            /* Typography */
+            font-size: calc(var(--countdown_height, var(--countdown_down_enter_height)) - var(--countdown_down_enter_padding));
+            line-height: var(--countdown_height, var(--countdown_down_enter_height));
+
+            /* Animation */
+            &[data-css-is-anime-start='true']:not([data-css-is-end-second='true']) {
+                animation: flip-up 1s 1;
+                animation-fill-mode: forwards;
+            }
+        }
+
+        $i: $countdownDownEnterTotal;
+
+        @while $i>0 {
+            .up-#{$i} {
+                animation: flip-up 1s 1;
+                animation-delay: #{$countdownDownEnterTotal - $i}s;
+                animation-fill-mode: forwards;
+                z-index: $i;
+            }
+
+            $i: $i - 1;
+        }
+
+        &-down_enter_down {
+            @extend .number;
+            @extend .number_down;
+
+            /* Positioning */
+            z-index: var(--down_enter_down_z_index);
+
+            /* Typography */
+            font-size: calc(var(--countdown_height, var(--countdown_down_enter_height)) - var(--countdown_down_enter_padding));
+
+            /* Animation */
+            transform: rotate3d(-1, 0, 0, 180deg);
+
+            &[data-css-is-anime-start='true']:not([data-css-is-initial-seconds='true']) {
+                animation: flip-up-back 1s 1;
+                animation-fill-mode: forwards;
+            }
+
+            &[data-css-is-initial-seconds='true'] {
+                transform: rotate3d(0, 0, 0, 180deg);
+            }
+        }
+
+        $i: $countdownDownEnterTotal;
+
+        @while $i>=0 {
+            .down-#{$i} {
+                z-index: $countdownDownEnterTotal - $i;
+                transform: rotate3d(-1, 0, 0, 180deg);
+                animation: flip-up-back 1s 1;
+                animation-delay: #{$countdownDownEnterTotal - $i - 1}s;
+                animation-fill-mode: forwards;
+            }
+
+            $i: $i - 1;
+        }
+    }
+
+    &-up_leave {
+        @extend .conutdow_block;
+
+        /* Positioning */
+        position: relative;
+
+        /* Display & Box Model */
+        width: var(--countdown_width, var(--countdown_up_leave_width));
+        height: var(--countdown_height, var(--countdown_up_leave_height));
+        padding: var(--countdown_padding, var(--countdown_up_leave_padding));
+
+        /* Visual */
+        background-color: var(--countdown_bg_color);
+
+        /* Misc */
+        perspective: 1000px;
+
+        &-debug_log {
+            @extend .debug_log;
+        }
+
+        &-up_leave_up {
+            @extend .number;
+            @extend .number_up;
+
+            /* Positioning */
+            z-index: var(--up_leave_up_z_index);
+
+            /* Typography */
+            font-size: calc(var(--countdown_height, var(--countdown_up_leave_height)) - var(--countdown_up_leave_padding));
+            line-height: var(--countdown_height, var(--countdown_up_leave_height));
+
+            /* Animation */
+            transform: rotate3d(-1, 0, 0, 180deg);
+
+            &[data-css-is-anime-start='true']:not([data-css-is-initial-seconds='true']) {
+                animation: flip-up-back 1s 1;
+                animation-fill-mode: forwards;
+            }
+
+            &[data-css-is-initial-seconds='true'] {
+                transform: rotate3d(0, 0, 0, 180deg);
+            }
+        }
+
+        @for $i from 1 through $countdownUpLeaveTotal {
+            .up-#{$i} {
+                z-index: $i;
+
+                transform: rotate3d(-1, 0, 0, 180deg);
+                animation: flip-up-back 1s 1;
+                animation-delay: #{$i}s;
+                animation-fill-mode: forwards;
+            }
+        }
+
+        &-up_leave_down {
+            @extend .number;
+            @extend .number_down;
+
+            /* Positioning */
+            z-index: var(--up_leave_down_z_index);
+
+            /* Typography */
+            font-size: calc(var(--countdown_height, var(--countdown_up_leave_height)) - var(--countdown_up_leave_padding));
+
+            /* Animation */
+            &[data-css-is-anime-start='true']:not([data-css-is-end-second='true']) {
+                animation: flip-up 1s 1;
+                animation-fill-mode: forwards;
+            }
+        }
+
+        @for $i from 0 through $countdownUpLeaveTotal - 1 {
+            .down-#{$i} {
+                z-index: 100-$i;
+
+                animation: flip-up 1s 1;
+                animation-delay: #{$i + 1}s;
+                animation-fill-mode: forwards;
+            }
+        }
+    }
+}
+
+@-webkit-keyframes flip-up
+
+/* Safari and Chrome */
+    {
+    from {
+        transform: rotate3d(0, 0, 0, 0deg);
+    }
+
+    to {
+        transform: rotate3d(1, 0, 0, 180deg);
+    }
+}
+
+@-webkit-keyframes flip-up-back
+
+/* Safari and Chrome */
+    {
+    from {
+        transform: rotate3d(-1, 0, 0, 180deg);
+    }
+
+    to {
+        transform: rotate3d(0, 0, 0, 0deg);
+    }
+}
+
+@keyframes flip-up {
+    from {
+        transform: rotate3d(0, 0, 0, 0deg);
+    }
+
+    to {
+        transform: rotate3d(1, 0, 0, 180deg);
+    }
+}
+
+@keyframes flip-up-back {
+    from {
+        transform: rotate3d(-1, 0, 0, 180deg);
+    }
+
+    to {
+        transform: rotate3d(0, 0, 0, 0deg);
+    }
+}
+
+@-webkit-keyframes fade
+
+/* Safari and Chrome */
+    {
+    0% {
+        opacity: 0;
+        -webkit-filter: blur(2px);
+    }
+
+    25% {
+        opacity: 1;
+        -webkit-filter: blur(0px);
+    }
+
+    75% {
+        opacity: 1;
+        -webkit-filter: blur(0px);
+    }
+
+    100% {
+        opacity: 0;
+        -webkit-filter: blur(2px);
+    }
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+
+    25% {
+        opacity: 1;
+    }
+
+    75% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

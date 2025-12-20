@@ -84,7 +84,7 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
   return (
     <html lang={locale} className={roboto.variable}>
       <PolyfillEvent />
-      <LayoutHead />
+      <LayoutHead nonce={nonce} />
       <LayoutBody params={params} locale={locale} nonce={nonce}>
         {children}
       </LayoutBody>

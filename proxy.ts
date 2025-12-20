@@ -11,6 +11,8 @@ import {
   exactProxy as exactMiddlewareOne
 } from '@/app/[locale]/one/proxy';
 
+import generateParamsUuidMiddleware from '@/proxy/generateParamsUuid';
+
 // 靜態檔案相關設定
 const STATIC_FILE_EXTENSIONS: RegExp =
   /\.(js|css|svg|jpg|jpeg|png|ico|gif|webp|txt|json|woff2?|ttf|eot|map)$/;
@@ -32,7 +34,8 @@ const POLICY_MIDDLEWARE_SETTINGS: Array<Function> = [
 const GLOBAL_MIDDLEWARE_SETTINGS: Array<Function> = [
   globalTestMiddleware,
   i18nMiddleware,
-  logMiddleware
+  logMiddleware,
+  generateParamsUuidMiddleware
 ];
 
 type MiddlewareSetting = {

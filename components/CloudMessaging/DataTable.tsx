@@ -237,7 +237,7 @@ export function CloudMessagingDataTable(
             {webTokenList.map((webToken, webTokenIndex) => (
               <tr
                 key={webToken.token as unknown as string}
-                data-title={`web token No.${webTokenIndex + 1}`}
+                css-title={`web token No.${webTokenIndex + 1}`}
                 className={
                   style[
                     'cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr'
@@ -250,8 +250,8 @@ export function CloudMessagingDataTable(
                       'cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-os_td'
                     ]
                   }
-                  data-title={`${OS_TD_TITLE}：`}
-                  data-context={webToken.os}
+                  css-title={`${OS_TD_TITLE}：`}
+                  css-context={webToken.os}
                 >
                   {webToken.os as unknown as string}
                 </td>
@@ -261,8 +261,8 @@ export function CloudMessagingDataTable(
                       'cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-token_td'
                     ]
                   }
-                  data-title={`${TOKEN_TD_TITLE}：`}
-                  data-context={webToken.token}
+                  css-title={`${TOKEN_TD_TITLE}：`}
+                  css-context={webToken.token}
                 >
                   {webToken.token as unknown as string}
                 </td>
@@ -272,7 +272,7 @@ export function CloudMessagingDataTable(
                       'cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td'
                     ]
                   }
-                  data-title={`${ACRION_TITLE}：`}
+                  css-title={`${ACRION_TITLE}：`}
                 >
                   <Button
                     color="error"
@@ -291,7 +291,7 @@ export function CloudMessagingDataTable(
             {androidTokenList.map((androidToken, androidTokenIndex) => (
               <tr
                 key={androidToken.token as unknown as string}
-                data-title={`android token No.${androidTokenIndex + 1}`}
+                css-title={`android token No.${androidTokenIndex + 1}`}
                 className={
                   style[
                     'cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr'
@@ -304,8 +304,8 @@ export function CloudMessagingDataTable(
                       'cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-os_td'
                     ]
                   }
-                  data-title={`${OS_TD_TITLE}：`}
-                  data-context={androidToken.os}
+                  css-title={`${OS_TD_TITLE}：`}
+                  css-context={androidToken.os}
                 >
                   {androidToken.os as unknown as string}
                 </td>
@@ -315,8 +315,8 @@ export function CloudMessagingDataTable(
                       'cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-token_td'
                     ]
                   }
-                  data-title={`${TOKEN_TD_TITLE}：`}
-                  data-context={androidToken.token}
+                  css-title={`${TOKEN_TD_TITLE}：`}
+                  css-context={androidToken.token}
                 >
                   {androidToken.token as unknown as string}
                 </td>
@@ -326,7 +326,7 @@ export function CloudMessagingDataTable(
                       'cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td'
                     ]
                   }
-                  data-title={`${ACRION_TITLE}：`}
+                  css-title={`${ACRION_TITLE}：`}
                 >
                   <Button
                     color="error"
@@ -345,7 +345,7 @@ export function CloudMessagingDataTable(
             {iosTokenList.map((iosToken, iosTokenIndex) => (
               <tr
                 key={iosToken.token as unknown as string}
-                data-title={`ios token No.${iosTokenIndex + 1}`}
+                css-title={`ios token No.${iosTokenIndex + 1}`}
                 className={
                   style[
                     'cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr'
@@ -358,8 +358,8 @@ export function CloudMessagingDataTable(
                       'cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-os_td'
                     ]
                   }
-                  data-title={`${OS_TD_TITLE}：`}
-                  data-context={iosToken.os}
+                  css-title={`${OS_TD_TITLE}：`}
+                  css-context={iosToken.os}
                 >
                   {iosToken.os as unknown as string}
                 </td>
@@ -369,8 +369,8 @@ export function CloudMessagingDataTable(
                       'cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-token_td'
                     ]
                   }
-                  data-title={`${TOKEN_TD_TITLE}：`}
-                  data-context={iosToken.token}
+                  css-title={`${TOKEN_TD_TITLE}：`}
+                  css-context={iosToken.token}
                 >
                   {iosToken.token as unknown as string}
                 </td>
@@ -380,7 +380,7 @@ export function CloudMessagingDataTable(
                       'cloud_messaging_page-skeleton_loader-scroll_fetch-token_table-tbody-tr-action_td'
                     ]
                   }
-                  data-title={`${ACRION_TITLE}：`}
+                  css-title={`${ACRION_TITLE}：`}
                 >
                   <Button
                     color="error"

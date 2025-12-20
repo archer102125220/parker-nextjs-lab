@@ -8,14 +8,16 @@ A comprehensive Next.js laboratory project showcasing modern web development pra
 
 - **🌍 Internationalization**: Full i18n support with English and Traditional Chinese
 - **🔥 Firebase Integration**: Complete Firebase ecosystem including Admin SDK, Messaging, and Analytics
-- **📱 PWA Support**: Service Worker implementation with Serwist
+- **📱 PWA Support**: Service Worker implementation with Serwist, offline fallback page
 - **🎨 Material-UI**: Modern UI components with custom theming
 - **🗄️ Database**: PostgreSQL with Sequelize ORM
 - **📊 Analytics**: Google Analytics and Google Tag Manager integration
-- **🔧 Custom Components**: Reusable component library including Dialog, Drawer, ScrollFetch, and Swiper
+- **🔧 Custom Components**: 40+ reusable component library
 - **⚡ Performance**: Optimized with Turbopack support and performance monitoring
-- **🔐 Authentication**: WebAuthn/FIDO2 integration for modern authentication
+- **🔐 Authentication**: WebAuthn/FIDO2 and OAuth (Google, Facebook, LINE) integration
 - **📱 Mobile-First**: Responsive design with mobile optimization
+- **🎥 WebRTC**: Real-time video chat with SSE signaling
+- **🤖 AI/ML**: Face detection and face swap features with face-api.js
 
 ## 🚀 Quick Start
 
@@ -25,6 +27,7 @@ A comprehensive Next.js laboratory project showcasing modern web development pra
 - Yarn package manager
 - PostgreSQL database
 - Firebase project (for Firebase features)
+- Upstash Redis (for WebRTC signaling)
 
 ### Installation
 
@@ -41,12 +44,13 @@ A comprehensive Next.js laboratory project showcasing modern web development pra
 
 3. **Environment Setup**
    ```bash
-   cp .env.example .env.local
+   cp .env.example .env
    ```
-   Configure your environment variables in `.env.local`:
+   Configure your environment variables in `.env`:
    - Database connection settings
    - Firebase configuration
    - Google Analytics/Tag Manager IDs
+   - Upstash Redis credentials
 
 4. **Database Setup**
    ```bash
@@ -61,50 +65,75 @@ A comprehensive Next.js laboratory project showcasing modern web development pra
 
 5. **Start Development Server**
    ```bash
-   # Standard development
+   # With Turbopack (default, faster)
    yarn dev
    
-   # With Turbopack (faster)
-   yarn dev:turbopack
+   # With Webpack
+   yarn dev:webpack
    
-   # With HTTPS
+   # With HTTPS + Turbopack (required for WebRTC/WebAuthn)
    yarn dev-https
+   
+   # With HTTPS + Webpack
+   yarn dev-https:webpack
    ```
 
-   Open [http://localhost:3001](http://localhost:3001) to view the application.
+   Open [http://localhost:3001](http://localhost:3001) (or https://localhost:3000 for HTTPS) to view the application.
 
 ## 📁 Project Structure
 
 ```
 ├── app/                          # Next.js App Router
-│   ├── [locale]/                # Internationalized routes
-│   │   ├── components/          # Component demos
-│   │   ├── firebase/           # Firebase integration
-│   │   └── one/                # Single page demos
-│   ├── api/                     # API routes
-│   └── layout.tsx              # Root layout
-├── components/                   # Reusable components
-│   ├── Dialog/                  # Custom dialog component
-│   ├── Drawer/                  # Custom drawer component
-│   ├── ScrollFetch/             # Infinite scroll component
-│   ├── SwiperJs/                # Swiper.js integration
-│   ├── FirebaseInit/            # Firebase initialization
-│   └── Google/                  # Google services integration
-├── hooks/                       # Custom React hooks
+│   ├── [locale]/                 # Internationalized routes
+│   │   ├── components/           # Component demos (40+ examples)
+│   │   ├── css-drawing/          # CSS art and drawings
+│   │   ├── directive-effects/    # DOM manipulation demos
+│   │   ├── face-swap/            # AI face swap (frontend/backend)
+│   │   ├── firebase/             # Firebase integration demos
+│   │   ├── hooks-test/           # Custom hooks demos
+│   │   ├── server-sent-event-test/ # SSE messaging demos
+│   │   ├── socket-test/          # Socket.IO & WebSocket demos
+│   │   ├── web-authn/            # WebAuthn/FIDO2 authentication
+│   │   ├── web-cam/              # Camera stream demos
+│   │   └── web-rtc/              # WebRTC video chat
+│   └── api/                      # API routes
+│       ├── facebook-oauth-verify/
+│       ├── google-oauth-verify/
+│       ├── line-oauth-verify/
+│       ├── face-swap/process/
+│       ├── server-sent-event/    # SSE endpoints
+│       ├── web-rtc/              # WebRTC signaling APIs
+│       └── web-authn/            # WebAuthn endpoints
+├── components/                   # Reusable components (40+)
+│   ├── Animation/               # Animation components
+│   ├── Banner/                  # Carousel banner
+│   ├── Dialog/                  # Modal dialogs
+│   ├── Drawer/                  # Side navigation
+│   ├── ScrollFetch/             # Infinite scroll
+│   ├── SwiperJs/                # Touch slider
+│   ├── VirtualScroller/         # Virtual list
+│   └── ...                      # Many more
+├── hooks/                       # Custom React hooks (28+)
+│   ├── useCameraStream.ts       # Camera access
+│   ├── useEventSource.ts        # SSE client
+│   ├── useWebSocket.ts          # WebSocket client
+│   ├── useSocketIoClient.ts     # Socket.IO client
+│   └── ...                      # Many more
+├── proxy/                       # Middleware modules
+├── proxy.ts                     # Middleware entry point
 ├── i18n/                        # Internationalization
-│   └── locales/                 # Translation files
 ├── services/                    # External service integrations
 ├── store/                       # Redux store configuration
-├── utils/                       # Utility functions
-└── styles/                      # Global styles and themes
+└── utils/                       # Utility functions
 ```
 
 ## 🛠️ Available Scripts
 
 ### Development
-- `yarn dev` - Start development server
-- `yarn dev:turbopack` - Start with Turbopack for faster builds
-- `yarn dev-https` - Start with HTTPS support
+- `yarn dev` - Start with Turbopack (port 3001, default)
+- `yarn dev:webpack` - Start with Webpack bundler
+- `yarn dev-https` - Start with HTTPS + Turbopack (port 3000)
+- `yarn dev-https:webpack` - Start with HTTPS + Webpack
 
 ### Database
 - `yarn initDB` - Initialize database (drop, create, migrate, seed)
@@ -140,25 +169,354 @@ Translation files are located in `i18n/locales/` and can be managed through Goog
 - **Analytics**: User behavior tracking
 - **Admin SDK**: Server-side Firebase operations
 
-## 🎨 Component Library
+## 🎨 Component Library (40+)
 
 ### Core Components
 - **Dialog**: Customizable modal dialogs
 - **Drawer**: Side navigation drawer
 - **ScrollFetch**: Infinite scroll with data fetching
-- **SwiperJs**: Touch slider integration
+- **SwiperJs/SwiperCustom**: Touch slider integration
+- **VirtualScroller**: Virtualized list for performance
+- **Banner**: Carousel banner component
 
-### Layout Components
-- **Header/Footer**: Site navigation
-- **PageLoading**: Loading states
-- **Message**: Toast notifications
+### Form Components
+- **DatePicker**: Date selection
+- **PhoneInput**: Phone number input with validation
+- **EnterLabel**: Animated input labels
+- **Selector**: Custom select dropdown
+- **SwitchButton**: Toggle switch
+- **ImageUpload**: Image upload with preview
 
-## 📊 Analytics & Tracking
+### UI Components
+- **Animation**: Various animation effects
+- **Countdown**: Timer countdown
+- **GoTop**: Scroll to top button
+- **Hexagon/Triangle**: CSS shape components
+- **LoadingBar**: Progress indicators
+- **SkeletonLoader**: Loading placeholders
+- **Ripple**: Material ripple effect
+- **Tabs**: Tab navigation
+- **SlideInPanel**: Sliding panel
 
-- **Google Analytics 4**: User behavior analytics
-- **Google Tag Manager**: Tag management
-- **Vercel Analytics**: Performance monitoring
-- **Custom Events**: GTM integration for custom tracking
+### Utility Components
+- **QRCode**: QR code generator
+- **Youtube**: YouTube player integration
+- **WangEditor**: Rich text editor
+- **NotificationPermission**: Push notification prompt
+
+## 🪝 Custom Hooks (28+)
+
+| Hook | Description |
+|------|-------------|
+| `useCameraStream` | Camera/microphone access |
+| `useEventSource` | SSE client (GET) |
+| `usePostEventSource` | SSE client (POST) |
+| `useWebSocket` | WebSocket client |
+| `useSocketIoClient` | Socket.IO client |
+| `useDebounce` | Debounce values |
+| `useThrottle` | Throttle values |
+| `useLocalStorage` | localStorage sync |
+| `useSessionStorage` | sessionStorage sync |
+| `useMediaQuery` | Responsive breakpoints |
+| `useMobile/useTablet` | Device detection |
+| `useIntersectionObserver` | Viewport detection |
+| `useLazyLoad` | Lazy loading images |
+| `useClickOutside` | Click outside detection |
+| `useKeyPress` | Keyboard events |
+| `useInterval/useTimeout` | Timer hooks |
+| `useWindowSize` | Window dimensions |
+| `useBeforeunload` | Page leave warning |
+| `useYoutube` | YouTube API integration |
+| `useFacebook` | Facebook SDK |
+| `useFirebase` | Firebase utilities |
+| `useGTMTrack` | GTM event tracking |
+
+## 💎 TypeScript Best Practices
+
+This project follows **strict type safety** standards, completely avoiding the use of `any` types.
+
+### Core Principles
+
+#### ❌ Avoid Using `any`
+```typescript
+// ❌ Bad practice
+function processData(data: any) {
+  return data.value;
+}
+
+// ✅ Good practice
+function processData<T extends { value: unknown }>(data: T) {
+  return data.value;
+}
+```
+
+#### ✅ Use Precise Type Definitions
+```typescript
+// ✅ Use official type definitions
+import type * as faceApi from 'face-api.js';
+
+export async function detectFace(
+  image: faceApi.TNetInput
+): Promise<faceApi.WithFaceLandmarks<...> | null>
+```
+
+#### ✅ Type Assertions with `as unknown as`
+```typescript
+// ✅ Double assertion (safer than as any)
+const element = document.getElementById('id') as unknown as CustomElement;
+
+// ❌ Avoid direct as any
+const element = document.getElementById('id') as any;
+```
+
+### Real-World Examples
+
+#### Face Swap API Type-Safe Implementation
+
+```typescript
+// utils/third-party/face-swap.ts
+
+// 1. Use official type definitions
+import type * as faceApi from 'face-api.js';
+
+// 2. Explicit function signatures
+export async function detectFace(
+  image: faceApi.TNetInput
+): Promise<faceApi.WithFaceLandmarks<
+  { detection: faceApi.FaceDetection },
+  faceApi.FaceLandmarks68
+> | null> {
+  const detection = await faceapi
+    .detectSingleFace(image)
+    .withFaceLandmarks();
+  
+  return detection || null;
+}
+
+// 3. Type assertions when necessary with as unknown as
+// Reason: node-canvas types differ from browser types, but are runtime compatible
+faceapi.env.monkeyPatch({
+  Canvas: Canvas as unknown as typeof HTMLCanvasElement,
+  Image: Image as unknown as typeof HTMLImageElement,
+  ImageData: ImageData as unknown as typeof globalThis.ImageData
+});
+```
+
+### Why Avoid `any`?
+
+| Using `any` | Using Precise Types |
+|------------|---------------------|
+| ❌ Loses type checking | ✅ Compile-time error detection |
+| ❌ No autocomplete | ✅ IDE IntelliSense |
+| ❌ Difficult refactoring | ✅ Safe refactoring |
+| ❌ Runtime errors | ✅ Compile-time errors |
+
+### Type Assertion Guidelines
+
+#### When to Use Type Assertions?
+
+1. **Third-party library type mismatches** (e.g., node-canvas vs browser Canvas)
+2. **DOM operations** (requiring specific element types)
+3. **Dynamic module loading** (incomplete type definitions)
+
+#### How to Use Safely?
+
+```typescript
+// ✅ Use as unknown as (double assertion)
+const value = input as unknown as TargetType;
+
+// ✅ Add comments explaining why
+// Type assertion: node-canvas Image is compatible with TNetInput at runtime
+const detection = await detectFace(img as unknown as faceApi.TNetInput);
+
+// ✅ Use type guards
+function isCustomType(value: unknown): value is CustomType {
+  return typeof value === 'object' && value !== null && 'property' in value;
+}
+```
+
+All code in this project follows these type safety principles to ensure code quality and maintainability.
+
+## 🎨 CSS Development Standards
+
+### CSS Property Order Convention
+
+The project follows mainstream CSS property ordering standards to ensure code consistency and maintainability:
+
+1. **Positioning** (position, top, left, z-index...)
+2. **Display & Box Model** (display, flex, width, margin, padding, border...)
+3. **Typography** (font, color, text-align...)
+4. **Visual** (background, box-shadow, opacity...)
+5. **Animation** (transition, animation...)
+6. **Misc** (cursor, content...)
+
+**Example**:
+```scss
+.example {
+  /* Positioning */
+  position: relative;
+  top: 0;
+  z-index: 10;
+
+  /* Display & Box Model */
+  display: flex;
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #ccc;
+
+  /* Typography */
+  font-size: 16px;
+  color: #333;
+
+  /* Visual */
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  /* Animation */
+  transition: all 0.3s;
+
+  /* Misc */
+  cursor: pointer;
+}
+```
+
+### CSS Naming Convention
+
+The project adopts a **Modified BEM Naming Convention**, cleverly sacrificing standard BEM's visual symbols (`__`) for better double-click selection efficiency in development tools, while maintaining CSS specificity and state management semantic integrity through SCSS concatenation and HTML attributes.
+
+#### Naming Structure
+
+- **Block**: Single name, e.g., `.countdown`
+- **Element**: Single hyphen `-` connecting Block and Element, e.g., `.countdown-down_enter`, `.countdown-up_leave`
+- **Sub-Element**: Single hyphen `-` connecting parent and child elements, with underscores `_` separating semantic words within element names, e.g.:
+  - `.countdown-down_enter-down_enter_up`
+  - `.image_upload_preview_img`
+- **State Modifiers**: Managed through HTML attribute selectors, e.g., `[css-is-anime-start='true']`, `[css-is-active='true']`
+
+#### Advantages
+
+1. ✅ **Double-click Selection** - No `__` interruption, complete class name selection
+2. ✅ **SCSS Nesting** - Maintains semantic hierarchy through `&-element`
+3. ✅ **Semantic Clarity** - Underscores separate multiple semantic words
+4. ✅ **State Management** - Uses HTML attributes instead of modifier classes, reducing class count
+5. ✅ **Maintainability** - Preserves good readability and maintainability
+
+#### Examples
+
+```scss
+.countdown {
+  &-down_enter {
+    // .countdown-down_enter
+    &-down_enter_up {
+      // .countdown-down_enter-down_enter_up
+      &[css-is-anime-start='true'] {
+        animation: flip-up 1s;
+      }
+    }
+  }
+}
+
+.image_upload {
+  &_preview {
+    // .image_upload_preview
+    &_img {
+      // .image_upload_preview_img
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+  
+  &_mask {
+    // .image_upload_mask
+    &[css-is-dragging='true'] {
+      opacity: 0.8;
+    }
+  }
+}
+```
+
+#### HTML Usage Example
+
+```tsx
+<div className="image_upload">
+  <div className="image_upload_preview">
+    <img className="image_upload_preview_img" src="..." />
+  </div>
+  <div className="image_upload_mask" css-is-dragging="true">
+    <p>Drop image here</p>
+  </div>
+</div>
+```
+
+All components in this project follow these CSS conventions to ensure code style consistency.
+```
+
+### Type Safety Examples in This Project
+
+- ✅ **Face Swap API**: Fully type-safe, zero `any` usage
+- ✅ **Custom Hooks**: All hooks have explicit generic definitions
+- ✅ **API Routes**: TypeScript interfaces for request/response
+- ✅ **Components**: Props defined with interfaces, full IntelliSense support
+
+
+
+## 🔀 Middleware Architecture
+
+The project implements a modular middleware system inspired by Nuxt.js.
+
+### Structure
+
+```
+├── proxy.ts                      # Main middleware entry
+├── proxy/                        # Global middleware modules
+│   ├── contentSecurityPolicy.ts  # CSP headers
+│   ├── globalTest.ts             # Global test middleware
+│   ├── i18n.ts                   # Internationalization
+│   └── log.ts                    # Request logging
+└── app/[locale]/
+    ├── one/proxy.ts              # Page-specific middleware
+    └── web-rtc/proxy.ts          # WebRTC UUID generation
+```
+
+### How It Works
+
+1. **Policy Middleware**: Security headers (CSP)
+2. **Global Middleware**: i18n, logging
+3. **Page Middleware**: Route-specific logic (UUID generation, validation)
+
+### Registration
+
+```typescript
+// proxy.ts
+import { proxy as webRtcMiddleware } from '@/app/[locale]/web-rtc/proxy';
+
+const MIDDLEWARE_SETTINGS = [
+  { patch: '/web-rtc', handler: webRtcMiddleware }
+];
+```
+
+## 📡 API Routes
+
+### OAuth Verification
+- `POST /api/facebook-oauth-verify` - Facebook token verification
+- `POST /api/google-oauth-verify` - Google ID token verification
+- `POST /api/line-oauth-verify` - LINE token verification
+
+### WebRTC Signaling (SSE + Upstash Redis)
+- `POST /api/web-rtc/join-room` - Join WebRTC room
+- `POST /api/web-rtc/candidate-list` - Exchange ICE candidates
+- `POST /api/web-rtc/description` - Exchange SDP offers/answers
+- `GET /api/web-rtc/subscription/[roomId]` - SSE subscription
+
+### Server-Sent Events
+- `GET /api/server-sent-event` - Global SSE stream
+- `GET /api/server-sent-event/room/[roomId]` - Room SSE stream
+- `POST /api/server-sent-event/room/[roomId]/send` - Send room message
+
+### WebAuthn
+- `POST /api/web-authn/register` - Start registration
+- `POST /api/web-authn/authenticate` - Start authentication
 
 ## 🔧 Configuration
 
@@ -175,13 +533,15 @@ FIREBASE_CLIENT_EMAIL=your-client-email
 # Google Analytics
 NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
-```
 
-### Next.js Configuration
-The project uses:
-- **next-intl**: Internationalization
-- **Serwist**: Service Worker/PWA
-- **SCSS**: Styling with global variables and mixins
+# OAuth
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-client-id
+NEXT_PUBLIC_FACEBOOK_APP_ID=your-facebook-app-id
+
+# Upstash Redis (for WebRTC)
+UPSTASH_REDIS_REST_URL=your-redis-url
+UPSTASH_REDIS_REST_TOKEN=your-redis-token
+```
 
 ## 🚀 Deployment
 
@@ -190,32 +550,13 @@ The project uses:
 2. Configure environment variables in Vercel dashboard
 3. Deploy automatically on push to main branch
 
-### Other Platforms
-The project can be deployed to any platform supporting Node.js:
-- Railway
-- Heroku
-- DigitalOcean App Platform
-- AWS/GCP/Azure
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+### Notes
+- WebSocket/Socket.IO features require non-serverless environments
+- Use SSE-based signaling for WebRTC on Vercel
 
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [Next.js](https://nextjs.org/) - React framework
-- [Material-UI](https://mui.com/) - React component library
-- [Firebase](https://firebase.google.com/) - Backend services
-- [Serwist](https://serwist.pages.dev/) - Service Worker library
-- [next-intl](https://next-intl-docs.vercel.app/) - Internationalization
 
 ---
 
