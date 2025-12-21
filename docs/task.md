@@ -760,10 +760,11 @@
 - [ ] 驗證 WebAuthn/FIDO2 認證流程
 - [ ] 驗證 Firebase Admin 推播通知功能
 
-#### 2. Socket.IO 部署方案評估
-- [ ] 研究 Vercel 替代方案 (Railway, Render, Fly.io)
-- [ ] 評估使用 SSE 替代 Socket.IO 的可行性
-- [ ] 決定最終部署架構
+#### 2. Socket.IO 部署方案評估 ⏳ 可選
+- [x] 確認 Next.js 不支援內建 WebSocket 伺服器
+- [x] 評估使用 SSE 替代 Socket.IO 的可行性 (已完成 - 推薦使用 SSE)
+- [ ] 如需雙向通訊,評估外部 Socket.IO 部署方案 (Railway/Render) (可選)
+- [x] 短期決策: 使用 SSE 作為主要方案
 
 #### 3. Face Swap 後端實作
 - [ ] 研究 `@tensorflow/tfjs-node` 在 Next.js 中的使用

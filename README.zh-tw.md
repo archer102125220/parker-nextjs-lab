@@ -518,6 +518,49 @@ const MIDDLEWARE_SETTINGS = [
 - `POST /api/web-authn/register` - 開始註冊
 - `POST /api/web-authn/authenticate` - 開始驗證
 
+## 🔑 Redis Key 前綴規範
+
+本專案與 [parker-nuxt-lab](https://github.com/your-username/parker-nuxt-lab) 共用 Upstash Redis 實例。為避免 key 衝突，所有 Redis keys 使用 `nextjs-lab:` 前綴。
+
+### Key 命名規範
+
+#### WebRTC Keys
+```typescript
+// 房間成員列表
+`nextjs-lab:web-rtc-member-list-${roomId}`
+
+// 個別成員類型 (Offer/Answer)
+`nextjs-lab:web-rtc-member-type-${roomId}-${userId}`
+
+// ICE Candidate 列表
+`nextjs-lab:web-rtc-member-candidate-list-${roomId}`
+
+// SDP Description 列表
+`nextjs-lab:web-rtc-member-description-list-${roomId}`
+```
+
+#### SSE Keys
+```typescript
+// 房間訊息
+`nextjs-lab:sse-room-messages-${roomId}`
+```
+
+### TTL 設定
+
+| Key Pattern | 用途 | TTL |
+|------------|------|-----|
+| `nextjs-lab:web-rtc-*` | WebRTC 信令資料 | 10 分鐘 |
+| `nextjs-lab:sse-room-messages-*` | SSE 房間訊息 | 1 小時 |
+
+### 專案區分
+
+| 專案 | Redis Key 前綴 |
+|------|---------------|
+| parker-nuxt-lab | (無前綴) |
+| parker-nextjs-lab | `nextjs-lab:` |
+
+這樣兩個專案可以安全地共用同一個 Upstash Redis 實例，不會互相干擾。
+
 ## 🔧 配置
 
 ### 環境變數

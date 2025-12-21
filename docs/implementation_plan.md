@@ -30,9 +30,15 @@ This plan aims to complete the missing features and components in `parker-nextjs
 > **需要外部服務的功能 (Features Requiring External Services)**
 > 
 > 1. **Face Swap 功能**: 需要 face-api.js 模型檔案和後端處理
-> 2. **WebRTC**: 需要 signaling server 配置
-> 3. **Socket.IO**: 需要 Socket.IO server 配置
-> 4. **PostgreSQL**: 需要資料庫連線配置
+> 2. **WebRTC**: ✅ 已使用 SSE + Upstash Redis 實作 signaling
+> 3. **~~Socket.IO~~**: ❌ **不實作** - Next.js 不支援內建 WebSocket 伺服器
+> 4. **~~WebSocket Server~~**: ❌ **不實作** - Next.js 不支援內建 WebSocket 伺服器
+> 5. **PostgreSQL**: 需要資料庫連線配置
+> 6. **Upstash Redis**: ✅ 已整合 - WebRTC 和 SSE 使用 `nextjs-lab:` 前綴
+> 
+> **替代方案**: 
+> - ✅ Server-Sent Events (SSE) 替代 Socket.IO/WebSocket (已完整實作並測試通過)
+> - ✅ Redis key 前綴 `nextjs-lab:` 避免與 parker-nuxt-lab 衝突
 
 ---
 

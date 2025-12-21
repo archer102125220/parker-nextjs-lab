@@ -12,7 +12,11 @@ export default function SSEGlobalPostPage(): React.ReactNode {
 
   const handleMessage = useCallback((event: MessageEvent) => {
     console.log('SSE message:', event.data);
-    setMessageList((prev) => [...prev, event.data]);
+    // Stringify the data to prevent React rendering errors
+    const messageStr = typeof event.data === 'string' 
+      ? event.data 
+      : JSON.stringify(event.data);
+    setMessageList((prev) => [...prev, messageStr]);
   }, []);
 
   const handleOpen = useCallback(() => {
@@ -26,7 +30,7 @@ export default function SSEGlobalPostPage(): React.ReactNode {
   }, []);
 
   const postEventSource = usePostEventSource({
-    channel: '/global-post',
+    channel: '/',
     open: handleOpen,
     error: handleError,
     message: handleMessage,

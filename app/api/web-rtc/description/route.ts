@@ -62,7 +62,7 @@ export async function POST(request: Request) {
 
     // Get existing description list for this room
     const memberDescriptionListString = await redis.get<string>(
-      `web-rtc-member-description-list-${roomId}`
+      `nextjs-lab:web-rtc-member-description-list-${roomId}`
     );
     const memberDescriptionList: MemberDescription[] =
       memberDescriptionListString
@@ -88,7 +88,7 @@ export async function POST(request: Request) {
     }
 
     await redis.set(
-      `web-rtc-member-description-list-${roomId}`,
+      `nextjs-lab:web-rtc-member-description-list-${roomId}`,
       safeToJSON(memberDescriptionList),
       { ex: 60 * 10 }
     );

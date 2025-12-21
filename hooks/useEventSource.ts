@@ -5,7 +5,9 @@ import { dayjs } from '@/hooks/useDayjs';
 
 const DOMAIN =
   (process.env.NODE_ENV === 'development'
-    ? window?.location?.origin
+    ? typeof window !== 'undefined'
+      ? window?.location?.origin
+      : ''
     : process.env.NEXT_PUBLIC_DOMAIN || window?.location?.origin) || '';
 const SERVER_SENT_EVENT_BASE_PATH =
   process.env.NEXT_PUBLIC_SERVER_SENT_EVENT_BASE_PATH || '/server-sent-event';

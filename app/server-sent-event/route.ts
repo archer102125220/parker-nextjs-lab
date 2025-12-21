@@ -52,3 +52,50 @@ export async function GET(request: Request) {
     }
   });
 }
+
+export async function POST(request: Request) {
+  const encoder = new TextEncoder();
+
+  // Read POST body
+  const body = await request.json().catch(() => ({}));
+  console.log('SSE Global POST:', { body });
+
+  const stream = new ReadableStream({
+    start(controller) {
+      const sendEvent = (data: unknown) => {
+        const message = `data: ${safeToJSON(data)}\n\n`;
+        controller.enqueue(encoder.encode(message));
+      };
+
+      // Send initial message with POST data
+      sendEvent({
+        connected: true,
+        time: new Date().toISOString(),
+        receivedData: body
+      });
+
+      // Send periodic messages
+      const interval = setInterval(() => {
+        sendEvent({
+          time: `POST Message @ ${new Date().toLocaleTimeString()}`,
+          postData: body
+        });
+      }, 1000);
+
+      // Handle client disconnect
+      request.signal.addEventListener('abort', () => {
+        console.log('SSE Global POST: client disconnected');
+        clearInterval(interval);
+        controller.close();
+      });
+    }
+  });
+
+  return new Response(stream, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive'
+    }
+  });
+}

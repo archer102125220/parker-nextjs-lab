@@ -56,7 +56,7 @@ export async function POST(request: Request) {
 
     // Get existing member list
     const memberListString = await redis.get<string>(
-      `web-rtc-member-list-${roomId}`
+      `nextjs-lab:web-rtc-member-list-${roomId}`
     );
     const memberList: MemberType[] = memberListString
       ? (safeParseJSON<MemberType[]>(memberListString) ?? [])
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
       memberList.push(memberType);
 
       await redis.set(
-        `web-rtc-member-list-${roomId}`,
+        `nextjs-lab:web-rtc-member-list-${roomId}`,
         safeToJSON(memberList),
         { ex: 60 * 10 } // 10 minutes TTL
       );
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
 
     // Store individual member type
     await redis.set(
-      `web-rtc-member-type-${roomId}-${userId}`,
+      `nextjs-lab:web-rtc-member-type-${roomId}-${userId}`,
       safeToJSON(memberType),
       { ex: 60 * 10 }
     );

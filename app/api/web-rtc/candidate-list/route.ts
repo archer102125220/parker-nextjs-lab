@@ -62,7 +62,7 @@ export async function POST(request: Request) {
 
     // Get existing candidate list for this room
     const memberCandidateListString = await redis.get<string>(
-      `web-rtc-member-candidate-list-${roomId}`
+      `nextjs-lab:web-rtc-member-candidate-list-${roomId}`
     );
     const memberCandidateList: MemberCandidate[] = memberCandidateListString
       ? (safeParseJSON<MemberCandidate[]>(memberCandidateListString) ?? [])
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
     }
 
     await redis.set(
-      `web-rtc-member-candidate-list-${roomId}`,
+      `nextjs-lab:web-rtc-member-candidate-list-${roomId}`,
       safeToJSON(memberCandidateList),
       { ex: 60 * 10 }
     );

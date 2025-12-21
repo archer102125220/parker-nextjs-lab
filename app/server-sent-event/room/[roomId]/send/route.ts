@@ -62,7 +62,7 @@ export async function POST(
 
     // Get existing messages
     const messagesString = await redis.get<string>(
-      `sse-room-messages-${roomId}`
+      `nextjs-lab:sse-room-messages-${roomId}`
     );
     const messages: RoomMessage[] = messagesString
       ? (safeParseJSON<RoomMessage[]>(messagesString) ?? [])
@@ -81,7 +81,7 @@ export async function POST(
 
     // Save to Redis with 1 hour TTL
     await redis.set(
-      `sse-room-messages-${roomId}`,
+      `nextjs-lab:sse-room-messages-${roomId}`,
       safeToJSON(trimmedMessages),
       { ex: 60 * 60 }
     );

@@ -21,12 +21,12 @@
 ### Stage 6.2: 即時通訊
 
 #### Socket Test (`app/[locale]/socket-test/`)
-| 項目 | 簡化說明 | 後續需要 |
-|------|----------|----------|
-| Socket.IO 伺服器 | ⚠️ 無後端 Socket.IO 伺服器 | 需建立或連接外部 Socket.IO 伺服器 |
-| WebSocket 伺服器 | ⚠️ 無後端 WebSocket 伺服器 | 需建立 WebSocket API route 或外部伺服器 |
-| ⚠️ 核心功能 | 僅 UI 和前端邏輯，無法實際通訊 | 需後端支援 |
-| 替代方案 | 可考慮完全使用 SSE 替代 | 評估 SSE 是否滿足需求 |
+| 項目 | 狀態 | 說明 |
+|------|------|------|
+| Next.js 內建 WebSocket | ❌ **不實作** | Next.js 不支援內建 WebSocket 伺服器 |
+| 外部 Socket.IO 伺服器 | ⏳ **可選實作** | 可部署到 Railway/Render 等平台 |
+| 前端 UI | ✅ 保留 | 可連接外部 Socket.IO 服務 |
+| **短期方案** | ✅ **使用 SSE** | 已完整實作,無需外部服務 |
 
 #### SSE Test (`app/[locale]/server-sent-event-test/`)
 | 項目 | 簡化說明 | 後續需要 |
@@ -49,10 +49,12 @@
 | ✅ SSE 訂閱 | 已完成 | `/api/web-rtc/subscription/[roomId]` |
 
 #### WebRTC Socket.IO/WebSocket (`socket-io/`, `websocket/`)
-| 項目 | 簡化說明 | 後續需要 |
-|------|----------|----------|
-| Signaling 伺服器 | ⚠️ 僅本地視訊預覽 | 需整合 SSE Signaling 或建立 WebSocket 伺服器 |
-| ⚠️ 核心功能 | 未整合 Signaling | 可複製 SSE 版邏輯 |
+| 項目 | 狀態 | 說明 |
+|------|------|------|
+| Next.js 內建 Signaling | ❌ **不實作** | Next.js 不支援內建 WebSocket 伺服器 |
+| 外部 Signaling 伺服器 | ⏳ **可選實作** | 可部署外部 Socket.IO/WebSocket 服務 |
+| 前端 UI | ✅ 保留 | 本地視訊預覽,可連接外部服務 |
+| **推薦方案** | ✅ **使用 SSE 版** | WebRTC SSE Signaling 已完整實作 |
 
 ---
 
@@ -105,19 +107,22 @@
 - [ ] 比對已轉換的 APIs
 - [ ] 補齊缺失的 APIs
 
-### Socket.IO 部署方案
+### Socket.IO 部署方案評估
 
 #### 選項評估
-| 方案 | 優點 | 缺點 | 成本 |
-|------|------|------|------|
-| Railway | 簡單部署、支援 WebSocket | 需額外服務 | $5-10/月 |
-| Render | 免費方案、支援 WebSocket | 冷啟動較慢 | 免費/$7/月 |
-| Fly.io | 全球部署、低延遲 | 配置較複雜 | 免費/$2/月 |
-| 完全使用 SSE | 無需額外服務、Vercel 原生支援 | 單向通訊 | 免費 |
+| 方案 | 優點 | 缺點 | 成本 | 狀態 |
+|------|------|------|------|------|
+| **Next.js 內建** | 無需外部服務 | ❌ **不支援** | - | ❌ 不可行 |
+| Railway | 簡單部署、支援 WebSocket | 需額外服務 | $5-10/月 | ⏳ 可選 |
+| Render | 免費方案、支援 WebSocket | 冷啟動較慢 | 免費/$7/月 | ⏳ 可選 |
+| Fly.io | 全球部署、低延遲 | 配置較複雜 | 免費/$2/月 | ⏳ 可選 |
+| **完全使用 SSE** | 無需額外服務、Vercel 原生支援 | 單向通訊 | 免費 | ✅ **推薦** |
 
-#### 建議方案
-- **短期**: 使用 SSE 替代 Socket.IO (已有完整實作)
-- **長期**: 評估是否真的需要雙向即時通訊，如需要則使用 Railway/Render
+#### 實作決策
+- ❌ **不實作**: Next.js 內建 WebSocket/Socket.IO 伺服器（技術上不可行）
+- ⏳ **可選實作**: 外部 Socket.IO 伺服器部署（如有需要）
+- ✅ **推薦方案**: 使用 SSE（已完整實作,無需額外服務）
+- ✅ **保留**: 客戶端 hooks 和 UI（可隨時連接外部服務）
 
 ---
 

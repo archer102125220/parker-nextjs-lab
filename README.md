@@ -518,6 +518,49 @@ const MIDDLEWARE_SETTINGS = [
 - `POST /api/web-authn/register` - Start registration
 - `POST /api/web-authn/authenticate` - Start authentication
 
+## 🔑 Redis Key Prefix Convention
+
+This project shares an Upstash Redis instance with [parker-nuxt-lab](https://github.com/your-username/parker-nuxt-lab). To avoid key conflicts, all Redis keys use the `nextjs-lab:` prefix.
+
+### Key Naming Convention
+
+#### WebRTC Keys
+```typescript
+// Room member list
+`nextjs-lab:web-rtc-member-list-${roomId}`
+
+// Individual member type (Offer/Answer)
+`nextjs-lab:web-rtc-member-type-${roomId}-${userId}`
+
+// ICE Candidate list
+`nextjs-lab:web-rtc-member-candidate-list-${roomId}`
+
+// SDP Description list
+`nextjs-lab:web-rtc-member-description-list-${roomId}`
+```
+
+#### SSE Keys
+```typescript
+// Room messages
+`nextjs-lab:sse-room-messages-${roomId}`
+```
+
+### TTL Configuration
+
+| Key Pattern | Purpose | TTL |
+|------------|---------|-----|
+| `nextjs-lab:web-rtc-*` | WebRTC signaling data | 10 minutes |
+| `nextjs-lab:sse-room-messages-*` | SSE room messages | 1 hour |
+
+### Project Differentiation
+
+| Project | Redis Key Prefix |
+|---------|-----------------|
+| parker-nuxt-lab | (no prefix) |
+| parker-nextjs-lab | `nextjs-lab:` |
+
+This allows both projects to safely share the same Upstash Redis instance without conflicts.
+
 ## 🔧 Configuration
 
 ### Environment Variables

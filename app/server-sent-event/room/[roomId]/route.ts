@@ -64,7 +64,7 @@ export async function GET(
       const interval = setInterval(async () => {
         try {
           const messagesString = await redis.get<string>(
-            `sse-room-messages-${roomId}`
+            `nextjs-lab:sse-room-messages-${roomId}`
           );
           const messages: RoomMessage[] = messagesString
             ? (safeParseJSON<RoomMessage[]>(messagesString) ?? [])

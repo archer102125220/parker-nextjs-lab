@@ -103,63 +103,27 @@ yarn dev
 
 ---
 
-### 2. Socket.IO 架構決策 ⏰ 預估 1 天
+### 2. Socket.IO 架構決策 ✅ 已完成
 
-#### 目標
-決定 Socket.IO 的部署方案，或是否完全使用 SSE 替代。
+#### 最終決策 (2025-12-21)
+**採用方案**: 完全使用 SSE 替代 Socket.IO/WebSocket
 
-#### 執行步驟
+#### 決策理由
+1. ✅ **Next.js 限制**: 不支援內建 WebSocket 伺服器
+2. ✅ **SSE 已完整實作**: 所有功能都已實作並測試通過
+3. ✅ **成本考量**: SSE 無需額外服務,成本為零
+4. ✅ **功能滿足**: SSE 已滿足專案需求
 
-**Step 1: 評估需求**
-- [ ] 列出需要 Socket.IO 的功能
-- [ ] 評估 SSE 是否能滿足需求
-- [ ] 比較雙向通訊 vs 單向通訊的必要性
+#### 實作狀態
+- ✅ SSE API routes 完整實作
+- ✅ SSE 測試頁面完成
+- ✅ WebRTC SSE Signaling 完成
+- ❌ Socket.IO/WebSocket 伺服器端標註為不實作
 
-**Step 2: 研究部署選項**
-
-**選項 A: 完全使用 SSE (推薦)**
-- ✅ 優點:
-  - 無需額外服務
-  - Vercel 原生支援
-  - 已有完整實作
-  - 成本為零
-- ⚠️ 缺點:
-  - 單向通訊 (Server → Client)
-  - 需要額外 POST API 來發送訊息
-
-**選項 B: Railway 部署 Socket.IO**
-- ✅ 優點:
-  - 簡單部署
-  - 支援 WebSocket
-  - 雙向即時通訊
-- ⚠️ 缺點:
-  - 需要額外服務
-  - 成本: $5-10/月
-  - 需要維護獨立服務
-
-**選項 C: Render 部署 Socket.IO**
-- ✅ 優點:
-  - 有免費方案
-  - 支援 WebSocket
-- ⚠️ 缺點:
-  - 冷啟動較慢
-  - 免費方案有限制
-
-**Step 3: 撰寫技術決策文件**
-- [ ] 建立 `docs/socket-io-architecture-decision.md`
-- [ ] 記錄評估過程
-- [ ] 列出優缺點比較
-- [ ] 提出建議方案
-
-**Step 4: 與使用者確認**
-- [ ] 準備決策簡報
-- [ ] 說明各方案的影響
-- [ ] 取得最終決策
-
-#### 交付成果
-- [ ] `docs/socket-io-architecture-decision.md` 技術決策文件
-- [ ] 使用者確認的最終方案
-- [ ] 實作計劃 (如需要部署外部服務)
+#### 保留功能
+- ✅ `useSocketIoClient` hook (可連接外部服務)
+- ✅ `useWebSocket` hook (可連接外部服務)
+- ✅ Socket test 頁面 UI (僅展示用途)
 
 ---
 

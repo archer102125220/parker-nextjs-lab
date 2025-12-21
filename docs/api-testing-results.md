@@ -197,79 +197,116 @@
 
 ### Server-Sent Events API
 
-#### 1. Global SSE
-- **路徑**: `/api/server-sent-event`
-- **方法**: GET
-- **狀態**: ⏳ 待測試
-- **測試項目**:
-  - [ ] 成功建立 SSE 連線
-  - [ ] 接收全域訊息
-  - [ ] 連線保持穩定
-  - [ ] 錯誤處理
+> **更新**: 2025-12-21 - SSE 功能已修復並正常運作
 
-#### 2. Room SSE
-- **路徑**: `/api/server-sent-event/room/[roomId]`
+#### 1. Global SSE (GET)
+- **路徑**: `/server-sent-event` (獨立路由，非 `/api` 前綴)
 - **方法**: GET
-- **狀態**: ⏳ 待測試
+- **狀態**: ✅ **測試通過**
 - **測試項目**:
-  - [ ] 成功建立房間 SSE 連線
-  - [ ] 接收房間訊息
-  - [ ] 多個客戶端測試
-  - [ ] 連線保持穩定
+  - [x] 成功建立 SSE 連線
+  - [x] 接收全域訊息
+  - [x] 連線保持穩定
+  - [x] 前端顯示「已連線」狀態
+- **測試日期**: 2025-12-21
+- **備註**: 使用 `useEventSource` hook，channel 設為 `/`
 
-#### 3. Room Send
-- **路徑**: `/api/server-sent-event/room/[roomId]/send`
+#### 2. Global SSE (POST)
+- **路徑**: `/server-sent-event`
 - **方法**: POST
-- **狀態**: ⏳ 待測試
+- **狀態**: ✅ **測試通過**
 - **測試項目**:
-  - [ ] 成功發送訊息
-  - [ ] 訊息廣播到所有客戶端
-  - [ ] 訊息格式正確
-  - [ ] 錯誤處理
+  - [x] 成功建立 SSE 連線（POST 方法）
+  - [x] 接收全域訊息
+  - [x] POST body 資料正確傳遞
+  - [x] UI 渲染正常
+- **測試日期**: 2025-12-21
+- **備註**: 使用 `usePostEventSource` hook
+
+#### 3. Room SSE
+- **路徑**: `/server-sent-event/room/[roomId]`
+- **方法**: GET
+- **狀態**: ✅ **已實作**
+- **測試項目**:
+  - [x] API 端點已實作
+  - [x] 使用 Upstash Redis 儲存訊息
+  - [x] Redis key: `nextjs-lab:sse-room-messages-${roomId}`
+  - [ ] 多個客戶端測試（待測試）
+  - [ ] 連線保持穩定（待測試）
+
+#### 4. Room Send
+- **路徑**: `/server-sent-event/room/[roomId]/send`
+- **方法**: POST
+- **狀態**: ✅ **已實作**
+- **測試項目**:
+  - [x] API 端點已實作
+  - [x] 訊息儲存到 Redis
+  - [x] TTL 設定為 1 小時
+  - [ ] 訊息廣播到所有客戶端（待測試）
+  - [ ] 訊息格式正確（待測試）
+
+#### Redis Key 規範
+所有 SSE 相關的 Redis keys 使用 `nextjs-lab:` 前綴：
+- `nextjs-lab:sse-room-messages-${roomId}` - 房間訊息（TTL: 1 小時）
 
 ---
 
 ### WebRTC Signaling API
 
+> **更新**: 2025-12-21 - 使用 SSE + Upstash Redis 實作，所有 Redis keys 使用 `nextjs-lab:` 前綴
+
 #### 1. Join Room
 - **路徑**: `/api/web-rtc/join-room`
 - **方法**: POST
-- **狀態**: ⏳ 待測試
+- **狀態**: ✅ **已實作**
 - **測試項目**:
-  - [ ] 成功加入房間
-  - [ ] 取得房間資訊
-  - [ ] 多個 peer 測試
-  - [ ] 錯誤處理
+  - [x] API 端點已實作
+  - [x] Redis 儲存成員列表
+  - [x] Redis keys: 
+    - `nextjs-lab:web-rtc-member-list-${roomId}`
+    - `nextjs-lab:web-rtc-member-type-${roomId}-${userId}`
+  - [ ] 多個 peer 測試（待測試）
+  - [ ] 錯誤處理（待測試）
 
 #### 2. Description (Offer/Answer)
 - **路徑**: `/api/web-rtc/description`
 - **方法**: POST
-- **狀態**: ⏳ 待測試
+- **狀態**: ✅ **已實作**
 - **測試項目**:
-  - [ ] 成功交換 SDP
-  - [ ] Offer/Answer 格式正確
-  - [ ] 多個 peer 測試
-  - [ ] 錯誤處理
+  - [x] API 端點已實作
+  - [x] Redis 儲存 SDP descriptions
+  - [x] Redis key: `nextjs-lab:web-rtc-member-description-list-${roomId}`
+  - [ ] Offer/Answer 格式正確（待測試）
+  - [ ] 多個 peer 測試（待測試）
 
 #### 3. Candidate List
 - **路徑**: `/api/web-rtc/candidate-list`
 - **方法**: POST
-- **狀態**: ⏳ 待測試
+- **狀態**: ✅ **已實作**
 - **測試項目**:
-  - [ ] 成功交換 ICE candidates
-  - [ ] Candidate 格式正確
-  - [ ] 多個 peer 測試
-  - [ ] 錯誤處理
+  - [x] API 端點已實作
+  - [x] Redis 儲存 ICE candidates
+  - [x] Redis key: `nextjs-lab:web-rtc-member-candidate-list-${roomId}`
+  - [ ] Candidate 格式正確（待測試）
+  - [ ] 多個 peer 測試（待測試）
 
-#### 4. Subscription
+#### 4. Subscription (SSE)
 - **路徑**: `/api/web-rtc/subscription/[roomId]`
-- **方法**: GET
-- **狀態**: ⏳ 待測試
+- **方法**: GET, POST
+- **狀態**: ✅ **已實作**
 - **測試項目**:
-  - [ ] 成功訂閱房間事件
-  - [ ] 接收 signaling 訊息
-  - [ ] 連線保持穩定
-  - [ ] 錯誤處理
+  - [x] API 端點已實作（GET + POST）
+  - [x] SSE 串流正常
+  - [x] 從 Redis 讀取 signaling 資料
+  - [ ] 接收 signaling 訊息（待測試）
+  - [ ] 連線保持穩定（待測試）
+
+#### Redis Key 規範
+所有 WebRTC 相關的 Redis keys 使用 `nextjs-lab:` 前綴，TTL 為 10 分鐘：
+- `nextjs-lab:web-rtc-member-list-${roomId}`
+- `nextjs-lab:web-rtc-member-type-${roomId}-${userId}`
+- `nextjs-lab:web-rtc-member-candidate-list-${roomId}`
+- `nextjs-lab:web-rtc-member-description-list-${roomId}`
 
 ---
 

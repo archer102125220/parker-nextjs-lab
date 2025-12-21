@@ -77,9 +77,9 @@ export async function POST(
             memberCandidateListString,
             memberDescriptionListString
           ] = await Promise.all([
-            redis.get<string>(`web-rtc-member-type-${roomId}-${userId}`),
-            redis.get<string>(`web-rtc-member-candidate-list-${roomId}`),
-            redis.get<string>(`web-rtc-member-description-list-${roomId}`)
+            redis.get<string>(`nextjs-lab:web-rtc-member-type-${roomId}-${userId}`),
+            redis.get<string>(`nextjs-lab:web-rtc-member-candidate-list-${roomId}`),
+            redis.get<string>(`nextjs-lab:web-rtc-member-description-list-${roomId}`)
           ]);
 
           const memberType = memberTypeString
@@ -152,9 +152,9 @@ export async function GET(
             memberCandidateListString,
             memberDescriptionListString
           ] = await Promise.all([
-            redis.get<string>(`web-rtc-member-type-${roomId}-${userId}`),
-            redis.get<string>(`web-rtc-member-candidate-list-${roomId}`),
-            redis.get<string>(`web-rtc-member-description-list-${roomId}`)
+            redis.get<string>(`nextjs-lab:web-rtc-member-type-${roomId}-${userId}`),
+            redis.get<string>(`nextjs-lab:web-rtc-member-candidate-list-${roomId}`),
+            redis.get<string>(`nextjs-lab:web-rtc-member-description-list-${roomId}`)
           ]);
 
           const memberType = memberTypeString
