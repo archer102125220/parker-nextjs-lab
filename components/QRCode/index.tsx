@@ -73,7 +73,6 @@ export function QRCodeComponent({
       width={width}
       height={height}
       className={`qr-code ${className}`}
-      style={{ objectFit: 'contain' }}
     />
   );
 }

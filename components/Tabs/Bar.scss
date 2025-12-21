@@ -61,6 +61,7 @@
             border-bottom: 1px solid #e0e0e0;
 
             /* Misc */
+            cursor: grab;
             scrollbar-width: none;
             /* Firefox */
             -ms-overflow-style: none;
@@ -69,6 +70,10 @@
             &::-webkit-scrollbar {
                 display: none;
                 /* Chrome/Safari */
+            }
+
+            &[css-is-dragging='true'] {
+                cursor: grabbing;
             }
 
             &_standard {
@@ -93,8 +98,12 @@
         }
 
         &-item {
+            /* Positioning */
+            position: relative;
+
             /* Display & Box Model */
             padding: 12px 24px;
+            overflow: hidden;
             white-space: nowrap;
             flex-shrink: 0;
 
@@ -179,6 +188,10 @@
         /* Animation */
         transition: all 0.2s, opacity 0.3s ease-in-out;
         will-change: opacity; // GPU acceleration for smooth opacity changes
+
+        &[css-is-disabled='true'] {
+            pointer-events: none;
+        }
 
         &_prev {
             opacity: var(--prev-opacity, 1);

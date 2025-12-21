@@ -583,7 +583,7 @@ export function Tabs({
             className={`tabs-nav tabs-nav_prev ${vertical ? 'tabs-nav_vertical' : ''}`}
             onClick={handlePrevScroll}
             aria-label={vertical ? "Previous tabs (scroll up)" : "Previous tabs"}
-            style={{ pointerEvents: prevOpacity === 0 ? 'none' : 'auto' }}
+            css-is-disabled={prevOpacity === 0 ? 'true' : 'false'}
           >
             {vertical ? '▲' : '‹'}
           </button>
@@ -602,7 +602,7 @@ export function Tabs({
           }`}
           onMouseDown={handleDragStart}
           onTouchStart={handleDragStart}
-          style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+          css-is-dragging={isDragging ? 'true' : 'false'}
         >
           {tabs.map((tab, index) => (
             <div
@@ -621,7 +621,6 @@ export function Tabs({
               aria-selected={tab.value === activeTab}
               aria-disabled={tab.disabled}
               tabIndex={tab.disabled ? -1 : 0}
-              style={{ position: 'relative', overflow: 'hidden' }}
             >
               {tab.label}
             </div>
@@ -658,7 +657,7 @@ export function Tabs({
             className={`tabs-nav tabs-nav_next ${vertical ? 'tabs-nav_vertical' : ''}`}
             onClick={handleNextScroll}
             aria-label={vertical ? "Next tabs (scroll down)" : "Next tabs"}
-            style={{ pointerEvents: nextOpacity === 0 ? 'none' : 'auto' }}
+            css-is-disabled={nextOpacity === 0 ? 'true' : 'false'}
           >
             {vertical ? '▼' : '›'}
           </button>

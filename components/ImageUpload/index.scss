@@ -135,4 +135,9 @@
             margin: 0;
         }
     }
+
+    &_input_hidden {
+        /* Display & Box Model */
+        display: none;
+    }
 }

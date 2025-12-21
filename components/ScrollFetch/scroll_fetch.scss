@@ -1,10 +1,27 @@
 html {
-  overscroll-behavior: var(--root_overscroll_behavior);
+    overscroll-behavior: var(--root_overscroll_behavior);
 }
-.scroll_fetching {
-  overflow: hidden;
 
-  *:not(.scroll_fetch):not(.scroll_fetch *) {
-    overflow: hidden;
-  }
+.scroll_fetch {
+    &_body {
+        overflow: hidden;
+    }
+}
+
+.scroll_fetch_pull_down-refresh_icon {
+    /* Display & Box Model */
+    display: block;
+
+    &[css-is-visible='false'] {
+        display: none;
+    }
+}
+
+.scroll_fetch_pull_down-refresh_text {
+    /* Display & Box Model */
+    display: block;
+
+    &[css-is-visible='false'] {
+        display: none;
+    }
 }

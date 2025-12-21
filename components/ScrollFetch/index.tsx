@@ -1008,14 +1008,12 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
                       className={
                         styles['scroll_fetch-trigger-icon_center-icon']
                       }
-                      nonce={clientNonce}
-                      style={{ display: isShowRefreshIcon ? 'block' : 'none' }}
+                      css-is-visible={isShowRefreshIcon ? 'true' : 'false'}
                       css-refresh-animation={`${refreshing === true && isPullStart === false}`}
                     />
                   ) : (
                     <div
-                      nonce={clientNonce}
-                      style={{ display: isShowRefreshIcon ? '' : 'none' }}
+                      css-is-visible={isShowRefreshIcon ? 'true' : 'false'}
                       className={
                         styles['scroll_fetch-trigger-icon_center-icon_img_bg']
                       }
