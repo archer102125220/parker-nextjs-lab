@@ -108,7 +108,7 @@ export default function FaceSwapBackendPage(): React.ReactNode {
     <section className="face_swap_backend_page">
       <Image
         className="face_swap_backend_page-banner"
-        src="/img/face-swap/face-swap-v.02.png"
+        src="/img/icon/Next.jsLab.v.01.webp"
         alt="Face Swap Banner"
         width={800}
         height={200}
