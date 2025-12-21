@@ -28,7 +28,7 @@ export default function RouteTestPage(): React.ReactNode {
 
       <Image
         className="route_test_page-banner"
-        src="/img/route/route-v.05.webp"
+        src="/img/icon/Next.jsLab.v.01.webp"
         alt="Route Test Banner"
         width={1200}
         height={400}

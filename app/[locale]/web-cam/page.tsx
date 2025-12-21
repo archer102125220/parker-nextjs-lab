@@ -69,7 +69,7 @@ export default function WebCamPage(): React.ReactNode {
     <section className="web_cam_page">
       <Image
         className="web_cam_page-banner"
-        src="/img/web-cam/web-cam-v.05.webp"
+        src="/img/icon/Next.jsLab.v.01.webp"
         alt="Web Cam Banner"
         width={1200}
         height={400}

@@ -51,7 +51,7 @@ export default function ServerSentEventTestPage(): React.ReactNode {
 
       <Image
         className="server_sent_event_test_page-banner"
-        src="/img/server-sent-event/server-sent-event-v.04.webp"
+        src="/img/icon/Next.jsLab.v.01.webp"
         alt="SSE Banner"
         width={1200}
         height={400}

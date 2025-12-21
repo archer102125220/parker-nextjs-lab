@@ -48,7 +48,7 @@ export default function WebRTCPage(): React.ReactNode {
 
       <Image
         className="web_rtc_page-banner"
-        src="/img/web-rtc/web-rtc-v.04.webp"
+        src="/img/icon/Next.jsLab.v.01.webp"
         alt="WebRTC Banner"
         width={1200}
         height={400}

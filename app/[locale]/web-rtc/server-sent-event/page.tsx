@@ -25,7 +25,8 @@ export default function WebRTCSSEPage(): React.ReactNode {
     router.push(`/${locale}/web-rtc/server-sent-event/room/${newRoomId}`);
   };
 
-  const handleJoinRoom = () => {
+  const handleJoinRoom = (e?: React.FormEvent) => {
+    e?.preventDefault();
     if (!disabledJoinLink) {
       router.push(`/${locale}/web-rtc/server-sent-event/room/${roomId}`);
     }
@@ -71,25 +72,27 @@ export default function WebRTCSSEPage(): React.ReactNode {
           <Typography variant="h6" gutterBottom>
             加入現有房間
           </Typography>
-          <TextField
-            fullWidth
-            label="Room ID"
-            value={roomId}
-            onChange={(e) => setRoomId(e.target.value)}
-            placeholder="輸入房間 UUID"
-            error={!isValidRoomId}
-            helperText={!isValidRoomId ? '無效的房間 ID 格式' : ''}
-            sx={{ mb: 2 }}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            disabled={disabledJoinLink}
-            onClick={handleJoinRoom}
-          >
-            加入視訊聊天
-          </Button>
+          <form onSubmit={handleJoinRoom}>
+            <TextField
+              fullWidth
+              label="Room ID"
+              value={roomId}
+              onChange={(e) => setRoomId(e.target.value)}
+              placeholder="輸入房間 UUID 後按 Enter"
+              error={!isValidRoomId}
+              helperText={!isValidRoomId ? '無效的房間 ID 格式' : ''}
+              sx={{ mb: 2 }}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              disabled={disabledJoinLink}
+            >
+              加入視訊聊天
+            </Button>
+          </form>
         </Paper>
       </div>
     </section>

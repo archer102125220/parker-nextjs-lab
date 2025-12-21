@@ -19,6 +19,13 @@ export const themeSetting = {
     fontFamily: 'var(--font-roboto)'
   },
   components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none' as const
+        }
+      }
+    },
     MuiCssBaseline: {
       styleOverrides: {
         body: {

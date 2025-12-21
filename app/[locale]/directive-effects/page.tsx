@@ -42,7 +42,7 @@ export default function DirectiveEffectsPage(): React.ReactNode {
 
       <Image
         className="directive_effects_page-banner"
-        src="/img/vue-directives/vue-directives-v.04.webp"
+        src="/img/icon/Next.jsLab.v.01.webp"
         alt="Directive Effects Banner"
         width={1200}
         height={400}
