@@ -100,4 +100,10 @@
             }
         }
     }
+
+    &_container {
+        /* Display & Box Model */
+        height: var(--editor-height, 400px);
+        overflow-y: auto;
+    }
 }

@@ -132,9 +132,9 @@ export function ImageUpload({
     >
       <div className="image_upload" style={cssVariables}>
         <input
-          ref={inputRef}
+          ref={fileInputRef}
           type="file"
-          accept="image/*"
+          accept={accept}
           onChange={handleFileChange}
           className="image_upload_input_hidden"
           disabled={disabled}

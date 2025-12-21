@@ -207,7 +207,7 @@ export function TabsContent({
 
       // If scrollFetch is disabled or tab doesn't need it, render directly
       if (scrollFetch === false || isNotScrollFetch(tab)) {
-        return <div style={{ height: '100%' }}>{renderContent()}</div>;
+        return <div className="tabs_content_wrapper">{renderContent()}</div>;
       }
 
       // Wrap with ScrollFetch component

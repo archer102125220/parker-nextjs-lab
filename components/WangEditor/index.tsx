@@ -108,15 +108,19 @@ export function WangEditor({
         mode="default"
         className="wang-editor-toolbar"
       />
-      <Editor
-        defaultConfig={defaultEditorConfig}
-        value={html}
-        onCreated={setEditor}
-        onChange={handleChange}
-        mode="default"
-        className="wang-editor-content"
-        style={{ height: heightValue, overflowY: 'auto' }}
-      />
+      <div
+        className="wang_editor_container"
+        style={{ '--editor-height': heightValue } as React.CSSProperties}
+      >
+        <Editor
+          defaultConfig={defaultEditorConfig}
+          value={html}
+          onCreated={setEditor}
+          onChange={handleChange}
+          mode="default"
+          className="wang-editor-content"
+        />
+      </div>
     </div>
   );
 }
