@@ -216,6 +216,11 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
         // If we're the offerer, create offer
         if (settings.isOffer === true) {
           try {
+            // Check if connection is still valid
+            if (pc.signalingState === 'closed') {
+              console.warn('Peer connection is closed, skipping offer creation');
+              return;
+            }
             const offer = await pc.createOffer();
             await pc.setLocalDescription(offer);
             sendDescriptionToServer(offer);
@@ -239,6 +244,11 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
 
           // If we received an offer, create answer
           if (member.description.type === 'offer') {
+            // Check if connection is still valid
+            if (pc.signalingState === 'closed') {
+              console.warn('Peer connection is closed, skipping answer creation');
+              return;
+            }
             const answer = await pc.createAnswer();
             await pc.setLocalDescription(answer);
             sendDescriptionToServer(answer);
@@ -363,25 +373,55 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
 
   // Initialize on mount
   useEffect(() => {
+    let mounted = true;
+    
     const init = async () => {
+      if (!mounted) return;
       await initCamera();
+      if (!mounted) return;
       initPeerConnection();
+      if (!mounted) return;
       await joinRoom();
     };
+    
     init();
 
     return () => {
+      mounted = false;
+      
+      // Clean up media stream
       if (localStreamRef.current) {
-        localStreamRef.current.getTracks().forEach((track) => track.stop());
+        localStreamRef.current.getTracks().forEach((track) => {
+          track.stop();
+          console.log('Stopped track:', track.kind);
+        });
+        localStreamRef.current = null;
       }
+      
+      // Clean up peer connection
       if (peerConnectionRef.current) {
         peerConnectionRef.current.close();
+        peerConnectionRef.current = null;
+        console.log('Closed peer connection');
       }
+      
+      // Clean up event source
       if (eventSourceRef.current) {
         eventSourceRef.current.close();
+        eventSourceRef.current = null;
+        console.log('Closed event source');
+      }
+      
+      // Clear video elements
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = null;
+      }
+      if (remoteVideoRef.current) {
+        remoteVideoRef.current.srcObject = null;
       }
     };
-  }, [initCamera, initPeerConnection, joinRoom]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty deps - only run once on mount
 
   return (
     <section className="web_rtc_room_page">

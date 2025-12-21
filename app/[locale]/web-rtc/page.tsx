@@ -29,14 +29,9 @@ export default function WebRTCPage(): React.ReactNode {
       description: '配合 Socket.IO 做為 Signaling Server'
     },
     {
-      to: `/${locale}/web-rtc/websocket`,
-      label: 'WebSocket 實作',
-      description: '配合原生 WebSocket 做為 Signaling'
-    },
-    {
       to: `/${locale}/web-rtc/server-sent-event`,
       label: 'SSE 實作',
-      description: '配合 Server-Sent Events 實作'
+      description: '配合 Server-Sent Events 及 @upstash/redis 實作'
     }
   ];
 
@@ -67,7 +62,7 @@ export default function WebRTCPage(): React.ReactNode {
       />
 
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        WebRTC 的實作測試，主要分為以下三種 Signaling 方式：
+        WebRTC 的實作測試，主要分為以下兩種 Signaling 方式：
       </Typography>
 
       <nav className="web_rtc_page-content" role="navigation">

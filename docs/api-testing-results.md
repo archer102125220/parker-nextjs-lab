@@ -312,14 +312,14 @@
 
 ### Socket.IO API
 
+> **重要說明**: Next.js 不支援內建 WebSocket 伺服器，因此 Socket.IO 伺服器端不會在 Next.js 中實作。
+> 客戶端 hooks 和 UI 已保留，可連接到外部的 Socket.IO 伺服器。
+
 #### 1. Status
 - **路徑**: `/api/socket-io/status`
 - **方法**: GET
-- **狀態**: ⏳ 待測試
-- **測試項目**:
-  - [ ] 成功取得狀態
-  - [ ] 回傳格式正確
-  - [ ] 顯示連線數等資訊
+- **狀態**: ✅ 已實作 (僅狀態檢查)
+- **說明**: 此 endpoint 僅提供狀態資訊，不提供實際 WebSocket 連線。
 
 ---
 

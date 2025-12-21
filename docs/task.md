@@ -633,15 +633,14 @@
 - [x] `nextjs-server/scroll-fetch-test`
 - [x] `nextjs-server/frontend-api-cach-test`
 
-### Socket.IO Server [1/6] ⚠️
-> **警告**: Vercel 不支援 WebSocket，需要使用外部服務或改用 SSE。
+### Socket.IO Server [1/1] ✅
+> **決策**: Next.js 不支援內建 WebSocket 伺服器，僅保留客戶端功能連接外部 Socket.IO 伺服器。
 
 - [x] 建立 `app/api/socket-io/status/route.ts` (狀態檢查)
-- [ ] 評估 Socket.IO 部署方案 (Railway/Render/獨立伺服器)
-- [ ] 設置 Socket.IO server
-- [ ] 實作全域訊息 routes
-- [ ] 實作房間訊息 routes
-- [ ] 測試連線
+- ❌ **不實作**: Next.js 內建 Socket.IO 伺服器 (技術限制)
+- ✅ **保留**: 前端 Socket.IO 客戶端 hooks 和 UI
+- ✅ **保留**: Socket test 頁面 (可連接外部伺服器)
+- 📝 **說明**: 如需 Socket.IO 功能，請部署獨立的 Socket.IO 伺服器 (Railway/Render/自架)
 
 ### SSE Server Routes [5/5] ✅
 - [x] 實作 SSE endpoints
@@ -760,11 +759,12 @@
 - [ ] 驗證 WebAuthn/FIDO2 認證流程
 - [ ] 驗證 Firebase Admin 推播通知功能
 
-#### 2. Socket.IO 部署方案評估 ⏳ 可選
+#### 2. Socket.IO 部署方案評估 ✅ 已決策
 - [x] 確認 Next.js 不支援內建 WebSocket 伺服器
 - [x] 評估使用 SSE 替代 Socket.IO 的可行性 (已完成 - 推薦使用 SSE)
-- [ ] 如需雙向通訊,評估外部 Socket.IO 部署方案 (Railway/Render) (可選)
-- [x] 短期決策: 使用 SSE 作為主要方案
+- ✅ **決策**: 不在 Next.js 中實作 Socket.IO 伺服器
+- ✅ **保留**: 客戶端 hooks 和 UI (可連接外部 Socket.IO 伺服器)
+- 📝 **說明**: 如需 Socket.IO，請部署獨立伺服器 (Railway/Render 等)
 
 #### 3. Face Swap 後端實作
 - [ ] 研究 `@tensorflow/tfjs-node` 在 Next.js 中的使用

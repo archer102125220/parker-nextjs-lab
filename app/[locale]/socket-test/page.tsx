@@ -56,6 +56,16 @@ export default function SocketTestPage(): React.ReactNode {
         </Typography>
       </Box>
 
+      <Alert severity="info" sx={{ mb: 2 }}>
+        <strong>Socket.IO 伺服器狀態：</strong>
+        <br />
+        ✅ <strong>本地開發環境：</strong>專案已配置獨立的 Socket.IO 伺服器（預設 port 3002），
+        在執行 <code>yarn dev</code> 或 <code>yarn dev-https</code> 時會自動啟動。
+        <br />
+        ❌ <strong>Vercel 部署環境：</strong>由於 Vercel 等 serverless 平台不支援 WebSocket，
+        Socket.IO 功能將無法運作。如需在生產環境使用，請部署獨立的 Socket.IO 伺服器（如 Railway、Render 等）。
+      </Alert>
+
       <Image
         className="socket_test_page-banner"
         src="/img/socket/socket-v.05.webp"
@@ -70,11 +80,6 @@ export default function SocketTestPage(): React.ReactNode {
         }}
         priority
       />
-
-      <Alert severity="warning" sx={{ mb: 2 }}>
-        當前部署環境可能不支援 WebSocket（如：Vercel 等 serverless
-        平台），Socket.IO 功能可能會無效。 建議在本地開發環境測試。
-      </Alert>
 
       <nav className="socket_test_page-content" role="navigation">
         {linkList.map((link) => (
