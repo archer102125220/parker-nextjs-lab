@@ -1,7 +1,8 @@
-// WebSocket Test Page Styles
+// SSE Global Post Page Styles
 @use '@/styles/placeholders'as *;
+@use '@/styles/mixin'as *;
 
-.websocket_page {
+.sse_global_post_page {
     @extend %test_page;
 
     &-controls {
@@ -23,10 +24,6 @@
 
         &_item {
             @extend %message_list_item;
-        }
-
-        &_content {
-            @extend %message_list_content;
         }
     }
 }

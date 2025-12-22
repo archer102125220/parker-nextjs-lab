@@ -420,6 +420,34 @@ const detection = await detectFace(img as unknown as faceApi.TNetInput);
 3. ✅ **語義清晰** - 使用底線分隔多個語義單詞
 4. ✅ **狀態管理** - 使用 HTML 屬性而非 modifier 類別來管理狀態，減少類別數量
 5. ✅ **可維護性** - 保持良好的可讀性與維護性
+**好處**：
+- ✅ 在瀏覽器 DevTools 中一眼就能識別元素來源
+- ✅ 快速定位問題所在的文件
+- ✅ 便於調試和維護
+
+**重要規則**：
+> 📌 **所有屬於該頁面的元素都必須巢狀在頁面根類別下**，這樣看代碼就能清楚看到層級結構。
+
+```scss
+// ✅ 正確：所有元素都巢狀在 hooks_test_page 下
+.hooks_test_page {
+  @extend %test_page;
+  
+  &-description { }      // .hooks_test_page-description
+  &-grid { }             // .hooks_test_page-grid
+  &-section {            // .hooks_test_page-section
+    &-title { }          // .hooks_test_page-section-title
+    &-description { }    // .hooks_test_page-section-description
+  }
+}
+
+// ❌ 錯誤：看不出 description 和 grid 屬於哪個頁面
+.hooks_test_page { }
+.description { }
+.grid { }
+```
+
+---
 
 #### 範例
 

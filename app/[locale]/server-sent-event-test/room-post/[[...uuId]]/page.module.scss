@@ -1,13 +1,24 @@
-// WebSocket Test Page Styles
+// SSE Room Post Page Styles
 @use '@/styles/placeholders'as *;
+@use '@/styles/mixin'as *;
 
-.websocket_page {
+.sse_room_post_page {
     @extend %test_page;
 
     &-controls {
         @extend %flex;
         @extend %flex_gap_16;
         @extend %flex_center;
+
+        /* Display & Box Model */
+        margin-bottom: 16px;
+    }
+
+    &-room_info {
+        @extend %flex;
+        @extend %flex_between;
+        @extend %flex_center;
+        @extend %flex_wrap;
 
         /* Display & Box Model */
         margin-bottom: 16px;
@@ -23,10 +34,6 @@
 
         &_item {
             @extend %message_list_item;
-        }
-
-        &_content {
-            @extend %message_list_content;
         }
     }
 }

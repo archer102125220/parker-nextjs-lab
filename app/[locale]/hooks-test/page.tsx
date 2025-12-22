@@ -75,21 +75,21 @@ export default function HooksTestPage() {
   return (
     <div className={styles.hooks_test_page}>
       <h1>Hooks 測試頁面</h1>
-      <p className={styles.description}>
+      <p className={styles['hooks_test_page-description']}>
         展示各種自訂 Hooks 的功能
       </p>
 
-      <div className={styles.grid}>
+      <div className={styles['hooks_test_page-grid']}>
         
         {/* useWindowSize */}
-        <div className={styles.section}>
-          <h2 className={styles['section-title']}>useWindowSize</h2>
-          <p className={styles['section-description']}>即時追蹤視窗尺寸</p>
-          <div className={styles['section-content_box']}>
-            <div className={styles['section-value_display']}>
+        <div className={styles['hooks_test_page-section']}>
+          <h2 className={styles['hooks_test_page-section-title']}>useWindowSize</h2>
+          <p className={styles['hooks_test_page-section-description']}>即時追蹤視窗尺寸</p>
+          <div className={styles['hooks_test_page-section-content_box']}>
+            <div className={styles['hooks_test_page-section-value_display']}>
               {width} x {height}
             </div>
-            <div className={styles['section-value_meta']}>
+            <div className={styles['hooks_test_page-section-value_meta']}>
               調整視窗大小來測試
             </div>
           </div>

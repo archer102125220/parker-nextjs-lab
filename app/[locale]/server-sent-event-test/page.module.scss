@@ -1,0 +1,13 @@
+// SSE Test Main Page Styles
+@use '@/styles/placeholders'as *;
+@use '@/styles/mixin'as *;
+
+.sse_test_page {
+    @extend %test_page;
+
+    &-link_grid {
+        @extend %flex;
+        @extend %flex_column;
+        @extend %flex_gap_16;
+    }
+}
