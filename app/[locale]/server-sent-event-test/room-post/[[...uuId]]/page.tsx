@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 
 import { usePostEventSource } from '@/hooks/usePostEventSource';
+import styles from './page.module.scss';
 
 export default function SSETestRoomPostPage(): React.ReactNode {
   const router = useNextRouter();
@@ -111,7 +112,7 @@ export default function SSETestRoomPostPage(): React.ReactNode {
 
   if (!roomId) {
     return (
-      <section>
+      <section className={styles.sse_room_post_page}>
         <Typography variant="h5" gutterBottom>
           Server-Sent Events 房間測試 (POST)
         </Typography>
@@ -142,7 +143,7 @@ export default function SSETestRoomPostPage(): React.ReactNode {
   }
 
   return (
-    <section>
+    <section className={styles.sse_room_post_page}>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600, mb: 1 }}>
         Server-Sent Events 房間測試 (POST)
       </Typography>

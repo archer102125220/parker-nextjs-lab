@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 
 import { useEventSource } from '@/hooks/useEventSource';
+import styles from './page.module.scss';
 
 export default function SSETestRoomGetPage(): React.ReactNode {
   const router = useNextRouter();
@@ -114,7 +115,7 @@ export default function SSETestRoomGetPage(): React.ReactNode {
 
   if (!roomId) {
     return (
-      <section>
+      <section className={styles.sse_room_get_page}>
         <Typography variant="h5" gutterBottom>
           Server-Sent Events 房間測試 (GET)
         </Typography>
@@ -145,7 +146,7 @@ export default function SSETestRoomGetPage(): React.ReactNode {
   }
 
   return (
-    <section>
+    <section className={styles.sse_room_get_page}>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600, mb: 1 }}>
         Server-Sent Events 房間測試 (GET)
       </Typography>

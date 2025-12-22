@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useLocale } from 'next-intl';
 import { Typography, Card, CardContent, CardActionArea } from '@mui/material';
 
-import '@/app/[locale]/server-sent-event-test/server-sent-event-test.scss';
+import styles from './page.module.scss';
 
 interface LinkItem {
   to: string;
@@ -40,7 +40,7 @@ export default function ServerSentEventTestPage(): React.ReactNode {
   ];
 
   return (
-    <section className="server_sent_event_test_page">
+    <section className={styles.sse_test_page}>
       <Typography variant="h5" gutterBottom>
         Server-Sent Events 測試列表
       </Typography>
@@ -50,25 +50,19 @@ export default function ServerSentEventTestPage(): React.ReactNode {
       </Typography>
 
       <Image
-        className="server_sent_event_test_page-banner"
+        className={styles['sse_test_page-banner']}
         src="/img/icon/Next.jsLab.v.01.webp"
         alt="SSE Banner"
         width={1200}
         height={400}
-        style={{
-          width: '100%',
-          height: 'auto',
-          maxHeight: '400px',
-          objectFit: 'cover'
-        }}
         priority
       />
 
-      <nav className="server_sent_event_test_page-content" role="navigation">
+      <nav className={styles['sse_test_page-content']} role="navigation">
         {linkList.map((link) => (
           <Card
             key={link.to}
-            className="server_sent_event_test_page-content-link"
+            className={styles['sse_test_page-content-link']}
           >
             <CardActionArea component={Link} href={link.to}>
               <CardContent>

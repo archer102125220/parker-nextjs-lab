@@ -109,7 +109,7 @@ export default function WebSocketPage(): React.ReactNode {
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="輸入訊息..."
-            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+            onKeyUp={(e) => e.key === 'Enter' && handleSendMessage()}
             disabled={!isConnected}
           />
           <Button
@@ -137,7 +137,7 @@ export default function WebSocketPage(): React.ReactNode {
                 key={index}
                 sx={{ mb: 1, p: 1, bgcolor: 'grey.100', borderRadius: 1 }}
               >
-                <pre className={styles.message_list_content}>
+                <pre className={styles['websocket_page-message_list_content']}>
                   {typeof msg === 'string' ? msg : JSON.stringify(msg, null, 2)}
                 </pre>
               </Box>

@@ -5,9 +5,38 @@
 .sse_test_page {
     @extend %test_page;
 
-    &-link_grid {
-        @extend %flex;
-        @extend %flex_column;
-        @extend %flex_gap_16;
+    &-banner {
+        /* Display & Box Model */
+        width: 100%;
+        height: auto;
+        max-height: 400px;
+        margin-bottom: 24px;
+
+        /* Visual */
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    &-content {
+        /* Display & Box Model */
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 16px;
+
+        &-link {
+            /* Display & Box Model */
+            flex: 1;
+            flex-basis: 200px;
+            min-width: 200px;
+
+            /* Animation */
+            transition: transform 0.2s;
+
+            &:hover {
+                /* Animation */
+                transform: translateY(-2px);
+            }
+        }
     }
 }

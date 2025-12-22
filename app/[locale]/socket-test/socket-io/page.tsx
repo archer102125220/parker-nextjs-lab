@@ -78,7 +78,7 @@ export default function SocketIoPage(): React.ReactNode {
         </Alert>
       )}
 
-      <div className={styles.controls}>
+      <div className={styles['socket_io_page-controls']}>
         <Chip
           label={isConnected ? '已連線' : '未連線'}
           color={isConnected ? 'success' : 'error'}
@@ -102,7 +102,7 @@ export default function SocketIoPage(): React.ReactNode {
         <Typography variant="subtitle2" gutterBottom>
           發送訊息
         </Typography>
-        <div className={styles.message_form}>
+        <div className={styles['socket_io_page-message_form']}>
           <TextField
             fullWidth
             size="small"
@@ -126,15 +126,15 @@ export default function SocketIoPage(): React.ReactNode {
         <Typography variant="subtitle2" gutterBottom>
           接收到的訊息：
         </Typography>
-        <div className={styles.message_list}>
+        <div className={styles['socket_io_page-message_list']}>
           {messageList.length === 0 ? (
             <Typography variant="body2" color="text.secondary">
               尚無訊息
             </Typography>
           ) : (
             messageList.map((msg, index) => (
-              <div key={index} className={styles.message_list_item}>
-                <pre className={styles.message_list_content}>
+              <div key={index} className={styles['socket_io_page-message_list_item']}>
+                <pre className={styles['socket_io_page-message_list_content']}>
                   {JSON.stringify(msg, null, 2)}
                 </pre>
               </div>
