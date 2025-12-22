@@ -21,11 +21,11 @@
     &-message_list {
         @extend %message_list;
 
-        &_item {
+        &-item {
             @extend %message_list_item;
         }
 
-        &_content {
+        &-content {
             @extend %message_list_content;
         }
     }

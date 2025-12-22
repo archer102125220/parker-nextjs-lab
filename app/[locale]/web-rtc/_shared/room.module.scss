@@ -1,9 +1,9 @@
 .web_rtc_room_page {
-    &_description {
+    &-description {
         margin-bottom: 32px;
     }
 
-    &_context {
+    &-context {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
@@ -17,26 +17,26 @@
             width: 100%;
         }
 
-        &_initiate,
-        &_join {
+        &-initiate,
+        &-join {
             flex: 1;
             min-width: 200px;
 
-            &_link {
+            &-link {
                 display: block;
             }
         }
     }
 
-    &_video_container {
+    &-video_container {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         gap: 16px;
         margin-top: 16px;
 
-        &_local,
-        &_remote {
+        &-local,
+        &-remote {
             flex: 1;
             min-width: 300px;
 
@@ -49,7 +49,7 @@
         }
     }
 
-    &_controls {
+    &-controls {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
@@ -58,7 +58,7 @@
         justify-content: center;
     }
 
-    &_room_info {
+    &-room_info {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;

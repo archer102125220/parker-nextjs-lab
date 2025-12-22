@@ -1,10 +1,10 @@
 .frontend_api_cache_test_page {
-    &_banner {
+    &-banner {
         width: 100%;
         margin-bottom: 8px;
     }
 
-    &_outbound_link {
+    &-outbound_link {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
@@ -14,24 +14,24 @@
         margin-bottom: 16px;
     }
 
-    &_form {
+    &-form {
         display: flex;
         flex-direction: column;
         gap: 8px;
 
         margin-bottom: 24px;
 
-        &_query,
-        &_payload {
+        &-query,
+        &-payload {
             margin-bottom: 8px;
         }
 
-        &_http_method {
+        &-http_method {
             margin-bottom: 8px;
         }
     }
 
-    &_content {
+    &-content {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
