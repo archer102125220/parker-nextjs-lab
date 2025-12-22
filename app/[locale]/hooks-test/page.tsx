@@ -12,6 +12,8 @@ import useKeyPress from '@/hooks/useKeyPress';
 import useTimeout from '@/hooks/useTimeout';
 import useInterval from '@/hooks/useInterval';
 
+import styles from './page.module.scss';
+
 export default function HooksTestPage() {
   // useThrottle demo
   const [scrollCount, setScrollCount] = useState(0);
@@ -71,195 +73,141 @@ export default function HooksTestPage() {
   }, isIntervalRunning ? 1000 : null);
 
   return (
-    <div style={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto' }}>
+    <div className={styles.page}>
       <h1>Hooks 測試頁面</h1>
-      <p style={{ marginBottom: '30px', color: '#666' }}>
+      <p className={styles.description}>
         展示各種自訂 Hooks 的功能
       </p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '20px' }}>
+      <div className={styles.grid}>
         
         {/* useWindowSize */}
-        <div style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
-          <h2 style={{ marginTop: 0 }}>useWindowSize</h2>
-          <p style={{ color: '#666', marginBottom: '15px' }}>即時追蹤視窗尺寸</p>
-          <div style={{ padding: '15px', backgroundColor: 'white', borderRadius: '4px' }}>
-            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#1976d2' }}>
+        <div className={styles.section}>
+          <h2 className={styles.section_title}>useWindowSize</h2>
+          <p className={styles.section_description}>即時追蹤視窗尺寸</p>
+          <div className={styles.content_box}>
+            <div className={styles.value_display}>
               {width} x {height}
             </div>
-            <div style={{ fontSize: '12px', color: '#666', marginTop: '5px' }}>
+            <div className={styles.value_meta}>
               調整視窗大小來測試
             </div>
           </div>
         </div>
 
         {/* useEventListener */}
-        <div style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
-          <h2 style={{ marginTop: 0 }}>useEventListener</h2>
-          <p style={{ color: '#666', marginBottom: '15px' }}>簡化事件監聽器管理</p>
-          <div style={{ padding: '15px', backgroundColor: 'white', borderRadius: '4px' }}>
-            <div style={{ fontSize: '14px', color: '#666' }}>滑鼠位置:</div>
-            <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#1976d2' }}>
+        <div className={styles.section}>
+          <h2 className={styles.section_title}>useEventListener</h2>
+          <p className={styles.section_description}>簡化事件監聽器管理</p>
+          <div className={styles.content_box}>
+            <div className={styles.value_meta}>滑鼠位置:</div>
+            <div className={styles.value_display} style={{ fontSize: '20px' }}>
               X: {mousePosition.x}, Y: {mousePosition.y}
             </div>
           </div>
         </div>
 
         {/* useClickOutside */}
-        <div style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
-          <h2 style={{ marginTop: 0 }}>useClickOutside</h2>
-          <p style={{ color: '#666', marginBottom: '15px' }}>偵測點擊元素外部</p>
-          <div style={{ position: 'relative' }}>
+        <div className={styles.section}>
+          <h2 className={styles.section_title}>useClickOutside</h2>
+          <p className={styles.section_description}>偵測點擊元素外部</p>
+          <div className={styles.dropdown}>
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              style={{
-                padding: '10px 20px',
-                backgroundColor: '#1976d2',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
+              className={styles.button}
             >
               {isDropdownOpen ? '關閉' : '開啟'} 下拉選單
             </button>
             {isDropdownOpen && (
-              <div
-                ref={dropdownRef}
-                style={{
-                  position: 'absolute',
-                  top: '45px',
-                  left: 0,
-                  backgroundColor: 'white',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  padding: '10px',
-                  minWidth: '200px',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                  zIndex: 10
-                }}
-              >
-                <div style={{ padding: '8px', cursor: 'pointer' }}>選項 1</div>
-                <div style={{ padding: '8px', cursor: 'pointer' }}>選項 2</div>
-                <div style={{ padding: '8px', cursor: 'pointer' }}>選項 3</div>
+              <div ref={dropdownRef} className={styles.dropdown_menu}>
+                <div className={styles.dropdown_item}>選項 1</div>
+                <div className={styles.dropdown_item}>選項 2</div>
+                <div className={styles.dropdown_item}>選項 3</div>
               </div>
             )}
           </div>
-          <p style={{ fontSize: '12px', color: '#999', marginTop: '10px' }}>
+          <p className={styles.hint}>
             點擊外部會自動關閉
           </p>
         </div>
 
         {/* useKeyPress */}
-        <div style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
-          <h2 style={{ marginTop: 0 }}>useKeyPress</h2>
-          <p style={{ color: '#666', marginBottom: '15px' }}>監聽特定按鍵</p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div style={{
-              padding: '10px',
-              backgroundColor: isEscapePressed ? '#f44336' : 'white',
-              color: isEscapePressed ? 'white' : 'black',
-              borderRadius: '4px',
-              transition: 'all 0.2s'
-            }}>
+        <div className={styles.section}>
+          <h2 className={styles.section_title}>useKeyPress</h2>
+          <p className={styles.section_description}>監聽特定按鍵</p>
+          <div className={styles.flex_column}>
+            <div 
+              className={styles.key_status}
+              data-pressed={isEscapePressed ? 'true' : 'false'}
+              data-key="escape"
+            >
               ESC: {isEscapePressed ? '按下' : '未按下'}
             </div>
-            <div style={{
-              padding: '10px',
-              backgroundColor: isEnterPressed ? '#4caf50' : 'white',
-              color: isEnterPressed ? 'white' : 'black',
-              borderRadius: '4px',
-              transition: 'all 0.2s'
-            }}>
+            <div 
+              className={styles.key_status}
+              data-pressed={isEnterPressed ? 'true' : 'false'}
+              data-key="enter"
+            >
               Enter: {isEnterPressed ? '按下' : '未按下'}
             </div>
           </div>
         </div>
 
         {/* useTimeout */}
-        <div style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
-          <h2 style={{ marginTop: 0 }}>useTimeout</h2>
-          <p style={{ color: '#666', marginBottom: '15px' }}>延遲執行函數</p>
+        <div className={styles.section}>
+          <h2 className={styles.section_title}>useTimeout</h2>
+          <p className={styles.section_description}>延遲執行函數</p>
           <button
             onClick={() => {
               setShowTimeoutMessage(false);
               setTimeoutDelay(2000);
             }}
-            style={{
-              padding: '10px 20px',
-              backgroundColor: '#1976d2',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              marginBottom: '10px'
-            }}
+            className={styles.button}
           >
             啟動 2 秒倒數
           </button>
           {showTimeoutMessage && (
-            <div style={{ padding: '10px', backgroundColor: '#4caf50', color: 'white', borderRadius: '4px' }}>
+            <div className={styles.success_message}>
               ✅ 時間到了!
             </div>
           )}
         </div>
 
         {/* useInterval */}
-        <div style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
-          <h2 style={{ marginTop: 0 }}>useInterval</h2>
-          <p style={{ color: '#666', marginBottom: '15px' }}>定時執行函數</p>
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '10px' }}>
+        <div className={styles.section}>
+          <h2 className={styles.section_title}>useInterval</h2>
+          <p className={styles.section_description}>定時執行函數</p>
+          <div className={styles.flex_row}>
             <button
               onClick={() => setIsIntervalRunning(!isIntervalRunning)}
-              style={{
-                padding: '10px 20px',
-                backgroundColor: isIntervalRunning ? '#f44336' : '#4caf50',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
+              className={`${styles.button} ${isIntervalRunning ? styles.button_danger : styles.button_success}`}
             >
               {isIntervalRunning ? '暫停' : '開始'}
             </button>
             <button
               onClick={() => setCounter(0)}
-              style={{
-                padding: '10px 20px',
-                backgroundColor: '#666',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
+              className={`${styles.button} ${styles.button_neutral}`}
             >
               重置
             </button>
           </div>
-          <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#1976d2' }}>
+          <div className={styles.counter_display}>
             {counter}
           </div>
         </div>
 
         {/* useThrottle */}
-        <div style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
-          <h2 style={{ marginTop: 0 }}>useThrottle</h2>
-          <p style={{ color: '#666', marginBottom: '15px' }}>節流函數調用</p>
+        <div className={styles.section}>
+          <h2 className={styles.section_title}>useThrottle</h2>
+          <p className={styles.section_description}>節流函數調用</p>
           <div
             onScroll={() => {
               setScrollCount(prev => prev + 1);
               handleScroll();
             }}
-            style={{
-              height: '150px',
-              overflow: 'auto',
-              border: '1px solid #ddd',
-              padding: '10px',
-              backgroundColor: 'white',
-              borderRadius: '4px'
-            }}
+            className={styles.scroll_test}
           >
-            <div style={{ height: '400px' }}>
+            <div className={styles.scroll_test_content}>
               <p>滾動測試</p>
               <p>正常: {scrollCount}</p>
               <p>節流 (500ms): {throttledScrollCount}</p>
@@ -268,83 +216,63 @@ export default function HooksTestPage() {
         </div>
 
         {/* useLocalStorage */}
-        <div style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
-          <h2 style={{ marginTop: 0 }}>useLocalStorage</h2>
-          <p style={{ color: '#666', marginBottom: '15px' }}>同步 localStorage</p>
+        <div className={styles.section}>
+          <h2 className={styles.section_title}>useLocalStorage</h2>
+          <p className={styles.section_description}>同步 localStorage</p>
           <input
             type="text"
             value={localName}
             onChange={(e) => setLocalName(e.target.value)}
             placeholder="輸入名稱"
-            style={{
-              width: '100%',
-              padding: '12px',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              fontSize: '14px',
-              boxSizing: 'border-box'
-            }}
+            className={styles.input_field}
           />
-          <p style={{ marginTop: '10px', fontSize: '12px', color: '#999' }}>
+          <p className={styles.hint}>
             💡 打開另一個 tab 測試同步
           </p>
         </div>
 
         {/* useSessionStorage */}
-        <div style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
-          <h2 style={{ marginTop: 0 }}>useSessionStorage</h2>
-          <p style={{ color: '#666', marginBottom: '15px' }}>同步 sessionStorage</p>
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <div className={styles.section}>
+          <h2 className={styles.section_title}>useSessionStorage</h2>
+          <p className={styles.section_description}>同步 sessionStorage</p>
+          <div className={styles.flex_row}>
             <button
               onClick={() => setSessionData({ count: sessionData.count + 1 })}
-              style={{
-                padding: '10px 20px',
-                backgroundColor: '#1976d2',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
+              className={styles.button}
             >
               增加
             </button>
-            <span style={{ fontSize: '20px', fontWeight: 'bold' }}>{sessionData.count}</span>
+            <span className={styles.value_display} style={{ fontSize: '20px' }}>{sessionData.count}</span>
           </div>
-          <p style={{ marginTop: '10px', fontSize: '12px', color: '#999' }}>
+          <p className={styles.hint}>
             💡 刷新頁面會保留
           </p>
         </div>
 
         {/* useMediaQuery */}
-        <div style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
-          <h2 style={{ marginTop: 0 }}>useMediaQuery</h2>
-          <p style={{ color: '#666', marginBottom: '15px' }}>監聽 media query</p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div style={{
-              padding: '8px',
-              backgroundColor: isMobile ? '#4caf50' : '#e0e0e0',
-              color: isMobile ? 'white' : 'black',
-              borderRadius: '4px',
-              fontSize: '14px'
-            }}>
+        <div className={styles.section}>
+          <h2 className={styles.section_title}>useMediaQuery</h2>
+          <p className={styles.section_description}>監聽 media query</p>
+          <div className={styles.flex_column}>
+            <div 
+              className={styles.media_badge}
+              data-active={isMobile ? 'true' : 'false'}
+              data-type="mobile"
+            >
               📱 Mobile: {isMobile ? '是' : '否'}
             </div>
-            <div style={{
-              padding: '8px',
-              backgroundColor: isTablet ? '#2196f3' : '#e0e0e0',
-              color: isTablet ? 'white' : 'black',
-              borderRadius: '4px',
-              fontSize: '14px'
-            }}>
+            <div 
+              className={styles.media_badge}
+              data-active={isTablet ? 'true' : 'false'}
+              data-type="tablet"
+            >
               📱 Tablet: {isTablet ? '是' : '否'}
             </div>
-            <div style={{
-              padding: '8px',
-              backgroundColor: isDarkMode ? '#424242' : '#e0e0e0',
-              color: isDarkMode ? 'white' : 'black',
-              borderRadius: '4px',
-              fontSize: '14px'
-            }}>
+            <div 
+              className={styles.media_badge}
+              data-active={isDarkMode ? 'true' : 'false'}
+              data-type="dark"
+            >
               🌙 Dark: {isDarkMode ? '是' : '否'}
             </div>
           </div>

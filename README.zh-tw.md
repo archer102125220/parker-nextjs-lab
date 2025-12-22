@@ -446,6 +446,108 @@ const detection = await detectFace(img as unknown as faceApi.TNetInput);
 
 本專案所有組件都遵循這些 CSS 規範，確保代碼風格一致性。
 
+### CSS 檔案組織規範
+
+專案採用**混合式樣式組織**策略，結合全域工具集中管理與組件樣式就近放置的優勢：
+
+#### 目錄結構
+
+```
+parker-nextjs-lab/
+├── styles/                    # 全域樣式工具（集中管理）
+│   ├── globals.scss          # 全域樣式
+│   ├── mixin.scss            # Mixins（可重用的樣式函數）
+│   ├── placeholders.scss     # Placeholders（可擴展的樣式模板）
+│   └── variables.scss        # 變數定義
+│
+├── components/                # 組件特定樣式（就近放置）
+│   ├── Button/
+│   │   ├── index.tsx
+│   │   └── index.scss        # 組件樣式
+│   └── Tabs/
+│       ├── Bar.tsx
+│       └── Bar.scss
+│
+└── app/                       # 頁面特定樣式（就近放置）
+    └── [locale]/
+        ├── page.tsx
+        └── page.module.scss  # 頁面樣式
+```
+
+#### 樣式放置原則
+
+1. **全域工具** → `styles/` 目錄
+   - ✅ Mixins（`@mixin`）- 可傳參數的樣式函數
+   - ✅ Placeholders（`%placeholder`）- 可擴展的樣式模板
+   - ✅ 變數定義
+   - ✅ 全域樣式
+
+2. **組件樣式** → 組件目錄內
+   - ✅ 與組件檔案放在同一目錄
+   - ✅ 使用 `.scss` 或 `.module.scss`
+   - ✅ 只包含該組件特定的樣式
+
+3. **頁面樣式** → `app/` 目錄內
+   - ✅ 與頁面檔案放在同一目錄
+   - ✅ 使用 `.module.scss` 避免全域污染
+   - ✅ 只包含該頁面特定的樣式
+
+#### Placeholders vs Mixins
+
+**Placeholders (`%name`)**：
+```scss
+// styles/placeholders.scss
+%flex {
+  display: flex;
+}
+
+// 使用
+.my-class {
+  @extend %flex;  // 會合併選擇器，減少重複 CSS
+}
+```
+
+**Mixins (`@mixin`)**：
+```scss
+// styles/mixin.scss
+@mixin flex-layout($gap: 12px) {
+  display: flex;
+  gap: $gap;
+}
+
+// 使用
+.my-class {
+  @include flex-layout(16px);  // 可傳參數，更靈活
+}
+```
+
+#### 使用範例
+
+```scss
+// 在組件 SCSS 中引入全域工具
+@use '@/styles/mixin' as *;
+@use '@/styles/placeholders' as *;
+
+.my-component {
+  @extend %flex;                    // 使用 placeholder
+  @include flex-layout(16px);       // 使用 mixin
+  
+  &_item {
+    @extend %text_primary;
+  }
+}
+```
+
+#### 優勢
+
+1. ✅ **集中管理** - 全域工具易於維護和更新
+2. ✅ **就近放置** - 組件和頁面樣式易於查找
+3. ✅ **避免重複** - Placeholders 減少重複的 CSS 代碼
+4. ✅ **靈活性** - Mixins 提供參數化的樣式函數
+5. ✅ **可維護性** - 清晰的職責分離
+
+本專案所有樣式檔案都遵循這些組織原則，確保樣式管理的一致性與可維護性。
+
 // ✅ 使用型別守衛
 function isCustomType(value: unknown): value is CustomType {
   return typeof value === 'object' && value !== null && 'property' in value;

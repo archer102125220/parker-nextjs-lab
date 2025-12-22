@@ -969,7 +969,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
                 <p
                   className={styles['scroll_fetch-trigger-pull_label']}
                   nonce={clientNonce}
-                  style={{ display: isShowRefreshIcon ? 'block' : 'none' }}
+                  css-is-visible={isShowRefreshIcon ? 'true' : 'false'}
                 >
                   {isPulling === true ? pullingLabel : pullLabel}
                 </p>

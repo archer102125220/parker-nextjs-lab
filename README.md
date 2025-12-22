@@ -450,7 +450,108 @@ The project adopts a **Modified BEM Naming Convention**, cleverly sacrificing st
 ```
 
 All components in this project follow these CSS conventions to ensure code style consistency.
+
+### CSS File Organization
+
+The project adopts a **Hybrid Style Organization** strategy, combining centralized global tool management with component-specific styles placed nearby:
+
+#### Directory Structure
+
 ```
+parker-nextjs-lab/
+├── styles/                    # Global style tools (centralized)
+│   ├── globals.scss          # Global styles
+│   ├── mixin.scss            # Mixins (reusable style functions)
+│   ├── placeholders.scss     # Placeholders (extendable style templates)
+│   └── variables.scss        # Variable definitions
+│
+├── components/                # Component-specific styles (co-located)
+│   ├── Button/
+│   │   ├── index.tsx
+│   │   └── index.scss        # Component styles
+│   └── Tabs/
+│       ├── Bar.tsx
+│       └── Bar.scss
+│
+└── app/                       # Page-specific styles (co-located)
+    └── [locale]/
+        ├── page.tsx
+        └── page.module.scss  # Page styles
+```
+
+#### Style Placement Principles
+
+1. **Global Tools** → `styles/` directory
+   - ✅ Mixins (`@mixin`) - Parameterized style functions
+   - ✅ Placeholders (`%placeholder`) - Extendable style templates
+   - ✅ Variable definitions
+   - ✅ Global styles
+
+2. **Component Styles** → Within component directory
+   - ✅ Co-located with component files
+   - ✅ Use `.scss` or `.module.scss`
+   - ✅ Contains only component-specific styles
+
+3. **Page Styles** → Within `app/` directory
+   - ✅ Co-located with page files
+   - ✅ Use `.module.scss` to avoid global pollution
+   - ✅ Contains only page-specific styles
+
+#### Placeholders vs Mixins
+
+**Placeholders (`%name`)**:
+```scss
+// styles/placeholders.scss
+%flex {
+  display: flex;
+}
+
+// Usage
+.my-class {
+  @extend %flex;  // Merges selectors, reduces duplicate CSS
+}
+```
+
+**Mixins (`@mixin`)**:
+```scss
+// styles/mixin.scss
+@mixin flex-layout($gap: 12px) {
+  display: flex;
+  gap: $gap;
+}
+
+// Usage
+.my-class {
+  @include flex-layout(16px);  // Accepts parameters, more flexible
+}
+```
+
+#### Usage Example
+
+```scss
+// Import global tools in component SCSS
+@use '@/styles/mixin' as *;
+@use '@/styles/placeholders' as *;
+
+.my-component {
+  @extend %flex;                    // Use placeholder
+  @include flex-layout(16px);       // Use mixin
+  
+  &_item {
+    @extend %text_primary;
+  }
+}
+```
+
+#### Advantages
+
+1. ✅ **Centralized Management** - Global tools are easy to maintain and update
+2. ✅ **Co-location** - Component and page styles are easy to find
+3. ✅ **Avoid Duplication** - Placeholders reduce duplicate CSS code
+4. ✅ **Flexibility** - Mixins provide parameterized style functions
+5. ✅ **Maintainability** - Clear separation of concerns
+
+All style files in this project follow these organizational principles to ensure consistency and maintainability in style management.
 
 ### Type Safety Examples in This Project
 
