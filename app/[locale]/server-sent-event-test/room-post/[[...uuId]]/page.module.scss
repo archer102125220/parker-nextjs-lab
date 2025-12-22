@@ -25,8 +25,7 @@
     }
 
     &-message_form {
-        @extend %flex;
-        @extend %flex_gap_16;
+        @extend %flex_row_gap_12;
     }
 
     &-message_list {
@@ -34,6 +33,27 @@
 
         &_item {
             @extend %message_list_item;
+        }
+    }
+
+    // CSS Compliance Fix - Properly nested BEM classes using placeholders
+    &-create_form {
+        @extend %flex_row;
+    }
+
+    &-action_buttons {
+        @extend %flex_row_gap_8;
+    }
+
+    &-messages {
+        @extend %message_container;
+
+        &_empty {
+            @extend %message_empty_state;
+        }
+
+        &_item {
+            @extend %message_item;
         }
     }
 }

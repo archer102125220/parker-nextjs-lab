@@ -31,4 +31,37 @@
             @extend %message_list_item;
         }
     }
+
+    // CSS Compliance Fix - Properly nested BEM classes using placeholders
+    &-create_form {
+        @extend %flex_row;
+    }
+
+    &-room_info {
+        @extend %flex_row_between;
+    }
+
+    &-action_buttons {
+        @extend %flex_row_gap_8;
+    }
+
+    &-controls {
+        @extend %flex_row_center;
+    }
+
+    &-message_form {
+        @extend %flex_row_gap_12;
+    }
+
+    &-messages {
+        @extend %message_container;
+
+        &_empty {
+            @extend %message_empty_state;
+        }
+
+        &_item {
+            @extend %message_item;
+        }
+    }
 }

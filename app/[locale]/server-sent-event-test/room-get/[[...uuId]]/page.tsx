@@ -128,7 +128,7 @@ export default function SSETestRoomGetPage(): React.ReactNode {
           <Typography variant="subtitle2" gutterBottom>
             建立新房間
           </Typography>
-          <div style={{ display: 'flex', gap: 16 }}>
+          <div className={styles['sse_room_get_page-create_form']}>
             <TextField
               fullWidth
               size="small"
@@ -157,7 +157,7 @@ export default function SSETestRoomGetPage(): React.ReactNode {
 
       {/* Room Info Card */}
       <Paper elevation={0} sx={{ p: 3, mb: 3, border: '1px solid', borderColor: 'divider', bgcolor: '#fafafa' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+        <div className={styles['sse_room_get_page-room_info']}>
           <div>
             <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 0.5 }}>
               房間 ID
@@ -166,7 +166,7 @@ export default function SSETestRoomGetPage(): React.ReactNode {
               {roomId}
             </Typography>
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div className={styles['sse_room_get_page-action_buttons']}>
             <Button 
               size="small" 
               variant="outlined"
@@ -187,7 +187,7 @@ export default function SSETestRoomGetPage(): React.ReactNode {
 
       {/* Connection Status & Controls */}
       <Paper elevation={0} sx={{ p: 2, mb: 3, border: '1px solid', borderColor: 'divider' }}>
-        <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+        <div className={styles['sse_room_get_page-controls']}>
           <Chip
             label={isConnected ? '已連線' : '未連線'}
             color={isConnected ? 'success' : 'default'}
@@ -218,7 +218,7 @@ export default function SSETestRoomGetPage(): React.ReactNode {
         <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
           發送訊息
         </Typography>
-        <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: 12 }}>
+        <form onSubmit={handleSendMessage} className={styles['sse_room_get_page-message_form']}>
           <TextField
             fullWidth
             size="small"
@@ -243,22 +243,9 @@ export default function SSETestRoomGetPage(): React.ReactNode {
         <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
           接收到的訊息
         </Typography>
-        <div 
-          style={{ 
-            maxHeight: 500, 
-            overflow: 'auto',
-            backgroundColor: '#fafafa',
-            borderRadius: 4,
-            padding: 16,
-            border: '1px solid #e0e0e0'
-          }}
-        >
+        <div className={styles['sse_room_get_page-messages']}>
           {messageList.length === 0 ? (
-            <div style={{ 
-              textAlign: 'center', 
-              padding: '40px 20px',
-              color: '#9e9e9e'
-            }}>
+            <div className={styles['sse_room_get_page-messages_empty']}>
               <Typography variant="body1" sx={{ mb: 1 }}>
                 尚無訊息
               </Typography>
@@ -270,13 +257,7 @@ export default function SSETestRoomGetPage(): React.ReactNode {
             messageList.map((msg, index) => (
               <div
                 key={index}
-                style={{
-                  marginBottom: 12,
-                  padding: 12,
-                  backgroundColor: 'white',
-                  borderRadius: 4,
-                  border: '1px solid #e0e0e0'
-                }}
+                className={styles['sse_room_get_page-messages_item']}
               >
                 <Typography 
                   variant="caption" 
