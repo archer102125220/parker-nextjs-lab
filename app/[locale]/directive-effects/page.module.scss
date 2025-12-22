@@ -1,0 +1,36 @@
+// Directive Effects Page Styles
+@use '@/styles/placeholders'as *;
+@use '@/styles/mixin'as *;
+
+.directive_effects_page {
+    @extend %test_page;
+
+    &-banner {
+        /* Display & Box Model */
+        width: 100%;
+        margin-bottom: 16px;
+    }
+
+    &-content {
+        /* Display & Box Model */
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 16px;
+
+        &-card {
+            /* Display & Box Model */
+            flex: 1;
+            flex-basis: 200px;
+            min-width: 200px;
+
+            /* Animation */
+            transition: transform 0.2s;
+
+            &:hover {
+                /* Animation */
+                transform: translateY(-2px);
+            }
+        }
+    }
+}

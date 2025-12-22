@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useLocale } from 'next-intl';
 import { Skeleton, Alert } from '@mui/material';
 
-import '@/app/[locale]/about/about.scss';
+import styles from './page.module.scss';
 
 interface DescriptionItem {
   text: string;
@@ -45,9 +45,9 @@ export default function AboutPage(): React.ReactNode {
   }, [locale]);
 
   return (
-    <section className="about_page">
+    <section className={styles.about_page}>
       <Image
-        className="about_page-banner"
+        className={styles['about_page-banner']}
         src="/img/about/about-v.10.webp"
         alt="About Banner"
         width={1200}
@@ -62,7 +62,7 @@ export default function AboutPage(): React.ReactNode {
       />
 
       {loading && (
-        <div className="about_page-skeleton">
+        <div className={styles['about_page-skeleton']}>
           <Skeleton variant="text" height={40} width="60%" />
           <Skeleton variant="text" height={24} width="80%" />
           <Skeleton variant="rectangular" height={100} />
@@ -73,7 +73,7 @@ export default function AboutPage(): React.ReactNode {
       )}
 
       {error && (
-        <Alert severity="error" className="about_page-error">
+        <Alert severity="error" className={styles['about_page-error']}>
           無法載入內容：{error}
         </Alert>
       )}
@@ -81,11 +81,11 @@ export default function AboutPage(): React.ReactNode {
       {!loading && !error && data && (
         <>
           {data.map((section, index) => (
-            <section key={index} className="about_page-section">
-              <h2 className="about_page-section-sub_title">{section.title}</h2>
+            <section key={index} className={styles['about_page-section']}>
+              <h2 className={styles['about_page-section-sub_title']}>{section.title}</h2>
 
               {section.description && (
-                <div className="about_page-section-description">
+                <div className={styles['about_page-section-description']}>
                   {section.description.map((descItem, descIndex) =>
                     descItem.isDel ? (
                       <del key={descIndex}>{descItem.text}</del>
@@ -97,11 +97,11 @@ export default function AboutPage(): React.ReactNode {
               )}
 
               {Array.isArray(section.listItemList) && (
-                <ul className="about_page-section-list">
+                <ul className={styles['about_page-section-list']}>
                   {section.listItemList.map((item, itemIndex) => (
                     <li
                       key={itemIndex}
-                      className="about_page-section-list-item"
+                      className={styles['about_page-section-list-item']}
                     >
                       {item}
                     </li>

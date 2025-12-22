@@ -10,7 +10,7 @@ import {
   Box
 } from '@mui/material';
 
-import '@/app/[locale]/directive-effects/directive-effects.scss';
+import styles from './page.module.scss';
 
 const DEMO_LINKS = [
   {
@@ -29,7 +29,7 @@ const DEMO_LINKS = [
 
 export default function DirectiveEffectsPage(): React.ReactNode {
   return (
-    <section className="directive_effects_page">
+    <section className={styles.directive_effects_page}>
       <Typography variant="body1" paragraph>
         為避免因套件版本相容性或專案性質不合適使用 npm
         上相關工具之狀況，因此自己實作相關效果
@@ -41,28 +41,22 @@ export default function DirectiveEffectsPage(): React.ReactNode {
       </Typography>
 
       <Image
-        className="directive_effects_page-banner"
+        className={styles['directive_effects_page-banner']}
         src="/img/icon/Next.jsLab.v.01.webp"
         alt="Directive Effects Banner"
         width={1200}
         height={400}
-        style={{
-          width: '100%',
-          height: 'auto',
-          maxHeight: '400px',
-          objectFit: 'cover'
-        }}
         priority
       />
 
-      <Box className="directive_effects_page-content">
+      <Box className={styles['directive_effects_page-content']}>
         {DEMO_LINKS.map((link) => (
           <Link
             key={link.path}
             href={link.path}
             style={{ textDecoration: 'none' }}
           >
-            <Card className="directive_effects_page-content-card">
+            <Card className={styles['directive_effects_page-content-card']}>
               <CardActionArea>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>

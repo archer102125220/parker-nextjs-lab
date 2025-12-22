@@ -1,0 +1,62 @@
+// About Page Styles
+@use '@/styles/placeholders'as *;
+@use '@/styles/mixin'as *;
+
+.about_page {
+    @extend %test_page;
+
+    &-banner {
+        /* Display & Box Model */
+        width: 100%;
+        margin-bottom: 16px;
+    }
+
+    &-skeleton {
+        /* Display & Box Model */
+        padding: 20px;
+    }
+
+    &-error {
+        /* Display & Box Model */
+        margin-bottom: 16px;
+    }
+
+    &-section {
+        /* Display & Box Model */
+        margin-bottom: 24px;
+
+        &-sub_title {
+            /* Display & Box Model */
+            margin-bottom: 12px;
+
+            /* Typography */
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        &-description {
+            /* Display & Box Model */
+            margin-bottom: 12px;
+
+            p {
+                /* Display & Box Model */
+                margin-bottom: 8px;
+            }
+
+            del {
+                /* Typography */
+                color: #999;
+            }
+        }
+
+        &-list {
+            /* Display & Box Model */
+            padding-left: 24px;
+
+            &-item {
+                /* Display & Box Model */
+                margin-bottom: 8px;
+            }
+        }
+    }
+}

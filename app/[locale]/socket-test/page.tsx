@@ -12,7 +12,7 @@ import {
   Alert
 } from '@mui/material';
 
-import '@/app/[locale]/socket-test/socket-test.scss';
+import styles from './page.module.scss';
 
 interface LinkItem {
   to: string;
@@ -37,12 +37,12 @@ export default function SocketTestPage(): React.ReactNode {
   ];
 
   return (
-    <section className="socket_test_page">
+    <section className={styles.socket_test_page}>
       <Typography variant="h5" gutterBottom>
         Socket 測試列表
       </Typography>
 
-      <Box className="socket_test_page-description">
+      <Box className={styles['socket_test_page-description']}>
         <Typography variant="body2">
           紀錄原生 WebSocket 以及由{' '}
           <a
@@ -67,23 +67,17 @@ export default function SocketTestPage(): React.ReactNode {
       </Alert>
 
       <Image
-        className="socket_test_page-banner"
+        className={styles['socket_test_page-banner']}
         src="/img/socket/socket-v.05.webp"
         alt="Socket Banner"
         width={1200}
         height={400}
-        style={{
-          width: '100%',
-          height: 'auto',
-          maxHeight: '400px',
-          objectFit: 'cover'
-        }}
         priority
       />
 
-      <nav className="socket_test_page-content" role="navigation">
+      <nav className={styles['socket_test_page-content']} role="navigation">
         {linkList.map((link) => (
-          <Card key={link.to} className="socket_test_page-content-link">
+          <Card key={link.to} className={styles['socket_test_page-content-link']}>
             <CardActionArea component={Link} href={link.to}>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
