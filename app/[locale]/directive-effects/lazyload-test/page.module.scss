@@ -1,7 +1,7 @@
 @use '@/styles/placeholders'as *;
 
 .lazyload_test_page {
-    &_section {
+    &-section {
         margin-bottom: 48px;
         padding: 16px;
 
@@ -9,7 +9,7 @@
         border-radius: 8px;
     }
 
-    &_image {
+    &-image {
         display: block;
 
         width: 100%;

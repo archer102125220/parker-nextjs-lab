@@ -66,7 +66,7 @@ export default function LazyLoadTestPage(): React.ReactNode {
         一、Next.js Image 內建功能
       </Typography>
 
-      <Box className={style.lazyload_test_page_section}>
+      <Box className={style['lazyload_test_page-section']}>
         <Typography variant="h6" gutterBottom>
           Next.js Image 內建 lazy loading (對照組)
         </Typography>
@@ -82,7 +82,7 @@ export default function LazyLoadTestPage(): React.ReactNode {
         />
       </Box>
 
-      <Box className="lazyload_test_page-section">
+      <Box className={style['lazyload_test_page-section']}>
         <Typography variant="h6" gutterBottom>
           Next.js Image 搭配 useLazyLoad
         </Typography>
@@ -127,7 +127,7 @@ export default function LazyLoadTestPage(): React.ReactNode {
         二、原生 img 標籤搭配 useLazyLoad
       </Typography>
 
-      <Box className="lazyload_test_page-section">
+      <Box className={style['lazyload_test_page-section']}>
         <Typography variant="h6" gutterBottom>
           1. 基本懶載入
         </Typography>
@@ -145,7 +145,7 @@ export default function LazyLoadTestPage(): React.ReactNode {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={nativeBasicRef}
-          className={style.lazyload_test_page_image}
+          className={style['lazyload_test_page-image']}
           alt="Native img basic lazy load"
         />
       </Box>
@@ -164,7 +164,7 @@ export default function LazyLoadTestPage(): React.ReactNode {
         </Typography>
       </Box>
 
-      <Box className="lazyload_test_page-section">
+      <Box className={style['lazyload_test_page-section']}>
         <Typography variant="h6" gutterBottom>
           2. 配合 rootMargin 提前載入
         </Typography>
@@ -182,12 +182,12 @@ export default function LazyLoadTestPage(): React.ReactNode {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={nativeRootMarginRef}
-          className={`${style.lazyload_test_page_image} ${style['lazyload_test_page_image--gif']}`}
+          className={`${style['lazyload_test_page-image']} ${style['lazyload_test_page-image--gif']}`}
           alt="Native img with rootMargin"
         />
       </Box>
 
-      <Box className="lazyload_test_page-section">
+      <Box className={style['lazyload_test_page-section']}>
         <Typography variant="h6" gutterBottom>
           3. 錯誤處理 (載入失敗時顯示備用圖片)
         </Typography>
@@ -205,7 +205,7 @@ export default function LazyLoadTestPage(): React.ReactNode {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={nativeErrorRef}
-          className={style.lazyload_test_page_image}
+          className={style['lazyload_test_page-image']}
           alt="Native img with error handling"
         />
       </Box>
