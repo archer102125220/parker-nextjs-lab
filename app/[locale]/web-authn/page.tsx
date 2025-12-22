@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 
 import { useAppDispatch } from '@/store';
-import '@/app/[locale]/web-authn/web-authn.scss';
+import style from '@/app/[locale]/web-authn/page.module.scss';
 
 interface CredentialData {
   credentialId: string;
@@ -280,7 +280,7 @@ export default function WebAuthnPage(): React.ReactNode {
   };
 
   return (
-    <section className="web_authn_page">
+    <section className={style.web_authn_page}>
       <Typography variant="h5" gutterBottom>
         WebAuthn 生物辨識測試
       </Typography>
@@ -289,7 +289,7 @@ export default function WebAuthnPage(): React.ReactNode {
         原生方式為主，套件用來編碼、解碼的方式實作
       </Typography>
 
-      <Box className="web_authn_page-outbound_link">
+      <Box className={style.web_authn_page_outbound_link}>
         <Typography variant="body2">記錄筆記：</Typography>
         <a
           href="https://www.notion.so/Web-Authn-6480f13abf224ef59a41571df1531f6a"
@@ -301,7 +301,7 @@ export default function WebAuthnPage(): React.ReactNode {
       </Box>
 
       <Image
-        className="web_authn_page-banner"
+        className={style.web_authn_page_banner}
         src="/img/web-authn/web-authn-v.06.webp"
         alt="WebAuthn Banner"
         width={1200}
@@ -316,9 +316,9 @@ export default function WebAuthnPage(): React.ReactNode {
       />
 
       {/* Registration Section */}
-      <Paper className="web_authn_page-register" elevation={2}>
+      <Paper className={style.web_authn_page_register} elevation={2}>
         <form onSubmit={handleWebAuthnRegister}>
-          <Typography variant="h6" className="web_authn_page-register-title">
+          <Typography variant="h6" className={style.web_authn_page_register_title}>
             向伺服器註冊生物辨識資料
           </Typography>
 
@@ -327,7 +327,7 @@ export default function WebAuthnPage(): React.ReactNode {
             label="ID"
             value={registerId}
             onChange={(e) => setRegisterId(e.target.value)}
-            className="web_authn_page-register-id"
+            className={style.web_authn_page_register_id}
             margin="normal"
           />
           <TextField
@@ -335,7 +335,7 @@ export default function WebAuthnPage(): React.ReactNode {
             label="帳號"
             value={registerAccount}
             onChange={(e) => setRegisterAccount(e.target.value)}
-            className="web_authn_page-register-account"
+            className={style.web_authn_page_register_account}
             margin="normal"
           />
           <TextField
@@ -343,11 +343,11 @@ export default function WebAuthnPage(): React.ReactNode {
             label="名稱"
             value={registerName}
             onChange={(e) => setRegisterName(e.target.value)}
-            className="web_authn_page-register-name"
+            className={style.web_authn_page_register_name}
             margin="normal"
           />
 
-          <Box className="web_authn_page-register-submit">
+          <Box className={style.web_authn_page_register_submit}>
             <Button
               variant="contained"
               color="primary"
@@ -361,11 +361,11 @@ export default function WebAuthnPage(): React.ReactNode {
 
         <Typography
           variant="subtitle2"
-          className="web_authn_page-register-output_title"
+          className={style.web_authn_page_register_output_title}
         >
           WebAuthn API 回傳：
         </Typography>
-        <Box className="web_authn_page-register-output">
+        <Box className={style.web_authn_page_register_output}>
           <pre>{registerWebApiOutput || '(尚未執行)'}</pre>
         </Box>
 
@@ -383,9 +383,9 @@ export default function WebAuthnPage(): React.ReactNode {
       <Divider sx={{ my: 3 }} />
 
       {/* Login/Verify Section */}
-      <Paper className="web_authn_page-login" elevation={2}>
+      <Paper className={style.web_authn_page_login} elevation={2}>
         <form onSubmit={handleWebAuthnLogin}>
-          <Typography variant="h6" className="web_authn_page-login-title">
+          <Typography variant="h6" className={style.web_authn_page_login_title}>
             執行身份驗證
           </Typography>
 
@@ -394,11 +394,11 @@ export default function WebAuthnPage(): React.ReactNode {
             label="帳號"
             value={loginId}
             onChange={(e) => setLoginId(e.target.value)}
-            className="web_authn_page-login-id"
+            className={style.web_authn_page_login_id}
             margin="normal"
           />
 
-          <Box className="web_authn_page-login-submit">
+          <Box className={style.web_authn_page_login_submit}>
             <Button
               variant="contained"
               color="primary"
@@ -412,11 +412,11 @@ export default function WebAuthnPage(): React.ReactNode {
 
         <Typography
           variant="subtitle2"
-          className="web_authn_page-login-output_title"
+          className={style.web_authn_page_login_output_title}
         >
           WebAuthn API 回傳：
         </Typography>
-        <Box className="web_authn_page-login-output">
+        <Box className={style.web_authn_page_login_output}>
           <pre>{loginWebApiOutput || '(尚未執行)'}</pre>
         </Box>
 

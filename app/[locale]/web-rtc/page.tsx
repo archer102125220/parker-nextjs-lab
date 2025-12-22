@@ -11,7 +11,7 @@ import {
   Alert
 } from '@mui/material';
 
-import '@/app/[locale]/web-rtc/web-rtc.scss';
+import style from '@/app/[locale]/web-rtc/page.module.scss';
 
 interface LinkItem {
   to: string;
@@ -36,7 +36,7 @@ export default function WebRTCPage(): React.ReactNode {
   ];
 
   return (
-    <section className="web_rtc_page">
+    <section className={style.web_rtc_page}>
       <Typography variant="h5" gutterBottom>
         WebRTC 測試列表
       </Typography>
@@ -47,7 +47,7 @@ export default function WebRTCPage(): React.ReactNode {
       </Alert>
 
       <Image
-        className="web_rtc_page-banner"
+        className={style.web_rtc_page_banner}
         src="/img/icon/Next.jsLab.v.01.webp"
         alt="WebRTC Banner"
         width={1200}
@@ -65,9 +65,9 @@ export default function WebRTCPage(): React.ReactNode {
         WebRTC 的實作測試，主要分為以下兩種 Signaling 方式：
       </Typography>
 
-      <nav className="web_rtc_page-content" role="navigation">
+      <nav className={style.web_rtc_page_content} role="navigation">
         {linkList.map((link) => (
-          <Card key={link.to} className="web_rtc_page-content-link">
+          <Card key={link.to} className={style.web_rtc_page_content_link}>
             <CardActionArea component={Link} href={link.to}>
               <CardContent>
                 <Typography variant="h6" gutterBottom>

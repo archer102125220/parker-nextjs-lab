@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Typography, Box, Alert } from '@mui/material';
 import { useLazyLoad } from '@/hooks/useLazyLoad';
 
-import '@/app/[locale]/directive-effects/lazyload-test/lazyload-test.scss';
+import style from '@/app/[locale]/directive-effects/lazyload-test/page.module.scss';
 
 export default function LazyLoadTestPage(): React.ReactNode {
   // Create refs for native img demos
@@ -45,7 +45,7 @@ export default function LazyLoadTestPage(): React.ReactNode {
   );
 
   return (
-    <section className="lazyload_test_page">
+    <section className={style.lazyload_test_page}>
       <Typography variant="h4" gutterBottom>
         useLazyLoad Hook 測試
       </Typography>
@@ -66,7 +66,7 @@ export default function LazyLoadTestPage(): React.ReactNode {
         一、Next.js Image 內建功能
       </Typography>
 
-      <Box className="lazyload_test_page-section">
+      <Box className={style.lazyload_test_page_section}>
         <Typography variant="h6" gutterBottom>
           Next.js Image 內建 lazy loading (對照組)
         </Typography>
@@ -78,7 +78,7 @@ export default function LazyLoadTestPage(): React.ReactNode {
           alt="Next.js Image with built-in lazy loading"
           width={600}
           height={400}
-          className="lazyload_test_page-image"
+          className={style.lazyload_test_page_image}
           style={{ width: '100%', height: 'auto', maxWidth: '600px' }}
         />
       </Box>
@@ -104,7 +104,7 @@ export default function LazyLoadTestPage(): React.ReactNode {
           alt="Next.js Image with useLazyLoad"
           width={600}
           height={400}
-          className="lazyload_test_page-image"
+          className={style.lazyload_test_page_image}
           style={{ width: '100%', height: 'auto', maxWidth: '600px' }}
           unoptimized
         />
@@ -147,7 +147,7 @@ export default function LazyLoadTestPage(): React.ReactNode {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={nativeBasicRef}
-          className="lazyload_test_page-image"
+          className={style.lazyload_test_page_image}
           alt="Native img basic lazy load"
         />
       </Box>
@@ -184,7 +184,7 @@ export default function LazyLoadTestPage(): React.ReactNode {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={nativeRootMarginRef}
-          className="lazyload_test_page-image lazyload_test_page-image--gif"
+          className={`${style.lazyload_test_page_image} ${style['lazyload_test_page_image--gif']}`}
           alt="Native img with rootMargin"
         />
       </Box>
@@ -207,7 +207,7 @@ export default function LazyLoadTestPage(): React.ReactNode {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={nativeErrorRef}
-          className="lazyload_test_page-image"
+          className={style.lazyload_test_page_image}
           alt="Native img with error handling"
         />
       </Box>

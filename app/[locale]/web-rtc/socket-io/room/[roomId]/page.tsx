@@ -24,7 +24,7 @@ import CallEndIcon from '@mui/icons-material/CallEnd';
 import { useSocketIoClient } from '@/hooks/useSocketIoClient';
 import { useWebRTC } from '@/hooks/useWebRTC';
 
-import '@/app/[locale]/web-rtc/web-rtc.scss';
+import style from '@/app/[locale]/web-rtc/_shared/room.module.scss';
 
 export default function WebRTCSocketIORoomPage(): React.ReactNode {
   const params = useParams();
@@ -266,7 +266,7 @@ export default function WebRTCSocketIORoomPage(): React.ReactNode {
   }, [remoteStreams]);
 
   return (
-    <section className="web_rtc_room_page">
+    <section className={style.web_rtc_room_page}>
       <Typography variant="h5" gutterBottom>
         WebRTC 視訊聊天室 (Socket.IO)
       </Typography>
@@ -274,7 +274,7 @@ export default function WebRTCSocketIORoomPage(): React.ReactNode {
       <Typography
         variant="body2"
         color="text.secondary"
-        className="web_rtc_room_page-description"
+        className={style.web_rtc_room_page_description}
       >
         配合 Socket.IO 做為 Signaling Server 實作
       </Typography>
@@ -290,7 +290,7 @@ export default function WebRTCSocketIORoomPage(): React.ReactNode {
         環境可能無法運作。
       </Alert>
 
-      <Paper className="web_rtc_room_page-room_info" onClick={handleCopyUrl}>
+      <Paper className={style.web_rtc_room_page_room_info} onClick={handleCopyUrl}>
         <Typography variant="body2">
           目前配對 ID 為: <strong>{roomId}</strong>
         </Typography>
@@ -343,9 +343,9 @@ export default function WebRTCSocketIORoomPage(): React.ReactNode {
         </Tooltip>
       </Paper>
 
-      <div className="web_rtc_room_page-video_container">
+      <div className={style.web_rtc_room_page_video_container}>
         <Paper
-          className="web_rtc_room_page-video_container-local"
+          className={style.web_rtc_room_page_video_container_local}
           sx={{ p: 1 }}
         >
           <Typography variant="subtitle2" gutterBottom>
@@ -366,7 +366,7 @@ export default function WebRTCSocketIORoomPage(): React.ReactNode {
         </Paper>
 
         <Paper
-          className="web_rtc_room_page-video_container-remote"
+          className={style.web_rtc_room_page_video_container_remote}
           sx={{ p: 1 }}
         >
           <Typography variant="subtitle2" gutterBottom>
@@ -386,7 +386,7 @@ export default function WebRTCSocketIORoomPage(): React.ReactNode {
         </Paper>
       </div>
 
-      <div className="web_rtc_room_page-controls">
+      <div className={style.web_rtc_room_page_controls}>
         <Tooltip title={isVideoEnabled ? '關閉視訊' : '開啟視訊'}>
           <IconButton
             color={isVideoEnabled ? 'primary' : 'default'}

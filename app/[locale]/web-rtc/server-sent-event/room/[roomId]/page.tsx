@@ -23,7 +23,7 @@ import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
 import CallEndIcon from '@mui/icons-material/CallEnd';
 
-import '@/app/[locale]/web-rtc/web-rtc.scss';
+import style from '@/app/[locale]/web-rtc/_shared/room.module.scss';
 
 interface MemberCandidate {
   userId: string;
@@ -424,7 +424,7 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
   }, []); // Empty deps - only run once on mount
 
   return (
-    <section className="web_rtc_room_page">
+    <section className={style.web_rtc_room_page}>
       <Typography variant="h5" gutterBottom>
         WebRTC 視訊聊天室 (SSE)
       </Typography>
@@ -432,7 +432,7 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
       <Typography
         variant="body2"
         color="text.secondary"
-        className="web_rtc_room_page-description"
+        className={style.web_rtc_room_page_description}
       >
         配合 Server-Sent Events 及 Upstash Redis 實作
       </Typography>
@@ -444,7 +444,7 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
       )}
 
       {/* Room Info */}
-      <Paper className="web_rtc_room_page-room_info" onClick={handleCopyUrl}>
+      <Paper className={style.web_rtc_room_page_room_info} onClick={handleCopyUrl}>
         <Typography variant="body2">
           目前配對 ID 為: <strong>{roomId}</strong>
         </Typography>
@@ -498,9 +498,9 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
       </Paper>
 
       {/* Video Container */}
-      <div className="web_rtc_room_page-video_container">
+      <div className={style.web_rtc_room_page_video_container}>
         <Paper
-          className="web_rtc_room_page-video_container-local"
+          className={style.web_rtc_room_page_video_container_local}
           sx={{ p: 1 }}
         >
           <Typography variant="subtitle2" gutterBottom>
@@ -521,7 +521,7 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
         </Paper>
 
         <Paper
-          className="web_rtc_room_page-video_container-remote"
+          className={style.web_rtc_room_page_video_container_remote}
           sx={{ p: 1 }}
         >
           <Typography variant="subtitle2" gutterBottom>
@@ -542,7 +542,7 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
       </div>
 
       {/* Controls */}
-      <div className="web_rtc_room_page-controls">
+      <div className={style.web_rtc_room_page_controls}>
         <Tooltip title={isVideoEnabled ? '關閉視訊' : '開啟視訊'}>
           <IconButton
             color={isVideoEnabled ? 'primary' : 'default'}

@@ -14,7 +14,7 @@ import FaceRetouchingNaturalIcon from '@mui/icons-material/FaceRetouchingNatural
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DownloadIcon from '@mui/icons-material/Download';
 
-import '@/app/[locale]/face-swap/face-swap.scss';
+import style from '@/app/[locale]/face-swap/frontend/page.module.scss';
 
 export default function FaceSwapFrontendPage(): React.ReactNode {
   // Refs
@@ -255,9 +255,9 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
   }, [initCamera]);
 
   return (
-    <section className="face_swap_frontend_page">
+    <section className={style.face_swap_frontend_page}>
       <Image
-        className="face_swap_frontend_page-banner"
+        className={style.face_swap_frontend_page_banner}
         src="/img/icon/Next.jsLab.v.01.webp"
         alt="Face Swap Banner"
         width={800}
@@ -270,13 +270,13 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
         }}
       />
 
-      <Typography variant="h5" className="face_swap_frontend_page-title">
+      <Typography variant="h5" className={style.face_swap_frontend_page_title}>
         純前端人臉替換
       </Typography>
       <Typography
         variant="body2"
         color="text.secondary"
-        className="face_swap_frontend_page-subtitle"
+        className={style.face_swap_frontend_page_subtitle}
       >
         使用瀏覽器端 face-api.js 進行即時人臉替換
       </Typography>
@@ -288,10 +288,10 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
       </Alert>
 
       {/* Face Swap Section */}
-      <div className="face_swap_frontend_page-swap_section">
+      <div className={style.face_swap_frontend_page_swap_section}>
         {/* Source Face */}
         <Paper
-          className="face_swap_frontend_page-swap_section-source"
+          className={style.face_swap_frontend_page_swap_section_source}
           sx={{ p: 2 }}
         >
           <Typography variant="h6" gutterBottom align="center">
@@ -342,16 +342,16 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
 
         {/* Target Video */}
         <Paper
-          className="face_swap_frontend_page-swap_section-target"
+          className={style.face_swap_frontend_page_swap_section_target}
           sx={{ p: 2 }}
         >
           <Typography variant="h6" gutterBottom align="center">
             目標畫面
           </Typography>
-          <div className="face_swap_frontend_page-swap_section-target-video_container">
+          <div className={style.face_swap_frontend_page_swap_section_target_video_container}>
             <video
               ref={videoRef}
-              className="face_swap_frontend_page-swap_section-target-video"
+              className={style.face_swap_frontend_page_swap_section_target_video}
               width={480}
               height={360}
               autoPlay
@@ -366,7 +366,7 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
             />
             <canvas
               ref={overlayCanvasRef}
-              className="face_swap_frontend_page-swap_section-target-overlay"
+              className={style.face_swap_frontend_page_swap_section_target_overlay}
               width={480}
               height={360}
             />
@@ -375,7 +375,7 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
 
         {/* Result */}
         <Paper
-          className="face_swap_frontend_page-swap_section-result"
+          className={style.face_swap_frontend_page_swap_section_result}
           sx={{ p: 2 }}
         >
           <Typography variant="h6" gutterBottom align="center">
@@ -383,7 +383,7 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
           </Typography>
           <canvas
             ref={canvasRef}
-            className="face_swap_frontend_page-swap_section-result-canvas"
+            className={style.face_swap_frontend_page_swap_section_result_canvas}
             width={480}
             height={360}
             style={{
@@ -397,7 +397,7 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
       </div>
 
       {/* Controls */}
-      <div className="face_swap_frontend_page-controls">
+      <div className={style.face_swap_frontend_page_controls}>
         <Button
           variant="contained"
           color="primary"
@@ -441,7 +441,7 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
       {statusMessage && (
         <Alert
           severity={statusType}
-          className="face_swap_frontend_page-status"
+          className={style.face_swap_frontend_page_status}
           onClose={() => setStatusMessage('')}
         >
           {statusMessage}

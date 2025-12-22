@@ -3,11 +3,11 @@
 import { Typography, Box, Alert, Button } from '@mui/material';
 import { Ripple } from '@/components/Ripple';
 
-import '@/app/[locale]/directive-effects/ripple-test/ripple-test.scss';
+import style from '@/app/[locale]/directive-effects/ripple-test/page.module.scss';
 
 export default function RippleTestPage(): React.ReactNode {
   return (
-    <section className="ripple_test_page">
+    <section className={style.ripple_test_page}>
       <Typography variant="h4" gutterBottom>
         Ripple Component 測試
       </Typography>
@@ -17,43 +17,43 @@ export default function RippleTestPage(): React.ReactNode {
         風格的點擊波紋效果。點擊下方區塊查看效果。
       </Alert>
 
-      <Box className="ripple_test_page-demos">
+      <Box className={style.ripple_test_page_demos}>
         {/* Demo 1: Basic ripple */}
-        <Box className="ripple_test_page-demo">
+        <Box className={style.ripple_test_page_demo}>
           <Typography variant="h6" gutterBottom>
             1. 基本波紋效果
           </Typography>
           <Ripple>
-            <Box className="ripple_test_page-demo-box">點擊我測試波紋效果</Box>
+            <Box className={style.ripple_test_page_demo_box}>點擊我測試波紋效果</Box>
           </Ripple>
         </Box>
 
         {/* Demo 2: Custom color */}
-        <Box className="ripple_test_page-demo">
+        <Box className={style.ripple_test_page_demo}>
           <Typography variant="h6" gutterBottom>
             2. 自訂顏色 (紅色)
           </Typography>
           <Ripple color="rgba(255, 0, 0, 0.4)">
-            <Box className="ripple_test_page-demo-box ripple_test_page-demo-box--red">
+            <Box className={`${style.ripple_test_page_demo_box} ${style['ripple_test_page_demo_box--red']}`}>
               紅色波紋效果
             </Box>
           </Ripple>
         </Box>
 
         {/* Demo 3: Blue color */}
-        <Box className="ripple_test_page-demo">
+        <Box className={style.ripple_test_page_demo}>
           <Typography variant="h6" gutterBottom>
             3. 自訂顏色 (藍色)
           </Typography>
           <Ripple color="rgba(0, 100, 255, 0.4)">
-            <Box className="ripple_test_page-demo-box ripple_test_page-demo-box--blue">
+            <Box className={`${style.ripple_test_page_demo_box} ${style['ripple_test_page_demo_box--blue']}`}>
               藍色波紋效果
             </Box>
           </Ripple>
         </Box>
 
         {/* Demo 4: With button */}
-        <Box className="ripple_test_page-demo">
+        <Box className={style.ripple_test_page_demo}>
           <Typography variant="h6" gutterBottom>
             4. 搭配按鈕使用
           </Typography>
@@ -69,19 +69,19 @@ export default function RippleTestPage(): React.ReactNode {
         </Box>
 
         {/* Demo 5: Disabled */}
-        <Box className="ripple_test_page-demo">
+        <Box className={style.ripple_test_page_demo}>
           <Typography variant="h6" gutterBottom>
             5. 停用波紋效果
           </Typography>
           <Ripple enabled={false}>
-            <Box className="ripple_test_page-demo-box ripple_test_page-demo-box--disabled">
+            <Box className={`${style.ripple_test_page_demo_box} ${style['ripple_test_page_demo_box--disabled']}`}>
               波紋效果已停用
             </Box>
           </Ripple>
         </Box>
 
         {/* Demo 6: With onClick */}
-        <Box className="ripple_test_page-demo">
+        <Box className={style.ripple_test_page_demo}>
           <Typography variant="h6" gutterBottom>
             6. 搭配 onClick 事件
           </Typography>
@@ -89,7 +89,7 @@ export default function RippleTestPage(): React.ReactNode {
             color="rgba(76, 175, 80, 0.5)"
             onClick={() => alert('點擊事件觸發！')}
           >
-            <Box className="ripple_test_page-demo-box ripple_test_page-demo-box--green">
+            <Box className={`${style.ripple_test_page_demo_box} ${style['ripple_test_page_demo_box--green']}`}>
               點擊會觸發 alert
             </Box>
           </Ripple>

@@ -1,0 +1,41 @@
+.web_cam_page {
+    font-family: sans-serif;
+
+    &_banner {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    &_error {
+        padding: 16px;
+        margin: 16px 0;
+
+        color: #721c24;
+
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        border-radius: 4px;
+    }
+
+    &_video {
+        display: none;
+        width: 480px;
+        height: 360px;
+        max-width: 100%;
+        max-height: 100%;
+
+        object-fit: contain;
+    }
+
+    &_canvas {
+        display: block;
+        width: 480px;
+        height: 360px;
+        max-width: 100%;
+        max-height: 100%;
+
+        border: 1px solid #333;
+
+        object-fit: contain;
+    }
+}

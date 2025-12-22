@@ -1,0 +1,54 @@
+.face_swap_page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 0 16px 32px;
+
+    &_banner {
+        width: 100%;
+        max-width: 800px;
+        margin-bottom: 24px;
+        border-radius: 8px;
+    }
+
+    &_title {
+        margin-bottom: 8px;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    &_subtitle {
+        margin-bottom: 32px;
+        text-align: center;
+    }
+
+    &_cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+        width: 100%;
+        max-width: 800px;
+
+        &_card {
+            position: relative;
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+
+            &:hover {
+                transform: translateY(-4px);
+            }
+
+            &--coming_soon {
+                opacity: 0.85;
+            }
+
+            &_chip {
+                position: absolute;
+                top: 12px;
+                right: 12px;
+            }
+        }
+    }
+}

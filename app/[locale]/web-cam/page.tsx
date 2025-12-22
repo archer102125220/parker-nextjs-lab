@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 
-import '@/app/[locale]/web-cam/web-cam.scss';
+import style from '@/app/[locale]/web-cam/page.module.scss';
 
 export default function WebCamPage(): React.ReactNode {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -66,9 +66,9 @@ export default function WebCamPage(): React.ReactNode {
   }, []);
 
   return (
-    <section className="web_cam_page">
+    <section className={style.web_cam_page}>
       <Image
-        className="web_cam_page-banner"
+        className={style.web_cam_page_banner}
         src="/img/icon/Next.jsLab.v.01.webp"
         alt="Web Cam Banner"
         width={1200}
@@ -83,7 +83,7 @@ export default function WebCamPage(): React.ReactNode {
       />
 
       {error && (
-        <div className="web_cam_page-error">
+        <div className={style.web_cam_page_error}>
           <p>Camera Error: {error}</p>
           <p>Please allow camera access in your browser settings.</p>
         </div>
@@ -91,7 +91,7 @@ export default function WebCamPage(): React.ReactNode {
 
       <video
         ref={videoRef}
-        className="web_cam_page-video"
+        className={style.web_cam_page_video}
         width={480}
         height={360}
         autoPlay
@@ -101,7 +101,7 @@ export default function WebCamPage(): React.ReactNode {
 
       <canvas
         ref={canvasRef}
-        className="web_cam_page-canvas"
+        className={style.web_cam_page_canvas}
         width={480}
         height={360}
       />

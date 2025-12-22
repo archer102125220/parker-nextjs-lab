@@ -1,0 +1,40 @@
+.frontend_api_cache_test_page {
+    &_banner {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    &_outbound_link {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 8px;
+
+        margin-bottom: 16px;
+    }
+
+    &_form {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        margin-bottom: 24px;
+
+        &_query,
+        &_payload {
+            margin-bottom: 8px;
+        }
+
+        &_http_method {
+            margin-bottom: 8px;
+        }
+    }
+
+    &_content {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+}

@@ -14,7 +14,7 @@ import {
   Link
 } from '@mui/material';
 
-import '@/app/[locale]/frontend-api-cache-test/frontend-api-cache-test.scss';
+import style from '@/app/[locale]/frontend-api-cache-test/page.module.scss';
 
 export default function FrontendApiCacheTestPage(): React.ReactNode {
   const [queryData, setQueryData] = useState('queryTest');
@@ -80,8 +80,8 @@ export default function FrontendApiCacheTestPage(): React.ReactNode {
   };
 
   return (
-    <section className="frontend_api_cache_test_page">
-      <Box className="frontend_api_cache_test_page-outbound_link">
+    <section className={style.frontend_api_cache_test_page}>
+      <Box className={style.frontend_api_cache_test_page_outbound_link}>
         <Typography component="span">
           漸進式網頁（Progressive Web Apps，PWA）記錄筆記：
         </Typography>
@@ -95,7 +95,7 @@ export default function FrontendApiCacheTestPage(): React.ReactNode {
       </Box>
 
       <Image
-        className="frontend_api_cache_test_page-banner"
+        className={style.frontend_api_cache_test_page_banner}
         src="/img/icon/Next.jsLab.v.01.webp"
         alt="Frontend API Cache Test Banner"
         width={1200}
@@ -110,7 +110,7 @@ export default function FrontendApiCacheTestPage(): React.ReactNode {
       />
 
       <form
-        className="frontend_api_cache_test_page-form"
+        className={style.frontend_api_cache_test_page_form}
         onSubmit={handleSubmit}
       >
         <TextField
@@ -118,7 +118,7 @@ export default function FrontendApiCacheTestPage(): React.ReactNode {
           label="GET參數"
           value={queryData}
           onChange={(e) => setQueryData(e.target.value)}
-          className="frontend_api_cache_test_page-form-query"
+          className={style.frontend_api_cache_test_page_form_query}
           margin="normal"
         />
 
@@ -127,12 +127,12 @@ export default function FrontendApiCacheTestPage(): React.ReactNode {
           label="POST參數"
           value={payloadData}
           onChange={(e) => setPayloadData(e.target.value)}
-          className="frontend_api_cache_test_page-form-payload"
+          className={style.frontend_api_cache_test_page_form_payload}
           margin="normal"
         />
 
         <RadioGroup
-          className="frontend_api_cache_test_page-form-http_method"
+          className={style.frontend_api_cache_test_page_form_http_method}
           value={isPost}
           onChange={(e) => setIsPost(e.target.value === 'true')}
         >
@@ -180,7 +180,7 @@ export default function FrontendApiCacheTestPage(): React.ReactNode {
         </Button>
       </form>
 
-      <Box className="frontend_api_cache_test_page-content">
+      <Box className={style.frontend_api_cache_test_page_content}>
         <Typography component="span">耗時約：</Typography>
         <Typography component="span" fontWeight="bold">
           {timeConsuming !== null ? timeConsuming : '-'}

@@ -1,0 +1,23 @@
+.web_rtc_page {
+    &_description {
+        margin-bottom: 16px;
+    }
+
+    &_banner {
+        width: 100%;
+        margin-bottom: 16px;
+    }
+
+    &_content {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 16px;
+
+        &_link {
+            flex: 1;
+            flex-basis: 200px;
+            min-width: 200px;
+        }
+    }
+}

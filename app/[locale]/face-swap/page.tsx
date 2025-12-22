@@ -14,15 +14,15 @@ import {
 import MonitorIcon from '@mui/icons-material/Monitor';
 import StorageIcon from '@mui/icons-material/Storage';
 
-import '@/app/[locale]/face-swap/face-swap.scss';
+import style from '@/app/[locale]/face-swap/page.module.scss';
 
 export default function FaceSwapPage(): React.ReactNode {
   const locale = useLocale();
 
   return (
-    <section className="face_swap_index_page">
+    <section className={style.face_swap_page}>
       <Image
-        className="face_swap_index_page-banner"
+        className={style.face_swap_page_banner}
         src="/img/icon/Next.jsLab.v.01.webp"
         alt="Face Swap Banner"
         width={800}
@@ -37,19 +37,19 @@ export default function FaceSwapPage(): React.ReactNode {
         priority
       />
 
-      <Typography variant="h4" className="face_swap_index_page-title">
+      <Typography variant="h4" className={style.face_swap_page_title}>
         AI 人臉替換
       </Typography>
       <Typography
         variant="body1"
         color="text.secondary"
-        className="face_swap_index_page-subtitle"
+        className={style.face_swap_page_subtitle}
       >
         選擇實作版本
       </Typography>
 
-      <div className="face_swap_index_page-cards">
-        <Card className="face_swap_index_page-cards-card">
+      <div className={style.face_swap_page_cards}>
+        <Card className={style.face_swap_page_cards_card}>
           <CardContent>
             <Typography variant="h6" gutterBottom>
               <MonitorIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
@@ -70,9 +70,9 @@ export default function FaceSwapPage(): React.ReactNode {
           </CardActions>
         </Card>
 
-        <Card className="face_swap_index_page-cards-card face_swap_index_page-cards-card--coming_soon">
+        <Card className={`${style.face_swap_page_cards_card} ${style['face_swap_page_cards_card--coming_soon']}`}>
           <Chip
-            className="face_swap_index_page-cards-card-chip"
+            className={style.face_swap_page_cards_card_chip}
             label="開發中"
             color="warning"
             size="small"

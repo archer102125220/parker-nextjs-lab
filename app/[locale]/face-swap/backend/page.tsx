@@ -14,7 +14,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import FaceRetouchingNaturalIcon from '@mui/icons-material/FaceRetouchingNatural';
 import DownloadIcon from '@mui/icons-material/Download';
 
-import '@/app/[locale]/face-swap/face-swap.scss';
+import style from '@/app/[locale]/face-swap/backend/page.module.scss';
 
 export default function FaceSwapBackendPage(): React.ReactNode {
   // State
@@ -105,9 +105,9 @@ export default function FaceSwapBackendPage(): React.ReactNode {
   };
 
   return (
-    <section className="face_swap_backend_page">
+    <section className={style.face_swap_backend_page}>
       <Image
-        className="face_swap_backend_page-banner"
+        className={style.face_swap_backend_page_banner}
         src="/img/icon/Next.jsLab.v.01.webp"
         alt="Face Swap Banner"
         width={800}
@@ -120,13 +120,13 @@ export default function FaceSwapBackendPage(): React.ReactNode {
         }}
       />
 
-      <Typography variant="h5" className="face_swap_backend_page-title">
+      <Typography variant="h5" className={style.face_swap_backend_page_title}>
         後端 AI 人臉替換
       </Typography>
       <Typography
         variant="body2"
         color="text.secondary"
-        className="face_swap_backend_page-subtitle"
+        className={style.face_swap_backend_page_subtitle}
       >
         使用 Node.js 後端 + TensorFlow.js 進行高精度人臉替換
       </Typography>
@@ -137,10 +137,10 @@ export default function FaceSwapBackendPage(): React.ReactNode {
       </Alert>
 
       {/* Upload Section */}
-      <div className="face_swap_backend_page-upload_section">
+      <div className={style.face_swap_backend_page_upload_section}>
         {/* Source Image */}
         <Paper
-          className="face_swap_backend_page-upload_section-source"
+          className={style.face_swap_backend_page_upload_section_source}
           sx={{ p: 2 }}
         >
           <Typography variant="h6" gutterBottom align="center">
@@ -159,7 +159,7 @@ export default function FaceSwapBackendPage(): React.ReactNode {
               <img
                 src={sourceImage}
                 alt="Source"
-                className="face_swap_backend_page-upload_section-preview"
+                className={style.face_swap_backend_page_upload_section_preview}
               />
               <Button
                 variant="outlined"
@@ -193,7 +193,7 @@ export default function FaceSwapBackendPage(): React.ReactNode {
 
         {/* Target Image */}
         <Paper
-          className="face_swap_backend_page-upload_section-target"
+          className={style.face_swap_backend_page_upload_section_target}
           sx={{ p: 2 }}
         >
           <Typography variant="h6" gutterBottom align="center">
@@ -246,7 +246,7 @@ export default function FaceSwapBackendPage(): React.ReactNode {
       </div>
 
       {/* Controls */}
-      <div className="face_swap_backend_page-controls">
+      <div className={style.face_swap_backend_page_controls}>
         <Button
           variant="contained"
           color="primary"
@@ -290,7 +290,7 @@ export default function FaceSwapBackendPage(): React.ReactNode {
 
       {/* Result */}
       {resultImage && (
-        <Paper className="face_swap_backend_page-result" sx={{ p: 2 }}>
+        <Paper className={style.face_swap_backend_page_result} sx={{ p: 2 }}>
           <Typography variant="h6" gutterBottom align="center">
             替換結果
           </Typography>
@@ -298,7 +298,7 @@ export default function FaceSwapBackendPage(): React.ReactNode {
           <img
             src={resultImage}
             alt="Result"
-            className="face_swap_backend_page-result-image"
+            className={style.face_swap_backend_page_result_image}
           />
         </Paper>
       )}
