@@ -1,0 +1,49 @@
+// Server-Sent Event Test Pages - Shared Styles
+@use '@/styles/placeholders'as *;
+@use '@/styles/mixin'as *;
+
+.page {
+    @extend %test_page;
+}
+
+.controls {
+    @extend %flex;
+    @extend %flex_gap_16;
+    @extend %flex_center;
+
+    /* Display & Box Model */
+    margin-bottom: 16px;
+}
+
+.message_form {
+    @extend %flex;
+    @extend %flex_gap_12;
+}
+
+.message_list {
+    @extend %message_list;
+
+    &_item {
+        @extend %message_list_item;
+    }
+
+    &_content {
+        @extend %message_list_content;
+    }
+}
+
+.room_info {
+    @extend %flex;
+    @extend %flex_between;
+    @extend %flex_center;
+    @extend %flex_wrap;
+
+    /* Display & Box Model */
+    margin-bottom: 16px;
+}
+
+.user_list {
+    @extend %flex;
+    @extend %flex_gap_8;
+    @extend %flex_wrap;
+}

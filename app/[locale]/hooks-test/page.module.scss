@@ -4,7 +4,7 @@
 @use '@/styles/placeholders'as *;
 @use '@/styles/mixin'as *;
 
-.page {
+.hooks_test_page {
     @extend %test_page;
 }
 
@@ -19,34 +19,86 @@
 .section {
     @extend %test_page_section;
 
-    &_title {
+    &-title {
         /* Display & Box Model */
         margin-top: 0;
     }
 
-    &_description {
+    &-description {
         @extend %text_secondary;
 
         /* Display & Box Model */
         margin-bottom: 15px;
     }
-}
 
-.content_box {
-    @extend %test_page_content_box;
-}
+    &-content_box {
+        @extend %test_page_content_box;
+    }
 
-.value_display {
-    @extend %text_large;
-    @extend %text_primary;
-}
+    &-value_display {
+        @extend %text_large;
+        @extend %text_primary;
+    }
 
-.value_meta {
-    @extend %text_small;
-    @extend %text_secondary;
+    &-value_meta {
+        @extend %text_small;
+        @extend %text_secondary;
 
-    /* Display & Box Model */
-    margin-top: 5px;
+        /* Display & Box Model */
+        margin-top: 5px;
+    }
+
+    &-input_field {
+        /* Display & Box Model */
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+
+        /* Typography */
+        font-size: 14px;
+    }
+
+    &-hint {
+        /* Display & Box Model */
+        margin-top: 10px;
+
+        /* Typography */
+        font-size: 12px;
+        color: #999;
+    }
+
+    &-flex_row {
+        @extend %flex;
+        @extend %flex_gap_12;
+        @extend %flex_center;
+    }
+
+    &-flex_column {
+        @extend %flex;
+        @extend %flex_column;
+        @extend %flex_gap_8;
+    }
+
+    &-counter_display {
+        /* Typography */
+        font-size: 32px;
+        font-weight: bold;
+        color: #1976d2;
+    }
+
+    &-success_message {
+        /* Display & Box Model */
+        padding: 10px;
+        border-radius: 4px;
+
+        /* Typography */
+        color: white;
+
+        /* Visual */
+        background-color: #4caf50;
+    }
 }
 
 .button {
@@ -63,28 +115,61 @@
 
     /* Misc */
     cursor: pointer;
+}
 
-    &_success {
-        /* Visual */
-        background-color: #4caf50;
-    }
+.button_success {
+    /* Display & Box Model */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
 
-    &_danger {
-        /* Visual */
-        background-color: #f44336;
-    }
+    /* Typography */
+    color: white;
 
-    &_neutral {
-        /* Visual */
-        background-color: #666;
-    }
+    /* Visual */
+    background-color: #4caf50;
+
+    /* Misc */
+    cursor: pointer;
+}
+
+.button_danger {
+    /* Display & Box Model */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+
+    /* Typography */
+    color: white;
+
+    /* Visual */
+    background-color: #f44336;
+
+    /* Misc */
+    cursor: pointer;
+}
+
+.button_neutral {
+    /* Display & Box Model */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+
+    /* Typography */
+    color: white;
+
+    /* Visual */
+    background-color: #666;
+
+    /* Misc */
+    cursor: pointer;
 }
 
 .dropdown {
     /* Positioning */
     position: relative;
 
-    &_menu {
+    &-menu {
         /* Positioning */
         position: absolute;
         top: 45px;
@@ -100,14 +185,14 @@
         /* Visual */
         background-color: white;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
 
-    &_item {
-        /* Display & Box Model */
-        padding: 8px;
+        &-item {
+            /* Display & Box Model */
+            padding: 8px;
 
-        /* Misc */
-        cursor: pointer;
+            /* Misc */
+            cursor: pointer;
+        }
     }
 }
 
@@ -154,43 +239,10 @@
     /* Visual */
     background-color: white;
 
-    &_content {
+    &-content {
         /* Display & Box Model */
         height: 400px;
     }
-}
-
-.input_field {
-    /* Display & Box Model */
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-
-    /* Typography */
-    font-size: 14px;
-}
-
-.hint {
-    /* Display & Box Model */
-    margin-top: 10px;
-
-    /* Typography */
-    font-size: 12px;
-    color: #999;
-}
-
-.flex_row {
-    @extend %flex;
-    @extend %flex_gap_12;
-    @extend %flex_center;
-}
-
-.flex_column {
-    @extend %flex;
-    @extend %flex_column;
-    @extend %flex_gap_8;
 }
 
 .media_badge {
@@ -228,23 +280,4 @@
         /* Visual */
         background-color: #424242;
     }
-}
-
-.counter_display {
-    /* Typography */
-    font-size: 32px;
-    font-weight: bold;
-    color: #1976d2;
-}
-
-.success_message {
-    /* Display & Box Model */
-    padding: 10px;
-    border-radius: 4px;
-
-    /* Typography */
-    color: white;
-
-    /* Visual */
-    background-color: #4caf50;
 }

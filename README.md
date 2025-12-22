@@ -390,8 +390,33 @@ The project adopts a **Modified BEM Naming Convention**, cleverly sacrificing st
 - **Element**: Single hyphen `-` connecting Block and Element, e.g., `.countdown-down_enter`, `.countdown-up_leave`
 - **Sub-Element**: Single hyphen `-` connecting parent and child elements, with underscores `_` separating semantic words within element names, e.g.:
   - `.countdown-down_enter-down_enter_up`
-  - `.image_upload_preview_img`
+  - `.image_upload-preview-img`
 - **State Modifiers**: Managed through HTML attribute selectors, e.g., `[css-is-anime-start='true']`, `[css-is-active='true']`
+
+#### Root Element Naming Convention
+
+To quickly identify problematic elements in browser dev tools, the project uses the following root element naming convention:
+
+- **Page Root Elements**: Use `[page_name]_page` format
+  - Examples: `.hooks_test_page`, `.socket_io_page`, `.web_rtc_page`
+- **Component Root Elements**: Use `[component_name]` format
+  - Examples: `.scroll_fetch`, `.image_upload`, `.countdown`
+
+**Examples**:
+```scss
+// Page SCSS (app/[locale]/hooks-test/page.module.scss)
+.hooks_test_page {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// Component SCSS (components/ScrollFetch/scroll_fetch.scss)
+.scroll_fetch {
+  position: relative;
+  width: 100%;
+}
+```
 
 #### Advantages
 
@@ -403,32 +428,53 @@ The project adopts a **Modified BEM Naming Convention**, cleverly sacrificing st
 
 #### Examples
 
+**Example 1: Basic Block and Element**
 ```scss
-.countdown {
-  &-down_enter {
-    // .countdown-down_enter
-    &-down_enter_up {
-      // .countdown-down_enter-down_enter_up
-      &[css-is-anime-start='true'] {
-        animation: flip-up 1s;
-      }
-    }
+.section {
+  /* Block styles */
+  padding: 20px;
+  background-color: #f5f5f5;
+  
+  &-title {
+    // .section-title (Element connected with hyphen -)
+    margin-top: 0;
+    font-size: 18px;
+  }
+  
+  &-description {
+    // .section-description
+    color: #666;
+    margin-bottom: 15px;
+  }
+  
+  &-content_box {
+    // .section-content_box (Multiple semantic words within element name use underscore _)
+    padding: 15px;
+    background: white;
   }
 }
+```
 
+**Example 2: Block with Multiple Semantic Words**
+```scss
 .image_upload {
-  &_preview {
-    // .image_upload_preview
-    &_img {
-      // .image_upload_preview_img
+  // Block name uses underscore _ for multiple words
+  position: relative;
+  
+  &-preview {
+    // .image_upload-preview (Element connected with hyphen -)
+    width: 100%;
+    
+    &-img {
+      // .image_upload-preview-img (Sub-Element connected with hyphen -)
       width: 100%;
       height: 100%;
       object-fit: contain;
     }
   }
   
-  &_mask {
-    // .image_upload_mask
+  &-mask {
+    // .image_upload-mask
     &[css-is-dragging='true'] {
       opacity: 0.8;
     }
@@ -436,18 +482,74 @@ The project adopts a **Modified BEM Naming Convention**, cleverly sacrificing st
 }
 ```
 
+**Example 3: State Management**
+```scss
+.dropdown {
+  position: relative;
+  
+  &-menu {
+    // .dropdown-menu
+    position: absolute;
+    
+    &-item {
+      // .dropdown-menu-item (Sub-Element)
+      padding: 8px;
+      cursor: pointer;
+    }
+  }
+}
+
+.key_status {
+  padding: 10px;
+  
+  &[data-pressed='true'] {
+    // State managed via HTML attributes
+    color: white;
+  }
+}
+```
+
 #### HTML Usage Example
 
+**Using CSS Modules**:
 ```tsx
-<div className="image_upload">
-  <div className="image_upload_preview">
-    <img className="image_upload_preview_img" src="..." />
+import styles from './page.module.scss';
+
+// Example 1: Basic usage
+<div className={styles.section}>
+  <h2 className={styles['section-title']}>Title</h2>
+  <p className={styles['section-description']}>Description</p>
+  <div className={styles['section-content_box']}>
+    Content
   </div>
-  <div className="image_upload_mask" css-is-dragging="true">
+</div>
+
+// Example 2: Nested structure
+<div className={styles.image_upload}>
+  <div className={styles['image_upload-preview']}>
+    <img className={styles['image_upload-preview-img']} src="..." />
+  </div>
+  <div className={styles['image_upload-mask']} css-is-dragging="true">
     <p>Drop image here</p>
   </div>
 </div>
+
+// Example 3: Dropdown menu
+<div className={styles.dropdown}>
+  <div className={styles['dropdown-menu']}>
+    <div className={styles['dropdown-menu-item']}>Option 1</div>
+    <div className={styles['dropdown-menu-item']}>Option 2</div>
+  </div>
+</div>
 ```
+
+#### Key Principles
+
+1. **Each element uses only one className** - Don't combine multiple classes
+2. **All elements within a Block should be children of that Block** - Connected with hyphen `-`
+3. **Multiple semantic words within element names use underscore `_`** - e.g., `content_box`, `value_display`
+4. **States use HTML attributes** - e.g., `[css-is-active='true']`, `[data-pressed='true']`
+
 
 All components in this project follow these CSS conventions to ensure code style consistency.
 

@@ -73,7 +73,7 @@ export default function HooksTestPage() {
   }, isIntervalRunning ? 1000 : null);
 
   return (
-    <div className={styles.page}>
+    <div className={styles.hooks_test_page}>
       <h1>Hooks 測試頁面</h1>
       <p className={styles.description}>
         展示各種自訂 Hooks 的功能
@@ -83,13 +83,13 @@ export default function HooksTestPage() {
         
         {/* useWindowSize */}
         <div className={styles.section}>
-          <h2 className={styles.section_title}>useWindowSize</h2>
-          <p className={styles.section_description}>即時追蹤視窗尺寸</p>
-          <div className={styles.content_box}>
-            <div className={styles.value_display}>
+          <h2 className={styles['section-title']}>useWindowSize</h2>
+          <p className={styles['section-description']}>即時追蹤視窗尺寸</p>
+          <div className={styles['section-content_box']}>
+            <div className={styles['section-value_display']}>
               {width} x {height}
             </div>
-            <div className={styles.value_meta}>
+            <div className={styles['section-value_meta']}>
               調整視窗大小來測試
             </div>
           </div>
@@ -97,11 +97,11 @@ export default function HooksTestPage() {
 
         {/* useEventListener */}
         <div className={styles.section}>
-          <h2 className={styles.section_title}>useEventListener</h2>
-          <p className={styles.section_description}>簡化事件監聽器管理</p>
-          <div className={styles.content_box}>
-            <div className={styles.value_meta}>滑鼠位置:</div>
-            <div className={styles.value_display} style={{ fontSize: '20px' }}>
+          <h2 className={styles['section-title']}>useEventListener</h2>
+          <p className={styles['section-description']}>簡化事件監聽器管理</p>
+          <div className={styles['section-content_box']}>
+            <div className={styles['section-value_meta']}>滑鼠位置:</div>
+            <div className={styles['section-value_display']}>
               X: {mousePosition.x}, Y: {mousePosition.y}
             </div>
           </div>
@@ -109,8 +109,8 @@ export default function HooksTestPage() {
 
         {/* useClickOutside */}
         <div className={styles.section}>
-          <h2 className={styles.section_title}>useClickOutside</h2>
-          <p className={styles.section_description}>偵測點擊元素外部</p>
+          <h2 className={styles['section-title']}>useClickOutside</h2>
+          <p className={styles['section-description']}>偵測點擊元素外部</p>
           <div className={styles.dropdown}>
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -119,23 +119,23 @@ export default function HooksTestPage() {
               {isDropdownOpen ? '關閉' : '開啟'} 下拉選單
             </button>
             {isDropdownOpen && (
-              <div ref={dropdownRef} className={styles.dropdown_menu}>
-                <div className={styles.dropdown_item}>選項 1</div>
-                <div className={styles.dropdown_item}>選項 2</div>
-                <div className={styles.dropdown_item}>選項 3</div>
+              <div ref={dropdownRef} className={styles['dropdown-menu']}>
+                <div className={styles['dropdown-menu-item']}>選項 1</div>
+                <div className={styles['dropdown-menu-item']}>選項 2</div>
+                <div className={styles['dropdown-menu-item']}>選項 3</div>
               </div>
             )}
           </div>
-          <p className={styles.hint}>
+          <p className={styles['section-hint']}>
             點擊外部會自動關閉
           </p>
         </div>
 
         {/* useKeyPress */}
         <div className={styles.section}>
-          <h2 className={styles.section_title}>useKeyPress</h2>
-          <p className={styles.section_description}>監聽特定按鍵</p>
-          <div className={styles.flex_column}>
+          <h2 className={styles['section-title']}>useKeyPress</h2>
+          <p className={styles['section-description']}>監聽特定按鍵</p>
+          <div className={styles['section-flex_column']}>
             <div 
               className={styles.key_status}
               data-pressed={isEscapePressed ? 'true' : 'false'}
@@ -155,8 +155,8 @@ export default function HooksTestPage() {
 
         {/* useTimeout */}
         <div className={styles.section}>
-          <h2 className={styles.section_title}>useTimeout</h2>
-          <p className={styles.section_description}>延遲執行函數</p>
+          <h2 className={styles['section-title']}>useTimeout</h2>
+          <p className={styles['section-description']}>延遲執行函數</p>
           <button
             onClick={() => {
               setShowTimeoutMessage(false);
@@ -167,7 +167,7 @@ export default function HooksTestPage() {
             啟動 2 秒倒數
           </button>
           {showTimeoutMessage && (
-            <div className={styles.success_message}>
+            <div className={styles['section-success_message']}>
               ✅ 時間到了!
             </div>
           )}
@@ -175,31 +175,31 @@ export default function HooksTestPage() {
 
         {/* useInterval */}
         <div className={styles.section}>
-          <h2 className={styles.section_title}>useInterval</h2>
-          <p className={styles.section_description}>定時執行函數</p>
-          <div className={styles.flex_row}>
+          <h2 className={styles['section-title']}>useInterval</h2>
+          <p className={styles['section-description']}>定時執行函數</p>
+          <div className={styles['section-flex_row']}>
             <button
               onClick={() => setIsIntervalRunning(!isIntervalRunning)}
-              className={`${styles.button} ${isIntervalRunning ? styles.button_danger : styles.button_success}`}
+              className={isIntervalRunning ? styles.button_danger : styles.button_success}
             >
               {isIntervalRunning ? '暫停' : '開始'}
             </button>
             <button
               onClick={() => setCounter(0)}
-              className={`${styles.button} ${styles.button_neutral}`}
+              className={styles.button_neutral}
             >
               重置
             </button>
           </div>
-          <div className={styles.counter_display}>
+          <div className={styles['section-counter_display']}>
             {counter}
           </div>
         </div>
 
         {/* useThrottle */}
         <div className={styles.section}>
-          <h2 className={styles.section_title}>useThrottle</h2>
-          <p className={styles.section_description}>節流函數調用</p>
+          <h2 className={styles['section-title']}>useThrottle</h2>
+          <p className={styles['section-description']}>節流函數調用</p>
           <div
             onScroll={() => {
               setScrollCount(prev => prev + 1);
@@ -207,7 +207,7 @@ export default function HooksTestPage() {
             }}
             className={styles.scroll_test}
           >
-            <div className={styles.scroll_test_content}>
+            <div className={styles['scroll_test-content']}>
               <p>滾動測試</p>
               <p>正常: {scrollCount}</p>
               <p>節流 (500ms): {throttledScrollCount}</p>
@@ -217,43 +217,43 @@ export default function HooksTestPage() {
 
         {/* useLocalStorage */}
         <div className={styles.section}>
-          <h2 className={styles.section_title}>useLocalStorage</h2>
-          <p className={styles.section_description}>同步 localStorage</p>
+          <h2 className={styles['section-title']}>useLocalStorage</h2>
+          <p className={styles['section-description']}>同步 localStorage</p>
           <input
             type="text"
             value={localName}
             onChange={(e) => setLocalName(e.target.value)}
             placeholder="輸入名稱"
-            className={styles.input_field}
+            className={styles['section-input_field']}
           />
-          <p className={styles.hint}>
+          <p className={styles['section-hint']}>
             💡 打開另一個 tab 測試同步
           </p>
         </div>
 
         {/* useSessionStorage */}
         <div className={styles.section}>
-          <h2 className={styles.section_title}>useSessionStorage</h2>
-          <p className={styles.section_description}>同步 sessionStorage</p>
-          <div className={styles.flex_row}>
+          <h2 className={styles['section-title']}>useSessionStorage</h2>
+          <p className={styles['section-description']}>同步 sessionStorage</p>
+          <div className={styles['section-flex_row']}>
             <button
               onClick={() => setSessionData({ count: sessionData.count + 1 })}
               className={styles.button}
             >
               增加
             </button>
-            <span className={styles.value_display} style={{ fontSize: '20px' }}>{sessionData.count}</span>
+            <span className={styles['section-value_display']}>{sessionData.count}</span>
           </div>
-          <p className={styles.hint}>
+          <p className={styles['section-hint']}>
             💡 刷新頁面會保留
           </p>
         </div>
 
         {/* useMediaQuery */}
         <div className={styles.section}>
-          <h2 className={styles.section_title}>useMediaQuery</h2>
-          <p className={styles.section_description}>監聽 media query</p>
-          <div className={styles.flex_column}>
+          <h2 className={styles['section-title']}>useMediaQuery</h2>
+          <p className={styles['section-description']}>監聽 media query</p>
+          <div className={styles['section-flex_column']}>
             <div 
               className={styles.media_badge}
               data-active={isMobile ? 'true' : 'false'}

@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 
 import { useWebSocket } from '@/hooks/useWebSocket';
+import styles from './page.module.scss';
 
 export default function WebSocketPage(): React.ReactNode {
   const [messageList, setMessageList] = useState<unknown[]>([]);
@@ -67,7 +68,7 @@ export default function WebSocketPage(): React.ReactNode {
   };
 
   return (
-    <section>
+    <section className={styles.websocket_page}>
       <Typography variant="h5" gutterBottom>
         原生 WebSocket 測試
       </Typography>
@@ -136,9 +137,7 @@ export default function WebSocketPage(): React.ReactNode {
                 key={index}
                 sx={{ mb: 1, p: 1, bgcolor: 'grey.100', borderRadius: 1 }}
               >
-                <pre
-                  style={{ margin: 0, fontSize: 12, whiteSpace: 'pre-wrap' }}
-                >
+                <pre className={styles.message_list_content}>
                   {typeof msg === 'string' ? msg : JSON.stringify(msg, null, 2)}
                 </pre>
               </Box>

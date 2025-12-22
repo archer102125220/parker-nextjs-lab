@@ -385,8 +385,33 @@ const detection = await detectFace(img as unknown as faceApi.TNetInput);
 - **Element（元素）**: 使用單個連字符 `-` 連接 Block 與 Element，如 `.countdown-down_enter`、`.countdown-up_leave`
 - **Sub-Element（子元素）**: 使用單個連字符 `-` 連接父元素與子元素，元素名稱內部使用底線 `_` 分隔語義單詞，如：
   - `.countdown-down_enter-down_enter_up`
-  - `.image_upload_preview_img`
+  - `.image_upload-preview-img`
 - **狀態修飾**: 透過 HTML 屬性選擇器管理狀態，如 `[css-is-anime-start='true']`、`[css-is-active='true']`
+
+#### 根元素命名規範
+
+為了在瀏覽器開發工具中快速定位問題元素，專案採用以下根元素命名規範：
+
+- **頁面根元素**: 使用 `[頁面名稱]_page` 格式
+  - 例如：`.hooks_test_page`, `.socket_io_page`, `.web_rtc_page`
+- **組件根元素**: 使用 `[組件名]` 格式
+  - 例如：`.scroll_fetch`, `.image_upload`, `.countdown`
+
+**範例**：
+```scss
+// 頁面 SCSS (app/[locale]/hooks-test/page.module.scss)
+.hooks_test_page {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// 組件 SCSS (components/ScrollFetch/scroll_fetch.scss)
+.scroll_fetch {
+  position: relative;
+  width: 100%;
+}
+```
 
 #### 優勢
 
@@ -398,32 +423,53 @@ const detection = await detectFace(img as unknown as faceApi.TNetInput);
 
 #### 範例
 
+**範例 1: 基本 Block 與 Element**
 ```scss
-.countdown {
-  &-down_enter {
-    // .countdown-down_enter
-    &-down_enter_up {
-      // .countdown-down_enter-down_enter_up
-      &[css-is-anime-start='true'] {
-        animation: flip-up 1s;
-      }
-    }
+.section {
+  /* Block 樣式 */
+  padding: 20px;
+  background-color: #f5f5f5;
+  
+  &-title {
+    // .section-title (Element 用連字符 - 連接)
+    margin-top: 0;
+    font-size: 18px;
+  }
+  
+  &-description {
+    // .section-description
+    color: #666;
+    margin-bottom: 15px;
+  }
+  
+  &-content_box {
+    // .section-content_box (Element 名稱內部用底線 _ 分隔多個語義詞)
+    padding: 15px;
+    background: white;
   }
 }
+```
 
+**範例 2: Block 名稱有多個語義詞**
+```scss
 .image_upload {
-  &_preview {
-    // .image_upload_preview
-    &_img {
-      // .image_upload_preview_img
+  // Block 名稱內部用底線 _ 分隔
+  position: relative;
+  
+  &-preview {
+    // .image_upload-preview (用連字符 - 連接 Element)
+    width: 100%;
+    
+    &-img {
+      // .image_upload-preview-img (Sub-Element 再用連字符 - 連接)
       width: 100%;
       height: 100%;
       object-fit: contain;
     }
   }
   
-  &_mask {
-    // .image_upload_mask
+  &-mask {
+    // .image_upload-mask
     &[css-is-dragging='true'] {
       opacity: 0.8;
     }
@@ -431,18 +477,74 @@ const detection = await detectFace(img as unknown as faceApi.TNetInput);
 }
 ```
 
+**範例 3: 狀態管理**
+```scss
+.dropdown {
+  position: relative;
+  
+  &-menu {
+    // .dropdown-menu
+    position: absolute;
+    
+    &-item {
+      // .dropdown-menu-item (Sub-Element)
+      padding: 8px;
+      cursor: pointer;
+    }
+  }
+}
+
+.key_status {
+  padding: 10px;
+  
+  &[data-pressed='true'] {
+    // 使用 HTML 屬性管理狀態
+    color: white;
+  }
+}
+```
+
 #### HTML 使用範例
 
+**使用 CSS Modules**:
 ```tsx
-<div className="image_upload">
-  <div className="image_upload_preview">
-    <img className="image_upload_preview_img" src="..." />
+import styles from './page.module.scss';
+
+// 範例 1: 基本使用
+<div className={styles.section}>
+  <h2 className={styles['section-title']}>標題</h2>
+  <p className={styles['section-description']}>描述</p>
+  <div className={styles['section-content_box']}>
+    內容
   </div>
-  <div className="image_upload_mask" css-is-dragging="true">
+</div>
+
+// 範例 2: 多層結構
+<div className={styles.image_upload}>
+  <div className={styles['image_upload-preview']}>
+    <img className={styles['image_upload-preview-img']} src="..." />
+  </div>
+  <div className={styles['image_upload-mask']} css-is-dragging="true">
     <p>拖拉圖片到此</p>
   </div>
 </div>
+
+// 範例 3: 下拉選單
+<div className={styles.dropdown}>
+  <div className={styles['dropdown-menu']}>
+    <div className={styles['dropdown-menu-item']}>選項 1</div>
+    <div className={styles['dropdown-menu-item']}>選項 2</div>
+  </div>
+</div>
 ```
+
+#### 重要原則
+
+1. **每個元素只使用一個 className** - 不要組合多個類別
+2. **Block 內的所有元素都應該是 Block 的子元素** - 使用連字符 `-` 連接
+3. **Element 名稱內部的多個語義詞使用底線 `_`** - 如 `content_box`, `value_display`
+4. **狀態使用 HTML 屬性** - 如 `[css-is-active='true']`, `[data-pressed='true']`
+
 
 本專案所有組件都遵循這些 CSS 規範，確保代碼風格一致性。
 
