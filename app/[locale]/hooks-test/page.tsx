@@ -96,55 +96,55 @@ export default function HooksTestPage() {
         </div>
 
         {/* useEventListener */}
-        <div className={styles.section}>
-          <h2 className={styles['section-title']}>useEventListener</h2>
-          <p className={styles['section-description']}>簡化事件監聽器管理</p>
-          <div className={styles['section-content_box']}>
-            <div className={styles['section-value_meta']}>滑鼠位置:</div>
-            <div className={styles['section-value_display']}>
+        <div className={styles['hooks_test_page-section']}>
+          <h2 className={styles['hooks_test_page-section-title']}>useEventListener</h2>
+          <p className={styles['hooks_test_page-section-description']}>簡化事件監聽器管理</p>
+          <div className={styles['hooks_test_page-section-content_box']}>
+            <div className={styles['hooks_test_page-section-value_meta']}>滑鼠位置:</div>
+            <div className={styles['hooks_test_page-section-value_display']}>
               X: {mousePosition.x}, Y: {mousePosition.y}
             </div>
           </div>
         </div>
 
         {/* useClickOutside */}
-        <div className={styles.section}>
-          <h2 className={styles['section-title']}>useClickOutside</h2>
-          <p className={styles['section-description']}>偵測點擊元素外部</p>
-          <div className={styles.dropdown}>
+        <div className={styles['hooks_test_page-section']}>
+          <h2 className={styles['hooks_test_page-section-title']}>useClickOutside</h2>
+          <p className={styles['hooks_test_page-section-description']}>偵測點擊元素外部</p>
+          <div className={styles['hooks_test_page-dropdown']}>
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className={styles.button}
+              className={styles['hooks_test_page-button']}
             >
               {isDropdownOpen ? '關閉' : '開啟'} 下拉選單
             </button>
             {isDropdownOpen && (
-              <div ref={dropdownRef} className={styles['dropdown-menu']}>
-                <div className={styles['dropdown-menu-item']}>選項 1</div>
-                <div className={styles['dropdown-menu-item']}>選項 2</div>
-                <div className={styles['dropdown-menu-item']}>選項 3</div>
+              <div ref={dropdownRef} className={styles['hooks_test_page-dropdown-menu']}>
+                <div className={styles['hooks_test_page-dropdown-menu-item']}>選項 1</div>
+                <div className={styles['hooks_test_page-dropdown-menu-item']}>選項 2</div>
+                <div className={styles['hooks_test_page-dropdown-menu-item']}>選項 3</div>
               </div>
             )}
           </div>
-          <p className={styles['section-hint']}>
+          <p className={styles['hooks_test_page-section-hint']}>
             點擊外部會自動關閉
           </p>
         </div>
 
         {/* useKeyPress */}
-        <div className={styles.section}>
-          <h2 className={styles['section-title']}>useKeyPress</h2>
-          <p className={styles['section-description']}>監聽特定按鍵</p>
-          <div className={styles['section-flex_column']}>
+        <div className={styles['hooks_test_page-section']}>
+          <h2 className={styles['hooks_test_page-section-title']}>useKeyPress</h2>
+          <p className={styles['hooks_test_page-section-description']}>監聽特定按鍵</p>
+          <div className={styles['hooks_test_page-section-flex_column']}>
             <div 
-              className={styles.key_status}
+              className={styles['hooks_test_page-key_status']}
               data-pressed={isEscapePressed ? 'true' : 'false'}
               data-key="escape"
             >
               ESC: {isEscapePressed ? '按下' : '未按下'}
             </div>
             <div 
-              className={styles.key_status}
+              className={styles['hooks_test_page-key_status']}
               data-pressed={isEnterPressed ? 'true' : 'false'}
               data-key="enter"
             >
@@ -154,60 +154,60 @@ export default function HooksTestPage() {
         </div>
 
         {/* useTimeout */}
-        <div className={styles.section}>
-          <h2 className={styles['section-title']}>useTimeout</h2>
-          <p className={styles['section-description']}>延遲執行函數</p>
+        <div className={styles['hooks_test_page-section']}>
+          <h2 className={styles['hooks_test_page-section-title']}>useTimeout</h2>
+          <p className={styles['hooks_test_page-section-description']}>延遲執行函數</p>
           <button
             onClick={() => {
               setShowTimeoutMessage(false);
               setTimeoutDelay(2000);
             }}
-            className={styles.button}
+            className={styles['hooks_test_page-button']}
           >
             啟動 2 秒倒數
           </button>
           {showTimeoutMessage && (
-            <div className={styles['section-success_message']}>
+            <div className={styles['hooks_test_page-section-success_message']}>
               ✅ 時間到了!
             </div>
           )}
         </div>
 
         {/* useInterval */}
-        <div className={styles.section}>
-          <h2 className={styles['section-title']}>useInterval</h2>
-          <p className={styles['section-description']}>定時執行函數</p>
-          <div className={styles['section-flex_row']}>
+        <div className={styles['hooks_test_page-section']}>
+          <h2 className={styles['hooks_test_page-section-title']}>useInterval</h2>
+          <p className={styles['hooks_test_page-section-description']}>定時執行函數</p>
+          <div className={styles['hooks_test_page-section-flex_row']}>
             <button
               onClick={() => setIsIntervalRunning(!isIntervalRunning)}
-              className={isIntervalRunning ? styles.button_danger : styles.button_success}
+              className={isIntervalRunning ? styles['hooks_test_page-button_danger'] : styles['hooks_test_page-button_success']}
             >
               {isIntervalRunning ? '暫停' : '開始'}
             </button>
             <button
               onClick={() => setCounter(0)}
-              className={styles.button_neutral}
+              className={styles['hooks_test_page-button_neutral']}
             >
               重置
             </button>
           </div>
-          <div className={styles['section-counter_display']}>
+          <div className={styles['hooks_test_page-section-counter_display']}>
             {counter}
           </div>
         </div>
 
         {/* useThrottle */}
-        <div className={styles.section}>
-          <h2 className={styles['section-title']}>useThrottle</h2>
-          <p className={styles['section-description']}>節流函數調用</p>
+        <div className={styles['hooks_test_page-section']}>
+          <h2 className={styles['hooks_test_page-section-title']}>useThrottle</h2>
+          <p className={styles['hooks_test_page-section-description']}>節流函數調用</p>
           <div
             onScroll={() => {
               setScrollCount(prev => prev + 1);
               handleScroll();
             }}
-            className={styles.scroll_test}
+            className={styles['hooks_test_page-scroll_test']}
           >
-            <div className={styles['scroll_test-content']}>
+            <div className={styles['hooks_test_page-scroll_test-content']}>
               <p>滾動測試</p>
               <p>正常: {scrollCount}</p>
               <p>節流 (500ms): {throttledScrollCount}</p>
@@ -216,60 +216,60 @@ export default function HooksTestPage() {
         </div>
 
         {/* useLocalStorage */}
-        <div className={styles.section}>
-          <h2 className={styles['section-title']}>useLocalStorage</h2>
-          <p className={styles['section-description']}>同步 localStorage</p>
+        <div className={styles['hooks_test_page-section']}>
+          <h2 className={styles['hooks_test_page-section-title']}>useLocalStorage</h2>
+          <p className={styles['hooks_test_page-section-description']}>同步 localStorage</p>
           <input
             type="text"
             value={localName}
             onChange={(e) => setLocalName(e.target.value)}
             placeholder="輸入名稱"
-            className={styles['section-input_field']}
+            className={styles['hooks_test_page-section-input_field']}
           />
-          <p className={styles['section-hint']}>
+          <p className={styles['hooks_test_page-section-hint']}>
             💡 打開另一個 tab 測試同步
           </p>
         </div>
 
         {/* useSessionStorage */}
-        <div className={styles.section}>
-          <h2 className={styles['section-title']}>useSessionStorage</h2>
-          <p className={styles['section-description']}>同步 sessionStorage</p>
-          <div className={styles['section-flex_row']}>
+        <div className={styles['hooks_test_page-section']}>
+          <h2 className={styles['hooks_test_page-section-title']}>useSessionStorage</h2>
+          <p className={styles['hooks_test_page-section-description']}>同步 sessionStorage</p>
+          <div className={styles['hooks_test_page-section-flex_row']}>
             <button
               onClick={() => setSessionData({ count: sessionData.count + 1 })}
-              className={styles.button}
+              className={styles['hooks_test_page-button']}
             >
               增加
             </button>
-            <span className={styles['section-value_display']}>{sessionData.count}</span>
+            <span className={styles['hooks_test_page-section-value_display']}>{sessionData.count}</span>
           </div>
-          <p className={styles['section-hint']}>
+          <p className={styles['hooks_test_page-section-hint']}>
             💡 刷新頁面會保留
           </p>
         </div>
 
         {/* useMediaQuery */}
-        <div className={styles.section}>
-          <h2 className={styles['section-title']}>useMediaQuery</h2>
-          <p className={styles['section-description']}>監聽 media query</p>
-          <div className={styles['section-flex_column']}>
+        <div className={styles['hooks_test_page-section']}>
+          <h2 className={styles['hooks_test_page-section-title']}>useMediaQuery</h2>
+          <p className={styles['hooks_test_page-section-description']}>監聽 media query</p>
+          <div className={styles['hooks_test_page-section-flex_column']}>
             <div 
-              className={styles.media_badge}
+              className={styles['hooks_test_page-media_badge']}
               data-active={isMobile ? 'true' : 'false'}
               data-type="mobile"
             >
               📱 Mobile: {isMobile ? '是' : '否'}
             </div>
             <div 
-              className={styles.media_badge}
+              className={styles['hooks_test_page-media_badge']}
               data-active={isTablet ? 'true' : 'false'}
               data-type="tablet"
             >
               📱 Tablet: {isTablet ? '是' : '否'}
             </div>
             <div 
-              className={styles.media_badge}
+              className={styles['hooks_test_page-media_badge']}
               data-active={isDarkMode ? 'true' : 'false'}
               data-type="dark"
             >
