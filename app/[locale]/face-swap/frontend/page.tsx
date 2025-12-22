@@ -257,7 +257,7 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
   return (
     <section className={style.face_swap_frontend_page}>
       <Image
-        className={style.face_swap_frontend_page_banner}
+        className={style['face_swap_frontend_page-banner']}
         src="/img/icon/Next.jsLab.v.01.webp"
         alt="Face Swap Banner"
         width={800}
@@ -270,13 +270,13 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
         }}
       />
 
-      <Typography variant="h5" className={style.face_swap_frontend_page_title}>
+      <Typography variant="h5" className={style['face_swap_frontend_page-title']}>
         純前端人臉替換
       </Typography>
       <Typography
         variant="body2"
         color="text.secondary"
-        className={style.face_swap_frontend_page_subtitle}
+        className={style['face_swap_frontend_page-subtitle']}
       >
         使用瀏覽器端 face-api.js 進行即時人臉替換
       </Typography>
@@ -288,10 +288,10 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
       </Alert>
 
       {/* Face Swap Section */}
-      <div className={style.face_swap_frontend_page_swap_section}>
+      <div className={style['face_swap_frontend_page-swap_section']}>
         {/* Source Face */}
         <Paper
-          className={style.face_swap_frontend_page_swap_section_source}
+          className={style['face_swap_frontend_page-swap_section-source']}
           sx={{ p: 2 }}
         >
           <Typography variant="h6" gutterBottom align="center">
@@ -342,16 +342,16 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
 
         {/* Target Video */}
         <Paper
-          className={style.face_swap_frontend_page_swap_section_target}
+          className={style['face_swap_frontend_page-swap_section-target']}
           sx={{ p: 2 }}
         >
           <Typography variant="h6" gutterBottom align="center">
             目標畫面
           </Typography>
-          <div className={style.face_swap_frontend_page_swap_section_target_video_container}>
+          <div className={style['face_swap_frontend_page-swap_section-target-video_container']}>
             <video
               ref={videoRef}
-              className={style.face_swap_frontend_page_swap_section_target_video}
+              className={style['face_swap_frontend_page-swap_section-target-video']}
               width={480}
               height={360}
               autoPlay
@@ -366,7 +366,7 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
             />
             <canvas
               ref={overlayCanvasRef}
-              className={style.face_swap_frontend_page_swap_section_target_overlay}
+              className={style['face_swap_frontend_page-swap_section-target-overlay']}
               width={480}
               height={360}
             />
@@ -375,7 +375,7 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
 
         {/* Result */}
         <Paper
-          className={style.face_swap_frontend_page_swap_section_result}
+          className={style['face_swap_frontend_page-swap_section-result']}
           sx={{ p: 2 }}
         >
           <Typography variant="h6" gutterBottom align="center">
@@ -383,7 +383,7 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
           </Typography>
           <canvas
             ref={canvasRef}
-            className={style.face_swap_frontend_page_swap_section_result_canvas}
+            className={style['face_swap_frontend_page-swap_section-result-canvas']}
             width={480}
             height={360}
             style={{
@@ -397,7 +397,7 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
       </div>
 
       {/* Controls */}
-      <div className={style.face_swap_frontend_page_controls}>
+      <div className={style['face_swap_frontend_page-controls']}>
         <Button
           variant="contained"
           color="primary"
@@ -441,7 +441,7 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
       {statusMessage && (
         <Alert
           severity={statusType}
-          className={style.face_swap_frontend_page_status}
+          className={style['face_swap_frontend_page-status']}
           onClose={() => setStatusMessage('')}
         >
           {statusMessage}

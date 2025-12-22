@@ -20,25 +20,25 @@
         @extend %hidden;
     }
 
-    &_banner {
+    &-banner {
         width: 100%;
         max-width: 800px;
         margin-bottom: 16px;
         border-radius: 8px;
     }
 
-    &_title {
+    &-title {
         margin-bottom: 8px;
         font-weight: 700;
         text-align: center;
     }
 
-    &_subtitle {
+    &-subtitle {
         margin-bottom: 24px;
         text-align: center;
     }
 
-    &_swap_section {
+    &-swap_section {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 24px;
@@ -49,9 +49,9 @@
         background-color: rgba(0, 0, 0, 0.02);
         border-radius: 12px;
 
-        &_source,
-        &_target,
-        &_result {
+        &-source,
+        &-target,
+        &-result {
             display: flex;
             flex-direction: column;
 
@@ -62,22 +62,22 @@
             }
         }
 
-        &_target {
-            &_video_container {
+        &-target {
+            &-video_container {
                 position: relative;
                 width: 100%;
                 max-width: 480px;
                 margin: 0 auto;
             }
 
-            &_video,
-            &_overlay {
+            &-video,
+            &-overlay {
                 width: 100%;
                 height: auto;
                 border-radius: 8px;
             }
 
-            &_overlay {
+            &-overlay {
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -85,8 +85,8 @@
             }
         }
 
-        &_result {
-            &_canvas {
+        &-result {
+            &-canvas {
                 width: 100%;
                 height: auto;
                 border-radius: 8px;
@@ -95,7 +95,7 @@
         }
     }
 
-    &_controls {
+    &-controls {
         display: flex;
         flex-wrap: wrap;
         gap: 16px;
@@ -103,12 +103,12 @@
         margin-bottom: 24px;
     }
 
-    &_status {
+    &-status {
         max-width: 600px;
         width: 100%;
     }
 
-    &_panels {
+    &-panels {
         width: 100%;
         max-width: 1200px;
     }

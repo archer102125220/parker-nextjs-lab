@@ -22,7 +22,7 @@ export default function FaceSwapPage(): React.ReactNode {
   return (
     <section className={style.face_swap_page}>
       <Image
-        className={style.face_swap_page_banner}
+        className={style['face_swap_page-banner']}
         src="/img/icon/Next.jsLab.v.01.webp"
         alt="Face Swap Banner"
         width={800}
@@ -37,19 +37,19 @@ export default function FaceSwapPage(): React.ReactNode {
         priority
       />
 
-      <Typography variant="h4" className={style.face_swap_page_title}>
+      <Typography variant="h4" className={style['face_swap_page-title']}>
         AI 人臉替換
       </Typography>
       <Typography
         variant="body1"
         color="text.secondary"
-        className={style.face_swap_page_subtitle}
+        className={style['face_swap_page-subtitle']}
       >
         選擇實作版本
       </Typography>
 
-      <div className={style.face_swap_page_cards}>
-        <Card className={style.face_swap_page_cards_card}>
+      <div className={style['face_swap_page-cards']}>
+        <Card className={style['face_swap_page-cards-card']}>
           <CardContent>
             <Typography variant="h6" gutterBottom>
               <MonitorIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
@@ -70,9 +70,9 @@ export default function FaceSwapPage(): React.ReactNode {
           </CardActions>
         </Card>
 
-        <Card className={`${style.face_swap_page_cards_card} ${style['face_swap_page_cards_card--coming_soon']}`}>
+        <Card className={`${style['face_swap_page-cards-card']} ${style['face_swap_page-cards-card--coming_soon']}`}>
           <Chip
-            className={style.face_swap_page_cards_card_chip}
+            className={style['face_swap_page-cards-card-chip']}
             label="開發中"
             color="warning"
             size="small"

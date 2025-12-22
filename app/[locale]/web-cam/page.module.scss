@@ -1,12 +1,12 @@
 .web_cam_page {
     font-family: sans-serif;
 
-    &_banner {
+    &-banner {
         width: 100%;
         margin-bottom: 8px;
     }
 
-    &_error {
+    &-error {
         padding: 16px;
         margin: 16px 0;
 
@@ -17,7 +17,7 @@
         border-radius: 4px;
     }
 
-    &_video {
+    &-video {
         display: none;
         width: 480px;
         height: 360px;
@@ -27,7 +27,7 @@
         object-fit: contain;
     }
 
-    &_canvas {
+    &-canvas {
         display: block;
         width: 480px;
         height: 360px;
