@@ -1,3 +1,5 @@
+@use '@/styles/placeholders'as *;
+
 .lazyload_test_page {
     &_section {
         margin-bottom: 48px;
@@ -26,5 +28,40 @@
         &--gif {
             max-height: 300px;
         }
+    }
+
+    &-demo_section {
+        /* Display & Box Model */
+        margin-bottom: 40px;
+
+        &_title {
+            /* Display & Box Model */
+            margin-bottom: 16px;
+
+            /* Typography */
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        &_description {
+            /* Display & Box Model */
+            margin-bottom: 16px;
+
+            /* Typography */
+            color: #666;
+        }
+
+        &_image_container {
+            /* Display & Box Model */
+            margin-bottom: 20px;
+        }
+    }
+
+    // CSS Compliance Fix
+    &-demo_image {
+        @extend %image_responsive;
+
+        /* Display & Box Model */
+        max-width: 600px;
     }
 }

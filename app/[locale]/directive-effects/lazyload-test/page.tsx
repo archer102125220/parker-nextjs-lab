@@ -78,8 +78,7 @@ export default function LazyLoadTestPage(): React.ReactNode {
           alt="Next.js Image with built-in lazy loading"
           width={600}
           height={400}
-          className={style.lazyload_test_page_image}
-          style={{ width: '100%', height: 'auto', maxWidth: '600px' }}
+          className={style['lazyload_test_page-demo_image']}
         />
       </Box>
 
@@ -104,8 +103,7 @@ export default function LazyLoadTestPage(): React.ReactNode {
           alt="Next.js Image with useLazyLoad"
           width={600}
           height={400}
-          className={style.lazyload_test_page_image}
-          style={{ width: '100%', height: 'auto', maxWidth: '600px' }}
+          className={style['lazyload_test_page-demo_image']}
           unoptimized
         />
       </Box>
