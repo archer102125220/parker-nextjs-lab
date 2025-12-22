@@ -579,6 +579,45 @@ import styles from './page.module.scss';
 3. **Multiple semantic words within element names use underscore `_`** - e.g., `content_box`, `value_display`
 4. **States use HTML attributes** - e.g., `[css-is-active='true']`, `[data-pressed='true']`
 
+#### Inline Styles Exceptions
+
+While the project follows CSS modularization and BEM naming conventions, inline styles are allowed in the following cases:
+
+1. **MUI sx prop** - Material-UI's official styling method
+   ```tsx
+   // ✅ Allowed: MUI sx prop
+   <Box sx={{ padding: 2, marginBottom: 3 }}>
+   ```
+   > 💡 **Reason**: The `sx` prop is MUI's officially recommended styling method, supports the theme system, and doesn't require `!important` overrides
+
+2. **CSS Variable Passing** (including dynamic calculated values)
+   ```tsx
+   // ✅ Allowed: Passing static or dynamic values via CSS variables
+   <div style={{ '--editor-height': `${height}px` }}>
+   <div style={{ '--offset-y': `${offsetY}px` }}>
+   ```
+   > 💡 **Reason**: Implement dynamic values through CSS variables, keeping style logic in CSS and improving component flexibility
+   
+   ```scss
+   // Use CSS variables in SCSS
+   .element {
+     height: var(--editor-height);
+     transform: translateY(var(--offset-y));
+   }
+   ```
+
+3. **Third-party Library Requirements**
+   ```tsx
+   // ✅ Allowed: Google Tag Manager and other third-party requirements
+   <noscript style={{ display: 'none', visibility: 'hidden' }}>
+   ```
+
+**❌ Inline Styles to Avoid**:
+- Static style values (should use CSS classes)
+- Dynamic calculated values (should use CSS variable passing)
+- Predictable conditional styles (should use CSS attribute selectors)
+- Repeated style patterns (should extract as placeholders or mixins)
+
 
 All components in this project follow these CSS conventions to ensure code style consistency.
 

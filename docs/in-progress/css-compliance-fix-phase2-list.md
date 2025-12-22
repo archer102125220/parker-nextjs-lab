@@ -1,8 +1,22 @@
 # CSS Compliance Fix Phase 2 - 違規清單
 
 **建立日期**: 2025-12-22  
-**總違規數**: 193 個 `style={{` 實例  
-**分類狀態**: 進行中
+**更新日期**: 2025-12-22  
+**原始統計**: 205 個 `style={{` 實例  
+**實際需修復**: 約 75 個（排除 MUI sx prop, CSS 變數, 第三方庫）  
+**分類狀態**: ✅ 完成
+
+---
+
+## 📊 統計摘要
+
+| 類別 | 數量 | 狀態 |
+|------|------|------|
+| MUI sx prop | ~100 | ✅ 保留（官方方法） |
+| CSS 變數/動態值 | ~12 | ✅ 保留（合理使用） |
+| 第三方庫要求 | ~1 | ✅ 保留（GTM） |
+| 已完成修復 | 17 | ✅ 完成 |
+| **剩餘需修復** | **~75** | 🔄 進行中 |
 
 ---
 
@@ -10,20 +24,25 @@
 
 ### ✅ 合理使用（無需修復）
 
-**CSS 變數傳遞** - 保留
+**CSS 變數傳遞**（包含動態計算值）- 保留
 - `components/WangEditor/index.tsx:113` - `'--editor-height'` CSS 變數
 - `components/SlideInPanel/index.tsx:121` - CSS 變數傳遞
 - `components/PhoneInput/index.tsx:204` - CSS 變數傳遞
 - `components/Banner/index.tsx:184` - CSS 變數傳遞
 - `components/Countdown/index.tsx` (4 處) - CSS 變數傳遞
-
-**動態計算值** - 保留
-- `components/VirtualScroller/index.tsx:77` - `translateY(${offsetY}px)` 動態位移
-- `components/VirtualScroller/index.tsx:85` - `height: ${itemHeight}px` 動態高度
+- `components/VirtualScroller/index.tsx:77` - `--offset-y: ${offsetY}px` 動態位移
+- `components/VirtualScroller/index.tsx:85` - `--item-height: ${itemHeight}px` 動態高度
 - `components/Tabs/Bar.tsx:636` - 動態標籤位置
+> 💡 **原則**：所有動態計算值都應透過 CSS 變數傳遞，而非直接內聯樣式
 
 **第三方庫要求** - 保留
 - `components/Google/GTMInit.tsx:44` - GTM 隱藏容器（Google 要求）
+
+**MUI sx prop** - 保留（官方樣式方法）
+- 所有 Material-UI 組件的 `sx` prop 使用
+- 範例：`<Box sx={{ p: 2 }}>`, `<Typography sx={{ color: 'text.secondary' }}>`
+- 原因：MUI 官方推薦方法，支持主題系統，不需要 `!important`
+- 估計實例數：100+ 個（全部保留）
 
 ### ❌ 需要修復（靜態樣式）
 
