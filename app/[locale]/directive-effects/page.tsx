@@ -54,7 +54,7 @@ export default function DirectiveEffectsPage(): React.ReactNode {
           <Link
             key={link.path}
             href={link.path}
-            style={{ textDecoration: 'none' }}
+            className={styles['directive_effects_page-link']}
           >
             <Card className={styles['directive_effects_page-content-card']}>
               <CardActionArea>

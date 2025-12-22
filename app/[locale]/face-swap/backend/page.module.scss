@@ -1,3 +1,6 @@
+// Face Swap Backend Page Styles
+@use '@/styles/placeholders'as *;
+
 .face_swap_backend_page {
     display: flex;
     flex-direction: column;
@@ -60,6 +63,11 @@
         gap: 16px;
         justify-content: center;
         margin-bottom: 24px;
+    }
+
+    // CSS Compliance Fix
+    &-hidden_input {
+        @extend %hidden;
     }
 
     &_result {

@@ -37,7 +37,7 @@ export default function RouteTestPage(): React.ReactNode {
 
       <nav className={styles['route_test_page-content']} role="navigation">
         {LINK_LIST.map((link) => (
-          <Link key={link.to} href={link.to} style={{ textDecoration: 'none' }}>
+          <Link key={link.to} href={link.to} className={styles['route_page-link']}>
             <Card className={styles['route_test_page-content-link']}>
               <CardActionArea>
                 <CardContent>

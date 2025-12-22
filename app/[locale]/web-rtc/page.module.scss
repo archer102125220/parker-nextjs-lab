@@ -1,3 +1,5 @@
+@use '@/styles/placeholders'as *;
+
 .web_rtc_page {
     &-option_link {
         @extend %flex;
