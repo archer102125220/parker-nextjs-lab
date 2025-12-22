@@ -380,6 +380,8 @@ The project follows mainstream CSS property ordering standards to ensure code co
 }
 ```
 
+> 💡 **Note**: In actual development, to keep code concise, you typically don't need to add comments before each property category. Comments are only recommended in complex styles to improve readability.
+
 ### CSS Naming Convention
 
 The project adopts a **Modified BEM Naming Convention**, cleverly sacrificing standard BEM's visual symbols (`__`) for better double-click selection efficiency in development tools, while maintaining CSS specificity and state management semantic integrity through SCSS concatenation and HTML attributes.
@@ -451,6 +453,134 @@ To quickly identify problematic elements in browser dev tools, the project uses 
 .hooks_test_page { }
 .description { }
 .grid { }
+```
+
+---
+
+### SCSS Placeholders Style Reuse
+
+The project uses **SCSS Placeholders (`%name`)** to achieve style reuse, reducing code duplication and improving maintainability.
+
+#### Why Use Placeholders?
+
+1. ✅ **Reduce Duplication** - Multiple selectors can inherit the same styles
+2. ✅ **Improve Maintainability** - Modify once, affect all inheriting locations
+3. ✅ **Better Organization** - Centralize shared styles
+4. ✅ **Responsive Support** - Placeholders can use mixins
+
+#### Usage Examples
+
+**Defining Placeholders**:
+```scss
+// Define at the top of component or page <style> block
+%data_block {
+  padding: 40px;
+  text-align: center;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+%section_title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 20px 0;
+
+  @include tablet {
+    font-size: 20px;
+  }
+  @include mobile {
+    font-size: 18px;
+  }
+}
+
+%data_field {
+  padding: 16px;
+  text-align: left;
+
+  @include tablet {
+    padding: 12px 8px;
+  }
+  @include mobile {
+    padding: 8px 4px;
+  }
+}
+```
+
+**Using Placeholders**:
+```scss
+.index_page {
+  &-list_section {
+    &-section_title {
+      @extend %section_title;  // Inherit shared styles
+    }
+
+    &-loading {
+      @extend %data_block;     // Inherit shared styles
+      background-color: #e3f2fd;
+      color: #1976d2;
+    }
+
+    &-error {
+      @extend %data_block;     // Inherit shared styles
+      background-color: #ffebee;
+      color: #c62828;
+    }
+
+    &-table {
+      &-header {
+        @extend %data_field;   // Inherit shared styles
+        font-weight: 600;
+        color: #ffffff;
+      }
+
+      &-cell {
+        @extend %data_field;   // Inherit shared styles
+        color: #e1e1e1;
+      }
+    }
+  }
+}
+```
+
+#### Placeholders vs Mixins
+
+**When to Use Placeholders**:
+- ✅ Multiple selectors need exactly the same styles
+- ✅ Styles don't need parameters (static styles)
+- ✅ Want to reduce CSS output size (selectors are merged)
+
+**When to Use Mixins**:
+- ✅ Need parameterized styles
+- ✅ Need customization based on usage
+- ✅ Need conditional logic in styles
+
+**Mixins Example** (Responsive Design):
+```scss
+// assets/css/mixin.scss
+@mixin mobile {
+  @media (max-width: 707px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: 1140px) {
+    @content;
+  }
+}
+
+// Usage
+.index_page {
+  padding: 20px;
+
+  @include tablet {
+    padding: 12px;
+  }
+  @include mobile {
+    padding: 8px;
+  }
+}
 ```
 
 ---
