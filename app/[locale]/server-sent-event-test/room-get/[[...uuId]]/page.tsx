@@ -245,7 +245,7 @@ export default function SSETestRoomGetPage(): React.ReactNode {
         </Typography>
         <div className={styles['sse_room_get_page-messages']}>
           {messageList.length === 0 ? (
-            <div className={styles['sse_room_get_page-messages_empty']}>
+            <div className={styles['sse_room_get_page-messages-empty']}>
               <Typography variant="body1" sx={{ mb: 1 }}>
                 尚無訊息
               </Typography>
@@ -257,7 +257,7 @@ export default function SSETestRoomGetPage(): React.ReactNode {
             messageList.map((msg, index) => (
               <div
                 key={index}
-                className={styles['sse_room_get_page-messages_item']}
+                className={styles['sse_room_get_page-messages-item']}
               >
                 <Typography 
                   variant="caption" 

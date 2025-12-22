@@ -27,7 +27,7 @@
     &-message_list {
         @extend %message_list;
 
-        &_item {
+        &-item {
             @extend %message_list_item;
         }
     }
@@ -56,11 +56,11 @@
     &-messages {
         @extend %message_container;
 
-        &_empty {
+        &-empty {
             @extend %message_empty_state;
         }
 
-        &_item {
+        &-item {
             @extend %message_item;
         }
     }

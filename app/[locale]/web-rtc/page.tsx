@@ -59,9 +59,9 @@ export default function WebRTCPage(): React.ReactNode {
         WebRTC 的實作測試，主要分為以下兩種 Signaling 方式：
       </Typography>
 
-      <nav className={style.web_rtc_page_content} role="navigation">
+      <nav className={style['web_rtc_page-content']} role="navigation">
         {linkList.map((link) => (
-          <Card key={link.to} className={style.web_rtc_page_content_link}>
+          <Card key={link.to} className={style['web_rtc_page-content-link']}>
             <CardActionArea component={Link} href={link.to}>
               <CardContent>
                 <Typography variant="h6" gutterBottom>

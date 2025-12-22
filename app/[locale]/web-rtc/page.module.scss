@@ -22,7 +22,7 @@
         transition: background-color 0.3s;
     }
 
-    &_description {
+    &-description {
         margin-bottom: 16px;
     }
 
@@ -31,13 +31,13 @@
         @extend %image_banner;
     }
 
-    &_content {
+    &-content {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         gap: 16px;
 
-        &_link {
+        &-link {
             flex: 1;
             flex-basis: 200px;
             min-width: 200px;
