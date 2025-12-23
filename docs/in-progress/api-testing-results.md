@@ -381,12 +381,12 @@ curl -X POST http://localhost:3001/api/web-authn/generate-challenge \
 ## 測試進度統計
 
 ### 整體進度
-- **總 API 數**: 30+
-- **已測試**: 0
-- **測試通過**: 0
+- **總 API 數**: 35+
+- **已測試**: 9
+- **測試通過**: 9
 - **測試失敗**: 0
-- **待測試**: 30+
-- **完成率**: 0%
+- **待測試**: 26+
+- **完成率**: ~26%
 
 ### 各類別進度
 | 類別 | 總數 | 已測試 | 通過 | 失敗 | 待測試 |
@@ -396,9 +396,9 @@ curl -X POST http://localhost:3001/api/web-authn/generate-challenge \
 | FIDO2 | 3 | 0 | 0 | 0 | 3 |
 | Firebase Admin | 7 | 0 | 0 | 0 | 7 |
 | Face Swap | 1 | 0 | 0 | 0 | 1 |
-| SSE | 3 | 0 | 0 | 0 | 3 |
-| WebRTC | 4 | 0 | 0 | 0 | 4 |
-| Socket.IO | 1 | 0 | 0 | 0 | 1 |
+| SSE | 4 | 4 | 4 | 0 | 0 |
+| WebRTC | 4 | 4 | 4 | 0 | 0 |
+| Socket.IO | 1 | 1 | 1 | 0 | 0 |
 | 測試用 | 3 | 0 | 0 | 0 | 3 |
 
 ---
@@ -429,4 +429,6 @@ curl -X POST http://localhost:3001/api/web-authn/generate-challenge \
 
 ## 更新日誌
 
+- 2025-12-23: 更新測試進度統計，SSE、WebRTC、Socket.IO 測試已完成
+- 2025-12-21: 更新 SSE 和 WebRTC API 測試狀態，標記為已實作
 - 2025-12-19: 建立 API 測試結果文件，列出所有待測試的 API

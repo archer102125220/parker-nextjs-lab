@@ -1,7 +1,7 @@
 # 簡化實作清單 (Simplified Implementation Notes)
 
 > 本文件記錄哪些頁面/組件是以簡化方式實作，需要後續完善。
-> 更新日期: 2025-12-19
+> 更新日期: 2025-12-23
 
 ---
 
@@ -66,9 +66,9 @@
 | ✅ face-api.js | 已安裝 | `face-api.js@0.22.2` |
 | ✅ canvas | 已安裝 | Node canvas 支援 |
 | ✅ AI 模型檔案 | 已複製 | `/public/ai_models/` (18個檔案) |
-| ✅ 後端 API | v3.0 完成 | `/api/face-swap/process` - face-api.js + canvas 實作 |
+| ✅ 後端 API | **v3.0 已完成** | `/api/face-swap/process` - face-api.js + canvas 實作 |
 | ✅ 前端換臉 | 已完成 | 基本 Canvas 融合 |
-| ✅ 後端換臉 | 已實作 | **與 Nuxt 版本相同** - face-api.js 自動偵測 + 橢圓遮罩融合 |
+| ✅ 後端換臉 | **已完成** | **與 Nuxt 版本相同** - face-api.js 自動偵測 + 橢圓遮罩融合 |
 
 **後端 API v3.0 特性** (2025-12-19 - 匹配 parker-nuxt-lab):
 - ✅ 使用 face-api.js 自動偵測人臉（無需前端提供座標）
@@ -132,11 +132,11 @@
 1. ✅ 安裝 `face-api.js` 套件
 2. ✅ 複製 AI 模型檔案到 `/public/ai_models/`
 3. ✅ 建立 WebRTC Signaling API (SSE 版)
-4. 🔄 測試所有已轉換的 API endpoints
-5. 🔄 決定 Socket.IO 部署方案
+4. ✅ 建立 Face Swap 後端 API (face-api.js + canvas)
+5. 🔄 測試所有已轉換的 API endpoints
+6. 🔄 決定 Socket.IO 部署方案（已決策：使用 SSE 替代）
 
 ### 中優先 (功能完善)
-6. 建立 Face Swap 後端 API (TensorFlow.js Node)
 7. 整合 Socket.IO/WebSocket 房間頁面使用 SSE Signaling
 8. WebAuthn 憑證持久化儲存
 9. 補齊缺失的 Nuxt Server APIs
@@ -156,16 +156,13 @@
 1. **Socket.IO 整合**
    - 目前僅有前端 UI，無實際功能
    - 需要決定使用 SSE 替代或部署獨立伺服器
+   - ✅ **已決策**: 使用 SSE 替代（已完整實作）
 
-2. **Face Swap 後端**
-   - 目前僅有前端簡單實作
-   - 需要完整的後端處理邏輯
-
-3. **測試覆蓋率**
+2. **測試覆蓋率**
    - 目前幾乎沒有單元測試
    - 需要補充核心組件和 hooks 的測試
 
-4. **API 文件**
+3. **API 文件**
    - 缺少完整的 API 使用文件
    - 需要撰寫 API 規格和範例
 

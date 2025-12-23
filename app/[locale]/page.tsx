@@ -68,6 +68,9 @@ async function Locale(): Promise<ReactNode> {
         <LinkButton href="/route" nonce={nonce}>
           路由測試
         </LinkButton>
+        <LinkButton href="/about" nonce={nonce}>
+          關於本站
+        </LinkButton>
       </Box>
     </DefaultLayout>
   );

@@ -1,117 +1,87 @@
-'use client';
-
-import { useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
+import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import Image from 'next/image';
-import { useLocale } from 'next-intl';
-import { Skeleton, Alert } from '@mui/material';
 
+import { DefaultLayout } from '@/layout/default';
 import styles from './page.module.scss';
+import { ABOUT_CONTENT_DATA_ZH, ABOUT_CONTENT_DATA_EN, type Section } from './data';
 
-interface DescriptionItem {
-  text: string;
-  isDel?: boolean;
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: '關於本站',
+    description: 'Parker Next.js Lab - 關於本站'
+  };
 }
 
-interface Section {
-  title: string;
-  description?: DescriptionItem[];
-  listItemList?: string[];
+interface AboutPageProps {
+  params: Promise<{ locale: string }>;
 }
 
-export default function AboutPage(): React.ReactNode {
-  const locale = useLocale();
-  const [data, setData] = useState<Section[] | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchAboutContent = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`/api/about-content?locale=${locale}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch content');
-        }
-        const result = await response.json();
-        setData(result);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAboutContent();
-  }, [locale]);
+export default async function AboutPage(props: AboutPageProps): Promise<ReactNode> {
+  const { locale } = await props.params;
+  const nonce = (await headers()).get('x-nonce') || '';
+  
+  // Get content based on locale
+  const data: Section[] = locale === 'en' ? ABOUT_CONTENT_DATA_EN : ABOUT_CONTENT_DATA_ZH;
 
   return (
-    <section className={styles.about_page}>
-      <Image
-        className={styles['about_page-banner']}
-        src="/img/about/about-v.10.webp"
-        alt="About Banner"
-        width={1200}
-        height={400}
-        style={{
-          width: '100%',
-          height: 'auto',
-          maxHeight: '400px',
-          objectFit: 'cover'
-        }}
-        priority
-      />
+    <DefaultLayout nonce={nonce}>
+      <section className={styles.about_page}>
+        <Image
+          className={styles['about_page-banner']}
+          src="/img/icon/Next.jsLab.v.01.webp"
+          alt="About Banner"
+          width={1200}
+          height={400}
+          style={{
+            width: '100%',
+            height: 'auto',
+            maxHeight: '400px',
+            objectFit: 'cover'
+          }}
+          priority
+        />
 
-      {loading && (
-        <div className={styles['about_page-skeleton']}>
-          <Skeleton variant="text" height={40} width="60%" />
-          <Skeleton variant="text" height={24} width="80%" />
-          <Skeleton variant="rectangular" height={100} />
-          <Skeleton variant="text" height={24} width="70%" />
-          <Skeleton variant="text" height={24} width="90%" />
-          <Skeleton variant="rectangular" height={80} />
-        </div>
-      )}
+        {data.length === 0 ? (
+          <div className={styles['about_page-error']}>
+            <p>無法載入內容，請稍後再試。</p>
+          </div>
+        ) : (
+          <>
+            {data.map((section, index) => (
+              <section key={index} className={styles['about_page-section']}>
+                <h2 className={styles['about_page-section-sub_title']}>{section.title}</h2>
 
-      {error && (
-        <Alert severity="error" className={styles['about_page-error']}>
-          無法載入內容：{error}
-        </Alert>
-      )}
+                {section.description && (
+                  <div className={styles['about_page-section-description']}>
+                    {section.description.map((descItem, descIndex) =>
+                      descItem.isDel ? (
+                        <del key={descIndex}>{descItem.text}</del>
+                      ) : (
+                        <p key={descIndex}>{descItem.text}</p>
+                      )
+                    )}
+                  </div>
+                )}
 
-      {!loading && !error && data && (
-        <>
-          {data.map((section, index) => (
-            <section key={index} className={styles['about_page-section']}>
-              <h2 className={styles['about_page-section-sub_title']}>{section.title}</h2>
-
-              {section.description && (
-                <div className={styles['about_page-section-description']}>
-                  {section.description.map((descItem, descIndex) =>
-                    descItem.isDel ? (
-                      <del key={descIndex}>{descItem.text}</del>
-                    ) : (
-                      <p key={descIndex}>{descItem.text}</p>
-                    )
-                  )}
-                </div>
-              )}
-
-              {Array.isArray(section.listItemList) && (
-                <ul className={styles['about_page-section-list']}>
-                  {section.listItemList.map((item, itemIndex) => (
-                    <li
-                      key={itemIndex}
-                      className={styles['about_page-section-list-item']}
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </section>
-          ))}
-        </>
-      )}
-    </section>
+                {Array.isArray(section.listItemList) && (
+                  <ul className={styles['about_page-section-list']}>
+                    {section.listItemList.map((item, itemIndex) => (
+                      <li
+                        key={itemIndex}
+                        className={styles['about_page-section-list-item']}
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            ))}
+          </>
+        )}
+      </section>
+    </DefaultLayout>
   );
 }

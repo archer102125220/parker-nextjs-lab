@@ -1,6 +1,7 @@
 'use client';
 import type { ReactNode } from 'react';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 import { Box, Typography, BoxProps } from '@mui/material';
 import { useAppSelector } from '@/store';
@@ -12,7 +13,6 @@ interface FooterProps extends BoxProps {
 }
 
 export function Footer(props: FooterProps): ReactNode {
-  // const { nonce, ...boxProps } = props;
   const { nonce: _nonce, ...boxProps } = props;
 
   const nonce = useAppSelector<string>((state) => state.system.nonce);
@@ -23,7 +23,7 @@ export function Footer(props: FooterProps): ReactNode {
 
   useEffect(() => {
     if (typeof nonce === 'string' && nonce !== '') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       setClientNonce(nonce);
     }
   }, [nonce]);
@@ -51,12 +51,23 @@ export function Footer(props: FooterProps): ReactNode {
           align="center"
           className="footer-text"
           nonce={clientNonce}
+          sx={{ mb: 1 }}
         >
           © {new Date().getFullYear()} {systemName}
+        </Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          align="center"
+          className="footer-links"
+          nonce={clientNonce}
+        >
+          <Link href="/about" style={{ color: 'inherit', textDecoration: 'underline' }}>
+            關於本站
+          </Link>
         </Typography>
       </div>
     </Box>
   );
 }
 export default Footer;
-

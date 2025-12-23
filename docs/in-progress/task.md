@@ -4,8 +4,8 @@
 
 - **開始日期 (Start Date)**: 2025-12-13
 - **目標完成日期 (Target Completion)**: 2025-12-31
-- **當前階段 (Current Phase)**: Phase 7 - API Routes 🔄 進行中
-- **整體進度 (Overall Progress)**: ~96% (Phase 0-6: ✅ | Phase 7: 17/35+ 🔄 | Phase 8-9: 待開始)
+- **當前階段 (Current Phase)**: Phase 7 - API Routes 🔄 進行中 | CSS Compliance Fix Phase 2 🔄 進行中
+- **整體進度 (Overall Progress)**: ~96% (Phase 0-6: ✅ | Phase 7: 17/35+ 🔄 | CSS Phase 2: 17/75 🔄 | Phase 8-9: 待開始)
 
 ---
 
@@ -658,6 +658,51 @@
 
 ---
 
+## Phase 7.5: CSS Compliance Fix Phase 2 (CSS 標準合規性修復 Phase 2) [17/75] 🔄
+
+> **目標**: 移除專案中剩餘的靜態內聯樣式，轉換為符合 BEM 規範的 CSS 類別或 CSS 變數
+
+### 已完成工作 (Completed) [17/17] ✅
+
+#### 全域 Placeholders 建立
+- [x] 添加 Flexbox 布局 placeholders (`%flex_row`, `%flex_row_between`, etc.)
+- [x] 添加 Message 顯示 placeholders (`%message_container`, `%message_item`, etc.)
+- [x] 添加工具類別 placeholders (`%hidden`, `%no_text_decoration`, `%image_banner`)
+
+#### SSE Room 頁面修復
+- [x] `room-post/[[...uuId]]/page.tsx` - 8 個內聯樣式 → BEM 類別
+- [x] `room-get/[[...uuId]]/page.tsx` - 8 個內聯樣式 → BEM 類別
+
+#### WebRTC 頁面修復
+- [x] `web-rtc/page.tsx` - banner 圖片樣式 → BEM 類別
+
+### 剩餘工作 (Remaining) [0/58]
+
+#### 階段 2.2: 簡單修復 (推薦優先) [0/8]
+- [ ] LazyLoad 測試圖片 (2 個)
+- [ ] Image 組件樣式標準化 (6 個)
+
+#### 階段 2.3: 隱藏輸入和 Link 裝飾 [0/5]
+- [ ] 隱藏輸入 (3 個)
+- [ ] Link 裝飾 (2 個)
+
+#### 階段 2.4: 測試頁面靜態樣式 [0/20]
+- [ ] Swiper 測試頁面 (~10 個)
+- [ ] YouTube 測試頁面 (~10 個)
+
+#### 階段 2.5: Video/Canvas 元素 [0/7]
+- [ ] Face Swap 頁面 (3 個)
+- [ ] WebRTC Room 頁面 (4 個)
+
+#### 階段 2.6: 條件樣式 (低優先級) [0/21]
+- [ ] 基於狀態的動態樣式
+
+### 參考文檔
+- [CSS Compliance Fix Phase 2 List](file:///c:/Users/User/Desktop/code/parker-nextjs-lab/docs/in-progress/css-compliance-fix-phase2-list.md)
+- [CSS Compliance Fix Phase 2 Roadmap](file:///c:/Users/User/Desktop/code/parker-nextjs-lab/docs/in-progress/css-compliance-fix-phase2-roadmap.md)
+
+---
+
 ## Phase 8: 測試與優化 (Testing & Optimization) [0/15]
 
 ### Unit Testing [0/5]
@@ -766,10 +811,17 @@
 - ✅ **保留**: 客戶端 hooks 和 UI (可連接外部 Socket.IO 伺服器)
 - 📝 **說明**: 如需 Socket.IO，請部署獨立伺服器 (Railway/Render 等)
 
-#### 3. Face Swap 後端實作
-- [ ] 研究 `@tensorflow/tfjs-node` 在 Next.js 中的使用
-- [ ] 實作完整的人臉交換後端邏輯
-- [ ] 優化處理效能
+#### 3. Face Swap 後端實作 ✅ 已完成
+- [x] 研究 `face-api.js` 在 Next.js 中的使用
+- [x] 實作完整的人臉交換後端邏輯（v3.0）
+- [x] 優化處理效能
+
+#### 4. CSS Compliance Fix Phase 2 🔄 進行中
+- [x] 完成階段 2.1（17 個內聯樣式已移除）
+- [ ] 執行階段 2.2: 簡單修復（8 個）
+- [ ] 執行階段 2.3: 工具類別（5 個）
+- [ ] 執行階段 2.4: 測試頁面（20 個）
+- [ ] 執行階段 2.5: Video/Canvas（7 個）
 
 ### 🟡 中優先級 (Medium Priority)
 
