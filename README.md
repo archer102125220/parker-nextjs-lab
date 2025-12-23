@@ -839,8 +839,16 @@ parker-nextjs-lab/
   @extend %flex;                    // Use placeholder
   @include flex-layout(16px);       // Use mixin
   
-  &_item {
+  &-item {
     @extend %text_primary;
+
+    &-item_title {
+      //  style
+    }
+  }
+
+  &-title {
+    //  style
   }
 }
 ```

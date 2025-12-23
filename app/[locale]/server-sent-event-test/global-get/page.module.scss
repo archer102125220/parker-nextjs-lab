@@ -1,24 +1,24 @@
 // SSE Global Get Page Styles
-@use '@/styles/placeholders'as *;
-@use '@/styles/mixin'as *;
+@use '@/styles/placeholders' as *;
+@use '@/styles/mixin' as *;
 
 .sse_global_get_page {
-    @extend %test_page;
+  @extend %test_page;
 
-    &-controls {
-        @extend %flex;
-        @extend %flex_gap_16;
-        @extend %flex_center;
+  &-controls {
+    @extend %flex;
+    @extend %flex_gap_16;
+    @extend %flex_center;
 
-        /* Display & Box Model */
-        margin-bottom: 16px;
+    /* Display & Box Model */
+    margin-bottom: 16px;
+  }
+
+  &-message_list {
+    @extend %message_list;
+
+    &-item {
+      @extend %message_list_item;
     }
-
-    &-message_list {
-        @extend %message_list;
-
-        &_item {
-            @extend %message_list_item;
-        }
-    }
+  }
 }

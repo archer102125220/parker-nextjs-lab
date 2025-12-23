@@ -833,8 +833,16 @@ parker-nextjs-lab/
   @extend %flex;                    // 使用 placeholder
   @include flex-layout(16px);       // 使用 mixin
   
-  &_item {
+  &-item {
     @extend %text_primary;
+
+    &-item_title {
+      //  style
+    }
+  }
+
+  &-title {
+    //  style
   }
 }
 ```
