@@ -65,20 +65,20 @@ export function Tabs({
   const [showFirstShadow, setShowFirstShadow] = useState(false);
   const [showLastShadow, setShowLastShadow] = useState(false);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-  const [hoverIndicatorStyle, setHoverIndicatorStyle] = useState({ 
-    left: 0, 
+  const [hoverIndicatorStyle, setHoverIndicatorStyle] = useState({
+    left: 0,
     top: 0,
     width: 0,
     height: 0,
     opacity: 0
   });
-  const [indicatorStyle, setIndicatorStyle] = useState({ 
-    left: 0, 
+  const [indicatorStyle, setIndicatorStyle] = useState({
+    left: 0,
     top: 0,
     width: 0,
     height: 0
   });
-  
+
   // Refs for DOM elements
   const tabsContainerRef = useRef<HTMLDivElement>(null);
   const tabsListRef = useRef<HTMLDivElement>(null);
@@ -86,153 +86,169 @@ export function Tabs({
 
   const handleTabClick = (tabValue: string | number, index: number) => {
     if (tabs[index]?.disabled) return;
-    
+
     setActiveTab(tabValue);
     onChange?.(tabValue, index);
-    
+
     // Scroll active tab into view
     scrollToTab(index);
   };
 
   // Ripple effect handler
-  const handleRipple = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ripple) return;
-    
-    const button = e.currentTarget;
-    const rippleElement = document.createElement('span');
-    const rect = button.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height);
-    const x = e.clientX - rect.left - size / 2;
-    const y = e.clientY - rect.top - size / 2;
-    
-    rippleElement.style.width = rippleElement.style.height = `${size}px`;
-    rippleElement.style.left = `${x}px`;
-    rippleElement.style.top = `${y}px`;
-    rippleElement.style.backgroundColor = rippleColor;
-    rippleElement.classList.add('tabs-ripple');
-    
-    button.appendChild(rippleElement);
-    
-    setTimeout(() => {
-      rippleElement.remove();
-    }, 600);
-  }, [ripple, rippleColor]);
+  const handleRipple = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!ripple) return;
+
+      const button = e.currentTarget;
+      const rippleElement = document.createElement('span');
+      const rect = button.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      const x = e.clientX - rect.left - size / 2;
+      const y = e.clientY - rect.top - size / 2;
+
+      rippleElement.style.width = rippleElement.style.height = `${size}px`;
+      rippleElement.style.left = `${x}px`;
+      rippleElement.style.top = `${y}px`;
+      rippleElement.style.backgroundColor = rippleColor;
+      rippleElement.classList.add('tabs-ripple');
+
+      button.appendChild(rippleElement);
+
+      setTimeout(() => {
+        rippleElement.remove();
+      }, 600);
+    },
+    [ripple, rippleColor]
+  );
 
   // Hover indicator handlers
-  const handleMouseEnter = useCallback((index: number) => {
-    if (!hover || tabs[index]?.disabled) return;
-    
-    setHoverIndex(index);
-    const tabElement = tabRefs.current[index];
-    const containerElement = tabsListRef.current;
-    
-    if (tabElement && containerElement) {
-      const containerRect = containerElement.getBoundingClientRect();
-      const tabRect = tabElement.getBoundingClientRect();
-      
-      if (vertical) {
-        setHoverIndicatorStyle({
-          left: 0,
-          top: tabRect.top - containerRect.top + containerElement.scrollTop,
-          width: 0,
-          height: tabRect.height,
-          opacity: 0.3
-        });
-      } else {
-        setHoverIndicatorStyle({
-          left: tabRect.left - containerRect.left + containerElement.scrollLeft,
-          top: 0,
-          width: tabRect.width,
-          height: 0,
-          opacity: 0.3
-        });
+  const handleMouseEnter = useCallback(
+    (index: number) => {
+      if (!hover || tabs[index]?.disabled) return;
+
+      setHoverIndex(index);
+      const tabElement = tabRefs.current[index];
+      const containerElement = tabsListRef.current;
+
+      if (tabElement && containerElement) {
+        const containerRect = containerElement.getBoundingClientRect();
+        const tabRect = tabElement.getBoundingClientRect();
+
+        if (vertical) {
+          setHoverIndicatorStyle({
+            left: 0,
+            top: tabRect.top - containerRect.top + containerElement.scrollTop,
+            width: 0,
+            height: tabRect.height,
+            opacity: 0.3
+          });
+        } else {
+          setHoverIndicatorStyle({
+            left:
+              tabRect.left - containerRect.left + containerElement.scrollLeft,
+            top: 0,
+            width: tabRect.width,
+            height: 0,
+            opacity: 0.3
+          });
+        }
       }
-    }
-  }, [hover, tabs, vertical]);
+    },
+    [hover, tabs, vertical]
+  );
 
   const handleMouseLeave = useCallback(() => {
     if (!hover) return;
     setHoverIndex(null);
-    setHoverIndicatorStyle(prev => ({ ...prev, opacity: 0 }));
+    setHoverIndicatorStyle((prev) => ({ ...prev, opacity: 0 }));
   }, [hover]);
 
   // Mouse wheel scroll handler
-  const handleWheel = useCallback((e: WheelEvent) => {
-    if (scrollDisable || !tabsListRef.current) return;
-    
-    // In horizontal mode, convert vertical wheel to horizontal scroll
-    if (!vertical) {
-      e.preventDefault();
-      const delta = e.deltaY || e.deltaX;
-      tabsListRef.current.scrollBy({
-        left: delta,
-        behavior: 'auto'
-      });
-    }
-    // In vertical mode, allow natural scrolling (don't prevent default)
-  }, [vertical, scrollDisable]);
+  const handleWheel = useCallback(
+    (e: WheelEvent) => {
+      if (scrollDisable || !tabsListRef.current) return;
+
+      // In horizontal mode, convert vertical wheel to horizontal scroll
+      if (!vertical) {
+        e.preventDefault();
+        const delta = e.deltaY || e.deltaX;
+        tabsListRef.current.scrollBy({
+          left: delta,
+          behavior: 'auto'
+        });
+      }
+      // In vertical mode, allow natural scrolling (don't prevent default)
+    },
+    [vertical, scrollDisable]
+  );
 
   // Drag scroll state
   const [isDragging, setIsDragging] = useState(false);
   const dragStartRef = useRef({ x: 0, y: 0, scrollLeft: 0, scrollTop: 0 });
 
   // Drag scroll handlers
-  const handleDragStart = useCallback((e: React.MouseEvent | React.TouchEvent) => {
-    if (scrollDisable || !tabsListRef.current) return;
-    
-    setIsDragging(true);
-    const container = tabsListRef.current;
-    
-    if ('touches' in e) {
-      // Touch event
-      dragStartRef.current = {
-        x: e.touches[0].pageX,
-        y: e.touches[0].pageY,
-        scrollLeft: container.scrollLeft,
-        scrollTop: container.scrollTop
-      };
-    } else {
-      // Mouse event
-      dragStartRef.current = {
-        x: e.pageX,
-        y: e.pageY,
-        scrollLeft: container.scrollLeft,
-        scrollTop: container.scrollTop
-      };
-    }
-    
-    container.style.cursor = 'grabbing';
-    container.style.userSelect = 'none';
-  }, [scrollDisable]);
+  const handleDragStart = useCallback(
+    (e: React.MouseEvent | React.TouchEvent) => {
+      if (scrollDisable || !tabsListRef.current) return;
 
-  const handleDragMove = useCallback((e: MouseEvent | TouchEvent) => {
-    if (!isDragging || !tabsListRef.current) return;
-    
-    e.preventDefault();
-    const container = tabsListRef.current;
-    
-    let currentX: number, currentY: number;
-    if ('touches' in e) {
-      currentX = e.touches[0].pageX;
-      currentY = e.touches[0].pageY;
-    } else {
-      currentX = e.pageX;
-      currentY = e.pageY;
-    }
-    
-    const deltaX = currentX - dragStartRef.current.x;
-    const deltaY = currentY - dragStartRef.current.y;
-    
-    if (vertical) {
-      container.scrollTop = dragStartRef.current.scrollTop - deltaY;
-    } else {
-      container.scrollLeft = dragStartRef.current.scrollLeft - deltaX;
-    }
-  }, [isDragging, vertical]);
+      setIsDragging(true);
+      const container = tabsListRef.current;
+
+      if ('touches' in e) {
+        // Touch event
+        dragStartRef.current = {
+          x: e.touches[0].pageX,
+          y: e.touches[0].pageY,
+          scrollLeft: container.scrollLeft,
+          scrollTop: container.scrollTop
+        };
+      } else {
+        // Mouse event
+        dragStartRef.current = {
+          x: e.pageX,
+          y: e.pageY,
+          scrollLeft: container.scrollLeft,
+          scrollTop: container.scrollTop
+        };
+      }
+
+      container.style.cursor = 'grabbing';
+      container.style.userSelect = 'none';
+    },
+    [scrollDisable]
+  );
+
+  const handleDragMove = useCallback(
+    (e: MouseEvent | TouchEvent) => {
+      if (!isDragging || !tabsListRef.current) return;
+
+      e.preventDefault();
+      const container = tabsListRef.current;
+
+      let currentX: number, currentY: number;
+      if ('touches' in e) {
+        currentX = e.touches[0].pageX;
+        currentY = e.touches[0].pageY;
+      } else {
+        currentX = e.pageX;
+        currentY = e.pageY;
+      }
+
+      const deltaX = currentX - dragStartRef.current.x;
+      const deltaY = currentY - dragStartRef.current.y;
+
+      if (vertical) {
+        container.scrollTop = dragStartRef.current.scrollTop - deltaY;
+      } else {
+        container.scrollLeft = dragStartRef.current.scrollLeft - deltaX;
+      }
+    },
+    [isDragging, vertical]
+  );
 
   const handleDragEnd = useCallback(() => {
     if (!tabsListRef.current) return;
-    
+
     setIsDragging(false);
     const container = tabsListRef.current;
     container.style.cursor = '';
@@ -241,14 +257,14 @@ export function Tabs({
 
   // Update indicator position based on active tab
   const updateIndicator = useCallback(() => {
-    const activeIndex = tabs.findIndex(tab => tab.value === activeTab);
+    const activeIndex = tabs.findIndex((tab) => tab.value === activeTab);
     const activeTabElement = tabRefs.current[activeIndex];
     const containerElement = tabsListRef.current;
-    
+
     if (activeTabElement && containerElement) {
       const containerRect = containerElement.getBoundingClientRect();
       const tabRect = activeTabElement.getBoundingClientRect();
-      
+
       if (vertical) {
         // Vertical mode
         if (variant === 'fullWidth') {
@@ -277,7 +293,8 @@ export function Tabs({
           });
         } else {
           setIndicatorStyle({
-            left: tabRect.left - containerRect.left + containerElement.scrollLeft,
+            left:
+              tabRect.left - containerRect.left + containerElement.scrollLeft,
             top: 0,
             width: tabRect.width,
             height: 0
@@ -290,18 +307,18 @@ export function Tabs({
   // Check if navigation buttons should be shown
   const updateNavigationVisibility = useCallback(() => {
     if (!hasNavigation || !tabsListRef.current) return;
-    
+
     const container = tabsListRef.current;
-    
+
     if (vertical) {
       const { scrollTop, scrollHeight, clientHeight } = container;
       const canScrollUp = scrollTop > 0;
       const canScrollDown = scrollTop < scrollHeight - clientHeight - 1;
-      
+
       // Only update opacity here, showPrev/showNext will be updated by useEffect with delay
       setPrevOpacity(canScrollUp ? 1 : 0);
       setNextOpacity(canScrollDown ? 1 : 0);
-      
+
       // Update shadow visibility
       if (limitShadow) {
         setShowFirstShadow(canScrollUp);
@@ -311,11 +328,11 @@ export function Tabs({
       const { scrollLeft, scrollWidth, clientWidth } = container;
       const canScrollLeft = scrollLeft > 0;
       const canScrollRight = scrollLeft < scrollWidth - clientWidth - 1;
-      
+
       // Only update opacity here, showPrev/showNext will be updated by useEffect with delay
       setPrevOpacity(canScrollLeft ? 1 : 0);
       setNextOpacity(canScrollRight ? 1 : 0);
-      
+
       // Update shadow visibility
       if (limitShadow) {
         setShowFirstShadow(canScrollLeft);
@@ -385,7 +402,7 @@ export function Tabs({
     const handleScroll = () => {
       updateNavigationVisibility();
       updateIndicator();
-      
+
       // Emit scroll event
       if (onScroll) {
         onScroll({
@@ -439,8 +456,11 @@ export function Tabs({
     const container = tabsListRef.current;
     if (!container || scrollDisable) return;
 
-    container.addEventListener('wheel', handleWheel as EventListener, { passive: false });
-    return () => container.removeEventListener('wheel', handleWheel as EventListener);
+    container.addEventListener('wheel', handleWheel as EventListener, {
+      passive: false
+    });
+    return () =>
+      container.removeEventListener('wheel', handleWheel as EventListener);
   }, [handleWheel, scrollDisable]);
 
   // Add drag event listeners
@@ -536,53 +556,57 @@ export function Tabs({
           '--next-transform': 'translateX(-50%)'
         }
       : isNavigationAbsolute
-      ? {
-          '--prev-left': '0px',
-          '--prev-top': '50%',
-          '--prev-transform': 'translateY(-50%)',
-          '--next-right': '0px',
-          '--next-top': '50%',
-          '--next-transform': 'translateY(-50%)'
-        }
-      : {}
-    ),
+        ? {
+            '--prev-left': '0px',
+            '--prev-top': '50%',
+            '--prev-transform': 'translateY(-50%)',
+            '--next-right': '0px',
+            '--next-top': '50%',
+            '--next-transform': 'translateY(-50%)'
+          }
+        : {}),
     ...(vertical
       ? {
-          '--indicator-top': variant === 'fullWidth' 
-            ? `${indicatorStyle.top}%` 
-            : `${indicatorStyle.top}px`,
-          '--indicator-height': variant === 'fullWidth'
-            ? `${indicatorStyle.height}%`
-            : `${indicatorStyle.height}px`,
+          '--indicator-top':
+            variant === 'fullWidth'
+              ? `${indicatorStyle.top}%`
+              : `${indicatorStyle.top}px`,
+          '--indicator-height':
+            variant === 'fullWidth'
+              ? `${indicatorStyle.height}%`
+              : `${indicatorStyle.height}px`,
           '--indicator-left': '0',
           '--indicator-width': '2px'
         }
       : {
-          '--indicator-left': variant === 'fullWidth' 
-            ? `${indicatorStyle.left}%` 
-            : `${indicatorStyle.left}px`,
-          '--indicator-width': variant === 'fullWidth'
-            ? `${indicatorStyle.width}%`
-            : `${indicatorStyle.width}px`,
+          '--indicator-left':
+            variant === 'fullWidth'
+              ? `${indicatorStyle.left}%`
+              : `${indicatorStyle.left}px`,
+          '--indicator-width':
+            variant === 'fullWidth'
+              ? `${indicatorStyle.width}%`
+              : `${indicatorStyle.width}px`,
           '--indicator-top': 'auto',
           '--indicator-height': '2px'
-        }
-    )
+        })
   } as Record<string, string | number>;
 
   return (
-    <div 
-      className={`tabs ${vertical ? 'tabs_vertical' : ''} ${className}`} 
-      ref={tabsContainerRef} 
+    <div
+      className={`tabs ${vertical ? 'tabs--vertical' : ''} ${className}`}
+      ref={tabsContainerRef}
       style={cssVariables}
     >
-      <div className={`tabs-header ${vertical ? 'tabs-header_vertical' : ''}`}>
+      <div className={`tabs-header ${vertical ? 'tabs-header--vertical' : ''}`}>
         {/* Prev Navigation Button */}
         {hasNavigation && showPrev && (
           <button
-            className={`tabs-nav tabs-nav_prev ${vertical ? 'tabs-nav_vertical' : ''}`}
+            className={`tabs-nav tabs-nav--prev ${vertical ? 'tabs-nav--vertical' : ''}`}
             onClick={handlePrevScroll}
-            aria-label={vertical ? "Previous tabs (scroll up)" : "Previous tabs"}
+            aria-label={
+              vertical ? 'Previous tabs (scroll up)' : 'Previous tabs'
+            }
             css-is-disabled={prevOpacity === 0 ? 'true' : 'false'}
           >
             {vertical ? '▲' : '‹'}
@@ -591,14 +615,16 @@ export function Tabs({
 
         {/* First gradient shadow */}
         {limitShadow && showFirstShadow && (
-          <div className={`tabs-shadow tabs-shadow_first ${vertical ? 'tabs-shadow_vertical' : ''}`} />
+          <div
+            className={`tabs-shadow tabs-shadow--first ${vertical ? 'tabs-shadow--vertical' : ''}`}
+          />
         )}
 
         {/* Tabs List */}
         <div
           ref={tabsListRef}
-          className={`tabs-header-list tabs-header-list_${variant} ${
-            vertical ? 'tabs-header-list_vertical' : ''
+          className={`tabs-header-list tabs-header-list--${variant === 'fullWidth' ? 'full_width' : variant} ${
+            vertical ? 'tabs-header-list--vertical' : ''
           }`}
           onMouseDown={handleDragStart}
           onTouchStart={handleDragStart}
@@ -607,10 +633,12 @@ export function Tabs({
           {tabs.map((tab, index) => (
             <div
               key={tab.value}
-              ref={(el) => { tabRefs.current[index] = el; }}
+              ref={(el) => {
+                tabRefs.current[index] = el;
+              }}
               className={`tabs-header-item ${
-                tab.value === activeTab ? 'tabs-header-item_active' : ''
-              } ${tab.disabled ? 'tabs-header-item_disabled' : ''}`}
+                tab.value === activeTab ? 'tabs-header-item--active' : ''
+              } ${tab.disabled ? 'tabs-header-item--disabled' : ''}`}
               onClick={(e) => {
                 handleTabClick(tab.value, index);
                 handleRipple(e);
@@ -625,13 +653,13 @@ export function Tabs({
               {tab.label}
             </div>
           ))}
-          
+
           {/* Indicator */}
           <div className="tabs-header-indicator" />
-          
+
           {/* Hover Indicator */}
           {hover && hoverIndex !== null && (
-            <div 
+            <div
               className="tabs-hover-indicator"
               style={{
                 left: vertical ? 'auto' : `${hoverIndicatorStyle.left}px`,
@@ -648,15 +676,17 @@ export function Tabs({
 
         {/* Last gradient shadow */}
         {limitShadow && showLastShadow && (
-          <div className={`tabs-shadow tabs-shadow_last ${vertical ? 'tabs-shadow_vertical' : ''}`} />
+          <div
+            className={`tabs-shadow tabs-shadow--last ${vertical ? 'tabs-shadow--vertical' : ''}`}
+          />
         )}
 
         {/* Next Navigation Button */}
         {hasNavigation && showNext && (
           <button
-            className={`tabs-nav tabs-nav_next ${vertical ? 'tabs-nav_vertical' : ''}`}
+            className={`tabs-nav tabs-nav--next ${vertical ? 'tabs-nav--vertical' : ''}`}
             onClick={handleNextScroll}
-            aria-label={vertical ? "Next tabs (scroll down)" : "Next tabs"}
+            aria-label={vertical ? 'Next tabs (scroll down)' : 'Next tabs'}
             css-is-disabled={nextOpacity === 0 ? 'true' : 'false'}
           >
             {vertical ? '▼' : '›'}

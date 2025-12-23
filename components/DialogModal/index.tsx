@@ -57,8 +57,8 @@ export function DialogModal({
     }
   };
 
-  const maxWidthClass = `dialog-modal-content_${maxWidth}`;
-  const fullWidthClass = fullWidth ? 'dialog-modal-content_full-width' : '';
+  const maxWidthClass = `dialog-modal-content--${maxWidth}`;
+  const fullWidthClass = fullWidth ? 'dialog-modal-content--full_width' : '';
 
   return (
     <div className="dialog-modal" onClick={handleBackdropClick}>

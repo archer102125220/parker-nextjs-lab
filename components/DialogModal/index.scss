@@ -1,159 +1,160 @@
 .dialog-modal {
+  /* Positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+
+  /* Display & Box Model */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  /* Animation */
+  animation: fadeIn 0.2s ease-out;
+
+  &-backdrop {
     /* Positioning */
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
-    z-index: 9999;
+    z-index: -1;
 
+    /* Display & Box Model */
+    width: 100%;
+    height: 100%;
+
+    /* Visual */
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  &-content {
+    /* Positioning */
+    position: relative;
+
+    /* Display & Box Model */
+    max-height: 90vh;
+    border-radius: 8px;
+    overflow: hidden;
+
+    /* Visual */
+    background-color: #fff;
+    box-shadow:
+      0 11px 15px -7px rgba(0, 0, 0, 0.2),
+      0 24px 38px 3px rgba(0, 0, 0, 0.14),
+      0 9px 46px 8px rgba(0, 0, 0, 0.12);
+
+    /* Animation */
+    animation: slideUp 0.3s ease-out;
+
+    &--xs {
+      max-width: 444px;
+    }
+
+    &--sm {
+      max-width: 600px;
+    }
+
+    &--md {
+      max-width: 900px;
+    }
+
+    &--lg {
+      max-width: 1200px;
+    }
+
+    &--xl {
+      max-width: 1536px;
+    }
+
+    &--full_width {
+      width: calc(100% - 64px);
+    }
+  }
+
+  &-header {
+    /* Display & Box Model */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  &-title {
+    /* Display & Box Model */
+    margin: 0;
+
+    /* Typography */
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.6;
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  &-close {
     /* Display & Box Model */
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100%;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+
+    /* Typography */
+    font-size: 28px;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.54);
+
+    /* Visual */
+    background-color: transparent;
+
+    /* Misc */
+    cursor: pointer;
 
     /* Animation */
-    animation: fadeIn 0.2s ease-out;
+    transition: background-color 0.2s;
 
-    &-backdrop {
-        /* Positioning */
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: -1;
-
-        /* Display & Box Model */
-        width: 100%;
-        height: 100%;
-
-        /* Visual */
-        background-color: rgba(0, 0, 0, 0.5);
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
     }
 
-    &-content {
-        /* Positioning */
-        position: relative;
-
-        /* Display & Box Model */
-        max-height: 90vh;
-        border-radius: 8px;
-        overflow: hidden;
-
-        /* Visual */
-        background-color: #fff;
-        box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2),
-            0 24px 38px 3px rgba(0, 0, 0, 0.14),
-            0 9px 46px 8px rgba(0, 0, 0, 0.12);
-
-        /* Animation */
-        animation: slideUp 0.3s ease-out;
-
-        &_xs {
-            max-width: 444px;
-        }
-
-        &_sm {
-            max-width: 600px;
-        }
-
-        &_md {
-            max-width: 900px;
-        }
-
-        &_lg {
-            max-width: 1200px;
-        }
-
-        &_xl {
-            max-width: 1536px;
-        }
-
-        &_full-width {
-            width: calc(100% - 64px);
-        }
+    &:active {
+      background-color: rgba(0, 0, 0, 0.08);
     }
+  }
 
-    &-header {
-        /* Display & Box Model */
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 16px 24px;
-        border-bottom: 1px solid #e0e0e0;
-    }
-
-    &-title {
-        /* Display & Box Model */
-        margin: 0;
-
-        /* Typography */
-        font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
-        font-size: 1.25rem;
-        font-weight: 500;
-        line-height: 1.6;
-        color: rgba(0, 0, 0, 0.87);
-    }
-
-    &-close {
-        /* Display & Box Model */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 32px;
-        height: 32px;
-        padding: 0;
-        border: none;
-        border-radius: 50%;
-
-        /* Typography */
-        font-size: 28px;
-        line-height: 1;
-        color: rgba(0, 0, 0, 0.54);
-
-        /* Visual */
-        background-color: transparent;
-
-        /* Misc */
-        cursor: pointer;
-
-        /* Animation */
-        transition: background-color 0.2s;
-
-        &:hover {
-            background-color: rgba(0, 0, 0, 0.04);
-        }
-
-        &:active {
-            background-color: rgba(0, 0, 0, 0.08);
-        }
-    }
-
-    &-body {
-        /* Display & Box Model */
-        padding: 20px 24px;
-        overflow-y: auto;
-        max-height: calc(90vh - 64px);
-    }
+  &-body {
+    /* Display & Box Model */
+    padding: 20px 24px;
+    overflow-y: auto;
+    max-height: calc(90vh - 64px);
+  }
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
+  from {
+    opacity: 0;
+  }
 
-    to {
-        opacity: 1;
-    }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

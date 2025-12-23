@@ -1,61 +1,63 @@
 .tabs-content {
+  /* Positioning */
+  position: relative;
+
+  /* Display & Box Model */
+  flex: 1;
+  height: var(--tabs-content-height, 100%);
+  overflow: hidden;
+
+  &-swiper {
     /* Positioning */
     position: relative;
 
     /* Display & Box Model */
-    flex: 1;
-    height: var(--tabs-content-height, 100%);
-    overflow: hidden;
+    height: var(--tabs-content-swiper-height, 100%);
+    width: 100%;
 
-    &-swiper {
-        /* Positioning */
-        position: relative;
+    &--transitioning {
+      /* Misc */
+      pointer-events: none;
+    }
+  }
 
-        /* Display & Box Model */
-        height: var(--tabs-content-swiper-height, 100%);
-        width: 100%;
+  &-panel {
+    /* Positioning */
+    position: absolute;
+    top: 0;
+    left: 0;
 
-        &_transitioning {
-            /* Misc */
-            pointer-events: none;
-        }
+    /* Display & Box Model */
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+
+    /* Animation */
+    transition: opacity 0.3s ease-in-out;
+
+    &--active {
+      /* Positioning */
+      position: relative;
+
+      /* Display & Box Model */
+      display: block;
     }
 
-    &-panel {
-        /* Positioning */
-        position: absolute;
-        top: 0;
-        left: 0;
-
-        /* Display & Box Model */
-        height: 100%;
-        width: 100%;
-        overflow: auto;
-
-        /* Animation */
-        transition: opacity 0.3s ease-in-out;
-
-        &_active {
-            /* Positioning */
-            position: relative;
-
-            /* Display & Box Model */
-            display: block;
-        }
-
-        &_animated {
-            /* Animation */
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-        }
-
-        &[hidden] {
-            /* Display & Box Model */
-            display: none;
-        }
+    &--animated {
+      /* Animation */
+      transition:
+        opacity 0.3s ease-in-out,
+        transform 0.3s ease-in-out;
     }
 
-    &_wrapper {
-        /* Display & Box Model */
-        height: 100%;
+    &[hidden] {
+      /* Display & Box Model */
+      display: none;
     }
+  }
+
+  &-wrapper {
+    /* Display & Box Model */
+    height: 100%;
+  }
 }

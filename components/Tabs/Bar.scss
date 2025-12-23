@@ -1,306 +1,328 @@
 .tabs {
+  /* Display & Box Model */
+  width: 100%;
+
+  &--vertical {
+    display: flex;
+    height: 400px; // Default height for vertical tabs
+
+    .tabs-header {
+      flex-direction: column;
+      height: 100%;
+      width: auto;
+    }
+
+    .tabs-header-list {
+      flex-direction: column;
+      overflow-x: hidden;
+      overflow-y: auto;
+      border-bottom: none;
+      border-right: 1px solid #e0e0e0;
+      height: 100%;
+    }
+
+    .tabs-header-indicator {
+      left: auto;
+      right: 0;
+      top: var(--indicator-top, 0);
+      bottom: auto;
+      width: var(--indicator-width, 2px);
+      height: var(--indicator-height, 0);
+      transition:
+        top 0.3s ease-in-out,
+        height 0.3s ease-in-out;
+    }
+  }
+
+  &-header {
+    /* Positioning */
+    position: relative;
+
     /* Display & Box Model */
-    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
-    &_vertical {
-        display: flex;
-        height: 400px; // Default height for vertical tabs
+    /* Animation */
+    transform: translateZ(0); // Force GPU acceleration
+    will-change: contents; // Hint browser about dynamic content changes
 
-        .tabs-header {
-            flex-direction: column;
-            height: 100%;
-            width: auto;
-        }
-
-        .tabs-header-list {
-            flex-direction: column;
-            overflow-x: hidden;
-            overflow-y: auto;
-            border-bottom: none;
-            border-right: 1px solid #e0e0e0;
-            height: 100%;
-        }
-
-        .tabs-header-indicator {
-            left: auto;
-            right: 0;
-            top: var(--indicator-top, 0);
-            bottom: auto;
-            width: var(--indicator-width, 2px);
-            height: var(--indicator-height, 0);
-            transition: top 0.3s ease-in-out, height 0.3s ease-in-out;
-        }
+    &--vertical {
+      flex-direction: column;
     }
 
-    &-header {
-        /* Positioning */
-        position: relative;
+    &-list {
+      /* Positioning */
+      position: relative;
 
-        /* Display & Box Model */
-        display: flex;
-        align-items: center;
-        gap: 8px;
+      /* Display & Box Model */
+      display: flex;
+      flex: 1;
+      overflow-x: auto;
+      overflow-y: hidden;
+      border-bottom: 1px solid #e0e0e0;
 
-        /* Animation */
-        transform: translateZ(0); // Force GPU acceleration
-        will-change: contents; // Hint browser about dynamic content changes
+      /* Misc */
+      cursor: grab;
+      scrollbar-width: none;
+      /* Firefox */
+      -ms-overflow-style: none;
+      /* IE/Edge */
 
-        &_vertical {
-            flex-direction: column;
+      &::-webkit-scrollbar {
+        display: none;
+        /* Chrome/Safari */
+      }
+
+      &[css-is-dragging='true'] {
+        cursor: grabbing;
+      }
+
+      &--standard {
+        justify-content: flex-start;
+      }
+
+      &--full_width {
+        justify-content: space-between;
+
+        .tabs-header-item {
+          flex: 1;
+          text-align: center;
         }
+      }
 
-        &-list {
-            /* Positioning */
-            position: relative;
-
-            /* Display & Box Model */
-            display: flex;
-            flex: 1;
-            overflow-x: auto;
-            overflow-y: hidden;
-            border-bottom: 1px solid #e0e0e0;
-
-            /* Misc */
-            cursor: grab;
-            scrollbar-width: none;
-            /* Firefox */
-            -ms-overflow-style: none;
-            /* IE/Edge */
-
-            &::-webkit-scrollbar {
-                display: none;
-                /* Chrome/Safari */
-            }
-
-            &[css-is-dragging='true'] {
-                cursor: grabbing;
-            }
-
-            &_standard {
-                justify-content: flex-start;
-            }
-
-            &_fullWidth {
-                justify-content: space-between;
-
-                .tabs-header-item {
-                    flex: 1;
-                    text-align: center;
-                }
-            }
-
-            &_vertical {
-                flex-direction: column;
-                overflow-x: hidden;
-                overflow-y: auto;
-                width: 100%;
-            }
-        }
-
-        &-item {
-            /* Positioning */
-            position: relative;
-
-            /* Display & Box Model */
-            padding: 12px 24px;
-            overflow: hidden;
-            white-space: nowrap;
-            flex-shrink: 0;
-
-            /* Typography */
-            font-family: 'PingFang SC', sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            color: #666;
-            text-align: center;
-
-            /* Misc */
-            cursor: pointer;
-            user-select: none;
-
-            /* Animation */
-            transition: color 0.3s;
-
-            &:hover:not(&_disabled) {
-                color: var(--selected-color, #1976d2);
-            }
-
-            &_active {
-                color: var(--selected-color, #1976d2);
-                font-weight: 600;
-            }
-
-            &_disabled {
-                color: #ccc;
-                cursor: not-allowed;
-            }
-        }
-
-        &-indicator {
-            /* Positioning */
-            position: absolute;
-            bottom: 0;
-            left: var(--indicator-left, 0);
-            top: var(--indicator-top, auto);
-
-            /* Display & Box Model */
-            height: var(--indicator-height, 2px);
-            width: var(--indicator-width, 0);
-
-            /* Visual */
-            background-color: var(--indicator-color, #1976d2);
-
-            /* Animation */
-            transition: left 0.3s ease-in-out, width 0.3s ease-in-out,
-                top 0.3s ease-in-out, height 0.3s ease-in-out;
-        }
+      &--vertical {
+        flex-direction: column;
+        overflow-x: hidden;
+        overflow-y: auto;
+        width: 100%;
+      }
     }
 
-    &-nav {
-        /* Positioning */
-        position: var(--navigation-position, relative);
-        z-index: 1;
+    &-item {
+      /* Positioning */
+      position: relative;
 
-        /* Display & Box Model */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 32px;
-        height: 40px;
-        min-width: 32px; // Prevent collapse during opacity transition
-        min-height: 40px; // Prevent collapse during opacity transition
-        padding: 0;
-        border: 1px solid #e0e0e0;
-        border-radius: 4px;
-        flex-shrink: 0;
+      /* Display & Box Model */
+      padding: 12px 24px;
+      overflow: hidden;
+      white-space: nowrap;
+      flex-shrink: 0;
 
-        /* Typography */
-        font-size: 20px;
-        color: #666;
+      /* Typography */
+      font-family: 'PingFang SC', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #666;
+      text-align: center;
 
-        /* Visual */
-        background: white;
+      /* Misc */
+      cursor: pointer;
+      user-select: none;
 
-        /* Misc */
-        cursor: pointer;
-        user-select: none;
+      /* Animation */
+      transition: color 0.3s;
 
-        /* Animation */
-        transition: all 0.2s, opacity 0.3s ease-in-out;
-        will-change: opacity; // GPU acceleration for smooth opacity changes
+      &:hover:not(&--disabled) {
+        color: var(--selected-color, #1976d2);
+      }
 
-        &[css-is-disabled='true'] {
-            pointer-events: none;
-        }
+      &--active {
+        color: var(--selected-color, #1976d2);
+        font-weight: 600;
+      }
 
-        &_prev {
-            opacity: var(--prev-opacity, 1);
-            left: var(--prev-left, auto);
-            top: var(--prev-top, auto);
-            transform: var(--prev-transform, none);
-        }
-
-        &_next {
-            opacity: var(--next-opacity, 1);
-            right: var(--next-right, auto);
-            bottom: var(--next-bottom, auto);
-            top: var(--next-top, auto);
-            left: var(--next-left, auto);
-            transform: var(--next-transform, none);
-        }
-
-        &:hover {
-            color: var(--selected-color, #1976d2);
-            border-color: var(--selected-color, #1976d2);
-            background: #f5f5f5;
-        }
-
-        &:active {
-
-            // Combine scale with existing transform to prevent override
-            &.tabs-nav_prev {
-                transform: var(--prev-transform, none) scale(0.95);
-            }
-
-            &.tabs-nav_next {
-                transform: var(--next-transform, none) scale(0.95);
-            }
-        }
-
-        &_vertical {
-            width: 40px;
-            height: 32px;
-            min-width: 40px;
-            min-height: 32px;
-        }
+      &--disabled {
+        color: #ccc;
+        cursor: not-allowed;
+      }
     }
 
-    // Gradient shadows for scroll indicators
-    &-shadow {
-        /* Positioning */
-        position: absolute;
-        z-index: 0; // Below navigation buttons (which have z-index: 1)
-        pointer-events: none;
+    &-indicator {
+      /* Positioning */
+      position: absolute;
+      bottom: 0;
+      left: var(--indicator-left, 0);
+      top: var(--indicator-top, auto);
 
-        /* Display & Box Model */
-        width: 60px;
-        height: 100%;
+      /* Display & Box Model */
+      height: var(--indicator-height, 2px);
+      width: var(--indicator-width, 0);
 
-        /* Animation */
-        transition: opacity 0.3s ease-in-out;
+      /* Visual */
+      background-color: var(--indicator-color, #1976d2);
 
-        &_first {
-            left: 0;
-            top: 0;
-            background: linear-gradient(to right, rgba(157, 156, 156, 0.22), transparent);
-        }
+      /* Animation */
+      transition:
+        left 0.3s ease-in-out,
+        width 0.3s ease-in-out,
+        top 0.3s ease-in-out,
+        height 0.3s ease-in-out;
+    }
+  }
 
-        &_last {
-            right: 0;
-            top: 0;
-            background: linear-gradient(to left, rgba(157, 156, 156, 0.22), transparent);
-        }
+  &-nav {
+    /* Positioning */
+    position: var(--navigation-position, relative);
+    z-index: 1;
 
-        &_vertical {
-            width: 100%;
-            height: 60px;
+    /* Display & Box Model */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 40px;
+    min-width: 32px; // Prevent collapse during opacity transition
+    min-height: 40px; // Prevent collapse during opacity transition
+    padding: 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    flex-shrink: 0;
 
-            &.tabs-shadow_first {
-                background: linear-gradient(to bottom, rgba(157, 156, 156, 0.22), transparent);
-            }
+    /* Typography */
+    font-size: 20px;
+    color: #666;
 
-            &.tabs-shadow_last {
-                top: auto;
-                bottom: 0;
-                background: linear-gradient(to top, rgba(157, 156, 156, 0.22), transparent);
-            }
-        }
+    /* Visual */
+    background: white;
+
+    /* Misc */
+    cursor: pointer;
+    user-select: none;
+
+    /* Animation */
+    transition:
+      all 0.2s,
+      opacity 0.3s ease-in-out;
+    will-change: opacity; // GPU acceleration for smooth opacity changes
+
+    &[css-is-disabled='true'] {
+      pointer-events: none;
     }
 
-    // Ripple effect
-    &-ripple {
-        position: absolute;
-        border-radius: 50%;
-        // Background color set via inline style
-        transform: scale(0);
-        animation: ripple-animation 0.6s ease-out;
-        pointer-events: none;
+    &--prev {
+      opacity: var(--prev-opacity, 1);
+      left: var(--prev-left, auto);
+      top: var(--prev-top, auto);
+      transform: var(--prev-transform, none);
     }
 
-    // Hover indicator
-    &-hover-indicator {
-        position: absolute;
-        bottom: 0; // Same as main indicator
-        background-color: var(--indicator-color, #1976d2);
-        transition: all 0.3s ease-in-out;
-        pointer-events: none;
-        z-index: 0;
+    &--next {
+      opacity: var(--next-opacity, 1);
+      right: var(--next-right, auto);
+      bottom: var(--next-bottom, auto);
+      top: var(--next-top, auto);
+      left: var(--next-left, auto);
+      transform: var(--next-transform, none);
     }
+
+    &:hover {
+      color: var(--selected-color, #1976d2);
+      border-color: var(--selected-color, #1976d2);
+      background: #f5f5f5;
+    }
+
+    &:active {
+      // Combine scale with existing transform to prevent override
+      &.tabs-nav_prev {
+        transform: var(--prev-transform, none) scale(0.95);
+      }
+
+      &.tabs-nav_next {
+        transform: var(--next-transform, none) scale(0.95);
+      }
+    }
+
+    &--vertical {
+      width: 40px;
+      height: 32px;
+      min-width: 40px;
+      min-height: 32px;
+    }
+  }
+
+  // Gradient shadows for scroll indicators
+  &-shadow {
+    /* Positioning */
+    position: absolute;
+    z-index: 0; // Below navigation buttons (which have z-index: 1)
+    pointer-events: none;
+
+    /* Display & Box Model */
+    width: 60px;
+    height: 100%;
+
+    /* Animation */
+    transition: opacity 0.3s ease-in-out;
+
+    &--first {
+      left: 0;
+      top: 0;
+      background: linear-gradient(
+        to right,
+        rgba(157, 156, 156, 0.22),
+        transparent
+      );
+    }
+
+    &--last {
+      right: 0;
+      top: 0;
+      background: linear-gradient(
+        to left,
+        rgba(157, 156, 156, 0.22),
+        transparent
+      );
+    }
+
+    &--vertical {
+      width: 100%;
+      height: 60px;
+
+      &.tabs-shadow_first {
+        background: linear-gradient(
+          to bottom,
+          rgba(157, 156, 156, 0.22),
+          transparent
+        );
+      }
+
+      &.tabs-shadow_last {
+        top: auto;
+        bottom: 0;
+        background: linear-gradient(
+          to top,
+          rgba(157, 156, 156, 0.22),
+          transparent
+        );
+      }
+    }
+  }
+
+  // Ripple effect
+  &-ripple {
+    position: absolute;
+    border-radius: 50%;
+    // Background color set via inline style
+    transform: scale(0);
+    animation: ripple-animation 0.6s ease-out;
+    pointer-events: none;
+  }
+
+  // Hover indicator
+  &-hover-indicator {
+    position: absolute;
+    bottom: 0; // Same as main indicator
+    background-color: var(--indicator-color, #1976d2);
+    transition: all 0.3s ease-in-out;
+    pointer-events: none;
+    z-index: 0;
+  }
 }
 
 @keyframes ripple-animation {
-    to {
-        transform: scale(4);
-        opacity: 0;
-    }
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
 }
