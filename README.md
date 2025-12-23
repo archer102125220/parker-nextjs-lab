@@ -707,7 +707,9 @@ import styles from './page.module.scss';
 1. **Each element uses only one className** - Don't combine multiple classes
 2. **All elements within a Block should be children of that Block** - Connected with hyphen `-`
 3. **Multiple semantic words within element names use underscore `_`** - e.g., `content_box`, `value_display`
-4. **States use HTML attributes** - e.g., `[css-is-active='true']`, `[data-pressed='true']`
+4. **States use HTML attributes** - e.g., `[css-is-active='true']`
+5. **HTML attributes must start with `css-` prefix** - e.g., `css-is-active`, `css-is-dragging`, to avoid conflicts with native attributes and to clearly identify that the prop is intended for CSS usage when passing through component hierarchies
+6. **CSS variables use underscore `_` instead of hyphen `-`** - e.g., `--editor_height`, `--offset_y`, allowing double-click selection of complete variable names in editors
 
 #### Inline Styles Exceptions
 
@@ -723,16 +725,16 @@ While the project follows CSS modularization and BEM naming conventions, inline 
 2. **CSS Variable Passing** (including dynamic calculated values)
    ```tsx
    // ✅ Allowed: Passing static or dynamic values via CSS variables
-   <div style={{ '--editor-height': `${height}px` }}>
-   <div style={{ '--offset-y': `${offsetY}px` }}>
+   <div style={{ '--editor_height': `${height}px` }}>
+   <div style={{ '--offset_y': `${offsetY}px` }}>
    ```
    > 💡 **Reason**: Implement dynamic values through CSS variables, keeping style logic in CSS and improving component flexibility
    
    ```scss
    // Use CSS variables in SCSS
    .element {
-     height: var(--editor-height);
-     transform: translateY(var(--offset-y));
+     height: var(--editor_height);
+     transform: translateY(var(--offset_y));
    }
    ```
 

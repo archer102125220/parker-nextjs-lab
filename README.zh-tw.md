@@ -701,7 +701,9 @@ import styles from './page.module.scss';
 1. **每個元素只使用一個 className** - 不要組合多個類別
 2. **Block 內的所有元素都應該是 Block 的子元素** - 使用連字符 `-` 連接
 3. **Element 名稱內部的多個語義詞使用底線 `_`** - 如 `content_box`, `value_display`
-4. **狀態使用 HTML 屬性** - 如 `[css-is-active='true']`, `[data-pressed='true']`
+4. **狀態使用 HTML 屬性** - 如 `[css-is-active='true']`
+5. **HTML 屬性必須以 `css-` 開頭** - 如 `css-is-active`, `css-is-dragging`，避免與原生屬性衝突，同時在組件層級傳遞屬性時可明確識別該變數是給 CSS 使用
+6. **CSS 變數使用底線 `_` 而非連字符 `-`** - 如 `--editor_height`, `--offset_y`，使編輯器可雙擊快速選取完整變數名稱
 
 #### 內聯樣式例外情況
 
@@ -717,16 +719,16 @@ import styles from './page.module.scss';
 2. **CSS 變數傳遞**（包含動態計算值）
    ```tsx
    // ✅ 允許：CSS 變數傳遞靜態或動態值
-   <div style={{ '--editor-height': `${height}px` }}>
-   <div style={{ '--offset-y': `${offsetY}px` }}>
+   <div style={{ '--editor_height': `${height}px` }}>
+   <div style={{ '--offset_y': `${offsetY}px` }}>
    ```
    > 💡 **原因**：透過 CSS 變數實現動態值，保持樣式邏輯在 CSS 中，提高組件彈性
    
    ```scss
    // 在 SCSS 中使用 CSS 變數
    .element {
-     height: var(--editor-height);
-     transform: translateY(var(--offset-y));
+     height: var(--editor_height);
+     transform: translateY(var(--offset_y));
    }
    ```
 
