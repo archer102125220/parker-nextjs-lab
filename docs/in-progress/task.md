@@ -658,11 +658,11 @@
 
 ---
 
-## Phase 7.5: CSS Compliance Fix Phase 2 (CSS 標準合規性修復 Phase 2) [56/75] 🔄
+## Phase 7.5: CSS Compliance Fix Phase 2 (CSS 標準合規性修復 Phase 2) [58/75] 🔄
 
 > **目標**: 移除專案中剩餘的靜態內聯樣式，轉換為符合 BEM 規範的 CSS 類別或 CSS 變數
 
-### 已完成工作 (Completed) [56/56] ✅
+### 已完成工作 (Completed) [58/58] ✅
 
 #### 全域 Placeholders 建立
 - [x] 添加 Flexbox 布局 placeholders (`%flex_row`, `%flex_row_between`, etc.)
@@ -679,7 +679,7 @@
 #### 階段 2.2: 簡單修復 ✅ (2025-12-24)
 - [x] LazyLoad 測試圖片 - 先前已完成
 - [x] `web-cam/page.tsx` - Image banner 樣式
-- [x] `web-authn/page.tsx` - Image banner 樣式
+- [x] `web-authn/page.tsx` - Image banner 樣式 + Link 唯一 class ✅ (2025-12-24)
 - [x] `frontend-api-cache-test/page.tsx` - Image banner 樣式
 - [x] `face-swap/page.tsx` - Image banner 樣式
 - [x] `face-swap/frontend/page.tsx` - Image banner + hidden input + video/canvas 樣式
@@ -688,6 +688,7 @@
 #### 階段 2.3: Link 裝飾 ✅ (2025-12-24)
 - [x] `route/page.tsx` - Link 樣式 (text-decoration)
 - [x] `directive-effects/page.tsx` - Link 樣式 (text-decoration)
+- [x] `components/Layout/Footer.tsx` - Link 唯一 class ✅ (2025-12-24)
 
 #### 階段 2.4: 測試頁面靜態樣式 ✅ (2025-12-24)
 - [x] `components/swiper-test/page.tsx` - 創建 CSS Module，移除 ~10 個內聯樣式
@@ -697,14 +698,22 @@
 - [x] `web-rtc/socket-io/room/[roomId]/page.tsx` - 2 個 video 內聯樣式
 - [x] `web-rtc/server-sent-event/room/[roomId]/page.tsx` - 2 個 video 內聯樣式
 
-### 剩餘工作 (Remaining) [0/19]
+#### CSS 規範文檔更新 ✅ (2025-12-24)
+- [x] 更新 `CLAUDE.md` - 添加「每個元素都必須有唯一 class」規則
+- [x] 更新 `.cursor/rules/css-naming.mdc` - 添加唯一 class name 規則
+- [x] 更新 `README.md` - 添加到 Key Principles 第一條
+- [x] 更新 `README.zh-tw.md` - 添加到重要原則第一條
+- [x] 更新 `docs/coding-standards.md` - 添加到 BEM Key Rules
+- [x] 更新 `docs/coding-standards.zh-tw.md` - 添加到 BEM 關鍵規則
 
-#### 階段 2.6: 條件樣式 (低優先級) [0/19]
+### 剩餘工作 (Remaining) [0/17]
+
+#### 階段 2.6: 條件樣式 (低優先級) [0/17]
 - [ ] 基於狀態的動態樣式（建議暫時保留）
 
 ### 參考文檔
-- [CSS Compliance Fix Phase 2 List](file:///Users/parker/Desktop/code/parker-nextjs-lab/docs/in-progress/css-compliance-fix-phase2-list.md)
-- [CSS Compliance Fix Phase 2 Roadmap](file:///Users/parker/Desktop/code/parker-nextjs-lab/docs/in-progress/css-compliance-fix-phase2-roadmap.md)
+- [CSS Compliance Fix Phase 2 List](file:///c:/Users/User/Desktop/code/parker-nextjs-lab/docs/in-progress/css-compliance-fix-phase2-list.md)
+- [CSS Compliance Fix Phase 2 Roadmap](file:///c:/Users/User/Desktop/code/parker-nextjs-lab/docs/in-progress/css-compliance-fix-phase2-roadmap.md)
 
 ---
 
