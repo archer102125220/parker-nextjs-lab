@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Banner from '@/components/Banner';
 import type { BannerItem } from '@/components/Banner';
-import style from './page.module.scss';
+import style from '@/app/[locale]/components/banner-demo/page.module.scss';
 
 export default function BannerDemoClient() {
   const [currentIndex, setCurrentIndex] = useState(0);

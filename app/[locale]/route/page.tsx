@@ -1,10 +1,12 @@
-'use client';
-
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
 import { Typography, Card, CardContent, CardActionArea } from '@mui/material';
+import dynamic from 'next/dynamic';
 
 import styles from './page.module.scss';
+
+const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
 
 const LINK_LIST = [
   {
@@ -19,9 +21,17 @@ const LINK_LIST = [
   }
 ];
 
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: '路由測試',
+    description: '測試 Next.js 路由功能 - query 參數與動態路由參數'
+  };
+}
+
 export default function RouteTestPage(): React.ReactNode {
   return (
     <section className={styles.route_test_page}>
+      <GTMScnOpen />
       <Typography variant="body1" paragraph>
         主要用作複現狀況，編筆記用途的測試
       </Typography>

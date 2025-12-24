@@ -10,10 +10,10 @@
 
 | Type | Total | Completed | In Progress | Remaining | Progress |
 |------|-------|-----------|-------------|-----------|----------|
-| Type A (Inline) | 15 | 3 | 0 | 12 | 20% |
+| Type A (Inline) | 15 | 6 | 0 | 9 | 40% |
 | Type B (Extract) | 12 | 0 | 0 | 12 | 0% |
 | Type C (Demo) | 15 | 0 | 0 | 15 | 0% |
-| **Total** | **42** | **3** | **0** | **39** | **7%** |
+| **Total** | **42** | **6** | **0** | **36** | **14%** |
 
 ---
 
@@ -34,9 +34,9 @@
 | 7 | components/switch-button | ⏳ | - | - | - |
 | 8 | components/youtube-test | ⏳ | - | - | - |
 | 9 | directive-effects/page | ✅ | 00:10 | 00:12 | No client component needed (static), Browser verified ✅ |
-| 10 | directive-effects/lazyload-test | ⏳ | - | - | - |
-| 11 | directive-effects/ripple-test | ⏳ | - | - | - |
-| 12 | route/page | ⏳ | - | - | - |
+| 10 | directive-effects/lazyload-test | ✅ | 00:13 | 00:17 | Created LazyLoadTestClient.tsx, Browser verified ✅ |
+| 11 | directive-effects/ripple-test | ✅ | 00:17 | 00:19 | Created RippleTestClient.tsx, Browser verified ✅ |
+| 12 | route/page | ✅ | 00:20 | 00:21 | No client component needed (static) |
 | 13 | route/params-back-test/[testData] | ⏳ | - | - | - |
 | 14 | route/query-back-test | ⏳ | - | - | - |
 | 15 | offline | ⏳ | - | - | - |

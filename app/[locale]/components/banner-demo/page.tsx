@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import style from './page.module.scss';
 
-const BannerDemoClient = dynamic(() => import('./BannerDemoClient'));
+const BannerDemoClient = dynamic(() => import('@/components/Demo/BannerDemo'));
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
 
 export async function generateMetadata(): Promise<Metadata> {

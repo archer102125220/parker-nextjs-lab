@@ -206,6 +206,19 @@ Translation files are located in `i18n/locales/` and can be managed through Goog
 - **WangEditor**: Rich text editor
 - **NotificationPermission**: Push notification prompt
 
+### Demo Components (`components/Demo/`)
+Full-page Client Components for feature demonstrations, using PascalCase naming:
+
+- **BannerDemo**: Banner carousel component test page
+- **GoTop**: GoTop back-to-top test page
+- **LazyLoadTest**: useLazyLoad Hook test page
+- **RippleTest**: Ripple Component test page
+- **ScrollFetch**: Scroll fetch test page (existing)
+
+> **Naming Convention**: 
+> - Full-page Client Components → `components/Demo/[PageName].tsx`
+> - Pages with multiple sub-components → `components/[PageName]/` folder
+
 ## 🪝 Custom Hooks (28+)
 
 | Hook | Description |

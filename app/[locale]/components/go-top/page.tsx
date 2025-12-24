@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import style from './page.module.scss';
 import '../page.scss';
 
-const GoTopClient = dynamic(() => import('./GoTopClient'));
+const GoTopClient = dynamic(() => import('@/components/Demo/GoTop'));
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
 
 export async function generateMetadata(): Promise<Metadata> {

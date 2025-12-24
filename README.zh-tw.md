@@ -206,6 +206,19 @@
 - **WangEditor**: 富文本編輯器
 - **NotificationPermission**: 推播通知提示
 
+### Demo 組件（`components/Demo/`）
+用於展示頁面功能的完整 Client Component，採用 PascalCase 命名：
+
+- **BannerDemo**: Banner 輪播組件測試頁面
+- **GoTop**: GoTop 回到頂部測試頁面
+- **LazyLoadTest**: useLazyLoad Hook 測試頁面
+- **RippleTest**: Ripple Component 測試頁面
+- **ScrollFetch**: 滾動載入測試頁面（已存在）
+
+> **命名規則**: 
+> - 整頁內容的 Client Component → `components/Demo/[PageName].tsx`
+> - 多個子組件的頁面 → `components/[PageName]/` 資料夾
+
 ## 🪝 自定義 Hooks（28+）
 
 | Hook | 說明 |

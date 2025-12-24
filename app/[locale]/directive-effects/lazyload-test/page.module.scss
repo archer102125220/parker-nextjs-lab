@@ -1,67 +1,71 @@
-@use '@/styles/placeholders' as *;
+@use '@/styles/placeholders'as *;
 
 .lazyload_test_page {
-  &-section {
-    margin-bottom: 48px;
-    padding: 16px;
+    &-section {
+        /* Display & Box Model */
+        margin-bottom: 48px;
+        padding: 16px;
 
-    border: 1px solid #eee;
-    border-radius: 8px;
-  }
-
-  &-image {
-    display: block;
-
-    width: 100%;
-    max-width: 600px;
-    height: auto;
-    min-height: 200px;
-
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-
-    object-fit: contain;
-
-    transition: opacity 0.3s ease-in-out;
-
-    &--gif {
-      max-height: 300px;
-    }
-  }
-
-  &-demo_section {
-    /* Display & Box Model */
-    margin-bottom: 40px;
-
-    &-title {
-      /* Display & Box Model */
-      margin-bottom: 16px;
-
-      /* Typography */
-      font-size: 20px;
-      font-weight: 600;
+        /* Visual */
+        border: 1px solid #eee;
+        border-radius: 8px;
     }
 
-    &-description {
-      /* Display & Box Model */
-      margin-bottom: 16px;
+    &-image {
+        /* Display & Box Model */
+        display: block;
+        width: 100%;
+        max-width: 600px;
+        height: auto;
+        min-height: 200px;
 
-      /* Typography */
-      color: #666;
+        /* Visual */
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        object-fit: contain;
+
+        /* Animation */
+        transition: opacity 0.3s ease-in-out;
+
+        &--gif {
+            /* Display & Box Model */
+            max-height: 300px;
+        }
     }
 
-    &-image_container {
-      /* Display & Box Model */
-      margin-bottom: 20px;
+    &-demo_section {
+        /* Display & Box Model */
+        margin-bottom: 40px;
+
+        &-title {
+            /* Display & Box Model */
+            margin-bottom: 16px;
+
+            /* Typography */
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        &-description {
+            /* Display & Box Model */
+            margin-bottom: 16px;
+
+            /* Typography */
+            color: #666;
+        }
+
+        &-image_container {
+            /* Display & Box Model */
+            margin-bottom: 20px;
+        }
     }
-  }
 
-  // CSS Compliance Fix
-  &-demo_image {
-    @extend %image_responsive;
+    // CSS Compliance Fix
+    &-demo_image {
+        @extend %image_responsive;
 
-    /* Display & Box Model */
-    max-width: 600px;
-  }
+        /* Display & Box Model */
+        max-width: 600px;
+    }
 }
