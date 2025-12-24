@@ -1,0 +1,25 @@
+---
+description: TypeScript 型別安全規範
+globs: ["**/*.ts", "**/*.tsx"]
+alwaysApply: true
+---
+
+# TypeScript Rules
+
+## Type Safety (MANDATORY)
+
+- **NEVER use `any` type** - Use generics, `unknown`, or precise types
+- **Use `as unknown as Type`** for type assertions, NEVER `as any`
+- **Add comments** explaining WHY when using type assertions
+
+## Examples
+
+```typescript
+// ❌ FORBIDDEN
+function process(data: any) { }
+const el = document.getElementById('id') as any;
+
+// ✅ REQUIRED
+function process<T extends { value: unknown }>(data: T) { }
+const el = document.getElementById('id') as unknown as CustomElement;
+```

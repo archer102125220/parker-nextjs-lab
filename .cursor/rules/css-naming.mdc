@@ -1,0 +1,61 @@
+---
+description: CSS/SCSS 命名規範 (Modified BEM)
+globs: ["**/*.scss", "**/*.css", "**/*.module.scss"]
+alwaysApply: true
+---
+
+# CSS Naming Convention (Modified BEM)
+
+## Naming Structure
+
+| Type | Format | Example |
+|------|--------|---------|
+| Block | single name | `.countdown` |
+| Element | hyphen `-` | `.countdown-title` |
+| Sub-Element | hyphen `-` | `.countdown-title-icon` |
+| Multi-word | underscore `_` | `.image_upload`, `.content_box` |
+| State | HTML attribute | `[css-is-active='true']` |
+
+## Key Rules
+
+- **Use `-` (hyphen)** to connect Block and Element
+- **Use `_` (underscore)** for multi-word names within a segment
+- **NEVER use `__`** (double underscore)
+- **State attributes MUST start with `css-`**: `css-is-active`, `css-is-dragging`
+- **CSS variables MUST use `_`**: `--editor_height`, `--offset_y`
+
+## Examples
+
+```scss
+// ✅ CORRECT
+.image_upload {
+  &-preview {        // .image_upload-preview
+    &-img { }        // .image_upload-preview-img
+  }
+  &[css-is-dragging='true'] { }
+}
+
+// ❌ WRONG
+.image__upload { }
+.image-upload__preview { }
+```
+
+## Page Root Class
+
+- **Page**: `[name]_page` (e.g., `.hooks_test_page`)
+- **Component**: `[name]` (e.g., `.image_upload`)
+- **Each page MUST have unique root class**
+
+```scss
+// ✅ CORRECT - All nested under page root
+.hooks_test_page {
+  &-description { }
+  &-section {
+    &-title { }
+  }
+}
+
+// ❌ WRONG - Orphaned classes
+.hooks_test_page { }
+.description { }
+```
