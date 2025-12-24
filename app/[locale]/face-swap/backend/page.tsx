@@ -112,15 +112,12 @@ export default function FaceSwapBackendPage(): React.ReactNode {
         alt="Face Swap Banner"
         width={800}
         height={200}
-        style={{
-          width: '100%',
-          maxWidth: 800,
-          height: 'auto',
-          objectFit: 'cover'
-        }}
       />
 
-      <Typography variant="h5" className={style['face_swap_backend_page-title']}>
+      <Typography
+        variant="h5"
+        className={style['face_swap_backend_page-title']}
+      >
         後端 AI 人臉替換
       </Typography>
       <Typography
@@ -151,7 +148,7 @@ export default function FaceSwapBackendPage(): React.ReactNode {
             accept="image/*"
             ref={sourceInputRef}
             onChange={(e) => handleImageSelect(e, setSourceImage)}
-            style={{ display: 'none' }}
+            className={style['face_swap_backend_page-hidden_input']}
           />
           {sourceImage ? (
             <Box sx={{ textAlign: 'center' }}>
@@ -159,7 +156,9 @@ export default function FaceSwapBackendPage(): React.ReactNode {
               <img
                 src={sourceImage}
                 alt="Source"
-                className={style['face_swap_backend_page-upload_section-preview']}
+                className={
+                  style['face_swap_backend_page-upload_section-preview']
+                }
               />
               <Button
                 variant="outlined"
@@ -204,7 +203,7 @@ export default function FaceSwapBackendPage(): React.ReactNode {
             accept="image/*"
             ref={targetInputRef}
             onChange={(e) => handleImageSelect(e, setTargetImage)}
-            style={{ display: 'none' }}
+            className={style['face_swap_backend_page-hidden_input']}
           />
           {targetImage ? (
             <Box sx={{ textAlign: 'center' }}>
@@ -212,7 +211,9 @@ export default function FaceSwapBackendPage(): React.ReactNode {
               <img
                 src={targetImage}
                 alt="Target"
-                className={style['face_swap_backend_page-upload_section-preview']}
+                className={
+                  style['face_swap_backend_page-upload_section-preview']
+                }
               />
               <Button
                 variant="outlined"

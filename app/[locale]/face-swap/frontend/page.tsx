@@ -262,15 +262,12 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
         alt="Face Swap Banner"
         width={800}
         height={200}
-        style={{
-          width: '100%',
-          maxWidth: 800,
-          height: 'auto',
-          objectFit: 'cover'
-        }}
       />
 
-      <Typography variant="h5" className={style['face_swap_frontend_page-title']}>
+      <Typography
+        variant="h5"
+        className={style['face_swap_frontend_page-title']}
+      >
         純前端人臉替換
       </Typography>
       <Typography
@@ -302,7 +299,7 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
             accept="image/*"
             ref={fileInputRef}
             onChange={handleImageSelect}
-            style={{ display: 'none' }}
+            className={style['face_swap_frontend_page-hidden_input']}
           />
           {sourceImage ? (
             <Box sx={{ textAlign: 'center' }}>
@@ -348,25 +345,29 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
           <Typography variant="h6" gutterBottom align="center">
             目標畫面
           </Typography>
-          <div className={style['face_swap_frontend_page-swap_section-target-video_container']}>
+          <div
+            className={
+              style[
+                'face_swap_frontend_page-swap_section-target-video_container'
+              ]
+            }
+          >
             <video
               ref={videoRef}
-              className={style['face_swap_frontend_page-swap_section-target-video']}
+              className={
+                style['face_swap_frontend_page-swap_section-target-video']
+              }
               width={480}
               height={360}
               autoPlay
               muted
               playsInline
-              style={{
-                width: '100%',
-                height: 'auto',
-                backgroundColor: '#000',
-                borderRadius: 8
-              }}
             />
             <canvas
               ref={overlayCanvasRef}
-              className={style['face_swap_frontend_page-swap_section-target-overlay']}
+              className={
+                style['face_swap_frontend_page-swap_section-target-overlay']
+              }
               width={480}
               height={360}
             />
@@ -383,15 +384,11 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
           </Typography>
           <canvas
             ref={canvasRef}
-            className={style['face_swap_frontend_page-swap_section-result-canvas']}
+            className={
+              style['face_swap_frontend_page-swap_section-result-canvas']
+            }
             width={480}
             height={360}
-            style={{
-              width: '100%',
-              height: 'auto',
-              backgroundColor: '#f0f0f0',
-              borderRadius: 8
-            }}
           />
         </Paper>
       </div>

@@ -1,40 +1,46 @@
 .frontend_api_cache_test_page {
-    &-banner {
-        width: 100%;
-        margin-bottom: 8px;
+  &-banner {
+    /* Display & Box Model */
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    margin-bottom: 8px;
+
+    /* Visual */
+    object-fit: cover;
+  }
+
+  &-outbound_link {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+
+    margin-bottom: 16px;
+  }
+
+  &-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    margin-bottom: 24px;
+
+    &-query,
+    &-payload {
+      margin-bottom: 8px;
     }
 
-    &-outbound_link {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: baseline;
-        gap: 8px;
-
-        margin-bottom: 16px;
+    &-http_method {
+      margin-bottom: 8px;
     }
+  }
 
-    &-form {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-
-        margin-bottom: 24px;
-
-        &-query,
-        &-payload {
-            margin-bottom: 8px;
-        }
-
-        &-http_method {
-            margin-bottom: 8px;
-        }
-    }
-
-    &-content {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 4px;
-    }
+  &-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
 }

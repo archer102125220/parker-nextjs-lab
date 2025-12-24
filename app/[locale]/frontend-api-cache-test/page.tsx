@@ -100,12 +100,6 @@ export default function FrontendApiCacheTestPage(): React.ReactNode {
         alt="Frontend API Cache Test Banner"
         width={1200}
         height={400}
-        style={{
-          width: '100%',
-          height: 'auto',
-          maxHeight: '400px',
-          objectFit: 'cover'
-        }}
         priority
       />
 

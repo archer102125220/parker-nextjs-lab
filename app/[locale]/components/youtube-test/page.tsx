@@ -2,7 +2,8 @@
 
 import { useState, useRef } from 'react';
 import Youtube from '@/components/Youtube';
-import '../page.scss';
+
+import styles from './page.module.scss';
 
 export default function YoutubeTestPage() {
   const [videoId, setVideoId] = useState('dQw4w9WgXcQ'); // Rick Astley - Never Gonna Give You Up
@@ -23,23 +24,18 @@ export default function YoutubeTestPage() {
   ];
 
   return (
-    <div style={{ padding: '40px 20px', maxWidth: '900px', margin: '0 auto' }}>
+    <section className={styles.youtube_test_page}>
       <h1>Youtube 播放器測試</h1>
-      <p style={{ marginBottom: '30px', color: '#666' }}>
+      <p className={styles['youtube_test_page-description']}>
         測試 YouTube 影片嵌入播放功能
       </p>
 
-      <div style={{ marginBottom: '40px' }}>
-        <h2>當前播放影片</h2>
-        <div style={{ 
-          position: 'relative', 
-          paddingBottom: '56.25%', 
-          height: 0, 
-          overflow: 'hidden',
-          backgroundColor: '#000',
-          borderRadius: '8px'
-        }}>
-          <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+      <div className={styles['youtube_test_page-section']}>
+        <h2 className={styles['youtube_test_page-section_title']}>
+          當前播放影片
+        </h2>
+        <div className={styles['youtube_test_page-video_wrapper']}>
+          <div className={styles['youtube_test_page-video_inner']}>
             <Youtube
               videoId={videoId}
               autoplay={false}
@@ -62,60 +58,41 @@ export default function YoutubeTestPage() {
         </div>
       </div>
 
-      <div style={{ marginBottom: '40px' }}>
-        <h2>載入自訂影片</h2>
-        <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+      <div className={styles['youtube_test_page-section']}>
+        <h2 className={styles['youtube_test_page-section_title']}>
+          載入自訂影片
+        </h2>
+        <div className={styles['youtube_test_page-input_group']}>
           <input
             type="text"
             value={customVideoId}
             onChange={(e) => setCustomVideoId(e.target.value)}
             placeholder="輸入 YouTube 影片 ID"
-            style={{
-              flex: 1,
-              padding: '10px',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              fontSize: '14px'
-            }}
+            className={styles['youtube_test_page-input']}
           />
           <button
             onClick={handleLoadVideo}
-            style={{
-              padding: '10px 20px',
-              backgroundColor: '#1976d2',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px'
-            }}
+            className={styles['youtube_test_page-button']}
           >
             載入影片
           </button>
         </div>
-        <p style={{ fontSize: '12px', color: '#666' }}>
-          提示: 從 YouTube 網址中取得影片 ID,例如 https://www.youtube.com/watch?v=<strong>dQw4w9WgXcQ</strong>
+        <p className={styles['youtube_test_page-hint']}>
+          提示: 從 YouTube 網址中取得影片 ID,例如
+          https://www.youtube.com/watch?v=<strong>dQw4w9WgXcQ</strong>
         </p>
       </div>
 
-      <div style={{ marginBottom: '40px' }}>
-        <h2>熱門影片範例</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>
+      <div className={styles['youtube_test_page-section']}>
+        <h2 className={styles['youtube_test_page-section_title']}>
+          熱門影片範例
+        </h2>
+        <div className={styles['youtube_test_page-popular_grid']}>
           {popularVideos.map((video) => (
             <button
               key={video.id}
               onClick={() => setVideoId(video.id)}
-              style={{
-                padding: '12px',
-                backgroundColor: videoId === video.id ? '#1976d2' : '#f5f5f5',
-                color: videoId === video.id ? 'white' : '#333',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '12px',
-                textAlign: 'left',
-                transition: 'all 0.2s'
-              }}
+              className={`${styles['youtube_test_page-popular_button']} ${videoId === video.id ? styles['youtube_test_page-popular_button--active'] : ''}`}
             >
               {video.title}
             </button>
@@ -123,9 +100,9 @@ export default function YoutubeTestPage() {
         </div>
       </div>
 
-      <div style={{ marginBottom: '40px' }}>
-        <h2>功能說明</h2>
-        <ul>
+      <div className={styles['youtube_test_page-section']}>
+        <h2 className={styles['youtube_test_page-section_title']}>功能說明</h2>
+        <ul className={styles['youtube_test_page-features']}>
           <li>✅ 支援 YouTube IFrame API</li>
           <li>✅ 可自訂播放器參數</li>
           <li>✅ 支援事件監聽 (onReady, onStateChange, onError)</li>
@@ -133,6 +110,6 @@ export default function YoutubeTestPage() {
           <li>✅ 支援自動播放控制</li>
         </ul>
       </div>
-    </div>
+    </section>
   );
 }

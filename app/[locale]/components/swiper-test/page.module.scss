@@ -1,0 +1,57 @@
+// Swiper Test Page Styles
+@use '@/styles/placeholders' as *;
+
+.swiper_test_page {
+  @extend %test_page;
+  max-width: 1000px;
+
+  &-description {
+    @extend %test_page_description;
+  }
+
+  &-section {
+    /* Display & Box Model */
+    margin-bottom: 40px;
+  }
+
+  &-section_title {
+    /* Display & Box Model */
+    margin-bottom: 16px;
+  }
+
+  &-slide_info {
+    /* Display & Box Model */
+    margin-top: 10px;
+
+    /* Typography */
+    color: #666;
+  }
+
+  &-slide {
+    /* Display & Box Model */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+
+    /* Typography */
+    color: white;
+    font-size: 24px;
+
+    &--blue {
+      background-color: #1976d2;
+    }
+
+    &--green {
+      background-color: #4caf50;
+    }
+
+    &--red {
+      background-color: #f44336;
+    }
+
+    &--orange {
+      background-color: #ff9800;
+    }
+  }
+}

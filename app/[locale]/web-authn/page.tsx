@@ -70,8 +70,8 @@ export default function WebAuthnPage(): React.ReactNode {
         },
         pubKeyCredParams: [
           { type: 'public-key', alg: -257 }, // RS256 (TPM compatible, prioritized)
-          { type: 'public-key', alg: -7 },   // ES256
-          { type: 'public-key', alg: -37 }   // PS256 (RSA-PSS)
+          { type: 'public-key', alg: -7 }, // ES256
+          { type: 'public-key', alg: -37 } // PS256 (RSA-PSS)
         ],
         authenticatorSelection: {
           requireResidentKey: true,
@@ -306,19 +306,16 @@ export default function WebAuthnPage(): React.ReactNode {
         alt="WebAuthn Banner"
         width={1200}
         height={400}
-        style={{
-          width: '100%',
-          height: 'auto',
-          maxHeight: '400px',
-          objectFit: 'cover'
-        }}
         priority
       />
 
       {/* Registration Section */}
       <Paper className={style['web_authn_page-register']} elevation={2}>
         <form onSubmit={handleWebAuthnRegister}>
-          <Typography variant="h6" className={style['web_authn_page-register-title']}>
+          <Typography
+            variant="h6"
+            className={style['web_authn_page-register-title']}
+          >
             向伺服器註冊生物辨識資料
           </Typography>
 
@@ -385,7 +382,10 @@ export default function WebAuthnPage(): React.ReactNode {
       {/* Login/Verify Section */}
       <Paper className={style['web_authn_page-login']} elevation={2}>
         <form onSubmit={handleWebAuthnLogin}>
-          <Typography variant="h6" className={style['web_authn_page-login-title']}>
+          <Typography
+            variant="h6"
+            className={style['web_authn_page-login-title']}
+          >
             執行身份驗證
           </Typography>
 

@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import SwiperCustom from '@/components/SwiperCustom';
 
+import styles from './page.module.scss';
+
 export default function SwiperTestPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -10,15 +12,9 @@ export default function SwiperTestPage() {
     {
       id: 1,
       content: (
-        <div style={{ 
-          height: '300px', 
-          backgroundColor: '#1976d2', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          color: 'white',
-          fontSize: '24px'
-        }}>
+        <div
+          className={`${styles['swiper_test_page-slide']} ${styles['swiper_test_page-slide--blue']}`}
+        >
           Slide 1
         </div>
       )
@@ -26,15 +22,9 @@ export default function SwiperTestPage() {
     {
       id: 2,
       content: (
-        <div style={{ 
-          height: '300px', 
-          backgroundColor: '#4caf50', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          color: 'white',
-          fontSize: '24px'
-        }}>
+        <div
+          className={`${styles['swiper_test_page-slide']} ${styles['swiper_test_page-slide--green']}`}
+        >
           Slide 2
         </div>
       )
@@ -42,15 +32,9 @@ export default function SwiperTestPage() {
     {
       id: 3,
       content: (
-        <div style={{ 
-          height: '300px', 
-          backgroundColor: '#f44336', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          color: 'white',
-          fontSize: '24px'
-        }}>
+        <div
+          className={`${styles['swiper_test_page-slide']} ${styles['swiper_test_page-slide--red']}`}
+        >
           Slide 3
         </div>
       )
@@ -58,15 +42,9 @@ export default function SwiperTestPage() {
     {
       id: 4,
       content: (
-        <div style={{ 
-          height: '300px', 
-          backgroundColor: '#ff9800', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          color: 'white',
-          fontSize: '24px'
-        }}>
+        <div
+          className={`${styles['swiper_test_page-slide']} ${styles['swiper_test_page-slide--orange']}`}
+        >
           Slide 4
         </div>
       )
@@ -74,31 +52,28 @@ export default function SwiperTestPage() {
   ];
 
   return (
-    <div style={{ padding: '40px 20px', maxWidth: '1000px', margin: '0 auto' }}>
+    <section className={styles.swiper_test_page}>
       <h1>SwiperCustom 自訂輪播測試</h1>
-      <p style={{ marginBottom: '30px', color: '#666' }}>
+      <p className={styles['swiper_test_page-description']}>
         展示自訂 Swiper 輪播組件
       </p>
 
-      <div style={{ marginBottom: '40px' }}>
-        <h2>基本用法</h2>
+      <div className={styles['swiper_test_page-section']}>
+        <h2 className={styles['swiper_test_page-section_title']}>基本用法</h2>
         <SwiperCustom
           slides={slides}
           onSlideChange={setCurrentIndex}
           autoplay={true}
         />
-        <p style={{ marginTop: '10px', color: '#666' }}>
+        <p className={styles['swiper_test_page-slide_info']}>
           當前索引: {currentIndex}
         </p>
       </div>
 
-      <div>
-        <h2>無自動播放</h2>
-        <SwiperCustom
-          slides={slides}
-          autoplay={false}
-        />
+      <div className={styles['swiper_test_page-section']}>
+        <h2 className={styles['swiper_test_page-section_title']}>無自動播放</h2>
+        <SwiperCustom slides={slides} autoplay={false} />
       </div>
-    </div>
+    </section>
   );
 }

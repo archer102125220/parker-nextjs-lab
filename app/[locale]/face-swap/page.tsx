@@ -27,13 +27,6 @@ export default function FaceSwapPage(): React.ReactNode {
         alt="Face Swap Banner"
         width={800}
         height={300}
-        style={{
-          width: '100%',
-          maxWidth: 800,
-          height: 'auto',
-          maxHeight: 300,
-          objectFit: 'cover'
-        }}
         priority
       />
 
@@ -70,7 +63,9 @@ export default function FaceSwapPage(): React.ReactNode {
           </CardActions>
         </Card>
 
-        <Card className={`${style['face_swap_page-cards-card']} ${style['face_swap_page-cards-card--coming_soon']}`}>
+        <Card
+          className={`${style['face_swap_page-cards-card']} ${style['face_swap_page-cards-card--coming_soon']}`}
+        >
           <Chip
             className={style['face_swap_page-cards-card-chip']}
             label="開發中"

@@ -658,11 +658,11 @@
 
 ---
 
-## Phase 7.5: CSS Compliance Fix Phase 2 (CSS 標準合規性修復 Phase 2) [17/75] 🔄
+## Phase 7.5: CSS Compliance Fix Phase 2 (CSS 標準合規性修復 Phase 2) [52/75] 🔄
 
 > **目標**: 移除專案中剩餘的靜態內聯樣式，轉換為符合 BEM 規範的 CSS 類別或 CSS 變數
 
-### 已完成工作 (Completed) [17/17] ✅
+### 已完成工作 (Completed) [52/52] ✅
 
 #### 全域 Placeholders 建立
 - [x] 添加 Flexbox 布局 placeholders (`%flex_row`, `%flex_row_between`, etc.)
@@ -676,30 +676,34 @@
 #### WebRTC 頁面修復
 - [x] `web-rtc/page.tsx` - banner 圖片樣式 → BEM 類別
 
-### 剩餘工作 (Remaining) [0/58]
+#### 階段 2.2: 簡單修復 ✅ (2025-12-24)
+- [x] LazyLoad 測試圖片 - 先前已完成
+- [x] `web-cam/page.tsx` - Image banner 樣式
+- [x] `web-authn/page.tsx` - Image banner 樣式
+- [x] `frontend-api-cache-test/page.tsx` - Image banner 樣式
+- [x] `face-swap/page.tsx` - Image banner 樣式
+- [x] `face-swap/frontend/page.tsx` - Image banner + hidden input + video/canvas 樣式
+- [x] `face-swap/backend/page.tsx` - Image banner + hidden input 樣式
 
-#### 階段 2.2: 簡單修復 (推薦優先) [0/8]
-- [ ] LazyLoad 測試圖片 (2 個)
-- [ ] Image 組件樣式標準化 (6 個)
+#### 階段 2.3: Link 裝飾 ✅ (2025-12-24)
+- [x] `route/page.tsx` - Link 樣式 (text-decoration)
+- [x] `directive-effects/page.tsx` - Link 樣式 (text-decoration)
 
-#### 階段 2.3: 隱藏輸入和 Link 裝飾 [0/5]
-- [ ] 隱藏輸入 (3 個)
-- [ ] Link 裝飾 (2 個)
+#### 階段 2.4: 測試頁面靜態樣式 ✅ (2025-12-24)
+- [x] `components/swiper-test/page.tsx` - 創建 CSS Module，移除 ~10 個內聯樣式
+- [x] `components/youtube-test/page.tsx` - 創建 CSS Module，移除 ~15 個內聯樣式
 
-#### 階段 2.4: 測試頁面靜態樣式 [0/20]
-- [ ] Swiper 測試頁面 (~10 個)
-- [ ] YouTube 測試頁面 (~10 個)
+### 剩餘工作 (Remaining) [0/23]
 
-#### 階段 2.5: Video/Canvas 元素 [0/7]
-- [ ] Face Swap 頁面 (3 個)
+#### 階段 2.5: Video/Canvas 元素 [0/4]
 - [ ] WebRTC Room 頁面 (4 個)
 
 #### 階段 2.6: 條件樣式 (低優先級) [0/21]
 - [ ] 基於狀態的動態樣式
 
 ### 參考文檔
-- [CSS Compliance Fix Phase 2 List](file:///c:/Users/User/Desktop/code/parker-nextjs-lab/docs/in-progress/css-compliance-fix-phase2-list.md)
-- [CSS Compliance Fix Phase 2 Roadmap](file:///c:/Users/User/Desktop/code/parker-nextjs-lab/docs/in-progress/css-compliance-fix-phase2-roadmap.md)
+- [CSS Compliance Fix Phase 2 List](file:///Users/parker/Desktop/code/parker-nextjs-lab/docs/in-progress/css-compliance-fix-phase2-list.md)
+- [CSS Compliance Fix Phase 2 Roadmap](file:///Users/parker/Desktop/code/parker-nextjs-lab/docs/in-progress/css-compliance-fix-phase2-roadmap.md)
 
 ---
 
