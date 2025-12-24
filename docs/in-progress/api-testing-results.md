@@ -19,35 +19,26 @@
 
 ### OAuth API Routes
 
+> ⚠️ **跳過測試**：這些 API 是從別的專案複製過來的，因缺少 OAuth 憑證而暫時跳過測試。
+> 建議使用時需要詳細測試。
+
 #### 1. Facebook OAuth Verify
 - **路徑**: `/api/facebook-oauth-verify`
 - **方法**: POST
-- **狀態**: ⏳ 待測試
-- **測試項目**:
-  - [ ] 有效的 Facebook token 驗證
-  - [ ] 無效的 token 錯誤處理
-  - [ ] 缺少 token 參數錯誤處理
-  - [ ] 回傳格式正確性
+- **狀態**: ⏭️ **跳過**（缺少 Facebook 憑證）
+- **備註**: 從別的專案複製，需設定 `NEXT_PUBLIC_FACEBOOK_APP_ID`
 
 #### 2. Google OAuth Verify
 - **路徑**: `/api/google-oauth-verify`
 - **方法**: POST
-- **狀態**: ⏳ 待測試
-- **測試項目**:
-  - [ ] 有效的 Google token 驗證
-  - [ ] 無效的 token 錯誤處理
-  - [ ] 缺少 token 參數錯誤處理
-  - [ ] 回傳格式正確性
+- **狀態**: ⏭️ **跳過**（缺少 Google 憑證）
+- **備註**: 從別的專案複製，需設定 `NEXT_PUBLIC_GOOGLE_CLIENT_ID`
 
 #### 3. LINE OAuth Verify
 - **路徑**: `/api/line-oauth-verify`
 - **方法**: POST
-- **狀態**: ⏳ 待測試
-- **測試項目**:
-  - [ ] 有效的 LINE token 驗證
-  - [ ] 無效的 token 錯誤處理
-  - [ ] 缺少 token 參數錯誤處理
-  - [ ] 回傳格式正確性
+- **狀態**: ⏭️ **跳過**（缺少 LINE 憑證）
+- **備註**: 從別的專案複製，需設定 LINE Login Channel
 
 ---
 

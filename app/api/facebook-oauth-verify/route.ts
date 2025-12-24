@@ -1,3 +1,9 @@
+/**
+ * WARNING: 此程式碼是從別的專案複製過來的，建議使用時需要詳細測試
+ * - 需要設定有效的 NEXT_PUBLIC_FACEBOOK_APP_ID 環境變數
+ * - 需要在 Facebook Developer Console 完成應用程式設定
+ */
+
 import { NextResponse } from 'next/server';
 
 const APP_ID = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID;

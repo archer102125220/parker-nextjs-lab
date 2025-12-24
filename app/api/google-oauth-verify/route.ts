@@ -1,3 +1,9 @@
+/**
+ * WARNING: 此程式碼是從別的專案複製過來的，建議使用時需要詳細測試
+ * - 需要設定有效的 NEXT_PUBLIC_GOOGLE_CLIENT_ID 環境變數
+ * - 需要在 Google Cloud Console 完成 OAuth 設定
+ */
+
 import { NextResponse } from 'next/server';
 import { OAuth2Client } from 'google-auth-library';
 

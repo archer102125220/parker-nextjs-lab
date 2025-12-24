@@ -1,3 +1,9 @@
+/**
+ * WARNING: 此程式碼是從別的專案複製過來的，建議使用時需要詳細測試
+ * - 需要設定有效的 LINE Login Channel
+ * - 需要在 LINE Developers Console 完成應用程式設定
+ */
+
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
