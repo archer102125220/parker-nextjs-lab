@@ -1,8 +1,17 @@
-'use client';
-
-import GoTop from '@/components/GoTop';
-import '../page.scss';
+import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import style from './page.module.scss';
+import '../page.scss';
+
+const GoTopClient = dynamic(() => import('./GoTopClient'));
+const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'GoTop 回到頂部測試',
+    description: '向下滾動頁面,當滾動超過 100px 時會出現回到頂部按鈕'
+  };
+}
 
 export default function GoTopTestPage() {
   const content = Array.from(
@@ -13,6 +22,7 @@ export default function GoTopTestPage() {
 
   return (
     <div className={style.go_top_test_page}>
+      <GTMScnOpen />
       <h1>GoTop 回到頂部測試</h1>
       <p className={style['go_top_test_page-description']}>
         向下滾動頁面,當滾動超過 100px 時會出現回到頂部按鈕
@@ -44,14 +54,7 @@ export default function GoTopTestPage() {
         <p>您已經滾動到頁面底部,點擊右下角的按鈕可以快速回到頂部!</p>
       </div>
 
-      {/* GoTop Component */}
-      <GoTop
-        limit={100}
-        position="fixed"
-        right="25px"
-        showBottom="25px"
-        heddinBottom="-50px"
-      />
+      <GoTopClient />
     </div>
   );
 }

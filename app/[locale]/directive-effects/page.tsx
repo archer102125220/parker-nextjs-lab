@@ -1,7 +1,7 @@
-'use client';
-
+import type { Metadata } from 'next';
 import { Link } from '@/i18n/navigation';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import {
   Card,
   CardContent,
@@ -11,6 +11,8 @@ import {
 } from '@mui/material';
 
 import styles from './page.module.scss';
+
+const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
 
 const DEMO_LINKS = [
   {
@@ -27,9 +29,18 @@ const DEMO_LINKS = [
   }
 ];
 
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'Directive Effects 效果測試',
+    description:
+      '自訂實作的 Directive Effects - 包含懶載入和波紋效果'
+  };
+}
+
 export default function DirectiveEffectsPage(): React.ReactNode {
   return (
     <section className={styles.directive_effects_page}>
+      <GTMScnOpen />
       <Typography variant="body1" paragraph>
         為避免因套件版本相容性或專案性質不合適使用 npm
         上相關工具之狀況，因此自己實作相關效果
