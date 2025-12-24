@@ -5,7 +5,11 @@ import Image from 'next/image';
 
 import { DefaultLayout } from '@/layout/default';
 import styles from './page.module.scss';
-import { ABOUT_CONTENT_DATA_ZH, ABOUT_CONTENT_DATA_EN, type Section } from './data';
+import {
+  ABOUT_CONTENT_DATA_ZH,
+  ABOUT_CONTENT_DATA_EN,
+  type Section
+} from './data';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -18,12 +22,15 @@ interface AboutPageProps {
   params: Promise<{ locale: string }>;
 }
 
-export default async function AboutPage(props: AboutPageProps): Promise<ReactNode> {
+export default async function AboutPage(
+  props: AboutPageProps
+): Promise<ReactNode> {
   const { locale } = await props.params;
   const nonce = (await headers()).get('x-nonce') || '';
-  
+
   // Get content based on locale
-  const data: Section[] = locale === 'en' ? ABOUT_CONTENT_DATA_EN : ABOUT_CONTENT_DATA_ZH;
+  const data: Section[] =
+    locale === 'en' ? ABOUT_CONTENT_DATA_EN : ABOUT_CONTENT_DATA_ZH;
 
   return (
     <DefaultLayout nonce={nonce}>
@@ -34,12 +41,6 @@ export default async function AboutPage(props: AboutPageProps): Promise<ReactNod
           alt="About Banner"
           width={1200}
           height={400}
-          style={{
-            width: '100%',
-            height: 'auto',
-            maxHeight: '400px',
-            objectFit: 'cover'
-          }}
           priority
         />
 
@@ -51,7 +52,9 @@ export default async function AboutPage(props: AboutPageProps): Promise<ReactNod
           <>
             {data.map((section, index) => (
               <section key={index} className={styles['about_page-section']}>
-                <h2 className={styles['about_page-section-sub_title']}>{section.title}</h2>
+                <h2 className={styles['about_page-section-sub_title']}>
+                  {section.title}
+                </h2>
 
                 {section.description && (
                   <div className={styles['about_page-section-description']}>

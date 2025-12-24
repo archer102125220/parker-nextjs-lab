@@ -1,0 +1,34 @@
+// WebRTCRoomEntryCard Component Styles
+@use '@/styles/placeholders' as *;
+
+.web_rtc_room_entry_card {
+  @extend %test_page;
+
+  &-description {
+    /* Display & Box Model */
+    margin-bottom: 32px;
+  }
+
+  &-context {
+    /* Display & Box Model */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 16px;
+    width: 70dvw;
+    margin: auto;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
+
+  &-context-initiate,
+  &-context-join {
+    /* Display & Box Model */
+    flex: 1;
+    min-width: 200px;
+  }
+}

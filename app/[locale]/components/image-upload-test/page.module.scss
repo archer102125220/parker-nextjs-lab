@@ -1,0 +1,26 @@
+// ImageUpload Demo Page Styles
+@use '@/styles/placeholders' as *;
+
+.image_upload_test_page {
+  @extend %demo_page;
+  @extend %demo_page--wide;
+
+  &-description {
+    @extend %demo_page-description;
+  }
+
+  &-section {
+    @extend %demo_page-section;
+  }
+
+  &-preview {
+    /* Display & Box Model */
+    margin-top: 20px;
+  }
+
+  &-preview_img {
+    /* Display & Box Model */
+    max-width: 300px;
+    border-radius: 8px;
+  }
+}

@@ -1,0 +1,36 @@
+// PhoneInput Demo Page Styles
+@use '@/styles/placeholders' as *;
+
+.phone_input_test_page {
+  @extend %demo_page;
+
+  &-description {
+    @extend %demo_page-description;
+  }
+
+  &-section {
+    @extend %demo_page-section;
+  }
+
+  &-section-note {
+    @extend %demo_page-section-note;
+  }
+
+  &-section-note--valid {
+    color: #4caf50;
+  }
+
+  &-section-note--invalid {
+    color: #f44336;
+  }
+
+  &-info_box {
+    /* Display & Box Model */
+    margin-top: 10px;
+    padding: 15px;
+    border-radius: 8px;
+
+    /* Visual */
+    background-color: #f5f5f5;
+  }
+}

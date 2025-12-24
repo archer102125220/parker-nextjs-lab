@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Banner from '@/components/Banner';
 import type { BannerItem } from '@/components/Banner';
+import style from './page.module.scss';
 
 export default function BannerDemoPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -22,7 +23,8 @@ export default function BannerDemoPage() {
     },
     {
       id: 3,
-      image: '/img/test-img/pngtree-green-field-landscape-wallpapers-picture-image_3163831.jpg',
+      image:
+        '/img/test-img/pngtree-green-field-landscape-wallpapers-picture-image_3163831.jpg',
       title: 'Banner 3',
       description: '這是第三個 Banner 的描述'
     },
@@ -35,13 +37,13 @@ export default function BannerDemoPage() {
   ];
 
   return (
-    <div style={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto' }}>
+    <div className={style.banner_demo_page}>
       <h1>Banner 輪播組件測試</h1>
-      <p style={{ marginBottom: '30px', color: '#666' }}>
+      <p className={style['banner_demo_page-description']}>
         展示 3D 輪播效果、拖曳支援、鍵盤導航和自動播放功能
       </p>
 
-      <div style={{ marginBottom: '40px' }}>
+      <div className={style['banner_demo_page-section']}>
         <h2>基本用法</h2>
         <Banner
           banners={banners}
@@ -51,18 +53,14 @@ export default function BannerDemoPage() {
           interval={3000}
           height={400}
         />
-        <p style={{ marginTop: '10px', color: '#666' }}>
+        <p className={style['banner_demo_page-section-note']}>
           當前索引: {currentIndex}
         </p>
       </div>
 
-      <div style={{ marginBottom: '40px' }}>
+      <div className={style['banner_demo_page-section']}>
         <h2>無自動播放</h2>
-        <Banner
-          banners={banners}
-          autoplay={false}
-          height={300}
-        />
+        <Banner banners={banners} autoplay={false} height={300} />
       </div>
 
       <div>

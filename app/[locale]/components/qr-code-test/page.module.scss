@@ -1,0 +1,35 @@
+// QRCode Demo Page Styles
+@use '@/styles/placeholders' as *;
+
+.qr_code_test_page {
+  @extend %demo_page;
+
+  &-description {
+    @extend %demo_page-description;
+  }
+
+  &-section {
+    @extend %demo_page-section;
+  }
+
+  &-section-note {
+    @extend %demo_page-section-note;
+  }
+
+  &-size_group {
+    @extend %demo_page-button_group;
+    gap: 20px;
+  }
+
+  &-input {
+    /* Display & Box Model */
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+
+    /* Typography */
+    font-size: 14px;
+  }
+}

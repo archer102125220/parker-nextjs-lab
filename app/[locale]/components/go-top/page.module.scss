@@ -1,0 +1,22 @@
+// GoTop Demo Page Styles
+@use '@/styles/placeholders' as *;
+
+.go_top_test_page {
+  @extend %demo_page;
+
+  &-description {
+    @extend %demo_page-description;
+  }
+
+  &-section {
+    @extend %demo_page-section;
+  }
+
+  &-paragraph {
+    @extend %demo_page-paragraph;
+  }
+
+  &-footer {
+    @extend %demo_page-footer;
+  }
+}

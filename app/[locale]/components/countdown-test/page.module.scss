@@ -1,0 +1,185 @@
+// Countdown Demo Page Styles
+@use '@/styles/placeholders' as *;
+
+.countdown_test_page {
+  @extend %demo_page;
+  @extend %demo_page--extra_wide;
+
+  &-description {
+    @extend %demo_page-description;
+  }
+
+  &-config_box {
+    /* Display & Box Model */
+    margin-bottom: 40px;
+    padding: 20px;
+    border-radius: 8px;
+
+    /* Visual */
+    background: #f5f5f5;
+  }
+
+  &-config_title {
+    /* Display & Box Model */
+    margin-bottom: 20px;
+  }
+
+  &-form {
+    /* Display & Box Model */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  &-label {
+    /* Display & Box Model */
+    display: block;
+    margin-bottom: 8px;
+
+    /* Typography */
+    font-weight: bold;
+  }
+
+  &-input {
+    /* Display & Box Model */
+    padding: 8px 12px;
+    width: 200px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+
+    /* Typography */
+    font-size: 16px;
+  }
+
+  &-radio_group {
+    /* Display & Box Model */
+    display: flex;
+    gap: 15px;
+  }
+
+  &-radio_label {
+    /* Display & Box Model */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    /* Misc */
+    cursor: pointer;
+  }
+
+  &-submit_btn {
+    /* Display & Box Model */
+    padding: 10px 24px;
+    border: none;
+    border-radius: 4px;
+
+    /* Typography */
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+
+    /* Visual */
+    background: #667eea;
+
+    /* Misc */
+    cursor: pointer;
+  }
+
+  &-restart_btn {
+    /* Display & Box Model */
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+
+    /* Typography */
+    font-weight: bold;
+    color: #fff;
+
+    /* Visual */
+    background: #4caf50;
+
+    /* Misc */
+    cursor: pointer;
+  }
+
+  &-preview {
+    /* Display & Box Model */
+    margin-top: 20px;
+
+    /* Typography */
+    text-align: center;
+  }
+
+  &-preview-note {
+    /* Display & Box Model */
+    margin-top: 10px;
+
+    /* Typography */
+    color: #666;
+  }
+
+  &-section {
+    @extend %demo_page-section;
+  }
+
+  &-section_header {
+    /* Display & Box Model */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  &-grid {
+    /* Display & Box Model */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+  }
+
+  &-grid_item {
+    /* Typography */
+    text-align: center;
+  }
+
+  &-grid_item-title {
+    /* Display & Box Model */
+    margin-bottom: 15px;
+  }
+
+  &-grid_item-countdown {
+    /* Display & Box Model */
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+
+  &-grid_item-note {
+    /* Typography */
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+  }
+
+  &-custom_group {
+    /* Display & Box Model */
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  &-custom_item {
+    /* Typography */
+    text-align: center;
+  }
+
+  &-custom_item-label {
+    /* Display & Box Model */
+    margin-top: 8px;
+
+    /* Typography */
+    font-size: 12px;
+    color: #666;
+  }
+}

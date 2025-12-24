@@ -806,8 +806,83 @@ parker-nextjs-lab/
    - ✅ Co-located with page files
    - ✅ Use `.module.scss` to avoid global pollution
    - ✅ Contains only page-specific styles
+   - ✅ **Each page must have a unique root class name** (e.g., `.hooks_test_page`, `.socket_io_page`)
 
-> ⚠️ **Important**: Do NOT create `_shared` SCSS directories within `app/`. Cross-page shared styles must be defined in `styles/placeholders/` and imported via `@use '@/styles/placeholders' as *;`
+> ⚠️ **Important Rules**:
+> - Do NOT create `_shared` SCSS directories within `app/`. Cross-page shared styles must be defined in `styles/placeholders/` and imported via `@use '@/styles/placeholders' as *;`
+> - Do NOT share CSS class names between pages (e.g., don't use `.web_rtc_room_page` in multiple pages). This helps quickly identify the corresponding file when debugging in browser DevTools.
+> - If multiple pages have similar DOM structures, create a **reusable component** in `components/` that accepts CSS class names as props, rather than sharing a single CSS file.
+
+#### Example: Component with Internal Styles and Page Identification
+
+When a component encapsulates the entire page content, the component should have its own SCSS file for internal styles. The page only passes a `pageClassName` for DevTools identification:
+
+```tsx
+// components/MyCard/index.tsx
+import './index.scss';  // Component's own styles
+
+interface MyCardProps {
+  title: string;
+  description: string;
+  pageClassName?: string;  // Only for page identification
+}
+
+export default function MyCard({ title, description, pageClassName }: MyCardProps) {
+  // Combine page identifier with component's internal class
+  const rootClassName = pageClassName 
+    ? `${pageClassName} my_card` 
+    : 'my_card';
+
+  return (
+    <div className={rootClassName}>
+      <h2 className="my_card-title">{title}</h2>
+      <p className="my_card-description">{description}</p>
+    </div>
+  );
+}
+```
+
+```scss
+// components/MyCard/index.scss
+.my_card {
+  padding: 20px;
+  
+  &-title {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+  
+  &-description {
+    color: #666;
+  }
+}
+```
+
+```tsx
+// app/[locale]/page-a/page.tsx
+import MyCard from '@/components/MyCard';
+import style from './page.module.scss';
+
+export default function PageA() {
+  return (
+    <MyCard
+      title="Page A Title"
+      description="Page A description"
+      pageClassName={style.page_a}  // Only one class needed
+    />
+  );
+}
+```
+
+```scss
+// app/[locale]/page-a/page.module.scss
+.page_a {
+  // Empty - only for DevTools identification
+  // Actual styles are in the component
+}
+```
+
+In DevTools, the element will show: `page_a my_card`, making it easy to identify both the page and the component.
 
 #### Placeholders vs Mixins
 

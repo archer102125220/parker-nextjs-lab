@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Countdown from '@/components/Countdown';
+import style from './page.module.scss';
 
 export default function CountdownTestPage() {
   // Test configuration
@@ -35,7 +36,7 @@ export default function CountdownTestPage() {
     setCountup10Running(false);
     setCountdown10(0); // Change value first
     setCountup10(0);
-    
+
     setTimeout(() => {
       setCountdown10(10);
       setCountup10(10);
@@ -45,23 +46,21 @@ export default function CountdownTestPage() {
   };
 
   return (
-    <div style={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto' }}>
+    <div className={style.countdown_test_page}>
       <h1>Countdown 倒數計時組件測試</h1>
-      <p style={{ marginBottom: '30px', color: '#666' }}>
+      <p className={style['countdown_test_page-description']}>
         展示翻牌動畫效果的倒數/正數計時器（基於 Nuxt 版本實現）
       </p>
 
       {/* Configuration Form */}
-      <div style={{ 
-        marginBottom: '40px', 
-        padding: '20px', 
-        background: '#f5f5f5', 
-        borderRadius: '8px' 
-      }}>
-        <h2 style={{ marginBottom: '20px' }}>測試配置</h2>
-        <form onSubmit={handleTestSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+      <div className={style['countdown_test_page-config_box']}>
+        <h2 className={style['countdown_test_page-config_title']}>測試配置</h2>
+        <form
+          onSubmit={handleTestSubmit}
+          className={style['countdown_test_page-form']}
+        >
           <div>
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
+            <label className={style['countdown_test_page-label']}>
               測試秒數：
             </label>
             <input
@@ -69,22 +68,16 @@ export default function CountdownTestPage() {
               value={testInput}
               onChange={(e) => setTestInput(e.target.value)}
               min="0"
-              style={{
-                padding: '8px 12px',
-                fontSize: '16px',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                width: '200px'
-              }}
+              className={style['countdown_test_page-input']}
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
+            <label className={style['countdown_test_page-label']}>
               倒數類型：
             </label>
-            <div style={{ display: 'flex', gap: '15px' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer' }}>
+            <div className={style['countdown_test_page-radio_group']}>
+              <label className={style['countdown_test_page-radio_label']}>
                 <input
                   type="radio"
                   value="up"
@@ -93,7 +86,7 @@ export default function CountdownTestPage() {
                 />
                 向上翻
               </label>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer' }}>
+              <label className={style['countdown_test_page-radio_label']}>
                 <input
                   type="radio"
                   value="down"
@@ -108,16 +101,7 @@ export default function CountdownTestPage() {
           <div>
             <button
               type="submit"
-              style={{
-                padding: '10px 24px',
-                fontSize: '16px',
-                background: '#667eea',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontWeight: 'bold'
-              }}
+              className={style['countdown_test_page-submit_btn']}
             >
               更新
             </button>
@@ -125,7 +109,7 @@ export default function CountdownTestPage() {
         </form>
 
         {testRunning && (
-          <div style={{ marginTop: '20px', textAlign: 'center' }}>
+          <div className={style['countdown_test_page-preview']}>
             <Countdown
               countdownType={testType}
               initialSeconds={testSeconds}
@@ -142,7 +126,7 @@ export default function CountdownTestPage() {
                 setTestRunning(false);
               }}
             />
-            <p style={{ marginTop: '10px', color: '#666' }}>
+            <p className={style['countdown_test_page-preview-note']}>
               當前值: {testValue} | 運行中: {testRunning ? '是' : '否'}
             </p>
           </div>
@@ -150,30 +134,24 @@ export default function CountdownTestPage() {
       </div>
 
       {/* Preset Examples */}
-      <div style={{ marginBottom: '40px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+      <div className={style['countdown_test_page-section']}>
+        <div className={style['countdown_test_page-section_header']}>
           <h2>預設範例</h2>
           <button
             onClick={handleRestart}
-            style={{
-              padding: '8px 16px',
-              background: '#4caf50',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontWeight: 'bold'
-            }}
+            className={style['countdown_test_page-restart_btn']}
           >
             重新開始
           </button>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
+        <div className={style['countdown_test_page-grid']}>
           {/* Countdown Example */}
-          <div>
-            <h3 style={{ marginBottom: '15px' }}>倒數計時 (10 → 0)</h3>
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '15px' }}>
+          <div className={style['countdown_test_page-grid_item']}>
+            <h3 className={style['countdown_test_page-grid_item-title']}>
+              倒數計時 (10 → 0)
+            </h3>
+            <div className={style['countdown_test_page-grid_item-countdown']}>
               <Countdown
                 countdownType="down"
                 initialSeconds={10}
@@ -188,15 +166,17 @@ export default function CountdownTestPage() {
                 onCountdownEnd={() => console.log('倒數結束!')}
               />
             </div>
-            <p style={{ textAlign: 'center', color: '#666', fontSize: '14px' }}>
+            <p className={style['countdown_test_page-grid_item-note']}>
               當前: {countdown10} | {countdown10Running ? '運行中' : '已停止'}
             </p>
           </div>
 
           {/* Countup Example */}
-          <div>
-            <h3 style={{ marginBottom: '15px' }}>向上翻動畫 (10 → 0)</h3>
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '15px' }}>
+          <div className={style['countdown_test_page-grid_item']}>
+            <h3 className={style['countdown_test_page-grid_item-title']}>
+              向上翻動畫 (10 → 0)
+            </h3>
+            <div className={style['countdown_test_page-grid_item-countdown']}>
               <Countdown
                 countdownType="up"
                 initialSeconds={10}
@@ -211,7 +191,7 @@ export default function CountdownTestPage() {
                 onCountdownEnd={() => console.log('倒數結束!')}
               />
             </div>
-            <p style={{ textAlign: 'center', color: '#666', fontSize: '14px' }}>
+            <p className={style['countdown_test_page-grid_item-note']}>
               當前: {countup10} | {countup10Running ? '運行中' : '已停止'}
             </p>
           </div>
@@ -220,9 +200,11 @@ export default function CountdownTestPage() {
 
       {/* Custom Styles */}
       <div>
-        <h2 style={{ marginBottom: '20px' }}>自訂樣式範例</h2>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
-          <div style={{ textAlign: 'center' }}>
+        <h2 className={style['countdown_test_page-config_title']}>
+          自訂樣式範例
+        </h2>
+        <div className={style['countdown_test_page-custom_group']}>
+          <div className={style['countdown_test_page-custom_item']}>
             <Countdown
               countdownType="down"
               initialSeconds={5}
@@ -232,9 +214,11 @@ export default function CountdownTestPage() {
               bgColor="#4caf50"
               color="#fff"
             />
-            <p style={{ marginTop: '8px', fontSize: '12px', color: '#666' }}>綠色 150x80</p>
+            <p className={style['countdown_test_page-custom_item-label']}>
+              綠色 150x80
+            </p>
           </div>
-          <div style={{ textAlign: 'center' }}>
+          <div className={style['countdown_test_page-custom_item']}>
             <Countdown
               countdownType="down"
               initialSeconds={5}
@@ -244,9 +228,11 @@ export default function CountdownTestPage() {
               bgColor="#ff9800"
               color="#fff"
             />
-            <p style={{ marginTop: '8px', fontSize: '12px', color: '#666' }}>橙色 120x70</p>
+            <p className={style['countdown_test_page-custom_item-label']}>
+              橙色 120x70
+            </p>
           </div>
-          <div style={{ textAlign: 'center' }}>
+          <div className={style['countdown_test_page-custom_item']}>
             <Countdown
               countdownType="down"
               initialSeconds={5}
@@ -256,7 +242,9 @@ export default function CountdownTestPage() {
               bgColor="#9c27b0"
               color="#fff"
             />
-            <p style={{ marginTop: '8px', fontSize: '12px', color: '#666' }}>紫色 100x60</p>
+            <p className={style['countdown_test_page-custom_item-label']}>
+              紫色 100x60
+            </p>
           </div>
         </div>
       </div>

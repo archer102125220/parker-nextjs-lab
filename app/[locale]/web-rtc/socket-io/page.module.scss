@@ -1,0 +1,7 @@
+// WebRTC Socket.IO Entry Page
+// Page-specific class for DevTools identification
+.web_rtc_socket_io_entry_page {
+  // This class exists only for page identification in DevTools
+  // Actual styles are defined in the WebRTCRoomEntryCard component
+  display: contents;
+}

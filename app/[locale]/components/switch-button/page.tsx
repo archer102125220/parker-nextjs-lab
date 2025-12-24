@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import SwitchButton from '@/components/SwitchButton';
+import style from './page.module.scss';
 
 export default function SwitchButtonPage() {
   const [isOn, setIsOn] = useState(false);
@@ -9,40 +10,41 @@ export default function SwitchButtonPage() {
   const [customSwitch, setCustomSwitch] = useState(false);
 
   return (
-    <div style={{ padding: '40px 20px', maxWidth: '800px', margin: '0 auto' }}>
+    <div className={style.switch_button_test_page}>
       <h1>SwitchButton 開關組件測試</h1>
-      <p style={{ marginBottom: '30px', color: '#666' }}>
+      <p className={style['switch_button_test_page-description']}>
         展示開關按鈕的各種用法和狀態
       </p>
 
-      <div style={{ marginBottom: '40px' }}>
+      <div className={style['switch_button_test_page-section']}>
         <h2>基本用法</h2>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <SwitchButton
-            value={isOn}
-            onChange={setIsOn}
-          />
+        <div className={style['switch_button_test_page-row']}>
+          <SwitchButton value={isOn} onChange={setIsOn} />
           <span>狀態: {isOn ? '開啟' : '關閉'}</span>
         </div>
       </div>
 
-      <div style={{ marginBottom: '40px' }}>
+      <div className={style['switch_button_test_page-section']}>
         <h2>停用狀態</h2>
-        <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+        <div className={style['switch_button_test_page-row_group']}>
           <div>
             <SwitchButton value={true} disabled={true} />
-            <p style={{ marginTop: '5px', fontSize: '12px', color: '#666' }}>開啟 + 停用</p>
+            <p className={style['switch_button_test_page-item_label']}>
+              開啟 + 停用
+            </p>
           </div>
           <div>
             <SwitchButton value={false} disabled={true} />
-            <p style={{ marginTop: '5px', fontSize: '12px', color: '#666' }}>關閉 + 停用</p>
+            <p className={style['switch_button_test_page-item_label']}>
+              關閉 + 停用
+            </p>
           </div>
         </div>
       </div>
 
-      <div style={{ marginBottom: '40px' }}>
+      <div className={style['switch_button_test_page-section']}>
         <h2>自訂顏色</h2>
-        <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', alignItems: 'center' }}>
+        <div className={style['switch_button_test_page-row_group']}>
           <SwitchButton
             value={customSwitch}
             onChange={setCustomSwitch}
@@ -63,25 +65,12 @@ export default function SwitchButtonPage() {
 
       <div>
         <h2>實際應用範例</h2>
-        <div style={{ 
-          padding: '20px', 
-          backgroundColor: '#f5f5f5', 
-          borderRadius: '8px' 
-        }}>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            marginBottom: '15px'
-          }}>
+        <div className={style['switch_button_test_page-settings_box']}>
+          <div className={style['switch_button_test_page-settings_row']}>
             <span>啟用通知</span>
             <SwitchButton value={isEnabled} onChange={setIsEnabled} />
           </div>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center' 
-          }}>
+          <div className={style['switch_button_test_page-settings_row']}>
             <span>深色模式</span>
             <SwitchButton value={isOn} onChange={setIsOn} />
           </div>

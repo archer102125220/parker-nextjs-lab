@@ -1,0 +1,19 @@
+// Banner Demo Page Styles
+@use '@/styles/placeholders' as *;
+
+.banner_demo_page {
+  @extend %demo_page;
+  @extend %demo_page--extra_wide;
+
+  &-description {
+    @extend %demo_page-description;
+  }
+
+  &-section {
+    @extend %demo_page-section;
+  }
+
+  &-section-note {
+    @extend %demo_page-section-note;
+  }
+}

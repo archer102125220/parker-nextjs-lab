@@ -800,8 +800,83 @@ parker-nextjs-lab/
    - ✅ 與頁面檔案放在同一目錄
    - ✅ 使用 `.module.scss` 避免全域污染
    - ✅ 只包含該頁面特定的樣式
+   - ✅ **每個頁面必須有獨立的根類別名稱**（例如：`.hooks_test_page`、`.socket_io_page`）
 
-> ⚠️ **重要**：禁止在 `app/` 目錄內建立 `_shared` SCSS 目錄。跨頁面共享樣式必須定義在 `styles/placeholders/` 中，並透過 `@use '@/styles/placeholders' as *;` 引入
+> ⚠️ **重要規則**：
+> - 禁止在 `app/` 目錄內建立 `_shared` SCSS 目錄。跨頁面共享樣式必須定義在 `styles/placeholders/` 中，並透過 `@use '@/styles/placeholders' as *;` 引入
+> - 禁止在多個頁面間共用相同的 CSS 類別名稱（例如：不要在多個頁面使用 `.web_rtc_room_page`）。這有助於在瀏覽器 DevTools 中快速找到對應的檔案。
+> - 如果多個頁面有相似的 DOM 結構，請在 `components/` 中建立**可重用組件**，並透過 props 接收 CSS 類別名稱，而非共用單一 CSS 檔案。
+
+#### 範例：組件內部樣式與頁面識別
+
+當組件封裝了整個頁面內容時，組件應該有自己的 SCSS 檔案處理內部樣式。頁面只需傳入 `pageClassName` 用於 DevTools 識別：
+
+```tsx
+// components/MyCard/index.tsx
+import './index.scss';  // 組件自己的樣式
+
+interface MyCardProps {
+  title: string;
+  description: string;
+  pageClassName?: string;  // 僅用於頁面識別
+}
+
+export default function MyCard({ title, description, pageClassName }: MyCardProps) {
+  // 合併頁面識別類別與組件內部類別
+  const rootClassName = pageClassName 
+    ? `${pageClassName} my_card` 
+    : 'my_card';
+
+  return (
+    <div className={rootClassName}>
+      <h2 className="my_card-title">{title}</h2>
+      <p className="my_card-description">{description}</p>
+    </div>
+  );
+}
+```
+
+```scss
+// components/MyCard/index.scss
+.my_card {
+  padding: 20px;
+  
+  &-title {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+  
+  &-description {
+    color: #666;
+  }
+}
+```
+
+```tsx
+// app/[locale]/page-a/page.tsx
+import MyCard from '@/components/MyCard';
+import style from './page.module.scss';
+
+export default function PageA() {
+  return (
+    <MyCard
+      title="頁面 A 標題"
+      description="頁面 A 描述"
+      pageClassName={style.page_a}  // 只需傳入這一個類別
+    />
+  );
+}
+```
+
+```scss
+// app/[locale]/page-a/page.module.scss
+.page_a {
+  // 空白 - 僅用於 DevTools 識別
+  // 實際樣式在組件中定義
+}
+```
+
+在 DevTools 中，元素會顯示：`page_a my_card`，便於同時識別頁面和組件。
 
 #### Placeholders vs Mixins
 

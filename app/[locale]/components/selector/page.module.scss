@@ -1,0 +1,18 @@
+// Selector Demo Page Styles
+@use '@/styles/placeholders' as *;
+
+.selector_test_page {
+  @extend %demo_page;
+
+  &-description {
+    @extend %demo_page-description;
+  }
+
+  &-section {
+    @extend %demo_page-section;
+  }
+
+  &-section-note {
+    @extend %demo_page-section-note;
+  }
+}

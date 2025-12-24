@@ -1,0 +1,33 @@
+// WangEditor Demo Page Styles
+@use '@/styles/placeholders' as *;
+
+.wang_editor_test_page {
+  @extend %demo_page;
+  @extend %demo_page--extra_wide;
+
+  &-description {
+    @extend %demo_page-description;
+  }
+
+  &-section {
+    @extend %demo_page-section;
+  }
+
+  &-output {
+    /* Display & Box Model */
+    margin-top: 20px;
+  }
+
+  &-code {
+    /* Display & Box Model */
+    padding: 15px;
+    overflow: auto;
+    border-radius: 4px;
+
+    /* Typography */
+    font-size: 12px;
+
+    /* Visual */
+    background-color: #f5f5f5;
+  }
+}

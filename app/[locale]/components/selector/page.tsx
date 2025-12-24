@@ -2,10 +2,13 @@
 
 import { useState } from 'react';
 import Selector from '@/components/Selector';
+import style from './page.module.scss';
 
 export default function SelectorPage() {
   const [selectedValue, setSelectedValue] = useState('');
-  const [selectedObject, setSelectedObject] = useState<{ code: string; name: string } | undefined>(undefined);
+  const [selectedObject, setSelectedObject] = useState<
+    { code: string; name: string } | undefined
+  >(undefined);
 
   const options = [
     { label: '選項 1', value: '1' },
@@ -24,13 +27,13 @@ export default function SelectorPage() {
   ];
 
   return (
-    <div style={{ padding: '40px 20px', maxWidth: '800px', margin: '0 auto' }}>
+    <div className={style.selector_test_page}>
       <h1>Selector 下拉選單組件測試</h1>
-      <p style={{ marginBottom: '30px', color: '#666' }}>
+      <p className={style['selector_test_page-description']}>
         展示下拉選單的各種用法和自訂功能
       </p>
 
-      <div style={{ marginBottom: '40px' }}>
+      <div className={style['selector_test_page-section']}>
         <h2>基本用法</h2>
         <Selector
           value={selectedValue}
@@ -39,17 +42,17 @@ export default function SelectorPage() {
           valueKey="value"
           displayKey="label"
         />
-        <p style={{ marginTop: '10px', color: '#666' }}>
+        <p className={style['selector_test_page-section-note']}>
           選中的值: {selectedValue || '(未選擇)'}
         </p>
       </div>
 
-      <div style={{ marginBottom: '40px' }}>
+      <div className={style['selector_test_page-section']}>
         <h2>自訂 valueKey 和 displayKey</h2>
         <Selector
           value={selectedObject?.code}
           onChange={(value) => {
-            const country = countries.find(c => c.code === value);
+            const country = countries.find((c) => c.code === value);
             setSelectedObject(country);
           }}
           optionList={countries}
@@ -58,17 +61,14 @@ export default function SelectorPage() {
           hasShadow={true}
           hasTransition={true}
         />
-        <p style={{ marginTop: '10px', color: '#666' }}>
+        <p className={style['selector_test_page-section-note']}>
           選中的國家: {selectedObject?.name || '(未選擇)'}
         </p>
       </div>
 
-      <div style={{ marginBottom: '40px' }}>
+      <div className={style['selector_test_page-section']}>
         <h2>空選項列表</h2>
-        <Selector
-          optionList={[]}
-          emptyText="沒有可用選項"
-        />
+        <Selector optionList={[]} emptyText="沒有可用選項" />
       </div>
 
       <div>

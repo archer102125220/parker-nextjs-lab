@@ -308,7 +308,7 @@ export default function FaceSwapFrontendPage(): React.ReactNode {
                 ref={sourceImageRef}
                 src={sourceImage}
                 alt="Source face"
-                style={{ maxWidth: '100%', maxHeight: 280, borderRadius: 8 }}
+                className={style['face_swap_frontend_page-result_image']}
                 crossOrigin="anonymous"
               />
               <Button

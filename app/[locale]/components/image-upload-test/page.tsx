@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import ImageUpload from '@/components/ImageUpload';
+import style from './page.module.scss';
 
 export default function ImageUploadTestPage() {
   const [singleImage, setSingleImage] = useState<File | undefined>(undefined);
@@ -17,13 +18,13 @@ export default function ImageUploadTestPage() {
   };
 
   return (
-    <div style={{ padding: '40px 20px', maxWidth: '1000px', margin: '0 auto' }}>
+    <div className={style.image_upload_test_page}>
       <h1>ImageUpload 圖片上傳測試</h1>
-      <p style={{ marginBottom: '30px', color: '#666' }}>
+      <p className={style['image_upload_test_page-description']}>
         展示圖片上傳組件的各種用法
       </p>
 
-      <div style={{ marginBottom: '40px' }}>
+      <div className={style['image_upload_test_page-section']}>
         <h2>單張圖片上傳</h2>
         <ImageUpload
           value={singleImage}
@@ -31,13 +32,13 @@ export default function ImageUploadTestPage() {
           maxSize={5 * 1024 * 1024}
         />
         {previewUrl && (
-          <div style={{ marginTop: '20px' }}>
+          <div className={style['image_upload_test_page-preview']}>
             <h3>預覽:</h3>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img 
-              src={previewUrl} 
-              alt="Preview" 
-              style={{ maxWidth: '300px', borderRadius: '8px' }}
+            <img
+              src={previewUrl}
+              alt="Preview"
+              className={style['image_upload_test_page-preview_img']}
             />
           </div>
         )}

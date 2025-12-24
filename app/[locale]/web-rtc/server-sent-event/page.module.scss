@@ -1,0 +1,7 @@
+// WebRTC SSE Entry Page
+// Page-specific class for DevTools identification
+.web_rtc_sse_entry_page {
+  // This class exists only for page identification in DevTools
+  // Actual styles are defined in the WebRTCRoomEntryCard component
+  display: contents;
+}
