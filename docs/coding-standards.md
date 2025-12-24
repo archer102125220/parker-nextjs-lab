@@ -78,6 +78,13 @@ The project uses a **Modified BEM** naming convention:
 | State/Modifier | HTML attribute | `[css-is-active='true']` |
 
 #### Key Rules:
+- **Each element MUST have its own unique class** - Critical for two reasons:
+  1. **CSS relies primarily on class names** for styling (not tag selectors)
+  2. **Quick DOM debugging** - Instantly identify which element has issues in browser DevTools
+  - ❌ Bad: `.footer-links a { ... }` (targeting tag)
+  - ✅ Good: `.footer-link { ... }` (unique class)
+  - ✅ Exception: Dynamic content areas (e.g., `.content p { ... }`)
+  - ✅ Exception: Third-party content (e.g., `:global a { ... }` in WangEditor)
 - **Use `-` (hyphen)** to connect Block and Element: `.block-element`
 - **Use `_` (underscore)** for multi-word names within a single segment: `.image_upload`, `.content_box`
 - **NEVER use `__`** (double underscore) for standard BEM - use single hyphen instead

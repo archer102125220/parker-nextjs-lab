@@ -62,7 +62,7 @@ export function Footer(props: FooterProps): ReactNode {
           className="footer-links"
           nonce={clientNonce}
         >
-          <Link href="/about" style={{ color: 'inherit', textDecoration: 'underline' }}>
+          <Link href="/about" className="footer-link">
             關於本站
           </Link>
         </Typography>

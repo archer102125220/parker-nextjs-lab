@@ -1,79 +1,79 @@
 .web_authn_page {
-  &-banner {
-    /* Display & Box Model */
-    width: 100%;
-    height: auto;
-    max-height: 400px;
-    margin-bottom: 16px;
+    &-banner {
+        /* Display & Box Model */
+        width: 100%;
+        height: auto;
+        max-height: 400px;
+        margin-bottom: 16px;
 
-    /* Visual */
-    object-fit: cover;
-  }
-
-  &-outbound_link {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 8px;
-
-    margin-bottom: 16px;
-
-    a {
-      color: var(--mui-palette-primary-main);
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-
-  &-register,
-  &-login {
-    padding: 16px;
-    margin-bottom: 16px;
-
-    &-title {
-      margin-bottom: 16px;
+        /* Visual */
+        object-fit: cover;
     }
 
-    &-id,
-    &-account,
-    &-name {
-      margin-bottom: 8px;
+    &-outbound_link {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 8px;
+
+        margin-bottom: 16px;
+
+        &-item {
+            color: var(--mui-palette-primary-main);
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
     }
 
-    &-submit {
-      margin-top: 16px;
-      margin-bottom: 16px;
+    &-register,
+    &-login {
+        padding: 16px;
+        margin-bottom: 16px;
 
-      text-align: center;
+        &-title {
+            margin-bottom: 16px;
+        }
+
+        &-id,
+        &-account,
+        &-name {
+            margin-bottom: 8px;
+        }
+
+        &-submit {
+            margin-top: 16px;
+            margin-bottom: 16px;
+
+            text-align: center;
+        }
+
+        &-output_title {
+            margin-top: 16px;
+            margin-bottom: 8px;
+
+            font-weight: 600;
+        }
+
+        &-output {
+            max-width: 100%;
+            max-height: 300px;
+            padding: 12px;
+            overflow: auto;
+
+            background-color: #f5f5f5;
+            border-radius: 4px;
+
+            pre {
+                margin: 0;
+
+                font-size: 12px;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+        }
     }
-
-    &-output_title {
-      margin-top: 16px;
-      margin-bottom: 8px;
-
-      font-weight: 600;
-    }
-
-    &-output {
-      max-width: 100%;
-      max-height: 300px;
-      padding: 12px;
-      overflow: auto;
-
-      background-color: #f5f5f5;
-      border-radius: 4px;
-
-      pre {
-        margin: 0;
-
-        font-size: 12px;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-      }
-    }
-  }
 }

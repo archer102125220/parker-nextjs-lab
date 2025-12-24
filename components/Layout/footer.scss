@@ -18,6 +18,16 @@
         margin: 0;
     }
 
+    &-link {
+        color: inherit;
+        text-decoration: underline;
+        transition: opacity 0.2s;
+
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+
     /* Tablet */
     @media (max-width: 1024px) {
         padding: 20px 12px;

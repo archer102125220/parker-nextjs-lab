@@ -46,6 +46,37 @@ alwaysApply: true
 - **Component**: `[name]` (e.g., `.image_upload`)
 - **Each page MUST have unique root class**
 
+### Unique Class Name Rule
+
+**Each element MUST have its own unique class** for two critical reasons:
+1. **CSS relies primarily on class names** for styling
+2. **Quick DOM debugging** - Instantly identify which element has issues in browser DevTools
+
+```scss
+// ✅ CORRECT - Each element has unique class
+.footer {
+  &-content { }
+  &-text { }
+  &-link {          // Unique class for link
+    color: inherit;
+    text-decoration: underline;
+  }
+}
+
+// ❌ WRONG - Using tag selectors
+.footer {
+  &-links {
+    a {              // Tag selector - hard to debug
+      color: inherit;
+    }
+  }
+}
+```
+
+**Exceptions** (when tag selectors are acceptable):
+- ✅ **Dynamic content areas**: `.content p { }` (for user-generated content)
+- ✅ **Third-party content**: `:global a { }` (e.g., WangEditor internal HTML)
+
 ```scss
 // ✅ CORRECT - All nested under page root
 .hooks_test_page {

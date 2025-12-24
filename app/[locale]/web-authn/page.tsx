@@ -295,6 +295,7 @@ export default function WebAuthnPage(): React.ReactNode {
           href="https://www.notion.so/Web-Authn-6480f13abf224ef59a41571df1531f6a"
           target="_blank"
           rel="noopener noreferrer"
+          className={style['web_authn_page-outbound_link-item']}
         >
           Notion 筆記連結
         </a>

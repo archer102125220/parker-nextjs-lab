@@ -706,12 +706,19 @@ import styles from './page.module.scss';
 
 #### Key Principles
 
-1. **Each element uses only one className** - Don't combine multiple classes
-2. **All elements within a Block should be children of that Block** - Connected with hyphen `-`
-3. **Multiple semantic words within element names use underscore `_`** - e.g., `content_box`, `value_display`
-4. **States use HTML attributes** - e.g., `[css-is-active='true']`
-5. **HTML attributes must start with `css-` prefix** - e.g., `css-is-active`, `css-is-dragging`, to avoid conflicts with native attributes and to clearly identify that the prop is intended for CSS usage when passing through component hierarchies
-6. **CSS variables use underscore `_` instead of hyphen `-`** - e.g., `--editor_height`, `--offset_y`, allowing double-click selection of complete variable names in editors
+1. **Each element MUST have its own unique class** - This is critical for two reasons:
+   - **CSS relies primarily on class names** for styling (not tag selectors)
+   - **Quick DOM debugging** - Instantly identify which element has issues in browser DevTools
+   - ❌ Bad: `.footer-links a { ... }` (targeting tag)
+   - ✅ Good: `.footer-link { ... }` (unique class)
+   - ✅ Exception: Dynamic content areas (e.g., `.content p { ... }`)
+   - ✅ Exception: Third-party content (e.g., `:global a { ... }` in WangEditor)
+2. **Each element uses only one className** - Don't combine multiple classes
+3. **All elements within a Block should be children of that Block** - Connected with hyphen `-`
+4. **Multiple semantic words within element names use underscore `_`** - e.g., `content_box`, `value_display`
+5. **States use HTML attributes** - e.g., `[css-is-active='true']`
+6. **HTML attributes must start with `css-` prefix** - e.g., `css-is-active`, `css-is-dragging`, to avoid conflicts with native attributes and to clearly identify that the prop is intended for CSS usage when passing through component hierarchies
+7. **CSS variables use underscore `_` instead of hyphen `-`** - e.g., `--editor_height`, `--offset_y`, allowing double-click selection of complete variable names in editors
 
 #### Inline Styles Exceptions
 

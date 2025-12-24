@@ -78,6 +78,13 @@ const element = document.getElementById('id') as unknown as CustomElement;
 | 狀態/修飾符 | HTML 屬性 | `[css-is-active='true']` |
 
 #### 關鍵規則：
+- **每個元素都必須有自己的唯一 class** - 這對於以下兩個關鍵原因至關重要：
+  1. **CSS 主要依賴 class name 進行樣式設定**（而非標籤選擇器）
+  2. **快速定位 DOM 問題** - 在瀏覽器 DevTools 中立即識別哪個元素有問題
+  - ❌ 不好：`.footer-links a { ... }`（針對標籤）
+  - ✅ 好：`.footer-link { ... }`（唯一 class）
+  - ✅ 例外：動態內容區域（如：`.content p { ... }`）
+  - ✅ 例外：第三方內容（如：WangEditor 中的 `:global a { ... }`）
 - **使用 `-`（連字號）** 連接區塊與元素：`.block-element`
 - **使用 `_`（底線）** 用於單一區段內的多詞名稱：`.image_upload`, `.content_box`
 - **永遠不要使用 `__`**（雙底線）- 使用單一連字號替代

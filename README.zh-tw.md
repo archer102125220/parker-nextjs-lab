@@ -700,12 +700,19 @@ import styles from './page.module.scss';
 
 #### 重要原則
 
-1. **每個元素只使用一個 className** - 不要組合多個類別
-2. **Block 內的所有元素都應該是 Block 的子元素** - 使用連字符 `-` 連接
-3. **Element 名稱內部的多個語義詞使用底線 `_`** - 如 `content_box`, `value_display`
-4. **狀態使用 HTML 屬性** - 如 `[css-is-active='true']`
-5. **HTML 屬性必須以 `css-` 開頭** - 如 `css-is-active`, `css-is-dragging`，避免與原生屬性衝突，同時在組件層級傳遞屬性時可明確識別該變數是給 CSS 使用
-6. **CSS 變數使用底線 `_` 而非連字符 `-`** - 如 `--editor_height`, `--offset_y`，使編輯器可雙擊快速選取完整變數名稱
+1. **每個元素都必須有自己的唯一 class** - 這對於以下兩個關鍵原因至關重要：
+   - **CSS 主要依賴 class name 進行樣式設定**（而非標籤選擇器）
+   - **快速定位 DOM 問題** - 在瀏覽器 DevTools 中立即識別哪個元素有問題
+   - ❌ 不好：`.footer-links a { ... }`（針對標籤）
+   - ✅ 好：`.footer-link { ... }`（唯一 class）
+   - ✅ 例外：動態內容區域（如：`.content p { ... }`）
+   - ✅ 例外：第三方內容（如：WangEditor 中的 `:global a { ... }`）
+2. **每個元素只使用一個 className** - 不要組合多個類別
+3. **Block 內的所有元素都應該是 Block 的子元素** - 使用連字符 `-` 連接
+4. **Element 名稱內部的多個語義詞使用底線 `_`** - 如 `content_box`, `value_display`
+5. **狀態使用 HTML 屬性** - 如 `[css-is-active='true']`
+6. **HTML 屬性必須以 `css-` 開頭** - 如 `css-is-active`, `css-is-dragging`，避免與原生屬性衝突，同時在組件層級傳遞屬性時可明確識別該變數是給 CSS 使用
+7. **CSS 變數使用底線 `_` 而非連字符 `-`** - 如 `--editor_height`, `--offset_y`，使編輯器可雙擊快速選取完整變數名稱
 
 #### 內聯樣式例外情況
 
