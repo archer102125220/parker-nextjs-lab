@@ -1,0 +1,20 @@
+// ============================================================================
+// SCSS Placeholders - Index
+//
+// 所有可重用的 placeholder 樣式模板，用於跨組件/頁面的樣式共享。
+//
+// 使用方式：
+// @use '@/styles/placeholders' as *;
+// .my-class { @extend %placeholder_name; }
+// ============================================================================
+
+@forward 'layout';
+@forward 'text';
+@forward 'message';
+@forward 'video';
+@forward 'form';
+@forward 'status';
+@forward 'button';
+@forward 'info';
+@forward 'code';
+@forward 'utility';

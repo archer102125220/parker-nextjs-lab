@@ -658,11 +658,11 @@
 
 ---
 
-## Phase 7.5: CSS Compliance Fix Phase 2 (CSS 標準合規性修復 Phase 2) [52/75] 🔄
+## Phase 7.5: CSS Compliance Fix Phase 2 (CSS 標準合規性修復 Phase 2) [56/75] 🔄
 
 > **目標**: 移除專案中剩餘的靜態內聯樣式，轉換為符合 BEM 規範的 CSS 類別或 CSS 變數
 
-### 已完成工作 (Completed) [52/52] ✅
+### 已完成工作 (Completed) [56/56] ✅
 
 #### 全域 Placeholders 建立
 - [x] 添加 Flexbox 布局 placeholders (`%flex_row`, `%flex_row_between`, etc.)
@@ -693,13 +693,14 @@
 - [x] `components/swiper-test/page.tsx` - 創建 CSS Module，移除 ~10 個內聯樣式
 - [x] `components/youtube-test/page.tsx` - 創建 CSS Module，移除 ~15 個內聯樣式
 
-### 剩餘工作 (Remaining) [0/23]
+#### 階段 2.5: Video/Canvas 元素 ✅ (2025-12-24)
+- [x] `web-rtc/socket-io/room/[roomId]/page.tsx` - 2 個 video 內聯樣式
+- [x] `web-rtc/server-sent-event/room/[roomId]/page.tsx` - 2 個 video 內聯樣式
 
-#### 階段 2.5: Video/Canvas 元素 [0/4]
-- [ ] WebRTC Room 頁面 (4 個)
+### 剩餘工作 (Remaining) [0/19]
 
-#### 階段 2.6: 條件樣式 (低優先級) [0/21]
-- [ ] 基於狀態的動態樣式
+#### 階段 2.6: 條件樣式 (低優先級) [0/19]
+- [ ] 基於狀態的動態樣式（建議暫時保留）
 
 ### 參考文檔
 - [CSS Compliance Fix Phase 2 List](file:///Users/parker/Desktop/code/parker-nextjs-lab/docs/in-progress/css-compliance-fix-phase2-list.md)

@@ -1,0 +1,44 @@
+// ============================================================================
+// Text Utilities - Placeholder Styles
+// ============================================================================
+
+%text_large {
+  /* Typography */
+  font-size: 24px;
+  font-weight: bold;
+}
+
+%text_small {
+  /* Typography */
+  font-size: 12px;
+}
+
+%text_primary {
+  /* Typography */
+  color: #1976d2;
+}
+
+%text_secondary {
+  /* Typography */
+  color: #666;
+}
+
+%text_no_margin {
+  /* Display & Box Model */
+  margin: 0;
+}
+
+%text_pre_wrap {
+  /* Typography */
+  white-space: pre-wrap;
+}
+
+%text_no_decoration {
+  /* Typography */
+  text-decoration: none;
+}
+
+%no_text_decoration {
+  /* Typography */
+  text-decoration: none;
+}

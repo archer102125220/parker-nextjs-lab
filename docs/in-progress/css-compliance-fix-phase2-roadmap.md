@@ -105,50 +105,21 @@
 
 ---
 
-### 階段 2.5：Video/Canvas 元素
+### 階段 2.5：Video/Canvas 元素 ✅ 已完成
 
 **目標**: 處理媒體元素的靜態樣式
+**完成日期**: 2025-12-24
 
-#### 2.5.1 Face Swap 頁面
+#### 2.5.1 Face Swap 頁面 ✅
+- **狀態**: ✅ 已在階段 2.2 中完成
+
+#### 2.5.2 WebRTC Room 頁面 ✅
 - **文件**:
-  - `app/[locale]/face-swap/frontend/page.tsx` (3 個)
-- **數量**: 3 個
-- **風險**: 中 🟡
-- **時間**: 30 分鐘
-- **修復方式**:
-  ```scss
-  .face_swap_frontend_page {
-    &-result_image {
-      max-width: 100%;
-      max-height: 280px;
-      border-radius: 8px;
-    }
-    
-    &-video {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
-    
-    &-canvas {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-      background-color: #f0f0f0;
-    }
-  }
-  ```
+  - `app/[locale]/web-rtc/socket-io/room/[roomId]/page.tsx` ✅
+  - `app/[locale]/web-rtc/server-sent-event/room/[roomId]/page.tsx` ✅
+- **修復內容**: 更新共享的 `room.module.scss`，添加 video 類別，移除 TSX 內聯樣式
 
-#### 2.5.2 WebRTC Room 頁面
-- **文件**:
-  - `app/[locale]/web-rtc/socket-io/room/[roomId]/page.tsx` (2 個)
-  - `app/[locale]/web-rtc/server-sent-event/room/[roomId]/page.tsx` (2 個)
-- **數量**: 4 個
-- **風險**: 中 🟡
-- **時間**: 30 分鐘
-- **修復方式**: 在共享的 `room.module.scss` 中添加 video 樣式
-
-**階段 2.5 小計**: 7 個，1 小時
+**階段 2.5 小計**: 4 個，✅ 已完成
 
 ---
 

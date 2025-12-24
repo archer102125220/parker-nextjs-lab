@@ -1,0 +1,23 @@
+// ============================================================================
+// Form Elements - Placeholder Styles
+// ============================================================================
+
+%form_inline {
+  /* Display & Box Model */
+  display: flex;
+  gap: 12px;
+}
+
+%form_group {
+  /* Display & Box Model */
+  margin-bottom: 16px;
+}
+
+%form_label {
+  /* Display & Box Model */
+  display: block;
+  margin-bottom: 8px;
+
+  /* Typography */
+  font-weight: 500;
+}

@@ -1,0 +1,31 @@
+// WebRTC Socket.IO Room Page Styles
+@use '@/styles/placeholders' as *;
+
+.web_rtc_socket_io_room_page {
+  @extend %web_rtc_room_page;
+
+  &-description {
+    @extend %web_rtc_room_page_description;
+  }
+
+  &-room_info {
+    @extend %web_rtc_room_page_room_info;
+  }
+
+  &-video_container {
+    @extend %web_rtc_room_page_video_container;
+
+    &-local,
+    &-remote {
+      @extend %web_rtc_room_page_video_container_panel;
+    }
+
+    &-video {
+      @extend %web_rtc_room_page_video;
+    }
+  }
+
+  &-controls {
+    @extend %web_rtc_room_page_controls;
+  }
+}

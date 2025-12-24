@@ -1,0 +1,123 @@
+// ============================================================================
+// Layout Utilities - Placeholder Styles
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// Test Page Layout
+// ----------------------------------------------------------------------------
+
+%test_page {
+  /* Display & Box Model */
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+%test_page_description {
+  /* Display & Box Model */
+  margin-bottom: 30px;
+
+  /* Typography */
+  color: #666;
+}
+
+%test_page_grid {
+  /* Display & Box Model */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 20px;
+}
+
+%test_page_section {
+  /* Display & Box Model */
+  padding: 20px;
+  border-radius: 8px;
+
+  /* Visual */
+  background-color: #f5f5f5;
+}
+
+%test_page_content_box {
+  /* Display & Box Model */
+  padding: 15px;
+  border-radius: 4px;
+
+  /* Visual */
+  background: white;
+}
+
+// ----------------------------------------------------------------------------
+// Flex Utilities - Basic
+// ----------------------------------------------------------------------------
+
+%flex {
+  /* Display & Box Model */
+  display: flex;
+}
+
+%flex_gap_8 {
+  gap: 8px;
+}
+
+%flex_gap_12 {
+  gap: 12px;
+}
+
+%flex_gap_16 {
+  gap: 16px;
+}
+
+%flex_center {
+  align-items: center;
+}
+
+%flex_between {
+  justify-content: space-between;
+}
+
+%flex_wrap {
+  flex-wrap: wrap;
+}
+
+%flex_column {
+  flex-direction: column;
+}
+
+// ----------------------------------------------------------------------------
+// Flexbox Row Layouts (for inline style replacements)
+// ----------------------------------------------------------------------------
+
+%flex_row {
+  /* Display & Box Model */
+  display: flex;
+  gap: 16px;
+}
+
+%flex_row_between {
+  /* Display & Box Model */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+%flex_row_center {
+  /* Display & Box Model */
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+%flex_row_gap_8 {
+  /* Display & Box Model */
+  display: flex;
+  gap: 8px;
+}
+
+%flex_row_gap_12 {
+  /* Display & Box Model */
+  display: flex;
+  gap: 12px;
+}

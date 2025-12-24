@@ -68,15 +68,17 @@ A comprehensive Next.js laboratory project showcasing modern web development pra
    # With Turbopack (default, faster)
    yarn dev
    
-   # With Webpack
+   # With Webpack (recommended for this project)
    yarn dev:webpack
    
    # With HTTPS + Turbopack (required for WebRTC/WebAuthn)
    yarn dev-https
    
-   # With HTTPS + Webpack
+   # With HTTPS + Webpack (recommended)
    yarn dev-https:webpack
    ```
+
+   > ⚠️ **Note**: This project uses `styles/scss_variable_export.module.scss` for exporting SCSS variables to JavaScript / TypeScript. Turbopack does not currently support this feature, so **Webpack mode is recommended** (`yarn dev:webpack` or `yarn dev-https:webpack`) until Turbopack adds support for SCSS variable exports.
 
    Open [http://localhost:3001](http://localhost:3001) (or https://localhost:3000 for HTTPS) to view the application.
 
@@ -764,7 +766,18 @@ parker-nextjs-lab/
 ├── styles/                    # Global style tools (centralized)
 │   ├── globals.scss          # Global styles
 │   ├── mixin.scss            # Mixins (reusable style functions)
-│   ├── placeholders.scss     # Placeholders (extendable style templates)
+│   ├── placeholders/         # Modular placeholders (split by category)
+│   │   ├── index.scss        # Entry point (re-exports all modules)
+│   │   ├── _layout.scss      # Layout utilities (test_page, flex, etc.)
+│   │   ├── _text.scss        # Text utilities
+│   │   ├── _message.scss     # Message/log display
+│   │   ├── _video.scss       # Video/media display + WebRTC room
+│   │   ├── _form.scss        # Form elements
+│   │   ├── _status.scss      # Status indicators
+│   │   ├── _button.scss      # Button groups
+│   │   ├── _info.scss        # Info boxes
+│   │   ├── _code.scss        # Code display
+│   │   └── _utility.scss     # General utilities
 │   └── variables.scss        # Variable definitions
 │
 ├── components/                # Component-specific styles (co-located)
@@ -798,6 +811,8 @@ parker-nextjs-lab/
    - ✅ Co-located with page files
    - ✅ Use `.module.scss` to avoid global pollution
    - ✅ Contains only page-specific styles
+
+> ⚠️ **Important**: Do NOT create `_shared` SCSS directories within `app/`. Cross-page shared styles must be defined in `styles/placeholders/` and imported via `@use '@/styles/placeholders' as *;`
 
 #### Placeholders vs Mixins
 

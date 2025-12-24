@@ -1,0 +1,21 @@
+// ============================================================================
+// Utility Placeholders
+// ============================================================================
+
+%hidden {
+  /* Display & Box Model */
+  display: none;
+}
+
+%image_responsive {
+  /* Display & Box Model */
+  width: 100%;
+  height: auto;
+}
+
+%image_banner {
+  /* Display & Box Model */
+  width: 100%;
+  height: auto;
+  max-width: 600px;
+}

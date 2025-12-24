@@ -23,7 +23,7 @@ import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
 import CallEndIcon from '@mui/icons-material/CallEnd';
 
-import style from '@/app/[locale]/web-rtc/_shared/room.module.scss';
+import style from './page.module.scss';
 
 interface MemberCandidate {
   userId: string;
@@ -218,7 +218,9 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
           try {
             // Check if connection is still valid
             if (pc.signalingState === 'closed') {
-              console.warn('Peer connection is closed, skipping offer creation');
+              console.warn(
+                'Peer connection is closed, skipping offer creation'
+              );
               return;
             }
             const offer = await pc.createOffer();
@@ -246,7 +248,9 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
           if (member.description.type === 'offer') {
             // Check if connection is still valid
             if (pc.signalingState === 'closed') {
-              console.warn('Peer connection is closed, skipping answer creation');
+              console.warn(
+                'Peer connection is closed, skipping answer creation'
+              );
               return;
             }
             const answer = await pc.createAnswer();
@@ -374,7 +378,7 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
   // Initialize on mount
   useEffect(() => {
     let mounted = true;
-    
+
     const init = async () => {
       if (!mounted) return;
       await initCamera();
@@ -383,12 +387,12 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
       if (!mounted) return;
       await joinRoom();
     };
-    
+
     init();
 
     return () => {
       mounted = false;
-      
+
       // Clean up media stream
       if (localStreamRef.current) {
         localStreamRef.current.getTracks().forEach((track) => {
@@ -397,21 +401,21 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
         });
         localStreamRef.current = null;
       }
-      
+
       // Clean up peer connection
       if (peerConnectionRef.current) {
         peerConnectionRef.current.close();
         peerConnectionRef.current = null;
         console.log('Closed peer connection');
       }
-      
+
       // Clean up event source
       if (eventSourceRef.current) {
         eventSourceRef.current.close();
         eventSourceRef.current = null;
         console.log('Closed event source');
       }
-      
+
       // Clear video elements
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = null;
@@ -424,7 +428,7 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
   }, []); // Empty deps - only run once on mount
 
   return (
-    <section className={style.web_rtc_room_page}>
+    <section className={style.web_rtc_sse_room_page}>
       <Typography variant="h5" gutterBottom>
         WebRTC 視訊聊天室 (SSE)
       </Typography>
@@ -432,7 +436,7 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
       <Typography
         variant="body2"
         color="text.secondary"
-        className={style.web_rtc_room_page_description}
+        className={style['web_rtc_sse_room_page-description']}
       >
         配合 Server-Sent Events 及 Upstash Redis 實作
       </Typography>
@@ -444,7 +448,10 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
       )}
 
       {/* Room Info */}
-      <Paper className={style.web_rtc_room_page_room_info} onClick={handleCopyUrl}>
+      <Paper
+        className={style['web_rtc_sse_room_page-room_info']}
+        onClick={handleCopyUrl}
+      >
         <Typography variant="body2">
           目前配對 ID 為: <strong>{roomId}</strong>
         </Typography>
@@ -498,9 +505,9 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
       </Paper>
 
       {/* Video Container */}
-      <div className={style.web_rtc_room_page_video_container}>
+      <div className={style['web_rtc_sse_room_page-video_container']}>
         <Paper
-          className={style.web_rtc_room_page_video_container_local}
+          className={style['web_rtc_sse_room_page-video_container-local']}
           sx={{ p: 1 }}
         >
           <Typography variant="subtitle2" gutterBottom>
@@ -508,20 +515,15 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
           </Typography>
           <video
             ref={localVideoRef}
+            className={style['web_rtc_sse_room_page-video_container-video']}
             autoPlay
             muted
             playsInline
-            style={{
-              width: '100%',
-              maxHeight: 300,
-              backgroundColor: '#000',
-              borderRadius: 4
-            }}
           />
         </Paper>
 
         <Paper
-          className={style.web_rtc_room_page_video_container_remote}
+          className={style['web_rtc_sse_room_page-video_container-remote']}
           sx={{ p: 1 }}
         >
           <Typography variant="subtitle2" gutterBottom>
@@ -529,20 +531,15 @@ export default function WebRTCSSERoomPage(): React.ReactNode {
           </Typography>
           <video
             ref={remoteVideoRef}
+            className={style['web_rtc_sse_room_page-video_container-video']}
             autoPlay
             playsInline
-            style={{
-              width: '100%',
-              maxHeight: 300,
-              backgroundColor: '#000',
-              borderRadius: 4
-            }}
           />
         </Paper>
       </div>
 
       {/* Controls */}
-      <div className={style.web_rtc_room_page_controls}>
+      <div className={style['web_rtc_sse_room_page-controls']}>
         <Tooltip title={isVideoEnabled ? '關閉視訊' : '開啟視訊'}>
           <IconButton
             color={isVideoEnabled ? 'primary' : 'default'}

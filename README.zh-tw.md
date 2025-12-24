@@ -68,15 +68,17 @@
    # 使用 Turbopack（預設，較快）
    yarn dev
    
-   # 使用 Webpack
+   # 使用 Webpack（本專案推薦）
    yarn dev:webpack
    
    # 使用 HTTPS + Turbopack（WebRTC/WebAuthn 必須）
    yarn dev-https
    
-   # 使用 HTTPS + Webpack
+   # 使用 HTTPS + Webpack（推薦）
    yarn dev-https:webpack
    ```
+
+   > ⚠️ **注意**：本專案使用 `styles/scss_variable_export.module.scss` 將 SCSS 變數導出至 JavaScript / TypeScript。Turbopack 目前不支援此功能，因此**建議使用 Webpack 模式**（`yarn dev:webpack` 或 `yarn dev-https:webpack`），直到 Turbopack 支援 SCSS 變數導出為止。
 
    開啟 [http://localhost:3001](http://localhost:3001)（或 HTTPS 使用 https://localhost:3000）查看應用程式。
 
@@ -758,7 +760,18 @@ parker-nextjs-lab/
 ├── styles/                    # 全域樣式工具（集中管理）
 │   ├── globals.scss          # 全域樣式
 │   ├── mixin.scss            # Mixins（可重用的樣式函數）
-│   ├── placeholders.scss     # Placeholders（可擴展的樣式模板）
+│   ├── placeholders/         # 模組化 placeholders（按類別拆分）
+│   │   ├── index.scss        # 入口點（重新匯出所有模組）
+│   │   ├── _layout.scss      # 布局工具（test_page, flex 等）
+│   │   ├── _text.scss        # 文字工具
+│   │   ├── _message.scss     # 訊息/日誌顯示
+│   │   ├── _video.scss       # 視頻/媒體顯示 + WebRTC room
+│   │   ├── _form.scss        # 表單元素
+│   │   ├── _status.scss      # 狀態指示器
+│   │   ├── _button.scss      # 按鈕群組
+│   │   ├── _info.scss        # 資訊框
+│   │   ├── _code.scss        # 代碼顯示
+│   │   └── _utility.scss     # 通用工具
 │   └── variables.scss        # 變數定義
 │
 ├── components/                # 組件特定樣式（就近放置）
@@ -792,6 +805,8 @@ parker-nextjs-lab/
    - ✅ 與頁面檔案放在同一目錄
    - ✅ 使用 `.module.scss` 避免全域污染
    - ✅ 只包含該頁面特定的樣式
+
+> ⚠️ **重要**：禁止在 `app/` 目錄內建立 `_shared` SCSS 目錄。跨頁面共享樣式必須定義在 `styles/placeholders/` 中，並透過 `@use '@/styles/placeholders' as *;` 引入
 
 #### Placeholders vs Mixins
 
