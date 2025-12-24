@@ -771,13 +771,8 @@ parker-nextjs-lab/
 │   │   ├── _layout.scss      # Layout utilities (test_page, flex, etc.)
 │   │   ├── _text.scss        # Text utilities
 │   │   ├── _message.scss     # Message/log display
-│   │   ├── _video.scss       # Video/media display + WebRTC room
-│   │   ├── _form.scss        # Form elements
-│   │   ├── _status.scss      # Status indicators
-│   │   ├── _button.scss      # Button groups
-│   │   ├── _info.scss        # Info boxes
-│   │   ├── _code.scss        # Code display
-│   │   └── _utility.scss     # General utilities
+│   │   ├── _video.scss       # WebRTC room page styles
+│   │   └── _utility.scss     # General utilities (hidden, image, etc.)
 │   └── variables.scss        # Variable definitions
 │
 ├── components/                # Component-specific styles (co-located)

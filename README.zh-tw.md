@@ -765,13 +765,8 @@ parker-nextjs-lab/
 │   │   ├── _layout.scss      # 布局工具（test_page, flex 等）
 │   │   ├── _text.scss        # 文字工具
 │   │   ├── _message.scss     # 訊息/日誌顯示
-│   │   ├── _video.scss       # 視頻/媒體顯示 + WebRTC room
-│   │   ├── _form.scss        # 表單元素
-│   │   ├── _status.scss      # 狀態指示器
-│   │   ├── _button.scss      # 按鈕群組
-│   │   ├── _info.scss        # 資訊框
-│   │   ├── _code.scss        # 代碼顯示
-│   │   └── _utility.scss     # 通用工具
+│   │   ├── _video.scss       # WebRTC room 頁面樣式
+│   │   └── _utility.scss     # 通用工具（hidden, image 等）
 │   └── variables.scss        # 變數定義
 │
 ├── components/                # 組件特定樣式（就近放置）

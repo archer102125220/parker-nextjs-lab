@@ -2,62 +2,6 @@
 // Video/Media Display - Placeholder Styles
 // ============================================================================
 
-%video_container {
-  /* Positioning */
-  position: relative;
-
-  /* Display & Box Model */
-  width: 100%;
-  max-width: 640px;
-  margin: 0 auto;
-}
-
-%video_container_remote {
-  /* Display & Box Model */
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
-}
-
-%video_container_item {
-  /* Positioning */
-  position: relative;
-
-  /* Display & Box Model */
-  border-radius: 8px;
-  overflow: hidden;
-
-  /* Visual */
-  background: #000;
-}
-
-%video_container_video {
-  /* Display & Box Model */
-  width: 100%;
-  height: auto;
-
-  /* Visual */
-  background: #000;
-}
-
-%video_container_label {
-  /* Positioning */
-  position: absolute;
-  top: 10px;
-  left: 10px;
-
-  /* Display & Box Model */
-  padding: 4px 8px;
-  border-radius: 4px;
-
-  /* Typography */
-  font-size: 12px;
-  color: white;
-
-  /* Visual */
-  background: rgba(0, 0, 0, 0.7);
-}
-
 // ============================================================================
 // WebRTC Room Page - Placeholder Styles
 // 用於 WebRTC socket-io 和 server-sent-event room 頁面
@@ -128,31 +72,4 @@
   gap: 8px;
   margin-top: 16px;
   justify-content: center;
-}
-
-%web_rtc_room_page_context {
-  /* Display & Box Model */
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-evenly;
-  gap: 16px;
-  width: 70dvw;
-  margin: auto;
-
-  @media (max-width: 768px) {
-    width: 100%;
-  }
-}
-
-%web_rtc_room_page_context_card {
-  /* Display & Box Model */
-  flex: 1;
-  min-width: 200px;
-}
-
-%web_rtc_room_page_context_link {
-  /* Display & Box Model */
-  display: block;
 }
