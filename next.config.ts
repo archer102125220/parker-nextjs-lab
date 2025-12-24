@@ -14,14 +14,24 @@ const withSerwist = withSerwistInit({
 
 const nextConfig: NextConfig = withSerwist(
   withNextIntl({
+    webpack(config, { isServer }) {
+      if (isServer) {
+        // Add canvas as external for server-side to prevent webpack bundling
+        config.externals = config.externals || [];
+        if (Array.isArray(config.externals)) {
+          config.externals.push('canvas');
+        }
+      }
+      return config;
+    },
     transpilePackages: ['mui-color-input'],
     /* config options here */
     sassOptions: {
       additionalData:
         '@use "@/styles/variable.scss" as *; @use "@/styles/mixin.scss" as *;'
     },
-    // Socket.IO needs to be external for server-side
-    serverExternalPackages: ['socket.io', 'engine.io']
+    // Socket.IO and canvas need to be external for server-side
+    serverExternalPackages: ['socket.io', 'engine.io', 'canvas']
   })
 );
 
