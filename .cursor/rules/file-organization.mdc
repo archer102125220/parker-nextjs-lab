@@ -73,3 +73,44 @@ export default function PageA() {
 // 2. Component styles
 .my_component { }
 ```
+
+---
+
+## Demo Components Organization
+
+### Location: `components/Demo/`
+
+Full-page Client Components for feature demonstrations.
+
+### Naming Convention
+- **PascalCase** for file names
+- Examples: `BannerDemo.tsx`, `LazyLoadTest.tsx`, `RippleTest.tsx`
+
+### Rules
+1. **Full-page content** → `components/Demo/[PageName].tsx`
+2. **Multiple sub-components** → `components/[PageName]/` folder
+
+### Pattern
+```tsx
+// app/[locale]/some-page/page.tsx (Server Component)
+import dynamic from 'next/dynamic';
+const DemoClient = dynamic(() => import('@/components/Demo/SomePage'));
+
+export default function Page() {
+  return <DemoClient />;
+}
+```
+
+```tsx
+// components/Demo/SomePage.tsx (Client Component)
+'use client';
+export default function SomePage() {
+  // Interactive logic here
+}
+```
+
+### Benefits
+- ✅ Clear separation of Server/Client components
+- ✅ Enables `generateMetadata` in page.tsx
+- ✅ Centralized demo components location
+- ✅ Consistent naming pattern

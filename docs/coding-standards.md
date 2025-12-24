@@ -222,6 +222,51 @@ components/
     └── types.ts        # Type definitions (if complex)
 ```
 
+### 3.3 Demo Components Organization (`components/Demo/`) (MANDATORY)
+
+Full-page Client Components for feature demonstrations, using PascalCase naming:
+
+#### Naming Rules:
+- **Full-page Client Component** → `components/Demo/[PageName].tsx`
+  - Examples: `BannerDemo.tsx`, `LazyLoadTest.tsx`, `RippleTest.tsx`
+- **Pages with multiple sub-components** → `components/[PageName]/` folder
+  - Examples: `components/ScrollFetch/`, `components/WebRTC/`
+
+#### Usage Example:
+
+```tsx
+// app/[locale]/components/banner-demo/page.tsx (Server Component)
+import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
+
+const BannerDemoClient = dynamic(() => import('@/components/Demo/BannerDemo'));
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'Banner Carousel Component Test',
+    description: 'Demonstrating various Banner component usages'
+  };
+}
+
+export default function BannerDemoPage() {
+  return <BannerDemoClient />;
+}
+```
+
+```tsx
+// components/Demo/BannerDemo.tsx (Client Component)
+'use client';
+
+import { useState } from 'react';
+import Banner from '@/components/Banner';
+import style from '@/app/[locale]/components/banner-demo/page.module.scss';
+
+export default function BannerDemo() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  // ... component logic
+}
+```
+
 ---
 
 ## 4. Quick Reference

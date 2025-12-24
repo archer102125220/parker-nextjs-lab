@@ -222,6 +222,51 @@ components/
     └── types.ts        # 型別定義（如複雜）
 ```
 
+### 3.3 Demo 組件組織 (`components/Demo/`) (強制)
+
+用於展示頁面功能的完整 Client Component，採用 PascalCase 命名：
+
+#### 命名規則：
+- **整頁內容的 Client Component** → `components/Demo/[PageName].tsx`
+  - 範例：`BannerDemo.tsx`, `LazyLoadTest.tsx`, `RippleTest.tsx`
+- **有多個子組件的頁面** → `components/[PageName]/` 資料夾
+  - 範例：`components/ScrollFetch/`, `components/WebRTC/`
+
+#### 使用範例：
+
+```tsx
+// app/[locale]/components/banner-demo/page.tsx (Server Component)
+import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
+
+const BannerDemoClient = dynamic(() => import('@/components/Demo/BannerDemo'));
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'Banner 輪播組件測試',
+    description: '展示 Banner 組件的各種用法'
+  };
+}
+
+export default function BannerDemoPage() {
+  return <BannerDemoClient />;
+}
+```
+
+```tsx
+// components/Demo/BannerDemo.tsx (Client Component)
+'use client';
+
+import { useState } from 'react';
+import Banner from '@/components/Banner';
+import style from '@/app/[locale]/components/banner-demo/page.module.scss';
+
+export default function BannerDemo() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  // ... component logic
+}
+```
+
 ---
 
 ## 4. 快速參考
