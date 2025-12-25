@@ -34,7 +34,10 @@ export default function RippleTestClient(): React.ReactNode {
             2. 自訂顏色 (紅色)
           </Typography>
           <Ripple color="rgba(255, 0, 0, 0.4)">
-            <Box className={`${style['ripple_test_page-demos-demo-box']} ${style['ripple_test_page-demos-demo-box--red']}`}>
+            <Box 
+              className={style['ripple_test_page-demos-demo-box']}
+              css-color="red"
+            >
               紅色波紋效果
             </Box>
           </Ripple>
@@ -46,7 +49,10 @@ export default function RippleTestClient(): React.ReactNode {
             3. 自訂顏色 (藍色)
           </Typography>
           <Ripple color="rgba(0, 100, 255, 0.4)">
-            <Box className={`${style['ripple_test_page-demos-demo-box']} ${style['ripple_test_page-demos-demo-box--blue']}`}>
+            <Box 
+              className={style['ripple_test_page-demos-demo-box']}
+              css-color="blue"
+            >
               藍色波紋效果
             </Box>
           </Ripple>
@@ -74,7 +80,10 @@ export default function RippleTestClient(): React.ReactNode {
             5. 停用波紋效果
           </Typography>
           <Ripple enabled={false}>
-            <Box className={`${style['ripple_test_page-demos-demo-box']} ${style['ripple_test_page-demos-demo-box--disabled']}`}>
+            <Box 
+              className={style['ripple_test_page-demos-demo-box']}
+              css-is-disabled="true"
+            >
               波紋效果已停用
             </Box>
           </Ripple>
@@ -87,7 +96,8 @@ export default function RippleTestClient(): React.ReactNode {
           </Typography>
           <Ripple color="rgba(76, 175, 80, 0.5)">
             <Box
-              className={`${style['ripple_test_page-demos-demo-box']} ${style['ripple_test_page-demos-demo-box--green']}`}
+              className={style['ripple_test_page-demos-demo-box']}
+              css-color="green"
               onClick={() => alert('點擊事件觸發！')}
               sx={{ cursor: 'pointer' }}
             >

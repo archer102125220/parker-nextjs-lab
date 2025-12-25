@@ -19,8 +19,71 @@ alwaysApply: true
 ## Key Rules
 
 - **Use `-` (hyphen)** to connect Block and Element
-- **Use `_` (underscore)** for multi-word names within a segment
-- **NEVER use `__`** (double underscore)
+- **Use `_` (underscore)** for multi-word names
+
+## Forbidden Practices
+
+- ❌ **NEVER use `__` (double underscore)**
+- ❌ **NEVER use `--` (double hyphen)** - use HTML attributes instead
+- ❌ **NEVER use multiple classNames on a single element**
+
+```tsx
+// ❌ WRONG
+<div className={`${style.box} ${style['box--red']}`}>
+
+// ✅ CORRECT
+<div className={style.box} css-color="red">
+```
+
+## HTML Attribute Usage
+
+### When to use HTML attributes
+
+1. **States**: `[css-is-active='true']`, `[css-is-disabled='true']`
+2. **Color variants**: `[css-color='red']`, `[css-color='blue']`
+3. **Size variants**: `[css-size='small']`, `[css-size='large']`
+
+### When to use separate classes
+
+Only when the class name has **clear semantic meaning** (not just describing appearance):
+
+```scss
+// ✅ Semantic class names
+.alert {
+  &-success { }  // Success message (semantic)
+  &-error { }    // Error message (semantic)
+}
+```
+
+### SCSS Example
+
+```scss
+.demo_box {
+  background: #f5f5f5;
+  
+  &[css-color='red'] {
+    background: #ffcdd2;
+  }
+  
+  &[css-is-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+```
+
+### TSX Example
+
+```tsx
+// ✅ CORRECT: Single className + HTML attributes
+<Box 
+  className={style.demo_box} 
+  css-color="red"
+  css-is-disabled={isDisabled ? 'true' : undefined}
+>
+  Demo content
+</Box>
+```
 - **State attributes MUST start with `css-`**: `css-is-active`, `css-is-dragging`
 - **CSS variables MUST use `_`**: `--editor_height`, `--offset_y`
 

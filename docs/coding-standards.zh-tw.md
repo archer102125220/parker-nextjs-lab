@@ -87,12 +87,29 @@ const element = document.getElementById('id') as unknown as CustomElement;
   - ✅ 例外：第三方內容（如：WangEditor 中的 `:global a { ... }`）
 - **使用 `-`（連字號）** 連接區塊與元素：`.block-element`
 - **使用 `_`（底線）** 用於單一區段內的多詞名稱：`.image_upload`, `.content_box`
-- **永遠不要使用 `__`**（雙底線）- 使用單一連字號替代
+- **永遠不要使用 `__`（雙底線）或 `--`（雙連字號）** - 使用 HTML 屬性替代
 - **狀態用 HTML 屬性必須以 `css-` 開頭**：`css-is-active`, `css-is-dragging`
 - **CSS 變數必須使用 `_`（底線）**：`--editor_height`, `--offset_y`
 
+#### HTML 屬性使用規範：
+
+**何時使用 HTML 屬性**：
+1. **狀態**: `[css-is-active='true']`, `[css-is-disabled='true']`
+2. **顏色變體**: `[css-color='red']`, `[css-color='blue']`
+3. **大小變體**: `[css-size='small']`, `[css-size='large']`
+
+**何時使用獨立 class**：
+當 class name 本身具有**明確語義**時（不只描述外觀）：
 ```scss
-// ✅ 正確
+// ✅ 語義化的 class name
+.alert {
+  &-success { }  // 成功提示（語義明確）
+  &-error { }    // 錯誤提示（語義明確）
+}
+```
+
+```scss
+// ✅ 正確：使用 HTML 屬性
 .image_upload {
   &-preview {        // .image_upload-preview
     &-img { }        // .image_upload-preview-img
@@ -100,9 +117,30 @@ const element = document.getElementById('id') as unknown as CustomElement;
   &[css-is-dragging='true'] { }
 }
 
+.demo_box {
+  background: #f5f5f5;
+  
+  &[css-color='red'] {
+    background: #ffcdd2;
+  }
+}
+```
+
+```tsx
+// ✅ 正確：單一 className + HTML 屬性
+<Box className={style.demo_box} css-color="red">
+  紅色示範
+</Box>
+
+// ❌ 錯誤：多個 className
+<Box className={`${style.demo_box} ${style['demo_box--red']}`}>
+```
+
+```scss
 // ❌ 錯誤
 .image__upload { }   // 不要使用 __
 .image-upload__preview { }  // 不要使用 __
+.button--red { }     // 不要使用 --（應改用 HTML 屬性）
 ```
 
 ### 2.3 頁面根類別命名 (強制)

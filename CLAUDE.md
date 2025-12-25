@@ -14,7 +14,9 @@ When working on this project, you MUST follow the coding standards defined below
 - Multi-word: `.image_upload` (underscore `_`)
 - State: `[css-is-active='true']` (HTML attr with `css-` prefix)
 - CSS variables: `--editor_height` (underscore `_`)
-- NEVER use `__` (double underscore)
+- NEVER use `__` (double underscore) or `--` (double hyphen)
+- Use HTML attributes for states/variants: `[css-color='red']`, `[css-is-disabled='true']`
+- Each element MUST have only ONE className
 
 ### Page Root Class
 - Page: `[name]_page` (e.g., `.hooks_test_page`)

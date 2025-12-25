@@ -404,6 +404,24 @@ const detection = await detectFace(img as unknown as faceApi.TNetInput);
   - `.countdown-down_enter-down_enter_up`
   - `.image_upload-preview-img`
 - **狀態修飾**: 透過 HTML 屬性選擇器管理狀態，如 `[css-is-anime-start='true']`、`[css-is-active='true']`
+- **顏色/大小變體**: 使用 HTML 屬性，如 `[css-color='red']`、`[css-size='small']`
+
+#### 關鍵規則
+
+- ❌ **永遠不要使用 `__`（雙底線）或 `--`（雙連字號）**
+- ✅ **每個元素只能有一個 className**
+- ✅ **使用 HTML 屬性處理狀態和變體**
+- ✅ **HTML 屬性必須以 `css-` 開頭**
+
+```tsx
+// ✅ 正確：單一 className + HTML 屬性
+<Box className={style.demo_box} css-color="red">
+  紅色示範
+</Box>
+
+// ❌ 錯誤：多個 className
+<Box className={`${style.demo_box} ${style['demo_box--red']}`}>
+```
 
 #### 根元素命名規範
 

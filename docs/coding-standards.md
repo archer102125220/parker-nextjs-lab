@@ -87,12 +87,29 @@ The project uses a **Modified BEM** naming convention:
   - ✅ Exception: Third-party content (e.g., `:global a { ... }` in WangEditor)
 - **Use `-` (hyphen)** to connect Block and Element: `.block-element`
 - **Use `_` (underscore)** for multi-word names within a single segment: `.image_upload`, `.content_box`
-- **NEVER use `__`** (double underscore) for standard BEM - use single hyphen instead
+- **NEVER use `__` (double underscore) or `--` (double hyphen)** - use HTML attributes instead
 - **HTML attributes for states MUST start with `css-`**: `css-is-active`, `css-is-dragging`
 - **CSS variables MUST use `_` (underscore)**: `--editor_height`, `--offset_y`
 
+#### HTML Attribute Usage Guidelines:
+
+**When to use HTML attributes**:
+1. **States**: `[css-is-active='true']`, `[css-is-disabled='true']`
+2. **Color variants**: `[css-color='red']`, `[css-color='blue']`
+3. **Size variants**: `[css-size='small']`, `[css-size='large']`
+
+**When to use separate classes**:
+When the class name itself has **clear semantic meaning** (not just describing appearance):
 ```scss
-// ✅ CORRECT
+// ✅ Semantic class names
+.alert {
+  &-success { }  // Success message (semantic)
+  &-error { }    // Error message (semantic)
+}
+```
+
+```scss
+// ✅ CORRECT: Using HTML attributes
 .image_upload {
   &-preview {        // .image_upload-preview
     &-img { }        // .image_upload-preview-img
@@ -100,9 +117,30 @@ The project uses a **Modified BEM** naming convention:
   &[css-is-dragging='true'] { }
 }
 
+.demo_box {
+  background: #f5f5f5;
+  
+  &[css-color='red'] {
+    background: #ffcdd2;
+  }
+}
+```
+
+```tsx
+// ✅ CORRECT: Single className + HTML attribute
+<Box className={style.demo_box} css-color="red">
+  Red demo
+</Box>
+
+// ❌ WRONG: Multiple classNames
+<Box className={`${style.demo_box} ${style['demo_box--red']}`}>
+```
+
+```scss
 // ❌ WRONG
 .image__upload { }   // Don't use __
 .image-upload__preview { }  // Don't use __
+.button--red { }     // Don't use -- (use HTML attributes instead)
 ```
 
 ### 2.3 Page Root Class Naming (MANDATORY)

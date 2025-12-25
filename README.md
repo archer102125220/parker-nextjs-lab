@@ -403,12 +403,30 @@ The project adopts a **Modified BEM Naming Convention**, cleverly sacrificing st
 
 #### Naming Structure
 
-- **Block**: Single name, e.g., `.countdown`
-- **Element**: Single hyphen `-` connecting Block and Element, e.g., `.countdown-down_enter`, `.countdown-up_leave`
-- **Sub-Element**: Single hyphen `-` connecting parent and child elements, with underscores `_` separating semantic words within element names, e.g.:
+- **Block**: Use a single name, e.g., `.countdown`
+- **Element**: Use a single hyphen `-` to connect Block and Element, e.g., `.countdown-down_enter`, `.countdown-up_leave`
+- **Sub-Element**: Use a single hyphen `-` to connect parent and child elements, with underscores `_` separating semantic words within names, e.g.:
   - `.countdown-down_enter-down_enter_up`
   - `.image_upload-preview-img`
-- **State Modifiers**: Managed through HTML attribute selectors, e.g., `[css-is-anime-start='true']`, `[css-is-active='true']`
+- **State Modifiers**: Managed via HTML attribute selectors, e.g., `[css-is-anime-start='true']`, `[css-is-active='true']`
+- **Color/Size Variants**: Use HTML attributes, e.g., `[css-color='red']`, `[css-size='small']`
+
+#### Key Rules
+
+- ❌ **NEVER use `__` (double underscore) or `--` (double hyphen)**
+- ✅ **Each element MUST have only ONE className**
+- ✅ **Use HTML attributes for states and variants**
+- ✅ **HTML attributes MUST start with `css-`**
+
+```tsx
+// ✅ CORRECT: Single className + HTML attribute
+<Box className={style.demo_box} css-color="red">
+  Red demo
+</Box>
+
+// ❌ WRONG: Multiple classNames
+<Box className={`${style.demo_box} ${style['demo_box--red']}`}>
+```
 
 #### Root Element Naming Convention
 
