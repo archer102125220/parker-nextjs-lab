@@ -3,8 +3,7 @@ import dynamic from 'next/dynamic';
 import style from './page.module.scss';
 
 const ImageUploadTest = dynamic(
-  () => import('@/components/Demo/ImageUploadTest'),
-  { ssr: false }
+  () => import('@/components/Demo/ImageUploadTest')
 );
 
 export async function generateMetadata(): Promise<Metadata> {

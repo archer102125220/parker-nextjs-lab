@@ -3,8 +3,7 @@ import dynamic from 'next/dynamic';
 import style from './page.module.scss';
 
 const FrontendApiCacheTest = dynamic(
-  () => import('@/components/Demo/FrontendApiCacheTest'),
-  { ssr: false }
+  () => import('@/components/Demo/FrontendApiCacheTest')
 );
 
 export async function generateMetadata(): Promise<Metadata> {

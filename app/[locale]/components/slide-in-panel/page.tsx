@@ -3,8 +3,7 @@ import dynamic from 'next/dynamic';
 import style from './page.module.scss';
 
 const SlideInPanelTest = dynamic(
-  () => import('@/components/Demo/SlideInPanelTest'),
-  { ssr: false }
+  () => import('@/components/Demo/SlideInPanelTest')
 );
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -25,4 +24,3 @@ export default function SlideInPanelPage() {
     </div>
   );
 }
-

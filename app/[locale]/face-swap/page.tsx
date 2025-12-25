@@ -2,10 +2,7 @@ import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import style from './page.module.scss';
 
-const FaceSwapIndex = dynamic(
-  () => import('@/components/Demo/FaceSwapIndex'),
-  { ssr: false }
-);
+const FaceSwapIndex = dynamic(() => import('@/components/Demo/FaceSwapIndex'));
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

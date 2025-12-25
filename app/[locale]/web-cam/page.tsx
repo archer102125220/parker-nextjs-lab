@@ -2,9 +2,7 @@ import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import style from './page.module.scss';
 
-const WebCamTest = dynamic(() => import('@/components/Demo/WebCamTest'), {
-  ssr: false
-});
+const WebCamTest = dynamic(() => import('@/components/Demo/WebCamTest'));
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

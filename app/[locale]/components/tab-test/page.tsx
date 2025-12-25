@@ -3,9 +3,7 @@ import dynamic from 'next/dynamic';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-const TabTest = dynamic(() => import('@/components/Demo/TabTest'), {
-  ssr: false
-});
+const TabTest = dynamic(() => import('@/components/Demo/TabTest'));
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

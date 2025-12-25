@@ -2,10 +2,7 @@ import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import styles from './page.module.scss';
 
-const SocketIoTest = dynamic(
-  () => import('@/components/Demo/SocketIoTest'),
-  { ssr: false }
-);
+const SocketIoTest = dynamic(() => import('@/components/Demo/SocketIoTest'));
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

@@ -3,8 +3,7 @@ import dynamic from 'next/dynamic';
 import style from './page.module.scss';
 
 const PhoneInputTest = dynamic(
-  () => import('@/components/Demo/PhoneInputTest'),
-  { ssr: false }
+  () => import('@/components/Demo/PhoneInputTest')
 );
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -25,4 +24,3 @@ export default function PhoneInputPage() {
     </div>
   );
 }
-

@@ -3,8 +3,7 @@ import dynamic from 'next/dynamic';
 import style from './page.module.scss';
 
 const WangEditorTest = dynamic(
-  () => import('@/components/Demo/WangEditorTest'),
-  { ssr: false }
+  () => import('@/components/Demo/WangEditorTest')
 );
 
 export async function generateMetadata(): Promise<Metadata> {

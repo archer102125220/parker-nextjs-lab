@@ -2,9 +2,7 @@ import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import styles from './page.module.scss';
 
-const SwiperTest = dynamic(() => import('@/components/Demo/SwiperTest'), {
-  ssr: false
-});
+const SwiperTest = dynamic(() => import('@/components/Demo/SwiperTest'));
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -24,4 +22,3 @@ export default function SwiperTestPage() {
     </section>
   );
 }
-

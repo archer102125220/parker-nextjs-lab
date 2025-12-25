@@ -3,8 +3,7 @@ import dynamic from 'next/dynamic';
 import styles from './page.module.scss';
 
 const SocketTestIndex = dynamic(
-  () => import('@/components/Demo/SocketTestIndex'),
-  { ssr: false }
+  () => import('@/components/Demo/SocketTestIndex')
 );
 
 export async function generateMetadata(): Promise<Metadata> {

@@ -3,8 +3,7 @@ import dynamic from 'next/dynamic';
 import style from './page.module.scss';
 
 const VirtualScrollerTest = dynamic(
-  () => import('@/components/Demo/VirtualScrollerTest'),
-  { ssr: false }
+  () => import('@/components/Demo/VirtualScrollerTest')
 );
 
 export async function generateMetadata(): Promise<Metadata> {
