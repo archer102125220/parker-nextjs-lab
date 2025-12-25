@@ -13,6 +13,7 @@
 # testing
 /coverage
 *_test_output.txt
+*_test.txt
 test_output.txt
 
 # next.js
