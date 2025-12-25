@@ -182,8 +182,9 @@ export default function LazyLoadTestClient(): React.ReactNode {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={nativeRootMarginRef}
-          className={`${style['lazyload_test_page-image']} ${style['lazyload_test_page-image--gif']}`}
+          className={style['lazyload_test_page-image']}
           alt="Native img with rootMargin"
+          css-type="gif"
         />
       </Box>
 

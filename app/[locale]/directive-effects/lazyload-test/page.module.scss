@@ -28,7 +28,7 @@
         /* Animation */
         transition: opacity 0.3s ease-in-out;
 
-        &--gif {
+        &[css-type='gif'] {
             /* Display & Box Model */
             max-height: 300px;
         }
