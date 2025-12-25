@@ -219,6 +219,18 @@
 > - 整頁內容的 Client Component → `components/Demo/[PageName].tsx`
 > - 多個子組件的頁面 → `components/[PageName]/` 資料夾
 
+> ⚠️ **重要注意事項：動態載入與 SSR**
+> 
+> ```tsx
+> // ✅ 正確：使用 dynamic() 預設行為（啟用 SSR）
+> const DemoComponent = dynamic(() => import('@/components/Demo/Example'));
+> 
+> // ❌ 錯誤：不應該隨意關閉 SSR
+> const DemoComponent = dynamic(() => import('@/components/Demo/Example'), { ssr: false });
+> ```
+> 
+> 只有在第三方套件完全無法在 Node.js 環境執行時才使用 `{ ssr: false }`。濫用會導致打包失敗、SEO 受損、效能下降。
+
 ## 🪝 自定義 Hooks（28+）
 
 | Hook | 說明 |

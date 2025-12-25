@@ -319,3 +319,47 @@ yarn lint
 - 每完成一個類型就測試一次
 - 保持 Git commits 清晰
 - 優先處理 Type A，快速見效
+
+---
+
+## ✅ 完成狀態
+
+**此計劃已於 2025-12-25 完成。**
+
+所有 42 個頁面均已完成重構：
+- Type A: 15/15 ✅
+- Type B: 12/12 ✅
+- Type C: 15/15 ✅
+
+---
+
+## ⚠️ 重要警告：關於 `dynamic()` 與 `{ ssr: false }`
+
+### 正確用法
+
+```tsx
+// ✅ 正確：使用 dynamic() 預設行為（啟用 SSR）
+import dynamic from 'next/dynamic';
+const DemoComponent = dynamic(() => import('@/components/Demo/Example'));
+```
+
+### 錯誤用法
+
+```tsx
+// ❌ 錯誤：不應該隨意關閉 SSR
+const DemoComponent = dynamic(() => import('@/components/Demo/Example'), { ssr: false });
+```
+
+### 何時才應該使用 `{ ssr: false }`？
+
+只有在以下極少數情況才需要：
+1. 第三方套件內部使用 `window` 或 `document` 且無法在 Node.js 環境執行
+2. 該套件沒有提供 SSR 兼容的版本
+3. 已確認無其他解決方案
+
+### 濫用的後果
+
+1. **打包失敗**：在某些配置下會導致 build error
+2. **SEO 受損**：搜尋引擎無法正確爬取頁面內容
+3. **效能下降**：增加首次載入時間（FCP/LCP）
+4. **Layout Shift**：可能造成頁面跳動

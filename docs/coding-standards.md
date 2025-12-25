@@ -333,3 +333,39 @@ export default function BannerDemo() {
 | Create placeholders in `styles/placeholders/` | Create `_shared` folders in `app/` |
 | Give each page a unique root class | Share CSS class names between pages |
 | Create components for shared DOM | Share CSS files between pages |
+
+---
+
+## 5. Next.js Standards
+
+### 5.1 Dynamic Import and SSR (MANDATORY)
+
+#### Correct Usage
+
+```tsx
+// ✅ CORRECT: Use dynamic() with default behavior (SSR enabled)
+import dynamic from 'next/dynamic';
+const DemoComponent = dynamic(() => import('@/components/Demo/Example'));
+```
+
+#### Wrong Usage
+
+```tsx
+// ❌ WRONG: Do NOT arbitrarily disable SSR
+const DemoComponent = dynamic(() => import('@/components/Demo/Example'), { ssr: false });
+```
+
+#### When Should You Use `{ ssr: false }`?
+
+Only in these rare cases:
+1. Third-party packages that use `window` or `document` internally and cannot run in Node.js
+2. The package doesn't provide an SSR-compatible version
+3. You've confirmed there are no other solutions
+
+#### Consequences of Misuse
+
+1. **Build Failure**: May cause build errors in certain configurations
+2. **SEO Damage**: Search engines cannot properly crawl page content
+3. **Performance Degradation**: Increases first contentful paint (FCP/LCP)
+4. **Layout Shift**: May cause page content to jump
+

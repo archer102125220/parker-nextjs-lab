@@ -53,6 +53,13 @@ When working on this project, you MUST follow the coding standards defined below
 - ALLOWED: MUI `sx`, CSS variable passing
 - FORBIDDEN: static values, dynamic calculations
 
+### Next.js Dynamic Import (⚠️ CRITICAL)
+- ✅ `dynamic(() => import(...))` - Default, SSR enabled
+- ❌ `dynamic(() => import(...), { ssr: false })` - AVOID unless absolutely necessary
+- Only use `{ ssr: false }` when third-party lib cannot run in Node.js
+- Misuse causes: build failure, SEO damage, performance issues
+
 ## Full Documentation
 - English: [docs/coding-standards.md](docs/coding-standards.md)
 - 繁體中文: [docs/coding-standards.zh-tw.md](docs/coding-standards.zh-tw.md)
+

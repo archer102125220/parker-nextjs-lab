@@ -333,3 +333,39 @@ export default function BannerDemo() {
 | 在 `styles/placeholders/` 建立 placeholders | 在 `app/` 內建立 `_shared` 資料夾 |
 | 每個頁面給予唯一根類別 | 在頁面間共用 CSS 類別名稱 |
 | 為共用 DOM 建立組件 | 在頁面間共用 CSS 檔案 |
+
+---
+
+## 5. Next.js 規範
+
+### 5.1 動態載入與 SSR (強制)
+
+#### 正確用法
+
+```tsx
+// ✅ 正確：使用 dynamic() 預設行為（啟用 SSR）
+import dynamic from 'next/dynamic';
+const DemoComponent = dynamic(() => import('@/components/Demo/Example'));
+```
+
+#### 錯誤用法
+
+```tsx
+// ❌ 錯誤：不應該隨意關閉 SSR
+const DemoComponent = dynamic(() => import('@/components/Demo/Example'), { ssr: false });
+```
+
+#### 何時才應該使用 `{ ssr: false }`？
+
+只有在以下極少數情況才需要：
+1. 第三方套件內部使用 `window` 或 `document` 且無法在 Node.js 環境執行
+2. 該套件沒有提供 SSR 兼容的版本
+3. 已確認無其他解決方案
+
+#### 濫用的後果
+
+1. **打包失敗**：在某些配置下會導致 build error
+2. **SEO 受損**：搜尋引擎無法正確爬取頁面內容
+3. **效能下降**：增加首次載入時間（FCP/LCP）
+4. **Layout Shift**：可能造成頁面跳動
+

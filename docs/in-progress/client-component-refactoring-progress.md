@@ -1,7 +1,8 @@
 # Client Component Refactoring - Progress Tracker
 
 **Start Date**: 2025-12-25  
-**Status**: 🔄 In Progress  
+**Completion Date**: 2025-12-25  
+**Status**: ✅ Completed  
 **Overall Progress**: 42/42 pages (100%)
 
 ---
@@ -109,4 +110,27 @@
 
 ---
 
-**Last Updated**: 2025-12-25 11:45
+## ⚠️ 重要注意事項 (Lessons Learned)
+
+### 關於 `dynamic()` 與 `ssr: false`
+
+**錯誤做法**（已修正）：
+```tsx
+// ❌ 不應該隨意關閉 SSR
+const Component = dynamic(() => import('@/components/Demo/Example'), { ssr: false });
+```
+
+**正確做法**：
+```tsx
+// ✅ 讓 Next.js 預設處理 SSR
+const Component = dynamic(() => import('@/components/Demo/Example'));
+```
+
+`{ ssr: false }` 只應該在非常特定的情況下使用（例如某些第三方套件完全無法在 Node.js 環境執行），而不是作為「預防措施」。濫用 `{ ssr: false }` 會導致：
+1. 打包失敗
+2. SEO 受損
+3. 首次載入效能下降
+
+---
+
+**Last Updated**: 2025-12-25 17:06

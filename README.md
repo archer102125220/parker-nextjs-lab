@@ -219,6 +219,18 @@ Full-page Client Components for feature demonstrations, using PascalCase naming:
 > - Full-page Client Components → `components/Demo/[PageName].tsx`
 > - Pages with multiple sub-components → `components/[PageName]/` folder
 
+> ⚠️ **Important Notice: Dynamic Import and SSR**
+> 
+> ```tsx
+> // ✅ CORRECT: Use dynamic() with default behavior (SSR enabled)
+> const DemoComponent = dynamic(() => import('@/components/Demo/Example'));
+> 
+> // ❌ WRONG: Do NOT arbitrarily disable SSR
+> const DemoComponent = dynamic(() => import('@/components/Demo/Example'), { ssr: false });
+> ```
+> 
+> Only use `{ ssr: false }` when third-party packages cannot run in Node.js environment. Misuse causes build failure, SEO damage, and performance degradation.
+
 ## 🪝 Custom Hooks (28+)
 
 | Hook | Description |
