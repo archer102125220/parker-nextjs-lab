@@ -56,18 +56,18 @@
 
 | 頁面 | 複雜度 | 重構策略 |
 |------|--------|---------|
-| `components/image-upload-test` | 中 | 提取為 `components/ClientDemo/ImageUploadDemo.tsx` |
-| `components/phone-input` | 中 | 提取為 `components/ClientDemo/PhoneInputDemo.tsx` |
-| `components/slide-in-panel` | 中 | 提取為 `components/ClientDemo/SlideInPanelDemo.tsx` |
-| `components/swiper-test` | 中 | 提取為 `components/ClientDemo/SwiperDemo.tsx` |
-| `components/tab-test` | 中 | 提取為 `components/ClientDemo/TabsDemo.tsx` |
-| `components/wang-editor-test` | 中 | 提取為 `components/ClientDemo/WangEditorDemo.tsx` |
-| `components/virtual-scroller` | 中 | 提取為 `components/ClientDemo/VirtualScrollerDemo.tsx` |
-| `web-cam` | 中 | 提取為 `components/ClientDemo/WebCamDemo.tsx` |
-| `frontend-api-cache-test` | 中 | 提取為 `components/ClientDemo/APICacheDemo.tsx` |
-| `face-swap/page` | 中 | 提取為 `components/ClientDemo/FaceSwapIndex.tsx` |
-| `socket-test/page` | 中 | 提取為 `components/ClientDemo/SocketIndex.tsx` |
-| `socket-test/socket-io` | 中 | 提取為 `components/ClientDemo/SocketIODemo.tsx` |
+| `components/image-upload-test` | 中 | 提取為 `components/Demo/ImageUploadTest.tsx` |
+| `components/phone-input` | 中 | 提取為 `components/Demo/PhoneInputTest.tsx` |
+| `components/slide-in-panel` | 中 | 提取為 `components/Demo/SlideInPanelTest.tsx` |
+| `components/swiper-test` | 中 | 提取為 `components/Demo/SwiperTest.tsx` |
+| `components/tab-test` | 中 | 提取為 `components/Demo/TabTest.tsx` |
+| `components/wang-editor-test` | 中 | 提取為 `components/Demo/WangEditorTest.tsx` |
+| `components/virtual-scroller` | 中 | 提取為 `components/Demo/VirtualScrollerTest.tsx` |
+| `web-cam` | 中 | 提取為 `components/Demo/WebCamTest.tsx` |
+| `frontend-api-cache-test` | 中 | 提取為 `components/Demo/FrontendApiCacheTest.tsx` |
+| `face-swap/page` | 中 | 提取為 `components/Demo/FaceSwapIndex.tsx` |
+| `socket-test/page` | 中 | 提取為 `components/Demo/SocketTestIndex.tsx` |
+| `socket-test/socket-io` | 中 | 提取為 `components/Demo/SocketIoTest.tsx` |
 
 **預估時間**: 4-5 小時
 
