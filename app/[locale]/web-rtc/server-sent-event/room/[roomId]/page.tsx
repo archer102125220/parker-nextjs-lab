@@ -2,10 +2,7 @@ import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import style from './page.module.scss';
 
-const WebRTCSSERoom = dynamic(
-  () => import('@/components/Demo/WebRTCSSERoom'),
-  { ssr: false }
-);
+const WebRTCSSERoom = dynamic(() => import('@/components/Demo/WebRTCSSERoom'));
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
