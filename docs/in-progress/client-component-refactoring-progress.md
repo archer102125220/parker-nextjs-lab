@@ -10,10 +10,10 @@
 
 | Type | Total | Completed | In Progress | Remaining | Progress |
 |------|-------|-----------|-------------|-----------|----------|
-| Type A (Inline) | 15 | 8 | 0 | 7 | 53% |
+| Type A (Inline) | 15 | 11 | 0 | 4 | 73% |
 | Type B (Extract) | 12 | 0 | 0 | 12 | 0% |
 | Type C (Demo) | 15 | 0 | 0 | 15 | 0% |
-| **Total** | **42** | **8** | **0** | **34** | **19%** |
+| **Total** | **42** | **11** | **0** | **31** | **26%** |
 
 ---
 
@@ -29,9 +29,9 @@
 | 2 | components/countdown-test | ✅ | 00:45 | 00:50 | Created CountdownTest.tsx, Browser verified ✅ |
 | 3 | components/enter-label | ✅ | 00:55 | 00:57 | Created EnterLabelTest.tsx, No SCSS (uses MUI sx) |
 | 4 | components/go-top | ✅ | 00:06 | 00:09 | Created GoTopClient.tsx, Browser verified ✅ |
-| 5 | components/qr-code-test | ⏳ | - | - | - |
-| 6 | components/selector | ⏳ | - | - | - |
-| 7 | components/switch-button | ⏳ | - | - | - |
+| 5 | components/qr-code-test | ✅ | 10:18 | 10:20 | Created QRCodeTest.tsx, CSS fixed |
+| 6 | components/selector | ✅ | 10:20 | 10:22 | Created SelectorTest.tsx |
+| 7 | components/switch-button | ✅ | 10:22 | 10:24 | Created SwitchButtonTest.tsx |
 | 8 | components/youtube-test | ⏳ | - | - | - |
 | 9 | directive-effects/page | ✅ | 00:10 | 00:12 | No client component needed (static), Browser verified ✅ |
 | 10 | directive-effects/lazyload-test | ✅ | 00:13 | 00:17 | Created LazyLoadTestClient.tsx, Browser verified ✅ |
