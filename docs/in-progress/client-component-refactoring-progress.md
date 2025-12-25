@@ -10,10 +10,10 @@
 
 | Type | Total | Completed | In Progress | Remaining | Progress |
 |------|-------|-----------|-------------|-----------|----------|
-| Type A (Inline) | 15 | 11 | 0 | 4 | 73% |
+| Type A (Inline) | 15 | 15 | 0 | 0 | 100% |
 | Type B (Extract) | 12 | 0 | 0 | 12 | 0% |
 | Type C (Demo) | 15 | 0 | 0 | 15 | 0% |
-| **Total** | **42** | **11** | **0** | **31** | **26%** |
+| **Total** | **42** | **15** | **0** | **27** | **36%** |
 
 ---
 
@@ -32,14 +32,14 @@
 | 5 | components/qr-code-test | ✅ | 10:18 | 10:20 | Created QRCodeTest.tsx, CSS fixed |
 | 6 | components/selector | ✅ | 10:20 | 10:22 | Created SelectorTest.tsx |
 | 7 | components/switch-button | ✅ | 10:22 | 10:24 | Created SwitchButtonTest.tsx |
-| 8 | components/youtube-test | ⏳ | - | - | - |
+| 8 | components/youtube-test | ✅ | 10:28 | 10:32 | Created YoutubeTest.tsx, Fixed --active to HTML attr |
 | 9 | directive-effects/page | ✅ | 00:10 | 00:12 | No client component needed (static), Browser verified ✅ |
 | 10 | directive-effects/lazyload-test | ✅ | 00:13 | 00:17 | Created LazyLoadTestClient.tsx, Browser verified ✅ |
 | 11 | directive-effects/ripple-test | ✅ | 00:17 | 00:19 | Created RippleTestClient.tsx, Browser verified ✅ |
 | 12 | route/page | ✅ | 00:20 | 00:21 | No client component needed (static) |
-| 13 | route/params-back-test/[testData] | ⏳ | - | - | - |
-| 14 | route/query-back-test | ⏳ | - | - | - |
-| 15 | offline | ⏳ | - | - | - |
+| 13 | route/params-back-test/[testData] | ✅ | 10:32 | 10:34 | Created ParamsBackTest.tsx |
+| 14 | route/query-back-test | ✅ | 10:34 | 10:36 | Created QueryBackTest.tsx |
+| 15 | offline | ✅ | 10:36 | 10:38 | Created OfflinePageClient.tsx |
 
 ---
 

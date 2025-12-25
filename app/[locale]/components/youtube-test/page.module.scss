@@ -1,144 +1,147 @@
 // YouTube Test Page Styles
-@use '@/styles/placeholders' as *;
+@use '@/styles/placeholders'as *;
 
 .youtube_test_page {
-  @extend %test_page;
-  max-width: 900px;
+    @extend %test_page;
+    max-width: 900px;
 
-  &-description {
-    @extend %test_page_description;
-  }
-
-  &-section {
-    /* Display & Box Model */
-    margin-bottom: 40px;
-  }
-
-  &-section_title {
-    /* Display & Box Model */
-    margin-bottom: 16px;
-  }
-
-  // Video container with 16:9 aspect ratio
-  &-video_wrapper {
-    /* Positioning */
-    position: relative;
-
-    /* Display & Box Model */
-    padding-bottom: 56.25%; // 16:9 aspect ratio
-    height: 0;
-    overflow: hidden;
-    border-radius: 8px;
-
-    /* Visual */
-    background-color: #000;
-  }
-
-  &-video_inner {
-    /* Positioning */
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    /* Display & Box Model */
-    width: 100%;
-    height: 100%;
-  }
-
-  // Custom video input form
-  &-input_group {
-    /* Display & Box Model */
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-
-  &-input {
-    /* Display & Box Model */
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-
-    /* Typography */
-    font-size: 14px;
-  }
-
-  &-button {
-    /* Display & Box Model */
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-
-    /* Typography */
-    font-size: 14px;
-    color: white;
-
-    /* Visual */
-    background-color: #1976d2;
-    cursor: pointer;
-
-    /* Animation */
-    transition: background-color 0.2s;
-
-    &:hover {
-      background-color: #1565c0;
-    }
-  }
-
-  &-hint {
-    /* Typography */
-    font-size: 12px;
-    color: #666;
-  }
-
-  // Popular videos grid
-  &-popular_grid {
-    /* Display & Box Model */
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 10px;
-  }
-
-  &-popular_button {
-    /* Display & Box Model */
-    padding: 12px;
-    border: none;
-    border-radius: 4px;
-
-    /* Typography */
-    font-size: 12px;
-    text-align: left;
-
-    /* Visual */
-    background-color: #f5f5f5;
-    color: #333;
-    cursor: pointer;
-
-    /* Animation */
-    transition: all 0.2s;
-
-    &:hover {
-      background-color: #e0e0e0;
+    &-description {
+        @extend %test_page_description;
     }
 
-    &--active {
-      background-color: #1976d2;
-      color: white;
-
-      &:hover {
-        background-color: #1565c0;
-      }
+    &-section {
+        /* Display & Box Model */
+        margin-bottom: 40px;
     }
-  }
 
-  // Features list
-  &-features {
-    /* Display & Box Model */
-    padding-left: 20px;
-
-    li {
-      margin-bottom: 8px;
+    &-section_title {
+        /* Display & Box Model */
+        margin-bottom: 16px;
     }
-  }
+
+    // Video container with 16:9 aspect ratio
+    &-video_wrapper {
+        /* Positioning */
+        position: relative;
+
+        /* Display & Box Model */
+        padding-bottom: 56.25%; // 16:9 aspect ratio
+        height: 0;
+        overflow: hidden;
+        border-radius: 8px;
+
+        /* Visual */
+        background-color: #000;
+    }
+
+    &-video_inner {
+        /* Positioning */
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        /* Display & Box Model */
+        width: 100%;
+        height: 100%;
+    }
+
+    // Custom video input form
+    &-input_group {
+        /* Display & Box Model */
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    &-input {
+        /* Display & Box Model */
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+
+        /* Typography */
+        font-size: 14px;
+    }
+
+    &-button {
+        /* Display & Box Model */
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+
+        /* Typography */
+        font-size: 14px;
+        color: white;
+
+        /* Visual */
+        background-color: #1976d2;
+        cursor: pointer;
+
+        /* Animation */
+        transition: background-color 0.2s;
+
+        &:hover {
+            background-color: #1565c0;
+        }
+    }
+
+    &-hint {
+        /* Typography */
+        font-size: 12px;
+        color: #666;
+    }
+
+    // Popular videos grid
+    &-popular_grid {
+        /* Display & Box Model */
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+    }
+
+    &-popular_button {
+        /* Display & Box Model */
+        padding: 12px 16px;
+        width: 100%;
+
+        /* Typography */
+        text-align: left;
+        font-size: 14px;
+
+        /* Visual */
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+
+        /* Animation */
+        transition: all 0.2s;
+
+        /* Misc */
+        cursor: pointer;
+
+        &[css-is-active='true'] {
+            /* Visual */
+            background: #667eea;
+            border-color: #667eea;
+
+            /* Typography */
+            color: white;
+        }
+
+        &:hover {
+            /* Visual */
+            background: #e0e0e0;
+        }
+    }
+
+    // Features list
+    &-features {
+        /* Display & Box Model */
+        padding-left: 20px;
+
+        li {
+            margin-bottom: 8px;
+        }
+    }
 }
