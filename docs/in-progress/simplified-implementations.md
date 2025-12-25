@@ -1,7 +1,7 @@
 # 簡化實作清單 (Simplified Implementation Notes)
 
 > 本文件記錄哪些頁面/組件是以簡化方式實作，需要後續完善。
-> 更新日期: 2025-12-24
+> 更新日期: 2025-12-26
 
 ---
 
@@ -158,9 +158,11 @@
    - 需要決定使用 SSE 替代或部署獨立伺服器
    - ✅ **已決策**: 使用 SSE 替代（已完整實作）
 
-2. **測試覆蓋率**
-   - 目前幾乎沒有單元測試
-   - 需要補充核心組件和 hooks 的測試
+2. **測試覆蓋率** 🔄 進行中
+   - ✅ 已完成 94 個單元測試 (2025-12-25)
+   - ✅ 核心組件測試：QRCode, SwitchButton, LoadingBar, Selector, PWALoading, DatePicker
+   - ✅ Hooks 測試：useDebounce, useThrottle, useLocalStorage, useMediaQuery
+   - 🔄 待補充：其他組件和 hooks 的測試
 
 3. **API 文件**
    - 缺少完整的 API 使用文件
