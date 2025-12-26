@@ -22,10 +22,10 @@
 - README 更新、test-structure.md 文件
 - 程式碼修復：SwitchButton aria-label、Header 語義化 nav
 
-### 🔄 可選項目 (Optional - 未完成)
+### 🔄 可選項目 (Optional)
 - [ ] **Storybook** - 組件視覺化展示平台
 - [ ] **CI/CD Pipeline** - GitHub Actions 自動化部署
-- [ ] **Integration Testing** - 組件整合測試
+- [x] **Integration Testing** - 組件整合測試 ✅ (11 tests pass)
 - [x] **E2E Testing** - Playwright 端到端測試 ✅ (36 tests pass)
 - [ ] **Performance Optimization** - 效能優化
 - [x] **Accessibility Testing** - 無障礙測試 ✅ (6 tests pass)
