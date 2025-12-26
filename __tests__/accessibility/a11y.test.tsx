@@ -21,26 +21,26 @@ jest.mock('next/navigation', () => ({
   useSearchParams: () => new URLSearchParams()
 }));
 
-// Import components individually with error handling
+// Import components
 import SwitchButton from '@/components/SwitchButton';
 import LoadingBar from '@/components/LoadingBar';
 
 describe('Accessibility Tests', () => {
   describe('SwitchButton', () => {
-    it('should have no accessibility violations', async () => {
+    it('should have no accessibility violations with aria-label', async () => {
       const { container } = render(
         <SwitchButton
           value={false}
           onChange={() => {}}
-          onLabel="On"
-          offLabel="Off"
+          onLabel="Turn On"
+          offLabel="Turn Off"
         />
       );
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
 
-    it('should display correct label based on value', () => {
+    it('should have accessible checkbox with role', () => {
       render(
         <SwitchButton
           value={true}
@@ -50,7 +50,37 @@ describe('Accessibility Tests', () => {
         />
       );
       
-      expect(screen.getByText('Enabled')).toBeInTheDocument();
+      // Checkbox should be accessible via role
+      const checkbox = screen.getByRole('checkbox');
+      expect(checkbox).toBeInTheDocument();
+      expect(checkbox).toHaveAttribute('aria-label', 'Enabled');
+    });
+
+    it('should use offLabel when unchecked', () => {
+      render(
+        <SwitchButton
+          value={false}
+          onChange={() => {}}
+          onLabel="On"
+          offLabel="Off"
+        />
+      );
+      
+      const checkbox = screen.getByRole('checkbox');
+      expect(checkbox).toHaveAttribute('aria-label', 'Off');
+    });
+
+    it('should use explicit ariaLabel when provided', () => {
+      render(
+        <SwitchButton
+          value={false}
+          onChange={() => {}}
+          ariaLabel="Toggle dark mode"
+        />
+      );
+      
+      const checkbox = screen.getByRole('checkbox');
+      expect(checkbox).toHaveAttribute('aria-label', 'Toggle dark mode');
     });
   });
 

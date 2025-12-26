@@ -18,6 +18,12 @@ export interface SwitchButtonProps {
   radius?: string;
   className?: string;
   children?: React.ReactNode;
+  /** Accessibility: label for unchecked state (used for aria-label) */
+  offLabel?: string;
+  /** Accessibility: label for checked state (used for aria-label) */
+  onLabel?: string;
+  /** Accessibility: explicit aria-label (overrides onLabel/offLabel) */
+  ariaLabel?: string;
 }
 
 export function SwitchButton({
@@ -34,7 +40,10 @@ export function SwitchButton({
   checkedBgColor,
   radius = '999px',
   className = '',
-  children
+  children,
+  offLabel,
+  onLabel,
+  ariaLabel
 }: SwitchButtonProps) {
   const [checked, setChecked] = useState(value);
   const [iconWidth, setIconWidth] = useState(0);
@@ -135,6 +144,7 @@ export function SwitchButton({
         disabled={disabled}
         checked={checked}
         onChange={handleChange}
+        aria-label={ariaLabel || (checked ? (onLabel || checkedLabel || 'On') : (offLabel || label || 'Off'))}
       />
 
       <div ref={iconRef} className="switch_button-icon">
