@@ -1,18 +1,147 @@
 .css_animejs_page {
-  &-banner {
-    width: 100%;
-    margin-bottom: 8px;
-  }
+    /* Display & Box Model */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
 
-  &-content {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    gap: 8px;
+    &-hero {
+        /* Display & Box Model */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 3rem 1.5rem;
+        margin-bottom: 2rem;
+        border-radius: 16px;
 
-    &-link {
-      flex: 1;
-      flex-basis: 150px;
+        /* Typography */
+        text-align: center;
+        color: #fff;
+
+        /* Visual */
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        &-icon {
+            /* Display & Box Model */
+            margin-bottom: 1rem;
+
+            /* Typography */
+            font-size: 4rem;
+        }
+
+        &-title {
+            /* Display & Box Model */
+            margin: 0 0 0.5rem;
+
+            /* Typography */
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        &-subtitle {
+            /* Display & Box Model */
+            max-width: 500px;
+            margin: 0;
+
+            /* Typography */
+            font-size: 1.1rem;
+
+            /* Visual */
+            opacity: 0.9;
+        }
     }
-  }
+
+    &-content {
+        /* Display & Box Model */
+        margin-bottom: 1rem;
+
+        /* Typography */
+        font-size: 1rem;
+        text-align: center;
+        color: #555;
+    }
+
+    &-link_list {
+        /* Display & Box Model */
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.25rem;
+    }
+
+    &-link_list-link {
+        /* Positioning */
+        position: relative;
+
+        /* Display & Box Model */
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1.5rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        overflow: hidden;
+
+        /* Typography */
+        text-decoration: none;
+        color: inherit;
+
+        /* Visual */
+        background: #fff;
+
+        /* Animation */
+        transition: all 0.3s ease;
+
+        &::before {
+            /* Positioning */
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            /* Display & Box Model */
+            width: 4px;
+            height: 100%;
+
+            /* Visual */
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            transform: scaleY(0);
+            transform-origin: top;
+
+            /* Animation */
+            transition: transform 0.3s ease;
+
+            /* Misc */
+            content: '';
+        }
+
+        &:hover {
+            border-color: #667eea;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+            transform: translateY(-4px);
+
+            &::before {
+                transform: scaleY(1);
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .css_animejs_page {
+        padding: 1rem;
+
+        &-hero {
+            padding: 2rem 1rem;
+
+            &-icon {
+                font-size: 3rem;
+            }
+
+            &-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        &-link_list {
+            grid-template-columns: 1fr;
+        }
+    }
 }
