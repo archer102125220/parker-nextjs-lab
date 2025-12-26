@@ -24,7 +24,7 @@
 
 ### 🔄 可選項目 (Optional)
 - [ ] **Storybook** - 組件視覺化展示平台
-- [ ] **CI/CD Pipeline** - GitHub Actions 自動化部署
+- [x] **CI/CD Pipeline** - GitHub Actions 自動化 ✅ (.github/workflows/ci.yml)
 - [x] **Integration Testing** - 組件整合測試 ✅ (11 tests pass)
 - [x] **E2E Testing** - Playwright 端到端測試 ✅ (36 tests pass)
 - [ ] **Performance Optimization** - 效能優化
