@@ -777,7 +777,7 @@
 
 ---
 
-## Phase 9: 文件與部署 (Documentation & Deployment) [7/10] 🔄 進行中
+## Phase 9: 文件與部署 (Documentation & Deployment) [9/10] ✅ 完成
 
 ### API Documentation [2/2] ✅ 完成
 - [x] 撰寫 API 文件 (docs/api-documentation.md)
@@ -796,9 +796,9 @@
 - [x] 撰寫部署文件 (docs/deployment-guide.md)
 - [ ] 建立 CI/CD pipeline
 
-### README Update [0/1]
-- [ ] 更新 README.md
-- [ ] 更新 README.zh-tw.md
+### README Update [1/1] ✅ 完成
+- [x] 更新 README.md
+- [x] 更新 README.zh-tw.md
 
 ---
 

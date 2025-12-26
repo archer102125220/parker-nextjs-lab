@@ -13,6 +13,7 @@ A comprehensive Next.js laboratory project showcasing modern web development pra
 - **🗄️ Database**: PostgreSQL with Sequelize ORM
 - **📊 Analytics**: Google Analytics and Google Tag Manager integration
 - **🔧 Custom Components**: 40+ reusable component library
+- **✅ Testing**: 189 unit tests with Jest + React Testing Library
 - **⚡ Performance**: Optimized with Turbopack support and performance monitoring
 - **🔐 Authentication**: WebAuthn/FIDO2 and OAuth (Google, Facebook, LINE) integration
 - **📱 Mobile-First**: Responsive design with mobile optimization
@@ -147,6 +148,9 @@ A comprehensive Next.js laboratory project showcasing modern web development pra
 - `yarn create-i18n` - Generate i18n files from Google Sheets
 
 ### Testing & Performance
+- `yarn test` - Run all unit tests (189 tests)
+- `yarn test:watch` - Run tests in watch mode
+- `yarn test:coverage` - Run tests with coverage report
 - `yarn stress` - Run stress testing
 - `yarn lint` - Run ESLint
 
@@ -1142,6 +1146,45 @@ UPSTASH_REDIS_REST_TOKEN=your-redis-token
 ### Notes
 - WebSocket/Socket.IO features require non-serverless environments
 - Use SSE-based signaling for WebRTC on Vercel
+
+## 📚 Documentation
+
+For more detailed documentation, see the [docs](./docs/) folder:
+
+| Document | Description |
+|----------|-------------|
+| [API Documentation](./docs/guides/api-documentation.md) | All API endpoints with request/response examples |
+| [Component Catalog (中文)](./docs/guides/component-catalog.zh-tw.md) | Complete component usage guide |
+| [Deployment Guide](./docs/guides/deployment-guide.md) | Vercel, Docker, and manual deployment |
+| [Coding Standards](./docs/guides/coding-standards.md) | CSS, TypeScript, and naming conventions |
+| [Documentation Index](./docs/README.md) | All documentation organized by category |
+
+## ✅ Testing
+
+This project includes comprehensive unit testing:
+
+```bash
+# Run all tests
+yarn test
+
+# Run in watch mode
+yarn test:watch
+
+# Generate coverage report
+yarn test:coverage
+```
+
+### Test Statistics
+- **Total Tests**: 189
+- **Test Files**: 18
+- **Pass Rate**: 100%
+- **Execution Time**: ~8s
+
+### Tested Components
+- **Form**: DatePicker, PhoneInput, ImageUpload, Selector, SwitchButton
+- **UI**: Banner, Countdown, DialogModal, SlideInPanel, Tabs, LoadingBar
+- **Utility**: QRCode, PWALoading
+- **Hooks**: useDebounce, useThrottle, useLocalStorage, useMediaQuery, useIntersectionObserver
 
 ## 📝 License
 

@@ -13,6 +13,7 @@
 - **🗄️ 資料庫**: PostgreSQL 搭配 Sequelize ORM
 - **📊 分析工具**: Google Analytics 和 Google Tag Manager 整合
 - **🔧 自定義組件**: 40+ 可重複使用的組件庫
+- **✅ 測試**: 189 個單元測試，使用 Jest + React Testing Library
 - **⚡ 效能優化**: Turbopack 支援和效能監控
 - **🔐 身份驗證**: WebAuthn/FIDO2 和 OAuth（Google、Facebook、LINE）整合
 - **📱 行動優先**: 響應式設計與行動裝置優化
@@ -147,6 +148,9 @@
 - `yarn create-i18n` - 從 Google Sheets 產生 i18n 檔案
 
 ### 測試與效能
+- `yarn test` - 執行所有單元測試（189 測試）
+- `yarn test:watch` - 監視模式執行測試
+- `yarn test:coverage` - 執行測試並產生覆蓋率報告
 - `yarn stress` - 執行壓力測試
 - `yarn lint` - 執行 ESLint
 
@@ -1142,6 +1146,45 @@ UPSTASH_REDIS_REST_TOKEN=your-redis-token
 ### 注意事項
 - WebSocket/Socket.IO 功能需要非 serverless 環境
 - 在 Vercel 上使用 SSE 信令進行 WebRTC
+
+## 📚 文件
+
+更詳細的文件請參考 [docs](./docs/) 資料夾：
+
+| 文件 | 說明 |
+|------|------|
+| [API 文件](./docs/guides/api-documentation.md) | 所有 API 端點與請求/回應範例 |
+| [組件目錄](./docs/guides/component-catalog.zh-tw.md) | 完整組件使用指南 |
+| [部署指南](./docs/guides/deployment-guide.md) | Vercel、Docker 與手動部署 |
+| [程式碼規範](./docs/guides/coding-standards.zh-tw.md) | CSS、TypeScript 與命名規範 |
+| [文件索引](./docs/README.md) | 所有文件分類索引 |
+
+## ✅ 測試
+
+本專案包含完整的單元測試：
+
+```bash
+# 執行所有測試
+yarn test
+
+# 監視模式
+yarn test:watch
+
+# 產生覆蓋率報告
+yarn test:coverage
+```
+
+### 測試統計
+- **總測試數**: 189
+- **測試檔案**: 18
+- **通過率**: 100%
+- **執行時間**: ~8s
+
+### 已測試組件
+- **表單**: DatePicker, PhoneInput, ImageUpload, Selector, SwitchButton
+- **UI**: Banner, Countdown, DialogModal, SlideInPanel, Tabs, LoadingBar
+- **工具**: QRCode, PWALoading
+- **Hooks**: useDebounce, useThrottle, useLocalStorage, useMediaQuery, useIntersectionObserver
 
 ## 📝 授權
 
