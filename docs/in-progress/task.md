@@ -27,7 +27,7 @@
 - [ ] **E2E Testing** - Playwright 端到端測試
 - [ ] **Performance Optimization** - 效能優化
 - [x] **Accessibility Testing** - 無障礙測試 ✅ (6 tests pass)
-- [ ] **Browser Compatibility** - 瀏覽器相容性測試
+- [x] **Browser Compatibility** - 瀏覽器相容性測試 ✅ (4 頁面已測試)
 
 ---
 

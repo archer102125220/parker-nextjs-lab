@@ -148,11 +148,28 @@
 - `yarn create-i18n` - 從 Google Sheets 產生 i18n 檔案
 
 ### 測試與效能
-- `yarn test` - 執行所有單元測試（189 測試）
+
+**測試結構**（業界標準）：
+```
+__tests__/     # Jest 單元測試（195 測試）
+tests/         # Playwright E2E 測試（12 測試）
+```
+
+**Jest 單元測試**：
+- `yarn test` - 執行所有單元測試（195 測試，19 檔案）
 - `yarn test:watch` - 監視模式執行測試
 - `yarn test:coverage` - 執行測試並產生覆蓋率報告
+
+**Playwright E2E 測試**：
+- `npx playwright test` - 執行所有 E2E 測試（Chromium, Firefox, WebKit）
+- `npx playwright test --project=chromium` - 在指定瀏覽器執行
+- `npx playwright show-report` - 檢視測試報告
+
+**其他**：
 - `yarn stress` - 執行壓力測試
 - `yarn lint` - 執行 ESLint
+
+> 📖 詳細文件請參考 [docs/guides/test-structure.zh-tw.md](docs/guides/test-structure.zh-tw.md)
 
 ### 建置與部署
 - `yarn build` - 建置生產版本

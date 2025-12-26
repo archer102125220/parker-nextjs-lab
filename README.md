@@ -148,11 +148,28 @@ A comprehensive Next.js laboratory project showcasing modern web development pra
 - `yarn create-i18n` - Generate i18n files from Google Sheets
 
 ### Testing & Performance
-- `yarn test` - Run all unit tests (189 tests)
+
+**Test Structure** (Industry Standard):
+```
+__tests__/     # Jest unit tests (195 tests)
+tests/         # Playwright E2E tests (12 tests)
+```
+
+**Jest Unit Tests**:
+- `yarn test` - Run all unit tests (195 tests, 19 files)
 - `yarn test:watch` - Run tests in watch mode
 - `yarn test:coverage` - Run tests with coverage report
+
+**Playwright E2E Tests**:
+- `npx playwright test` - Run all E2E tests (Chromium, Firefox, WebKit)
+- `npx playwright test --project=chromium` - Run on specific browser
+- `npx playwright show-report` - View test report
+
+**Other**:
 - `yarn stress` - Run stress testing
 - `yarn lint` - Run ESLint
+
+> 📖 See [docs/guides/test-structure.md](docs/guides/test-structure.md) for detailed documentation.
 
 ### Build & Deploy
 - `yarn build` - Build for production

@@ -17,7 +17,9 @@ docs/
 │   ├── component-catalog.zh-tw.md
 │   ├── deployment-guide.md
 │   ├── coding-standards.md
-│   └── coding-standards.zh-tw.md
+│   ├── coding-standards.zh-tw.md
+│   ├── test-structure.md
+│   └── test-structure.zh-tw.md
 ├── completed/（已完成的開發紀錄）
 ├── in-progress/（進行中的文檔）
 └── pending/（未開始的文檔）
