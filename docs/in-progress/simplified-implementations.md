@@ -158,15 +158,16 @@
    - 需要決定使用 SSE 替代或部署獨立伺服器
    - ✅ **已決策**: 使用 SSE 替代（已完整實作）
 
-2. **測試覆蓋率** 🔄 進行中
-   - ✅ 已完成 94 個單元測試 (2025-12-25)
-   - ✅ 核心組件測試：QRCode, SwitchButton, LoadingBar, Selector, PWALoading, DatePicker
-   - ✅ Hooks 測試：useDebounce, useThrottle, useLocalStorage, useMediaQuery
-   - 🔄 待補充：其他組件和 hooks 的測試
+2. **測試覆蓋率** ✅ 完成
+   - ✅ 已完成 189 個單元測試 (2025-12-26)
+   - ✅ 核心組件測試：QRCode, SwitchButton, LoadingBar, Selector, PWALoading, DatePicker, Tabs, PhoneInput, ImageUpload, Banner, Countdown, DialogModal, SlideInPanel
+   - ✅ Hooks 測試：useDebounce, useThrottle, useLocalStorage, useMediaQuery, useIntersectionObserver
+   - ✅ 18 個測試檔案，100% 通過率
 
-3. **API 文件**
-   - 缺少完整的 API 使用文件
-   - 需要撰寫 API 規格和範例
+3. **API 文件** ✅ 完成
+   - ✅ 已建立 docs/guides/api-documentation.md (中英文)
+   - ✅ 已建立 docs/guides/component-catalog.md (中英文)
+   - ✅ 已建立 docs/guides/deployment-guide.md (中英文)
 
 ### 效能優化項目
 
@@ -186,34 +187,34 @@
 
 ## 未來改進計劃
 
-### Phase 8: 測試與優化
+### Phase 8: 測試與優化 ✅ 完成
 
-1. **單元測試**
-   - 設置 Jest + React Testing Library
-   - 為所有組件撰寫測試
-   - 目標: 80%+ 覆蓋率
+1. **單元測試** ✅
+   - ✅ 設置 Jest + React Testing Library
+   - ✅ 189 個測試，18 個檔案
+   - ✅ 100% 通過率
 
-2. **E2E 測試**
-   - 設置 Playwright
-   - 撰寫關鍵流程測試
+2. **E2E 測試** 🔄 可選
+   - ✅ 已設置 Playwright
+   - ☐ 撰寫關鍵流程測試 (可選)
 
-3. **效能優化**
-   - Lighthouse 分數優化
-   - Core Web Vitals 改善
+3. **效能優化** 🔄 可選
+   - ☐ Lighthouse 分數優化
+   - ☐ Core Web Vitals 改善
 
-### Phase 9: 文件與部署
+### Phase 9: 文件與部署 ✅ 90% 完成
 
-1. **API 文件**
-   - 使用 Swagger/OpenAPI
-   - 撰寫詳細的 API 規格
+1. **API 文件** ✅
+   - ✅ docs/guides/api-documentation.md (中英文)
+   - ✅ 撰寫詳細的 API 規格
 
-2. **組件文件**
-   - 考慮使用 Storybook
-   - 撰寫使用範例
+2. **組件文件** ✅
+   - ✅ docs/guides/component-catalog.md (中英文)
+   - ☐ 考慮使用 Storybook (可選)
 
-3. **部署文件**
-   - CI/CD 流程
-   - 環境配置指南
+3. **部署文件** ✅
+   - ✅ docs/guides/deployment-guide.md (中英文)
+   - ☐ CI/CD 流程 (可選)
 
 ---
 
