@@ -1,328 +1,324 @@
 .tabs {
-  /* Display & Box Model */
-  width: 100%;
-
-  &--vertical {
-    display: flex;
-    height: 400px; // Default height for vertical tabs
-
-    .tabs-header {
-      flex-direction: column;
-      height: 100%;
-      width: auto;
-    }
-
-    .tabs-header-list {
-      flex-direction: column;
-      overflow-x: hidden;
-      overflow-y: auto;
-      border-bottom: none;
-      border-right: 1px solid #e0e0e0;
-      height: 100%;
-    }
-
-    .tabs-header-indicator {
-      left: auto;
-      right: 0;
-      top: var(--indicator-top, 0);
-      bottom: auto;
-      width: var(--indicator-width, 2px);
-      height: var(--indicator-height, 0);
-      transition:
-        top 0.3s ease-in-out,
-        height 0.3s ease-in-out;
-    }
-  }
-
-  &-header {
-    /* Positioning */
-    position: relative;
-
     /* Display & Box Model */
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    /* Animation */
-    transform: translateZ(0); // Force GPU acceleration
-    will-change: contents; // Hint browser about dynamic content changes
+    width: 100%;
 
     &--vertical {
-      flex-direction: column;
-    }
+        display: flex;
+        height: 400px; // Default height for vertical tabs
 
-    &-list {
-      /* Positioning */
-      position: relative;
-
-      /* Display & Box Model */
-      display: flex;
-      flex: 1;
-      overflow-x: auto;
-      overflow-y: hidden;
-      border-bottom: 1px solid #e0e0e0;
-
-      /* Misc */
-      cursor: grab;
-      scrollbar-width: none;
-      /* Firefox */
-      -ms-overflow-style: none;
-      /* IE/Edge */
-
-      &::-webkit-scrollbar {
-        display: none;
-        /* Chrome/Safari */
-      }
-
-      &[css-is-dragging='true'] {
-        cursor: grabbing;
-      }
-
-      &--standard {
-        justify-content: flex-start;
-      }
-
-      &--full_width {
-        justify-content: space-between;
-
-        .tabs-header-item {
-          flex: 1;
-          text-align: center;
+        .tabs-header {
+            flex-direction: column;
+            height: 100%;
+            width: auto;
         }
-      }
 
-      &--vertical {
-        flex-direction: column;
-        overflow-x: hidden;
-        overflow-y: auto;
-        width: 100%;
-      }
+        .tabs-header-list {
+            flex-direction: column;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-bottom: none;
+            border-right: 1px solid #e0e0e0;
+            height: 100%;
+        }
+
+        .tabs-header-indicator {
+            left: auto;
+            right: 0;
+            top: var(--indicator-top, 0);
+            bottom: auto;
+            width: var(--indicator-width, 2px);
+            height: var(--indicator-height, 0);
+            transition:
+                top 0.3s ease-in-out,
+                height 0.3s ease-in-out;
+        }
     }
 
-    &-item {
-      /* Positioning */
-      position: relative;
+    &-header {
+        /* Positioning */
+        position: relative;
 
-      /* Display & Box Model */
-      padding: 12px 24px;
-      overflow: hidden;
-      white-space: nowrap;
-      flex-shrink: 0;
+        /* Display & Box Model */
+        display: flex;
+        align-items: center;
+        gap: 8px;
 
-      /* Typography */
-      font-family: 'PingFang SC', sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      color: #666;
-      text-align: center;
+        /* Animation */
+        transform: translateZ(0); // Force GPU acceleration
+        will-change: contents; // Hint browser about dynamic content changes
 
-      /* Misc */
-      cursor: pointer;
-      user-select: none;
+        &--vertical {
+            flex-direction: column;
+        }
 
-      /* Animation */
-      transition: color 0.3s;
+        &-list {
+            /* Positioning */
+            position: relative;
 
-      &:hover:not(&--disabled) {
-        color: var(--selected-color, #1976d2);
-      }
+            /* Display & Box Model */
+            display: flex;
+            flex: 1;
+            overflow-x: auto;
+            overflow-y: hidden;
+            border-bottom: 1px solid #e0e0e0;
 
-      &--active {
-        color: var(--selected-color, #1976d2);
-        font-weight: 600;
-      }
+            /* Misc */
+            cursor: grab;
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE/Edge */
 
-      &--disabled {
-        color: #ccc;
-        cursor: not-allowed;
-      }
+            &::-webkit-scrollbar {
+                display: none;
+                /* Chrome/Safari */
+            }
+
+            &[css-is-dragging='true'] {
+                cursor: grabbing;
+            }
+
+            &--standard {
+                justify-content: flex-start;
+            }
+
+            &--full_width {
+                justify-content: space-between;
+
+                .tabs-header-item {
+                    flex: 1;
+                    text-align: center;
+                }
+            }
+
+            &--vertical {
+                flex-direction: column;
+                overflow-x: hidden;
+                overflow-y: auto;
+                width: 100%;
+            }
+        }
+
+        &-item {
+            /* Positioning */
+            position: relative;
+
+            /* Display & Box Model */
+            padding: 12px 24px;
+            overflow: hidden;
+            white-space: nowrap;
+            flex-shrink: 0;
+
+            /* Typography */
+            font-family: 'PingFang SC', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            text-align: center;
+
+            /* Misc */
+            cursor: pointer;
+            user-select: none;
+
+            /* Animation */
+            transition: color 0.3s;
+
+            &:hover:not(&--disabled) {
+                color: var(--selected-color, #1976d2);
+            }
+
+            &--active {
+                color: var(--selected-color, #1976d2);
+                font-weight: 600;
+            }
+
+            &--disabled {
+                color: #ccc;
+                cursor: not-allowed;
+            }
+        }
+
+        &-indicator {
+            /* Positioning */
+            position: absolute;
+            bottom: 0;
+            left: var(--indicator-left, 0);
+            top: var(--indicator-top, auto);
+
+            /* Display & Box Model */
+            height: var(--indicator-height, 2px);
+            width: var(--indicator-width, 0);
+
+            /* Visual */
+            background-color: var(--indicator-color, #1976d2);
+
+            /* Animation */
+            transition:
+                left 0.3s ease-in-out,
+                width 0.3s ease-in-out,
+                top 0.3s ease-in-out,
+                height 0.3s ease-in-out;
+        }
     }
 
-    &-indicator {
-      /* Positioning */
-      position: absolute;
-      bottom: 0;
-      left: var(--indicator-left, 0);
-      top: var(--indicator-top, auto);
+    &-nav {
+        /* Positioning */
+        position: var(--navigation-position, relative);
+        z-index: 1;
 
-      /* Display & Box Model */
-      height: var(--indicator-height, 2px);
-      width: var(--indicator-width, 0);
+        /* Display & Box Model */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 40px;
+        min-width: 32px; // Prevent collapse during opacity transition
+        min-height: 40px; // Prevent collapse during opacity transition
+        padding: 0;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        flex-shrink: 0;
 
-      /* Visual */
-      background-color: var(--indicator-color, #1976d2);
+        /* Typography */
+        font-size: 20px;
+        color: #666;
 
-      /* Animation */
-      transition:
-        left 0.3s ease-in-out,
-        width 0.3s ease-in-out,
-        top 0.3s ease-in-out,
-        height 0.3s ease-in-out;
-    }
-  }
+        /* Visual */
+        background: white;
 
-  &-nav {
-    /* Positioning */
-    position: var(--navigation-position, relative);
-    z-index: 1;
+        /* Misc */
+        cursor: pointer;
+        user-select: none;
 
-    /* Display & Box Model */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 40px;
-    min-width: 32px; // Prevent collapse during opacity transition
-    min-height: 40px; // Prevent collapse during opacity transition
-    padding: 0;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    flex-shrink: 0;
+        /* Animation */
+        transition:
+            all 0.2s,
+            opacity 0.3s ease-in-out;
+        will-change: opacity; // GPU acceleration for smooth opacity changes
 
-    /* Typography */
-    font-size: 20px;
-    color: #666;
+        &[css-is-disabled='true'] {
+            pointer-events: none;
+        }
 
-    /* Visual */
-    background: white;
+        &--prev {
+            opacity: var(--prev-opacity, 1);
+            left: var(--prev-left, auto);
+            top: var(--prev-top, auto);
+            transform: var(--prev-transform, none);
+        }
 
-    /* Misc */
-    cursor: pointer;
-    user-select: none;
+        &--next {
+            opacity: var(--next-opacity, 1);
+            right: var(--next-right, auto);
+            bottom: var(--next-bottom, auto);
+            top: var(--next-top, auto);
+            left: var(--next-left, auto);
+            transform: var(--next-transform, none);
+        }
 
-    /* Animation */
-    transition:
-      all 0.2s,
-      opacity 0.3s ease-in-out;
-    will-change: opacity; // GPU acceleration for smooth opacity changes
+        &:hover {
+            color: var(--selected-color, #1976d2);
+            border-color: var(--selected-color, #1976d2);
+            background: #f5f5f5;
+        }
 
-    &[css-is-disabled='true'] {
-      pointer-events: none;
-    }
+        &:active {
 
-    &--prev {
-      opacity: var(--prev-opacity, 1);
-      left: var(--prev-left, auto);
-      top: var(--prev-top, auto);
-      transform: var(--prev-transform, none);
-    }
+            // Combine scale with existing transform to prevent override
+            &.tabs-nav_prev {
+                transform: var(--prev-transform, none) scale(0.95);
+            }
 
-    &--next {
-      opacity: var(--next-opacity, 1);
-      right: var(--next-right, auto);
-      bottom: var(--next-bottom, auto);
-      top: var(--next-top, auto);
-      left: var(--next-left, auto);
-      transform: var(--next-transform, none);
-    }
+            &.tabs-nav_next {
+                transform: var(--next-transform, none) scale(0.95);
+            }
+        }
 
-    &:hover {
-      color: var(--selected-color, #1976d2);
-      border-color: var(--selected-color, #1976d2);
-      background: #f5f5f5;
+        &--vertical {
+            width: 40px;
+            height: 32px;
+            min-width: 40px;
+            min-height: 32px;
+        }
     }
 
-    &:active {
-      // Combine scale with existing transform to prevent override
-      &.tabs-nav_prev {
-        transform: var(--prev-transform, none) scale(0.95);
-      }
+    // Gradient shadows for scroll indicators
+    &-shadow {
+        /* Positioning */
+        position: absolute;
+        z-index: 0; // Below navigation buttons (which have z-index: 1)
+        pointer-events: none;
 
-      &.tabs-nav_next {
-        transform: var(--next-transform, none) scale(0.95);
-      }
+        /* Display & Box Model */
+        width: 60px;
+        height: 100%;
+
+        /* Animation */
+        transition: opacity 0.3s ease-in-out;
+
+        &--first {
+            left: 0;
+            top: 0;
+            background: linear-gradient(to right,
+                    rgba(157, 156, 156, 0.22),
+                    transparent);
+        }
+
+        &--last {
+            right: 0;
+            top: 0;
+            background: linear-gradient(to left,
+                    rgba(157, 156, 156, 0.22),
+                    transparent);
+        }
+
+        &--vertical {
+            width: 100%;
+            height: 60px;
+
+            &.tabs-shadow--first {
+                left: 0;
+                top: 0;
+                background: linear-gradient(to bottom,
+                        rgba(157, 156, 156, 0.22),
+                        transparent);
+            }
+
+            &.tabs-shadow--last {
+                left: 0;
+                top: auto;
+                bottom: 0;
+                background: linear-gradient(to top,
+                        rgba(157, 156, 156, 0.22),
+                        transparent);
+            }
+        }
     }
 
-    &--vertical {
-      width: 40px;
-      height: 32px;
-      min-width: 40px;
-      min-height: 32px;
-    }
-  }
-
-  // Gradient shadows for scroll indicators
-  &-shadow {
-    /* Positioning */
-    position: absolute;
-    z-index: 0; // Below navigation buttons (which have z-index: 1)
-    pointer-events: none;
-
-    /* Display & Box Model */
-    width: 60px;
-    height: 100%;
-
-    /* Animation */
-    transition: opacity 0.3s ease-in-out;
-
-    &--first {
-      left: 0;
-      top: 0;
-      background: linear-gradient(
-        to right,
-        rgba(157, 156, 156, 0.22),
-        transparent
-      );
+    // Ripple effect
+    &-ripple {
+        position: absolute;
+        border-radius: 50%;
+        // Background color set via inline style
+        transform: scale(0);
+        animation: ripple-animation 0.6s ease-out;
+        pointer-events: none;
     }
 
-    &--last {
-      right: 0;
-      top: 0;
-      background: linear-gradient(
-        to left,
-        rgba(157, 156, 156, 0.22),
-        transparent
-      );
+    // Hover indicator
+    &-hover-indicator {
+        position: absolute;
+        bottom: 0; // Same as main indicator
+        background-color: var(--indicator-color, #1976d2);
+        transition: all 0.3s ease-in-out;
+        pointer-events: none;
+        z-index: 0;
     }
-
-    &--vertical {
-      width: 100%;
-      height: 60px;
-
-      &.tabs-shadow_first {
-        background: linear-gradient(
-          to bottom,
-          rgba(157, 156, 156, 0.22),
-          transparent
-        );
-      }
-
-      &.tabs-shadow_last {
-        top: auto;
-        bottom: 0;
-        background: linear-gradient(
-          to top,
-          rgba(157, 156, 156, 0.22),
-          transparent
-        );
-      }
-    }
-  }
-
-  // Ripple effect
-  &-ripple {
-    position: absolute;
-    border-radius: 50%;
-    // Background color set via inline style
-    transform: scale(0);
-    animation: ripple-animation 0.6s ease-out;
-    pointer-events: none;
-  }
-
-  // Hover indicator
-  &-hover-indicator {
-    position: absolute;
-    bottom: 0; // Same as main indicator
-    background-color: var(--indicator-color, #1976d2);
-    transition: all 0.3s ease-in-out;
-    pointer-events: none;
-    z-index: 0;
-  }
 }
 
 @keyframes ripple-animation {
-  to {
-    transform: scale(4);
-    opacity: 0;
-  }
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
 }
