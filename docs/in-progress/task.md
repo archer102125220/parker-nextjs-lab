@@ -14,20 +14,22 @@
 > | 無障礙測試 | ✅ 6 tests pass |
 
 ### ✅ 已完成項目
-- 195 個單元測試（19 個測試檔案）
+- 237 個測試全數通過
+  - 195 個單元測試（19 個檔案）
+  - 6 個無障礙測試 (jest-axe)
+  - 36 個 E2E 測試 (Playwright: Chromium/Firefox/WebKit)
 - API 文件、組件目錄、部署指南（中英文）
-- README.md 與 README.zh-tw.md 更新
-- docs/guides/ 文件結構整理
-- 無障礙測試 (6 個測試通過，SwitchButton 已修復)
+- README 更新、test-structure.md 文件
+- 程式碼修復：SwitchButton aria-label、Header 語義化 nav
 
 ### 🔄 可選項目 (Optional - 未完成)
 - [ ] **Storybook** - 組件視覺化展示平台
 - [ ] **CI/CD Pipeline** - GitHub Actions 自動化部署
 - [ ] **Integration Testing** - 組件整合測試
-- [ ] **E2E Testing** - Playwright 端到端測試
+- [x] **E2E Testing** - Playwright 端到端測試 ✅ (36 tests pass)
 - [ ] **Performance Optimization** - 效能優化
 - [x] **Accessibility Testing** - 無障礙測試 ✅ (6 tests pass)
-- [x] **Browser Compatibility** - 瀏覽器相容性測試 ✅ (4 頁面已測試)
+- [x] **Browser Compatibility** - 瀏覽器相容性測試 ✅ (36 tests: Chromium/Firefox/WebKit)
 
 ---
 
