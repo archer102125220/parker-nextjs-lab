@@ -19,12 +19,9 @@ test.describe('Browser Compatibility - Homepage', () => {
   });
 
   test('should have working navigation', async ({ page }) => {
-    // Check navigation links exist (either nav element or header with links)
-    const navLinks = page.locator('header a, nav a, a[href*="/"]');
-    const count = await navLinks.count();
-    
-    // At least some navigation links should exist
-    expect(count).toBeGreaterThan(0);
+    // Check semantic navigation element exists (proper a11y)
+    const nav = page.getByRole('navigation');
+    await expect(nav).toBeVisible();
   });
 
   test('should display images correctly', async ({ page }) => {
@@ -52,22 +49,20 @@ test.describe('Browser Compatibility - Components Page', () => {
   });
 
   test('should navigate to component demo', async ({ page }) => {
-    // Find component links (more specific selector)
+    // Find component links
     const componentLinks = page.locator('a[href*="/components/"]');
     const count = await componentLinks.count();
     
     if (count > 0) {
       const firstLink = componentLinks.first();
-      const href = await firstLink.getAttribute('href');
       
       // Click and wait for navigation
       await firstLink.click();
       await page.waitForLoadState('domcontentloaded');
       
-      // Just verify page loaded successfully (not 404)
-      await expect(page.locator('body')).toBeVisible();
+      // Verify we're on a component page (use Playwright expect for better reliability)
+      await expect(page).toHaveURL(/\/components\//);
     } else {
-      // Skip if no component links found
       test.skip();
     }
   });
@@ -86,6 +81,9 @@ test.describe('Browser Compatibility - Language Switching', () => {
 });
 
 test.describe('Browser Compatibility - Responsive Design', () => {
+  // Increase timeout for viewport tests as some browsers need more time
+  test.setTimeout(60000);
+
   test('should work on desktop viewport', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await page.goto('https://localhost:3000/zh-tw');
@@ -112,24 +110,49 @@ test.describe('Browser Compatibility - Interactive Components', () => {
   test('should handle button clicks', async ({ page }) => {
     await page.goto('https://localhost:3000/zh-tw/components/switch-button-test');
     
-    // Wait for page to load (use domcontentloaded to avoid timeout)
+    // Wait for page and React hydration
     await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(1000);
     
-    // Small wait for React hydration
-    await page.waitForTimeout(500);
+    // Check if SwitchButton components exist
+    const switches = page.locator('input[type="checkbox"]');
+    const count = await switches.count();
     
-    // Check page loaded successfully
-    await expect(page.locator('body')).toBeVisible();
+    if (count > 0) {
+      // Click first switch
+      const firstSwitch = switches.first();
+      const initialState = await firstSwitch.isChecked();
+      
+      await firstSwitch.click();
+      
+      // Verify state changed
+      if (initialState) {
+        await expect(firstSwitch).not.toBeChecked();
+      } else {
+        await expect(firstSwitch).toBeChecked();
+      }
+    } else {
+      // Page loaded but no checkboxes - verify page is functional
+      await expect(page.locator('body')).toBeVisible();
+    }
   });
 
   test('should handle form inputs', async ({ page }) => {
     await page.goto('https://localhost:3000/zh-tw/components/selector-demo');
     
-    // Wait for page to load
     await page.waitForLoadState('domcontentloaded');
     
-    // Just verify page loaded successfully
-    await expect(page.locator('body')).toBeVisible();
+    // Check if selectors exist
+    const selects = page.locator('select');
+    const count = await selects.count();
+    
+    if (count > 0) {
+      // Verify select is interactive
+      const firstSelect = selects.first();
+      await expect(firstSelect).toBeVisible();
+    } else {
+      // Page loaded successfully
+      await expect(page.locator('body')).toBeVisible();
+    }
   });
 });
-

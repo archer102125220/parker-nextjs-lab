@@ -46,40 +46,42 @@ export function Header(props: HeaderProps): ReactNode {
   // console.log(JSON.stringify({ HeaderNonce: nonce, _nonce }));
 
   return (
-    <Toolbar className={`header-toolbar ${className || ''}`} sx={sx}>
-      <PageLoading nonce={nonce} loading={loading} />
-      <GoBack nonce={nonce} />
-      <Message
-        nonce={nonce}
-        messageState={messageState}
-        resetMessageState={resetMessageState}
-      />
-      <Typography variant="h6" component="div" sx={{ flex: 1 }}>
-        <LinkBox
-          href="/"
-          className="header-title"
-          sx={{
-            color: 'inherit',
-            textDecoration: 'none',
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center'
-          }}
+    <nav role="navigation" aria-label="Main navigation">
+      <Toolbar className={`header-toolbar ${className || ''}`} sx={sx}>
+        <PageLoading nonce={nonce} loading={loading} />
+        <GoBack nonce={nonce} />
+        <Message
           nonce={nonce}
-        >
-          <Image
-            src="/img/icon/Next.jsLab.v.01.svg"
-            alt="Parker's Next.js Lab"
-            width={50}
-            height={50}
-            className="header-logo"
-          />
-          <p>{systemName}</p>
-        </LinkBox>
-      </Typography>
+          messageState={messageState}
+          resetMessageState={resetMessageState}
+        />
+        <Typography variant="h6" component="div" sx={{ flex: 1 }}>
+          <LinkBox
+            href="/"
+            className="header-title"
+            sx={{
+              color: 'inherit',
+              textDecoration: 'none',
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center'
+            }}
+            nonce={nonce}
+          >
+            <Image
+              src="/img/icon/Next.jsLab.v.01.svg"
+              alt="Parker's Next.js Lab"
+              width={50}
+              height={50}
+              className="header-logo"
+            />
+            <p>{systemName}</p>
+          </LinkBox>
+        </Typography>
 
-      <I18nList />
-    </Toolbar>
+        <I18nList />
+      </Toolbar>
+    </nav>
   );
 }
 export default Header;
