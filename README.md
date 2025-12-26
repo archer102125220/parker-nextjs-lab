@@ -1070,7 +1070,7 @@ const MIDDLEWARE_SETTINGS = [
 
 ## 🔑 Redis Key Prefix Convention
 
-This project shares an Upstash Redis instance with [parker-nuxt-lab](https://github.com/your-username/parker-nuxt-lab). To avoid key conflicts, all Redis keys use the `nextjs-lab:` prefix.
+This project shares an Upstash Redis instance with [原始 Nuxt 專案](https://github.com/archer102125220/parker-nuxt-lab). To avoid key conflicts, all Redis keys use the `nextjs-lab:` prefix.
 
 ### Key Naming Convention
 

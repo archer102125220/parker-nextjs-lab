@@ -58,13 +58,26 @@ export default async function AboutPage(
 
                 {section.description && (
                   <div className={styles['about_page-section-description']}>
-                    {section.description.map((descItem, descIndex) =>
-                      descItem.isDel ? (
-                        <del key={descIndex}>{descItem.text}</del>
-                      ) : (
-                        <p key={descIndex}>{descItem.text}</p>
-                      )
-                    )}
+                    {section.description.map((descItem, descIndex) => {
+                      if (descItem.isDel) {
+                        return <del key={descIndex}>{descItem.text}</del>;
+                      }
+                      if (descItem.isLink && descItem.href && descItem.linkText) {
+                        return (
+                          <p key={descIndex}>
+                            {descItem.text}{' '}
+                            <a
+                              href={descItem.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {descItem.linkText}
+                            </a>
+                          </p>
+                        );
+                      }
+                      return <p key={descIndex}>{descItem.text}</p>;
+                    })}
                   </div>
                 )}
 

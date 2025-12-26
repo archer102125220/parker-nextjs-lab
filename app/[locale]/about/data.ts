@@ -2,6 +2,9 @@
 export interface DescriptionItem {
   text: string;
   isDel?: boolean;
+  isLink?: boolean;
+  href?: string;
+  linkText?: string;
 }
 
 export interface Section {
@@ -22,6 +25,13 @@ export const ABOUT_CONTENT_DATA_ZH: Section[] = [
       {
         isDel: false,
         text: '，並透過實際頁面與 API 演示多語系、PWA、ISR、安全性、即時互動等主題。'
+      },
+      {
+        isDel: false,
+        text: '另有',
+        isLink: true,
+        href: 'https://parker-nuxt-lab.vercel.app/',
+        linkText: '原始 Nuxt 專案'
       }
     ]
   },
@@ -107,6 +117,13 @@ export const ABOUT_CONTENT_DATA_EN: Section[] = [
       {
         isDel: false,
         text: ', and demonstrates topics such as multi-language, PWA, ISR, security, real-time interaction through actual pages and APIs.'
+      },
+      {
+        isDel: false,
+        text: 'See also the',
+        isLink: true,
+        href: 'https://parker-nuxt-lab.vercel.app/',
+        linkText: 'Original Nuxt Project'
       }
     ]
   },

@@ -1070,7 +1070,7 @@ const MIDDLEWARE_SETTINGS = [
 
 ## 🔑 Redis Key 前綴規範
 
-本專案與 [parker-nuxt-lab](https://github.com/your-username/parker-nuxt-lab) 共用 Upstash Redis 實例。為避免 key 衝突，所有 Redis keys 使用 `nextjs-lab:` 前綴。
+本專案與 [原始 Nuxt 專案](https://github.com/archer102125220/parker-nuxt-lab) 共用 Upstash Redis 實例。為避免 key 衝突，所有 Redis keys 使用 `nextjs-lab:` 前綴。
 
 ### Key 命名規範
 
