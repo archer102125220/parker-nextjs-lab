@@ -1,57 +1,60 @@
 // Swiper Test Page Styles
-@use '@/styles/placeholders' as *;
+@use '@/styles/placeholders'as *;
 
 .swiper_test_page {
-  @extend %test_page;
-  max-width: 1000px;
+    @extend %test_page;
+    max-width: 1000px;
 
-  &-description {
-    @extend %test_page_description;
-  }
-
-  &-section {
-    /* Display & Box Model */
-    margin-bottom: 40px;
-  }
-
-  &-section_title {
-    /* Display & Box Model */
-    margin-bottom: 16px;
-  }
-
-  &-slide_info {
-    /* Display & Box Model */
-    margin-top: 10px;
-
-    /* Typography */
-    color: #666;
-  }
-
-  &-slide {
-    /* Display & Box Model */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 300px;
-
-    /* Typography */
-    color: white;
-    font-size: 24px;
-
-    &--blue {
-      background-color: #1976d2;
+    &-description {
+        @extend %test_page_description;
     }
 
-    &--green {
-      background-color: #4caf50;
+    &-section {
+        /* Display & Box Model */
+        margin-bottom: 40px;
     }
 
-    &--red {
-      background-color: #f44336;
+    &-section_title {
+        /* Display & Box Model */
+        margin-bottom: 16px;
     }
 
-    &--orange {
-      background-color: #ff9800;
+    &-slide_info {
+        /* Display & Box Model */
+        margin-top: 10px;
+
+        /* Typography */
+        color: #666;
     }
-  }
+
+    &-slide {
+        /* Display & Box Model */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 300px;
+
+        /* Typography */
+        color: white;
+        font-size: 24px;
+
+        /* Visual */
+        background-color: #1976d2;
+
+        &[css-color='blue'] {
+            background-color: #1976d2;
+        }
+
+        &[css-color='green'] {
+            background-color: #4caf50;
+        }
+
+        &[css-color='red'] {
+            background-color: #f44336;
+        }
+
+        &[css-color='orange'] {
+            background-color: #ff9800;
+        }
+    }
 }

@@ -1,35 +1,139 @@
-.swiper-custom {
-    /* Display & Box Model */
-    width: 100%;
-    height: 100%;
+.swiper_custom {
+    /* Positioning */
+    position: relative;
 
-    :global {
-        .swiper {
-            width: 100%;
-            height: 100%;
-        }
+    &-prev {
+        /* Positioning */
+        position: absolute;
+        top: 0;
+        left: 5px;
+        z-index: 2;
 
-        .swiper-slide {
+        /* Display & Box Model */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+
+        &-btn {
             /* Display & Box Model */
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
+            width: 24px;
+            height: 24px;
+            margin: 0;
+            padding: 0;
+            border-radius: 100%;
 
             /* Typography */
-            text-align: center;
-            font-size: 18px;
+            color: #fff;
+            font-size: 14px;
+            line-height: 1;
 
             /* Visual */
-            background: #fff;
-        }
+            background-color: #008cff;
+            cursor: pointer;
 
-        .swiper-button-next,
-        .swiper-button-prev {
-            color: #1976d2;
-        }
+            /* Animation */
+            transition: background-color 200ms ease;
 
-        .swiper-pagination-bullet-active {
-            background: #1976d2;
+            &:hover {
+                background-color: #006acc;
+            }
+        }
+    }
+
+    &-next {
+        /* Positioning */
+        position: absolute;
+        top: 0;
+        right: 5px;
+        z-index: 2;
+
+        /* Display & Box Model */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+
+        &-btn {
+            /* Display & Box Model */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 24px;
+            height: 24px;
+            margin: 0;
+            padding: 0;
+            border-radius: 100%;
+
+            /* Typography */
+            color: #fff;
+            font-size: 14px;
+            line-height: 1;
+
+            /* Visual */
+            background-color: #008cff;
+            cursor: pointer;
+
+            /* Animation */
+            transition: background-color 200ms ease;
+
+            &:hover {
+                background-color: #006acc;
+            }
+        }
+    }
+
+    &-content {
+        /* Display & Box Model */
+        height: var(--content_wrapper_slide_height);
+        width: var(--content_wrapper_slide_width, 100%);
+        overflow: hidden;
+
+        &-wrapper {
+            /* Display & Box Model */
+            display: flex;
+            height: var(--content_wrapper_slide_height);
+
+            /* Animation */
+            transition-duration: var(--wrapper_transition_duration, 0ms);
+            transform: var(--wrapper_transform);
+
+            &-slide {
+                /* Positioning */
+                position: relative;
+
+                /* Display & Box Model */
+                flex-shrink: 0;
+                width: var(--slide_width, 100%);
+                height: var(--content_wrapper_slide_height);
+                overflow-x: var(--slide_overflow_x);
+                overflow-y: var(--slide_overflow_y);
+
+                &-center {
+                    /* Positioning */
+                    position: relative;
+
+                    /* Display & Box Model */
+                    display: flex;
+                    height: var(--content_wrapper_slide_height);
+
+                    &-middle {
+                        /* Positioning */
+                        position: relative;
+
+                        /* Display & Box Model */
+                        flex: 1;
+                        height: var(--content_wrapper_slide_height);
+                        overflow-x: var(--slide_overflow_x);
+                        overflow-y: var(--slide_overflow_y);
+                    }
+                }
+            }
         }
     }
 }
