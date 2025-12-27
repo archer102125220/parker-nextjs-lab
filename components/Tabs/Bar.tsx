@@ -594,15 +594,18 @@ export function Tabs({
 
   return (
     <div
-      className={`tabs ${vertical ? 'tabs--vertical' : ''} ${className}`}
+      className={`tabs ${className}`}
+      css-is-vertical={vertical ? 'true' : 'false'}
       ref={tabsContainerRef}
       style={cssVariables}
     >
-      <div className={`tabs-header ${vertical ? 'tabs-header--vertical' : ''}`}>
+      <div className="tabs-header" css-is-vertical={vertical ? 'true' : 'false'}>
         {/* Prev Navigation Button */}
         {hasNavigation && showPrev && (
           <button
-            className={`tabs-nav tabs-nav--prev ${vertical ? 'tabs-nav--vertical' : ''}`}
+            className="tabs-nav"
+            css-position="prev"
+            css-is-vertical={vertical ? 'true' : 'false'}
             onClick={handlePrevScroll}
             aria-label={
               vertical ? 'Previous tabs (scroll up)' : 'Previous tabs'
@@ -616,16 +619,18 @@ export function Tabs({
         {/* First gradient shadow */}
         {limitShadow && showFirstShadow && (
           <div
-            className={`tabs-shadow tabs-shadow--first ${vertical ? 'tabs-shadow--vertical' : ''}`}
+            className="tabs-shadow"
+            css-position="first"
+            css-is-vertical={vertical ? 'true' : 'false'}
           />
         )}
 
         {/* Tabs List */}
         <div
           ref={tabsListRef}
-          className={`tabs-header-list tabs-header-list--${variant === 'fullWidth' ? 'full_width' : variant} ${
-            vertical ? 'tabs-header-list--vertical' : ''
-          }`}
+          className="tabs-header-list"
+          css-variant={variant === 'fullWidth' ? 'full_width' : variant}
+          css-is-vertical={vertical ? 'true' : 'false'}
           onMouseDown={handleDragStart}
           onTouchStart={handleDragStart}
           css-is-dragging={isDragging ? 'true' : 'false'}
@@ -636,9 +641,9 @@ export function Tabs({
               ref={(el) => {
                 tabRefs.current[index] = el;
               }}
-              className={`tabs-header-item ${
-                tab.value === activeTab ? 'tabs-header-item--active' : ''
-              } ${tab.disabled ? 'tabs-header-item--disabled' : ''}`}
+              className="tabs-header-list-item"
+              css-is-active={tab.value === activeTab ? 'true' : 'false'}
+              css-is-disabled={tab.disabled ? 'true' : 'false'}
               onClick={(e) => {
                 handleTabClick(tab.value, index);
                 handleRipple(e);
@@ -655,12 +660,12 @@ export function Tabs({
           ))}
 
           {/* Indicator */}
-          <div className="tabs-header-indicator" />
+          <div className="tabs-header-list-indicator" />
 
           {/* Hover Indicator */}
           {hover && hoverIndex !== null && (
             <div
-              className="tabs-hover-indicator"
+              className="tabs-header-list-hover_indicator"
               style={{
                 left: vertical ? 'auto' : `${hoverIndicatorStyle.left}px`,
                 right: vertical ? 0 : 'auto',
@@ -677,14 +682,18 @@ export function Tabs({
         {/* Last gradient shadow */}
         {limitShadow && showLastShadow && (
           <div
-            className={`tabs-shadow tabs-shadow--last ${vertical ? 'tabs-shadow--vertical' : ''}`}
+            className="tabs-shadow"
+            css-position="last"
+            css-is-vertical={vertical ? 'true' : 'false'}
           />
         )}
 
         {/* Next Navigation Button */}
         {hasNavigation && showNext && (
           <button
-            className={`tabs-nav tabs-nav--next ${vertical ? 'tabs-nav--vertical' : ''}`}
+            className="tabs-nav"
+            css-position="next"
+            css-is-vertical={vertical ? 'true' : 'false'}
             onClick={handleNextScroll}
             aria-label={vertical ? 'Next tabs (scroll down)' : 'Next tabs'}
             css-is-disabled={nextOpacity === 0 ? 'true' : 'false'}

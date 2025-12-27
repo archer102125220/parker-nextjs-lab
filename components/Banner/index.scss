@@ -54,6 +54,33 @@
         /* Animation */
         transition: all var(--banner-transition-duration, 300ms) ease-in-out;
 
+        /* State: hidden (default) */
+        &[css-state='hidden'] {
+            z-index: 0;
+            opacity: 0;
+        }
+
+        /* State: active */
+        &[css-state='active'] {
+            z-index: 3;
+            opacity: 1;
+            transform: translate(-50%, -50%) translateX(var(--banner-drag-offset, 0)) scale(1);
+        }
+
+        /* State: prev */
+        &[css-state='prev'] {
+            z-index: 1;
+            opacity: 0.7;
+            transform: translate(-50%, -50%) translateX(calc(-35% + var(--banner-drag-offset, 0))) scale(0.85);
+        }
+
+        /* State: next */
+        &[css-state='next'] {
+            z-index: 1;
+            opacity: 0.7;
+            transform: translate(-50%, -50%) translateX(calc(35% + var(--banner-drag-offset, 0))) scale(0.85);
+        }
+
         &-content {
             /* Positioning */
             position: relative;
@@ -61,83 +88,64 @@
             /* Display & Box Model */
             width: 100%;
             height: 100%;
-        }
 
-        &-image {
-            /* Display & Box Model */
-            width: 100%;
-            height: 100%;
+            &-image {
+                /* Display & Box Model */
+                width: 100%;
+                height: 100%;
 
-            /* Visual */
-            object-fit: cover;
+                /* Visual */
+                object-fit: cover;
 
-            /* Misc */
-            pointer-events: none;
-        }
+                /* Misc */
+                pointer-events: none;
+            }
 
-        &-text {
-            /* Positioning */
-            position: absolute;
-            bottom: 0;
-            left: 0;
+            &-text {
+                /* Positioning */
+                position: absolute;
+                bottom: 0;
+                left: 0;
 
-            /* Display & Box Model */
-            width: 100%;
-            padding: 30px;
+                /* Display & Box Model */
+                width: 100%;
+                padding: 30px;
 
-            /* Visual */
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-            color: #fff;
-        }
+                /* Typography */
+                color: #fff;
 
-        &-title {
-            /* Display & Box Model */
-            margin: 0 0 10px 0;
+                /* Visual */
+                background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
 
-            /* Typography */
-            font-size: 32px;
-            font-weight: 700;
-        }
+                &-title {
+                    /* Display & Box Model */
+                    margin: 0 0 10px 0;
 
-        &-description {
-            /* Display & Box Model */
-            margin: 0;
+                    /* Typography */
+                    font-size: 32px;
+                    font-weight: 700;
+                }
 
-            /* Typography */
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.9);
-        }
+                &-description {
+                    /* Display & Box Model */
+                    margin: 0;
 
-        &-hidden {
-            opacity: 0;
-            z-index: 0;
-        }
-
-        &-active {
-            transform: translate(-50%, -50%) translateX(var(--banner-drag-offset, 0)) scale(1);
-            z-index: 3;
-            opacity: 1;
-        }
-
-        &-prev {
-            transform: translate(-50%, -50%) translateX(calc(-35% + var(--banner-drag-offset, 0))) scale(0.85);
-            z-index: 1;
-            opacity: 0.7;
-        }
-
-        &-next {
-            transform: translate(-50%, -50%) translateX(calc(35% + var(--banner-drag-offset, 0))) scale(0.85);
-            z-index: 1;
-            opacity: 0.7;
+                    /* Typography */
+                    font-size: 16px;
+                    color: rgba(255, 255, 255, 0.9);
+                }
+            }
         }
     }
 
     /* 3D Effect for 3+ banners */
-    &-3d &-slide {
+    &[css-has-3d='true'] {
+        .banner-slide {
 
-        &-prev,
-        &-next {
-            filter: brightness(0.8);
+            &[css-state='prev'],
+            &[css-state='next'] {
+                filter: brightness(0.8);
+            }
         }
     }
 
@@ -151,11 +159,11 @@
         /* Display & Box Model */
         transform: translateY(-50%);
 
-        &-prev {
+        &[css-position='prev'] {
             left: 20px;
         }
 
-        &-next {
+        &[css-position='next'] {
             right: 20px;
         }
 
@@ -206,31 +214,31 @@
         display: flex;
         gap: 10px;
         transform: translateX(-50%);
-    }
 
-    &-indicator {
-        /* Display & Box Model */
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
+        &-item {
+            /* Display & Box Model */
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
 
-        /* Visual */
-        background-color: rgba(255, 255, 255, 0.5);
+            /* Visual */
+            background-color: rgba(255, 255, 255, 0.5);
 
-        /* Misc */
-        cursor: pointer;
+            /* Misc */
+            cursor: pointer;
 
-        /* Animation */
-        transition: all 0.3s;
+            /* Animation */
+            transition: all 0.3s;
 
-        &:hover {
-            background-color: rgba(255, 255, 255, 0.8);
-            transform: scale(1.2);
-        }
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.8);
+                transform: scale(1.2);
+            }
 
-        &-active {
-            background-color: #fff;
-            transform: scale(1.3);
+            &[css-is-active='true'] {
+                background-color: #fff;
+                transform: scale(1.3);
+            }
         }
     }
 }

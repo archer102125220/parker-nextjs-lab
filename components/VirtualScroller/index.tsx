@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, useMemo, useCallback, ReactNode, CSSProperties } from 'react';
+import { useState, useRef, useMemo, useCallback, ReactNode, CSSProperties } from 'react';
 import './index.scss';
 
 export interface VirtualScrollerProps<T = unknown> {
@@ -14,8 +14,8 @@ export interface VirtualScrollerProps<T = unknown> {
 }
 
 interface VirtualScrollerCSSProperties extends CSSProperties {
-  '--virtual_scroller_container_height'?: string;
-  '--virtual_scroller_total_height'?: string;
+  '--virtual_scroller-height'?: string;
+  '--virtual_scroller-spacer-height'?: string;
 }
 
 export function VirtualScroller<T = unknown>({
@@ -60,8 +60,8 @@ export function VirtualScroller<T = unknown>({
 
   // CSS variables
   const cssVariables: VirtualScrollerCSSProperties = {
-    '--virtual_scroller_container_height': `${containerHeight}px`,
-    '--virtual_scroller_total_height': `${items.length * itemHeight}px`
+    '--virtual_scroller-height': `${containerHeight}px`,
+    '--virtual_scroller-spacer-height': `${items.length * itemHeight}px`
   };
 
   return (
@@ -73,7 +73,7 @@ export function VirtualScroller<T = unknown>({
     >
       <div className="virtual_scroller-spacer">
         <div
-          className="virtual_scroller-content"
+          className="virtual_scroller-spacer-content"
           style={{ transform: `translateY(${offsetY}px)` }}
         >
           {visibleItems.map((item, index) => {
@@ -81,7 +81,7 @@ export function VirtualScroller<T = unknown>({
             return (
               <div
                 key={actualIndex}
-                className="virtual_scroller-item"
+                className="virtual_scroller-spacer-content-item"
                 style={{ height: `${itemHeight}px` }}
               >
                 {renderItem(item, actualIndex)}

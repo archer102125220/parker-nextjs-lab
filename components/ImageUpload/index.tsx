@@ -105,16 +105,16 @@ export function ImageUpload({
   };
 
   const cssVariables = {
-    '--preview_bg_color': previewBgColor,
-    '--preview_opacity': previewUrl ? '1' : '0',
-    '--mask_opacity': showMask ? '0.8' : '0',
-    '--image_upload_cursor': disabled ? 'not-allowed' : 'pointer'
+    '--image_upload-preview-bg': previewBgColor,
+    '--image_upload-preview-opacity': previewUrl ? '1' : '0',
+    '--image_upload-mask-opacity': showMask ? '0.8' : '0',
+    '--image_upload-cursor': disabled ? 'not-allowed' : 'pointer'
   } as React.CSSProperties;
 
   return (
     <ButtonBase
       component="div"
-      className={`image_upload_wrapper ${className}`}
+      className={`image_upload-wrapper ${className}`}
       onClick={handleClick}
       onDragEnter={handleDragEnter}
       onDragOver={handleDragOver}
@@ -136,7 +136,7 @@ export function ImageUpload({
           type="file"
           accept={accept}
           onChange={handleFileChange}
-          className="image_upload_input_hidden"
+          className="image_upload-input"
           disabled={disabled}
         />
 
@@ -156,18 +156,18 @@ export function ImageUpload({
           </>
         )}
 
-        <div className="image_upload_preview">
+        <div className="image_upload-preview">
           {previewUrl && (
             <img
               src={previewUrl}
               alt="Preview"
-              className="image_upload_preview_img"
+              className="image_upload-preview-img"
             />
           )}
         </div>
 
-        <div className="image_upload_mask">
-          <p>{maskLabel}</p>
+        <div className="image_upload-mask">
+          <p className="image_upload-mask-text">{maskLabel}</p>
         </div>
       </div>
     </ButtonBase>

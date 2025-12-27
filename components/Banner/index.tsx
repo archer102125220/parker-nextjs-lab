@@ -154,25 +154,14 @@ export function Banner({
     }
   }, [handlePrev, handleNext]);
 
-  // Get slide class
-  const getSlideClass = (index: number) => {
-    const classes = ['banner-slide'];
-    
-    if (index === currentIndex) {
-      classes.push('banner-slide-active');
-    } else if (has3DEffect) {
-      if (index === getPrevIndex()) {
-        classes.push('banner-slide-prev');
-      } else if (index === getNextIndex()) {
-        classes.push('banner-slide-next');
-      } else {
-        classes.push('banner-slide-hidden');
-      }
-    } else {
-      classes.push('banner-slide-hidden');
+  // Get slide state
+  const getSlideState = (index: number): string => {
+    if (index === currentIndex) return 'active';
+    if (has3DEffect) {
+      if (index === getPrevIndex()) return 'prev';
+      if (index === getNextIndex()) return 'next';
     }
-    
-    return classes.join(' ');
+    return 'hidden';
   };
 
   const heightValue = typeof height === 'number' ? `${height}px` : height;
@@ -180,7 +169,8 @@ export function Banner({
   return (
     <div
       ref={bannerRef}
-      className={`banner ${has3DEffect ? 'banner-3d' : ''} ${className}`}
+      className={`banner ${className}`}
+      css-has-3d={has3DEffect ? 'true' : 'false'}
       style={{
         '--banner-height': heightValue,
         '--banner-transition-duration': isDragging ? '0ms' : `${transitionDuration}ms`,
@@ -196,10 +186,10 @@ export function Banner({
       {/* Navigation Buttons */}
       {showNavigation && banners.length > 1 && (
         <>
-          <div className="banner-nav banner-nav-prev" onClick={handlePrev}>
+          <div className="banner-nav" css-position="prev" onClick={handlePrev}>
             <div className="banner-nav-btn">‹</div>
           </div>
-          <div className="banner-nav banner-nav-next" onClick={handleNext}>
+          <div className="banner-nav" css-position="next" onClick={handleNext}>
             <div className="banner-nav-btn">›</div>
           </div>
         </>
@@ -215,7 +205,8 @@ export function Banner({
           {banners.map((banner, index) => (
             <div
               key={banner.id || index}
-              className={getSlideClass(index)}
+              className="banner-slide"
+              css-state={getSlideState(index)}
             >
               {children ? (
                 children(banner, index, index === currentIndex)
@@ -225,15 +216,15 @@ export function Banner({
                     <img
                       src={banner.image}
                       alt={banner.alt || `Banner ${index + 1}`}
-                      className="banner-slide-image"
+                      className="banner-slide-content-image"
                       draggable={false}
                     />
                   )}
                   {(banner.title || banner.description) && (
-                    <div className="banner-slide-text">
-                      {banner.title && <h3 className="banner-slide-title">{banner.title}</h3>}
+                    <div className="banner-slide-content-text">
+                      {banner.title && <h3 className="banner-slide-content-text-title">{banner.title}</h3>}
                       {banner.description && (
-                        <p className="banner-slide-description">{banner.description}</p>
+                        <p className="banner-slide-content-text-description">{banner.description}</p>
                       )}
                     </div>
                   )}
@@ -250,7 +241,8 @@ export function Banner({
           {banners.map((banner, index) => (
             <div
               key={`indicator-${banner.id || index}`}
-              className={`banner-indicator ${index === currentIndex ? 'banner-indicator-active' : ''}`}
+              className="banner-indicators-item"
+              css-is-active={index === currentIndex ? 'true' : 'false'}
               onClick={() => goToSlide(index)}
             />
           ))}

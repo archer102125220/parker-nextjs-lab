@@ -1,63 +1,71 @@
-.tabs-content {
-  /* Positioning */
-  position: relative;
-
-  /* Display & Box Model */
-  flex: 1;
-  height: var(--tabs-content-height, 100%);
-  overflow: hidden;
-
-  &-swiper {
+.tabs_content {
     /* Positioning */
     position: relative;
 
     /* Display & Box Model */
-    height: var(--tabs-content-swiper-height, 100%);
-    width: 100%;
+    flex: 1;
+    height: var(--tabs_content-height, 100%);
+    overflow: hidden;
 
-    &--transitioning {
-      /* Misc */
-      pointer-events: none;
-    }
-  }
-
-  &-panel {
-    /* Positioning */
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    /* Display & Box Model */
-    height: 100%;
-    width: 100%;
-    overflow: auto;
-
-    /* Animation */
-    transition: opacity 0.3s ease-in-out;
-
-    &--active {
-      /* Positioning */
-      position: relative;
-
-      /* Display & Box Model */
-      display: block;
+    &-loading {
+        /* Display & Box Model */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
     }
 
-    &--animated {
-      /* Animation */
-      transition:
-        opacity 0.3s ease-in-out,
-        transform 0.3s ease-in-out;
+    &-swiper {
+        /* Positioning */
+        position: relative;
+
+        /* Display & Box Model */
+        width: 100%;
+        height: var(--tabs_content-swiper-height, 100%);
+
+        &[css-is-transitioning='true'] {
+            /* Misc */
+            pointer-events: none;
+        }
     }
 
-    &[hidden] {
-      /* Display & Box Model */
-      display: none;
+    &-scroll_wrapper {
+        /* Display & Box Model */
+        height: 100%;
     }
-  }
 
-  &-wrapper {
-    /* Display & Box Model */
-    height: 100%;
-  }
+    &-panel {
+        /* Positioning */
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        /* Display & Box Model */
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+
+        /* Animation */
+        transition: opacity 0.3s ease-in-out;
+
+        &[css-is-active='true'] {
+            /* Positioning */
+            position: relative;
+
+            /* Display & Box Model */
+            display: block;
+        }
+
+        &[css-is-animated='true'] {
+            /* Animation */
+            transition:
+                opacity 0.3s ease-in-out,
+                transform 0.3s ease-in-out;
+        }
+
+        &[hidden] {
+            /* Display & Box Model */
+            display: none;
+        }
+    }
 }

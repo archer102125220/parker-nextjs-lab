@@ -92,7 +92,7 @@
                 font-weight: 500;
                 color: #666;
 
-                &.selected {
+                &[css-is-selected='true'] {
                     color: #1976d2;
                 }
             }

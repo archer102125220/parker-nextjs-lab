@@ -111,8 +111,8 @@ export function TabsContent({
     : contentHeightStyle;
 
   const cssVariables = {
-    '--tabs-content-height': contentHeightStyle,
-    '--tabs-content-swiper-height': swiperHeightStyle
+    '--tabs_content-height': contentHeightStyle,
+    '--tabs_content-swiper-height': swiperHeightStyle
   } as React.CSSProperties;
 
   // Helper functions
@@ -207,13 +207,13 @@ export function TabsContent({
 
       // If scrollFetch is disabled or tab doesn't need it, render directly
       if (scrollFetch === false || isNotScrollFetch(tab)) {
-        return <div className="tabs_content_wrapper">{renderContent()}</div>;
+        return <div className="tabs_content-wrapper">{renderContent()}</div>;
       }
 
       // Wrap with ScrollFetch component
       return (
         <ScrollFetch
-          className="tabs-content-scroll-wrapper"
+          className="tabs_content-scroll_wrapper"
           height={height}
           loading={loading}
           iosStyle={iosStyle}
@@ -261,7 +261,7 @@ export function TabsContent({
 
   return (
     <div
-      className={`tabs-content ${className}`}
+      className={`tabs_content ${className}`}
       style={cssVariables}
       onMouseUp={resetRefreshDisable}
       onMouseOver={resetRefreshDisable}
@@ -271,10 +271,10 @@ export function TabsContent({
       {renderTabTop}
 
       {/* Loading Slot */}
-      {renderLoading || (loading && <div className="tabs-content-loading">Loading...</div>)}
+      {renderLoading || (loading && <div className="tabs_content-loading">Loading...</div>)}
 
       <Swiper
-        className="tabs-content-swiper"
+        className="tabs_content-swiper"
         initialSlide={initialSlide}
         onSwiper={setSwiperInstance}
         onSlideChange={handleSlideChange}

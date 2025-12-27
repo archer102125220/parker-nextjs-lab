@@ -3,46 +3,11 @@
     position: relative;
 
     /* Display & Box Model */
-    height: var(--virtual_scroller_container_height, 400px);
-    overflow-y: auto;
+    height: var(--virtual_scroller-height, 400px);
     overflow-x: hidden;
-
-    /* Visual */
+    overflow-y: auto;
     border: 1px solid #e0e0e0;
     border-radius: 4px;
-
-    &-spacer {
-        /* Display & Box Model */
-        height: var(--virtual_scroller_total_height, 0px);
-        width: 100%;
-
-        /* Positioning */
-        position: relative;
-    }
-
-    &-content {
-        /* Positioning */
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-
-        /* Misc */
-        will-change: transform;
-    }
-
-    &-item {
-        /* Display & Box Model */
-        width: 100%;
-        box-sizing: border-box;
-
-        /* Visual */
-        border-bottom: 1px solid #f0f0f0;
-
-        &:last-child {
-            border-bottom: none;
-        }
-    }
 
     /* Scrollbar styling */
     &::-webkit-scrollbar {
@@ -50,16 +15,47 @@
     }
 
     &::-webkit-scrollbar-track {
-        background: #f1f1f1;
         border-radius: 4px;
+        background: #f1f1f1;
     }
 
     &::-webkit-scrollbar-thumb {
-        background: #888;
         border-radius: 4px;
+        background: #888;
 
         &:hover {
             background: #555;
+        }
+    }
+
+    &-spacer {
+        /* Positioning */
+        position: relative;
+
+        /* Display & Box Model */
+        width: 100%;
+        height: var(--virtual_scroller-spacer-height, 0px);
+
+        &-content {
+            /* Positioning */
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+
+            /* Misc */
+            will-change: transform;
+
+            &-item {
+                /* Display & Box Model */
+                width: 100%;
+                box-sizing: border-box;
+                border-bottom: 1px solid #f0f0f0;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+            }
         }
     }
 }

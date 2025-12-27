@@ -101,15 +101,15 @@ export function WangEditor({
   const heightValue = typeof height === 'number' ? `${height}px` : height;
 
   return (
-    <div className={`wang-editor ${className}`}>
+    <div className={`wang_editor ${className}`}>
       <Toolbar
         editor={editor}
         defaultConfig={defaultToolbarConfig}
         mode="default"
-        className="wang-editor-toolbar"
+        className="wang_editor-toolbar"
       />
       <div
-        className="wang_editor_container"
+        className="wang_editor-container"
         style={{ '--editor-height': heightValue } as React.CSSProperties}
       >
         <Editor
@@ -118,7 +118,7 @@ export function WangEditor({
           onCreated={setEditor}
           onChange={handleChange}
           mode="default"
-          className="wang-editor-content"
+          className="wang_editor-container-content"
         />
       </div>
     </div>

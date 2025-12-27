@@ -1,109 +1,207 @@
-.wang-editor {
-  /* Display & Box Model */
-  border: 1px solid #ccc;
+// WangEditor Styles - MUI-like design
+// Note: :global tag selectors are allowed for dynamic content areas (WangEditor exception)
 
-  &-toolbar {
+.wang_editor {
     /* Display & Box Model */
-    border-bottom: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.23);
+    border-radius: 4px;
+    overflow: hidden;
 
-    /* Visual */
-    background-color: #fff;
-  }
+    /* Animation */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
-  &-content {
-    /* Visual */
-    background-color: #fff;
-
-    /* Typography */
-    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-
-    /* Override default styles */
-    :global {
-      p {
-        margin: 0 0 10px 0;
-      }
-
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
-        margin: 20px 0 10px 0;
-        font-weight: 600;
-      }
-
-      ul,
-      ol {
-        margin: 10px 0;
-        padding-left: 30px;
-      }
-
-      blockquote {
-        margin: 10px 0;
-        padding: 10px 15px;
-        border-left: 4px solid #ddd;
-        background-color: #f9f9f9;
-      }
-
-      code {
-        padding: 2px 6px;
-        border-radius: 3px;
-        background-color: #f5f5f5;
-        font-family: 'Courier New', monospace;
-      }
-
-      pre {
-        margin: 10px 0;
-        padding: 15px;
-        border-radius: 4px;
-        background-color: #f5f5f5;
-        overflow-x: auto;
-
-        code {
-          padding: 0;
-          background-color: transparent;
-        }
-      }
-
-      table {
-        margin: 10px 0;
-        border-collapse: collapse;
-        width: 100%;
-
-        th,
-        td {
-          padding: 8px 12px;
-          border: 1px solid #ddd;
-        }
-
-        th {
-          background-color: #f5f5f5;
-          font-weight: 600;
-        }
-      }
-
-      img {
-        max-width: 100%;
-        height: auto;
-      }
-
-      a {
-        color: #1976d2;
-        text-decoration: none;
-
-        &:hover {
-          text-decoration: underline;
-        }
-      }
+    /* MUI-like hover effect */
+    &:hover {
+        border-color: rgba(0, 0, 0, 0.87);
     }
-  }
 
-  &-container {
-    /* Display & Box Model */
-    height: var(--editor-height, 400px);
-    overflow-y: auto;
-  }
+    /* MUI-like focus effect */
+    &:focus-within {
+        border-width: 2px;
+        border-color: #1976d2;
+        box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+    }
+
+    &-toolbar {
+        /* Display & Box Model */
+        padding: 4px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+        /* Visual */
+        background-color: #fafafa;
+    }
+
+    &-container {
+        /* Display & Box Model */
+        height: var(--editor-height, 400px);
+        overflow-y: auto;
+
+        /* Visual - MUI-like scrollbar */
+        &::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: #f5f5f5;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.2);
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        &-content {
+            /* Typography */
+            font-family: 'Roboto', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+
+            /* Visual */
+            background-color: #fff;
+
+            // Override default wangEditor styles for MUI consistency
+            // Note: Tag selectors allowed here for third-party dynamic content
+            :global {
+                .w-e-text-container {
+                    padding: 12px 14px;
+                }
+
+                .w-e-text-placeholder {
+                    /* Positioning */
+                    top: 12px;
+                    left: 14px;
+
+                    /* Typography */
+                    font-style: normal;
+                    color: rgba(0, 0, 0, 0.38);
+                }
+
+                p {
+                    /* Display & Box Model */
+                    margin: 0 0 12px 0;
+
+                    /* Typography */
+                    color: rgba(0, 0, 0, 0.87);
+                }
+
+                h1,
+                h2,
+                h3,
+                h4,
+                h5,
+                h6 {
+                    /* Display & Box Model */
+                    margin: 20px 0 12px 0;
+
+                    /* Typography */
+                    font-weight: 500;
+                    color: rgba(0, 0, 0, 0.87);
+                }
+
+                ul,
+                ol {
+                    /* Display & Box Model */
+                    margin: 12px 0;
+                    padding-left: 24px;
+                }
+
+                blockquote {
+                    /* Display & Box Model */
+                    margin: 12px 0;
+                    padding: 12px 16px;
+                    border-left: 4px solid #1976d2;
+                    border-radius: 0 4px 4px 0;
+
+                    /* Typography */
+                    color: rgba(0, 0, 0, 0.6);
+
+                    /* Visual */
+                    background-color: rgba(25, 118, 210, 0.04);
+                }
+
+                code {
+                    /* Display & Box Model */
+                    padding: 2px 8px;
+                    border-radius: 4px;
+
+                    /* Typography */
+                    font-family: 'Roboto Mono', 'Courier New', monospace;
+                    font-size: 0.875em;
+                    color: #d32f2f;
+
+                    /* Visual */
+                    background-color: rgba(0, 0, 0, 0.04);
+                }
+
+                pre {
+                    /* Display & Box Model */
+                    margin: 12px 0;
+                    padding: 16px;
+                    border-radius: 4px;
+                    overflow-x: auto;
+
+                    /* Visual */
+                    background-color: #263238;
+
+                    code {
+                        /* Display & Box Model */
+                        padding: 0;
+
+                        /* Typography */
+                        color: #a5d6a7;
+
+                        /* Visual */
+                        background-color: transparent;
+                    }
+                }
+
+                table {
+                    /* Display & Box Model */
+                    width: 100%;
+                    margin: 12px 0;
+                    border-radius: 4px;
+                    border-collapse: collapse;
+                    overflow: hidden;
+
+                    th,
+                    td {
+                        /* Display & Box Model */
+                        padding: 12px 16px;
+                        border: 1px solid rgba(0, 0, 0, 0.12);
+                    }
+
+                    th {
+                        /* Typography */
+                        font-weight: 500;
+                        text-align: left;
+
+                        /* Visual */
+                        background-color: #fafafa;
+                    }
+                }
+
+                img {
+                    /* Display & Box Model */
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 4px;
+                }
+
+                a {
+                    /* Typography */
+                    font-weight: 500;
+                    text-decoration: none;
+                    color: #1976d2;
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
+    }
 }

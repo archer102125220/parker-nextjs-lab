@@ -226,7 +226,10 @@ export function PhoneInput({
             <div className="phone_input-country_selector-option">
               <span className={`fi fi-${(option as CountryCode & { [key: string]: unknown }).countryCode?.toLowerCase()} phone_input-country_selector-option-flag`} />
               <span className="phone_input-country_selector-option-name">{(option as CountryCode & { [key: string]: unknown }).countryName}</span>
-              <span className={`phone_input-country_selector-option-code ${selected ? 'selected' : ''}`}>
+              <span
+                className="phone_input-country_selector-option-code"
+                css-is-selected={selected ? 'true' : 'false'}
+              >
                 +{(option as CountryCode & { [key: string]: unknown }).phoneCode}
               </span>
             </div>
