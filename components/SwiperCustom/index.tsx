@@ -123,18 +123,28 @@ export function SwiperCustom({
   renderPrev,
   renderNext
 }: SwiperCustomProps) {
-  // Refs
+  // DOM Refs
   const swiperRef = useRef<HTMLDivElement>(null);
   const sliderContentRef = useRef<HTMLDivElement>(null);
 
-  // State
+  // State for rendering
   const [sliderActiveIndex, setSliderActiveIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const [canCancel, setCanCancel] = useState(false);
-  const [startX, setStartX] = useState<number | null>(null);
-  const [startY, setStartY] = useState<number | null>(null);
-  const [moveX, setMoveX] = useState<number | null>(null);
   const [isSliderMoving, setIsSliderMoving] = useState(false);
+  const [currentDeltaX, setCurrentDeltaX] = useState(0);
+
+  // Refs for event handler values (to avoid stale closures)
+  const isDraggingRef = useRef(false);
+  const canCancelRef = useRef(false);
+  const startXRef = useRef<number | null>(null);
+  const startYRef = useRef<number | null>(null);
+  const moveXRef = useRef<number | null>(null);
+  const sliderActiveIndexRef = useRef(0);
+
+  // Keep refs in sync with state
+  useEffect(() => {
+    sliderActiveIndexRef.current = sliderActiveIndex;
+  }, [sliderActiveIndex]);
 
   // ============================================================================
   // Computed Values
@@ -163,35 +173,46 @@ export function SwiperCustom({
   useEffect(() => {
     const swiperIndex = getCurrentSwiperIndex(value, slideList);
     setSliderActiveIndex(swiperIndex);
+    sliderActiveIndexRef.current = swiperIndex;
   }, [value, slideList, getCurrentSwiperIndex]);
 
-  const slideXList = useMemo(() => {
-    if (!Array.isArray(slideList)) return [];
-    const contentWidth = sliderContentRef.current?.clientWidth || 1;
-    return slideList.map((_, index) => index * contentWidth * -1);
-  }, [slideList, sliderContentRef.current?.clientWidth]);
+  // Get content width for calculations
+  const getContentWidth = useCallback(() => {
+    return sliderContentRef.current?.clientWidth || 1;
+  }, []);
 
-  const deltaX = useMemo(() => {
-    const sliderActive = slideXList[sliderActiveIndex] ?? 0;
-    if (
-      typeof startX !== 'number' ||
-      typeof moveX !== 'number' ||
-      startX === null ||
-      moveX === null
-    ) {
+  // Calculate slide X positions
+  const getSlideXList = useCallback(() => {
+    if (!Array.isArray(slideList)) return [];
+    const contentWidth = getContentWidth();
+    return slideList.map((_, index) => index * contentWidth * -1);
+  }, [slideList, getContentWidth]);
+
+  // Calculate current deltaX based on dragging state
+  const calculateDeltaX = useCallback(() => {
+    const slideXList = getSlideXList();
+    const sliderActive = slideXList[sliderActiveIndexRef.current] ?? 0;
+    const startX = startXRef.current;
+    const moveX = moveXRef.current;
+
+    if (typeof startX !== 'number' || typeof moveX !== 'number') {
       return sliderActive;
     }
     const delta = sliderActive + moveX - startX;
     return isNaN(delta) ? sliderActive : delta;
-  }, [slideXList, sliderActiveIndex, startX, moveX]);
+  }, [getSlideXList]);
 
   // ============================================================================
   // CSS Variables
   // ============================================================================
 
   const cssVariables = useMemo((): CSSProperties => {
+    const slideXList = getSlideXList();
+    const sliderActive = slideXList[sliderActiveIndex] ?? 0;
+    const transformX = isDragging ? currentDeltaX : sliderActive;
+
     const vars: Record<string, string> = {
-      '--wrapper_transform': `translate3d(${deltaX}px, 0, 0)`
+      '--wrapper_transform': `translate3d(${transformX}px, 0, 0)`
     };
 
     if (shouldFillHeight) {
@@ -204,16 +225,27 @@ export function SwiperCustom({
       vars['--slide_overflow_x'] = 'hidden';
     }
 
-    if (sliderContentRef.current?.clientWidth) {
-      vars['--slide_width'] = `${sliderContentRef.current.clientWidth}px`;
+    const contentWidth = getContentWidth();
+    if (contentWidth > 1) {
+      vars['--slide_width'] = `${contentWidth}px`;
     }
 
     if (!isDragging) {
       vars['--wrapper_transition_duration'] = '300ms';
+    } else {
+      vars['--wrapper_transition_duration'] = '0ms';
     }
 
     return vars as CSSProperties;
-  }, [deltaX, shouldFillHeight, overflow, isDragging]);
+  }, [
+    sliderActiveIndex,
+    isDragging,
+    currentDeltaX,
+    shouldFillHeight,
+    overflow,
+    getSlideXList,
+    getContentWidth
+  ]);
 
   // ============================================================================
   // Event Handlers
@@ -221,24 +253,28 @@ export function SwiperCustom({
 
   const handleChangeStart = useCallback(
     (e: ReactMouseEvent | ReactTouchEvent) => {
+      isDraggingRef.current = true;
+      canCancelRef.current = true;
+      startXRef.current = getEventX(e);
+      startYRef.current = getEventY(e);
+      moveXRef.current = getEventX(e);
+
       setIsDragging(true);
-      setCanCancel(true);
-      setStartX(getEventX(e));
-      setStartY(getEventY(e));
-      setMoveX(getEventX(e));
+      setCurrentDeltaX(calculateDeltaX());
     },
-    []
+    [calculateDeltaX]
   );
 
-  const handleSliderMove = useCallback(
-    (e: MouseEvent | TouchEvent) => {
-      if (!isDragging) return;
+  // Handle slide movement during drag
+  useEffect(() => {
+    const handleSliderMove = (e: MouseEvent | TouchEvent) => {
+      if (!isDraggingRef.current) return;
 
       const eventX = getEventX(e);
       const eventY = getEventY(e);
 
       const result = classifySwipeDirection(
-        { clientX: startX ?? 0, clientY: startY ?? 0 },
+        { clientX: startXRef.current ?? 0, clientY: startYRef.current ?? 0 },
         { clientX: eventX, clientY: eventY }
       );
 
@@ -247,105 +283,116 @@ export function SwiperCustom({
       // Determine if we should cancel
       if (
         !isHorizontal ||
-        (moveX !== null &&
-          moveX > 0 &&
-          Math.abs(moveX - (startX ?? 0)) > 20)
+        (moveXRef.current !== null &&
+          moveXRef.current > 0 &&
+          Math.abs(moveXRef.current - (startXRef.current ?? 0)) > 20)
       ) {
-        setCanCancel(false);
+        canCancelRef.current = false;
       }
 
-      if (!isHorizontal && canCancel) {
+      if (!isHorizontal && canCancelRef.current) {
+        isDraggingRef.current = false;
         setIsDragging(false);
         return;
       }
 
-      setMoveX(eventX);
+      moveXRef.current = eventX;
       setIsSliderMoving(true);
 
+      // Calculate and update deltaX for rendering
+      const newDeltaX = calculateDeltaX();
+      setCurrentDeltaX(newDeltaX);
+
       if (onSliderMove) {
-        const currentSlide = slideList[sliderActiveIndex];
+        const currentSlide = slideList[sliderActiveIndexRef.current];
         const currentValue = valueKey
           ? currentSlide?.[valueKey]
           : currentSlide?.value ?? currentSlide;
         onSliderMove(
           e,
           currentValue as string | number | SwiperCustomSlide,
-          sliderActiveIndex
+          sliderActiveIndexRef.current
         );
       }
-    },
-    [
-      isDragging,
-      startX,
-      startY,
-      moveX,
-      canCancel,
-      onSliderMove,
-      slideList,
-      sliderActiveIndex,
-      valueKey
-    ]
-  );
+    };
 
-  const handleSlideXFindLast = useCallback(
-    (slideX: number): boolean => {
-      const sliderContentWidth = sliderContentRef.current?.clientWidth || 1;
-      const ratio =
-        typeof longSwipesRatio !== 'number' ? 0.5 : longSwipesRatio;
+    const handleChanging = () => {
+      if (!isDraggingRef.current) return;
+
+      isDraggingRef.current = false;
+      setIsDragging(false);
+
+      const slideXList = getSlideXList();
+      const contentWidth = getContentWidth();
+      const currentDelta = calculateDeltaX();
+      const ratio = typeof longSwipesRatio !== 'number' ? 0.5 : longSwipesRatio;
       const adjustedRatio = ratio >= 1 ? ratio : Math.abs(1 - ratio);
 
-      const slideXAbs = Math.abs(slideX);
-      const deltaXAbs = Math.abs(deltaX);
-      const difference = Math.abs(slideXAbs - deltaXAbs);
+      const handleSlideXFindLast = (slideX: number): boolean => {
+        const slideXAbs = Math.abs(slideX);
+        const deltaXAbs = Math.abs(currentDelta);
+        const difference = Math.abs(slideXAbs - deltaXAbs);
 
-      return (
-        (deltaX >= 0 && slideX === 0) ||
-        (difference >= 0 && difference <= sliderContentWidth * adjustedRatio)
-      );
-    },
-    [deltaX, longSwipesRatio]
-  );
-
-  const handleChanging = useCallback(() => {
-    setIsDragging(false);
-
-    let newSliderActiveIndex = -1;
-
-    if (moveX !== null && startX !== null) {
-      if (moveX > startX) {
-        // prev
-        newSliderActiveIndex = slideXList.findIndex((slideX) =>
-          handleSlideXFindLast(slideX)
+        return (
+          (currentDelta >= 0 && slideX === 0) ||
+          (difference >= 0 && difference <= contentWidth * adjustedRatio)
         );
-      } else if (moveX < startX) {
-        // next
-        newSliderActiveIndex = slideXList.findLastIndex((slideX) =>
-          handleSlideXFindLast(slideX)
-        );
-      }
-    }
+      };
 
-    if (newSliderActiveIndex >= 0) {
-      const newSlide = slideList[newSliderActiveIndex] ?? {};
-      const newValue = valueKey
-        ? newSlide[valueKey]
-        : newSlide.value ?? newSlide;
-      if (onChange) {
-        onChange(newValue as string | number | SwiperCustomSlide);
-      }
-      setSliderActiveIndex(newSliderActiveIndex);
-    }
+      let newSliderActiveIndex = -1;
+      const moveX = moveXRef.current;
+      const startX = startXRef.current;
 
-    setStartX(null);
-    setMoveX(null);
+      if (moveX !== null && startX !== null) {
+        if (moveX > startX) {
+          // prev (dragging right)
+          newSliderActiveIndex = slideXList.findIndex((slideX) =>
+            handleSlideXFindLast(slideX)
+          );
+        } else if (moveX < startX) {
+          // next (dragging left)
+          newSliderActiveIndex = slideXList.findLastIndex((slideX) =>
+            handleSlideXFindLast(slideX)
+          );
+        }
+      }
+
+      if (newSliderActiveIndex >= 0) {
+        const newSlide = slideList[newSliderActiveIndex] ?? {};
+        const newValue = valueKey
+          ? newSlide[valueKey]
+          : newSlide.value ?? newSlide;
+        if (onChange) {
+          onChange(newValue as string | number | SwiperCustomSlide);
+        }
+        setSliderActiveIndex(newSliderActiveIndex);
+        sliderActiveIndexRef.current = newSliderActiveIndex;
+      }
+
+      startXRef.current = null;
+      moveXRef.current = null;
+    };
+
+    document.addEventListener('mousemove', handleSliderMove);
+    document.addEventListener('mouseup', handleChanging);
+    document.addEventListener('touchmove', handleSliderMove);
+    document.addEventListener('touchend', handleChanging);
+
+    return () => {
+      document.removeEventListener('mousemove', handleSliderMove);
+      document.removeEventListener('mouseup', handleChanging);
+      document.removeEventListener('touchmove', handleSliderMove);
+      document.removeEventListener('touchend', handleChanging);
+    };
   }, [
-    moveX,
-    startX,
-    slideXList,
     slideList,
     valueKey,
+    longSwipesRatio,
     onChange,
-    handleSlideXFindLast
+    onSliderMove,
+    calculateDeltaX,
+    getSlideXList,
+    getContentWidth
   ]);
 
   const resetMovingStatus = useCallback(() => {
@@ -376,6 +423,7 @@ export function SwiperCustom({
         onChange(newValue as string | number | SwiperCustomSlide);
       }
       setSliderActiveIndex(newSliderActiveIndex);
+      sliderActiveIndexRef.current = newSliderActiveIndex;
     }
   }, [sliderActiveIndex, slideList, valueKey, onChange]);
 
@@ -390,31 +438,9 @@ export function SwiperCustom({
         onChange(newValue as string | number | SwiperCustomSlide);
       }
       setSliderActiveIndex(newSliderActiveIndex);
+      sliderActiveIndexRef.current = newSliderActiveIndex;
     }
   }, [sliderActiveIndex, slideList, valueKey, onChange]);
-
-  // ============================================================================
-  // Effects
-  // ============================================================================
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => handleSliderMove(e);
-    const handleMouseUp = () => handleChanging();
-    const handleTouchMove = (e: TouchEvent) => handleSliderMove(e);
-    const handleTouchEnd = () => handleChanging();
-
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-    document.addEventListener('touchmove', handleTouchMove);
-    document.addEventListener('touchend', handleTouchEnd);
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-      document.removeEventListener('touchmove', handleTouchMove);
-      document.removeEventListener('touchend', handleTouchEnd);
-    };
-  }, [handleSliderMove, handleChanging]);
 
   // ============================================================================
   // Render
