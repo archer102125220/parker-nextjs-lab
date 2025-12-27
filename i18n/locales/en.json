@@ -1,46 +1,160 @@
 {
-  "en": "English",
-  "zh-tw": "Chinese",
-  "metadata": {
-    "systemName": "Parker's Next.js lab",
-    "defaultTitle": "Parker's Next.js lab",
-    "titleTemplate": "%s | Parker's Next.js lab",
-    "description": "Parker's Next.js Laboratory"
-  },
-  "components": {
-    "MuiBreadcrumbs": {
-      "defaultProps": {
-        "expandText": "Show path"
-      }
+    "en": "English",
+    "zh-tw": "Chinese",
+    "metadata": {
+        "systemName": "Parker's Next.js Lab",
+        "defaultTitle": "Parker's Next.js Lab",
+        "titleTemplate": "%s | Parker's Next.js Lab",
+        "description": "Parker's Next.js Laboratory"
     },
-    "MuiTablePagination": {
-      "defaultProps": {
-        "labelRowsPerPage": "Rows per page:"
-      }
+    "components": {
+        "MuiBreadcrumbs": {
+            "defaultProps": {
+                "expandText": "Show path"
+            }
+        },
+        "MuiTablePagination": {
+            "defaultProps": {
+                "labelRowsPerPage": "Rows per page:"
+            }
+        },
+        "MuiRating": {
+            "defaultProps": {
+                "emptyLabelText": "Empty"
+            }
+        },
+        "MuiAutocomplete": {
+            "defaultProps": {
+                "clearText": "Clear",
+                "closeText": "Close",
+                "loadingText": "Loading…",
+                "noOptionsText": "No options",
+                "openText": "Open"
+            }
+        },
+        "MuiAlert": {
+            "defaultProps": {
+                "closeText": "Close"
+            }
+        },
+        "MuiPagination": {
+            "defaultProps": {
+                "aria-label": "Pagination navigation"
+            }
+        }
     },
-    "MuiRating": {
-      "defaultProps": {
-        "emptyLabelText": "Empty"
-      }
+    "common": {
+        "viewDemo": "View Demo →",
+        "loading": "Loading...",
+        "error": "An error occurred",
+        "retry": "Retry",
+        "back": "Back",
+        "next": "Next",
+        "prev": "Previous",
+        "submit": "Submit",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "close": "Close",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "search": "Search",
+        "noData": "No data"
     },
-    "MuiAutocomplete": {
-      "defaultProps": {
-        "clearText": "Clear",
-        "closeText": "Close",
-        "loadingText": "Loading…",
-        "noOptionsText": "No options",
-        "openText": "Open"
-      }
-    },
-    "MuiAlert": {
-      "defaultProps": {
-        "closeText": "Close"
-      }
-    },
-    "MuiPagination": {
-      "defaultProps": {
-        "aria-label": "Pagination navigation"
-      }
+    "pages": {
+        "home": {
+            "heroTitle": "Parker's Next.js Lab",
+            "heroSubtitle": "Explore modern frontend technologies — WebRTC, AI Face Swap, PWA, Firebase and more",
+            "categories": {
+                "customComponents": {
+                    "title": "🎨 Custom Components",
+                    "description": "Reusable UI components for forms, navigation, and display"
+                },
+                "realtime": {
+                    "title": "📡 Real-time Communication",
+                    "description": "WebSocket, SSE, WebRTC communication technologies"
+                },
+                "aiDevice": {
+                    "title": "🤖 AI & Devices",
+                    "description": "AI face swap, camera, microphone device integration"
+                },
+                "devTools": {
+                    "title": "🛠️ Dev Tools",
+                    "description": "CSS drawing, Vue directive effects experiments"
+                }
+            },
+            "links": {
+                "components": {
+                    "label": "Component Library",
+                    "description": "20+ reusable UI components"
+                }
+            }
+        },
+        "components": {
+            "title": "🎨 Component Library",
+            "subtitle": "{count} reusable React UI components",
+            "categories": {
+                "form": "Form Components",
+                "display": "Display Components",
+                "navigation": "Navigation Components",
+                "scroll": "Scroll Components",
+                "richMedia": "Rich Media Components"
+            },
+            "items": {
+                "selector": "Custom dropdown selector",
+                "phoneInput": "International phone number input",
+                "imageUpload": "Image upload with preview",
+                "switchButton": "Toggle switch button",
+                "banner": "Carousel banner",
+                "qrCode": "QR Code generator",
+                "countdown": "Multi-format countdown timer",
+                "skeletonLoader": "Skeleton loading animation",
+                "tabs": "Multi-functional tabs component",
+                "slideInPanel": "Slide-in side panel",
+                "dialog": "Modal dialog",
+                "drawer": "Drawer navigation",
+                "goTop": "Scroll to top button",
+                "scrollFetch": "Pull-to-refresh & infinite scroll",
+                "virtualScroller": "Virtual scroller list",
+                "swiper": "Custom carousel slider",
+                "swiperJS": "Swiper.js integration",
+                "youtube": "YouTube player embed",
+                "wangEditor": "Rich text editor",
+                "enterLabel": "Typewriter animation effect"
+            },
+            "stats": {
+                "uiComponents": "UI Components",
+                "categories": "Categories",
+                "typescript": "TypeScript"
+            }
+        },
+        "cssDrawing": {
+            "heroTitle": "CSS Drawing & Anime.js",
+            "heroSubtitle": "Explore pure CSS graphics and anime.js animation integration"
+        },
+        "firebase": {
+            "heroTitle": "Firebase Testing",
+            "heroSubtitle": "Firebase Authentication, Firestore, Cloud Messaging feature testing",
+            "description": "Features originally implemented in my resume project. Since that project doesn't implement PWA or Service Worker features, this project attempts to integrate and test Service Workers.",
+            "resumeLink": "Portfolio →"
+        },
+        "directiveEffects": {
+            "heroTitle": "Vue Directive Effects",
+            "heroSubtitle": "Recreating Vue Directives effects in React"
+        },
+        "sseTest": {
+            "heroTitle": "Server-Sent Events Test",
+            "heroSubtitle": "Testing SSE one-way real-time communication"
+        },
+        "socketTest": {
+            "heroTitle": "WebSocket Test",
+            "heroSubtitle": "Testing native WebSocket and Socket.IO real-time communication",
+            "description": "Recording results of native WebSocket and socket.io implementations"
+        },
+        "offline": {
+            "title": "You are offline",
+            "description": "Please check your internet connection",
+            "retryButton": "Retry connection"
+        }
     }
-  }
 }

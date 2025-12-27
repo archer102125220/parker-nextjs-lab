@@ -1,41 +1,160 @@
 {
-  "en": "英文",
-  "zh-tw": "繁體中文",
-  "metadata": {
-    "systemName": "Parker 的 Next.js實驗室",
-    "defaultTitle": "Parker 的 Next.js實驗室",
-    "titleTemplate": "%s | Parker 的 Next.js實驗室",
-    "description": "Parker 的 Next.js實驗室"
-  },
-  "components": {
-    "MuiBreadcrumbs": {
-      "defaultProps": {
-        "expandText": "展開"
-      }
+    "en": "英文",
+    "zh-tw": "繁體中文",
+    "metadata": {
+        "systemName": "Parker 的 Next.js實驗室",
+        "defaultTitle": "Parker 的 Next.js實驗室",
+        "titleTemplate": "%s | Parker 的 Next.js實驗室",
+        "description": "Parker 的 Next.js實驗室"
     },
-    "MuiTablePagination": {
-      "defaultProps": {
-        "labelRowsPerPage": "每頁數量:"
-      }
+    "components": {
+        "MuiBreadcrumbs": {
+            "defaultProps": {
+                "expandText": "展開"
+            }
+        },
+        "MuiTablePagination": {
+            "defaultProps": {
+                "labelRowsPerPage": "每頁數量:"
+            }
+        },
+        "MuiRating": {
+            "defaultProps": {
+                "emptyLabelText": "無標籤"
+            }
+        },
+        "MuiAutocomplete": {
+            "defaultProps": {
+                "clearText": "清空",
+                "closeText": "關閉",
+                "loadingText": "載入中…",
+                "noOptionsText": "沒有可用選項",
+                "openText": "打開"
+            }
+        },
+        "MuiAlert": {
+            "defaultProps": {
+                "closeText": "關閉"
+            }
+        },
+        "MuiPagination": {
+            "defaultProps": {
+                "aria-label": "分頁導航"
+            }
+        }
     },
-    "MuiRating": {
-      "defaultProps": {
-        "emptyLabelText": "無標籤"
-      }
+    "common": {
+        "viewDemo": "查看演示 →",
+        "loading": "載入中...",
+        "error": "發生錯誤",
+        "retry": "重試",
+        "back": "返回",
+        "next": "下一步",
+        "prev": "上一步",
+        "submit": "提交",
+        "cancel": "取消",
+        "confirm": "確認",
+        "close": "關閉",
+        "save": "儲存",
+        "delete": "刪除",
+        "edit": "編輯",
+        "search": "搜尋",
+        "noData": "無資料"
     },
-    "MuiAutocomplete": {
-      "defaultProps": {
-        "clearText": "清空",
-        "closeText": "關閉",
-        "loadingText": "載入中…",
-        "noOptionsText": "沒有可用選項",
-        "openText": "打開"
-      }
-    },
-    "MuiAlert": {
-      "defaultProps": {
-        "closeText": "關閉"
-      }
+    "pages": {
+        "home": {
+            "heroTitle": "Parker's Next.js Lab",
+            "heroSubtitle": "探索現代前端技術 — WebRTC、AI 換臉、PWA、Firebase 等實驗性功能",
+            "categories": {
+                "customComponents": {
+                    "title": "🎨 自訂組件",
+                    "description": "表單、導航、展示等可重用 UI 組件"
+                },
+                "realtime": {
+                    "title": "📡 即時通訊",
+                    "description": "WebSocket、SSE、WebRTC 通訊技術"
+                },
+                "aiDevice": {
+                    "title": "🤖 AI & 裝置",
+                    "description": "AI 換臉、攝影機、麥克風等裝置整合"
+                },
+                "devTools": {
+                    "title": "🛠️ 開發工具",
+                    "description": "CSS 繪圖、Vue 指令效果等實驗"
+                }
+            },
+            "links": {
+                "components": {
+                    "label": "組件庫",
+                    "description": "20+ 可重用 UI 組件"
+                }
+            }
+        },
+        "components": {
+            "title": "🎨 組件庫",
+            "subtitle": "{count} 個可重用的 React UI 組件",
+            "categories": {
+                "form": "表單元件",
+                "display": "展示元件",
+                "navigation": "導航元件",
+                "scroll": "滾動元件",
+                "richMedia": "富媒體元件"
+            },
+            "items": {
+                "selector": "自訂下拉選單組件",
+                "phoneInput": "國際電話號碼輸入",
+                "imageUpload": "圖片上傳與預覽",
+                "switchButton": "開關切換按鈕",
+                "banner": "輪播廣告橫幅",
+                "qrCode": "QR Code 生成器",
+                "countdown": "多格式倒數計時",
+                "skeletonLoader": "載入骨架動畫",
+                "tabs": "多功能分頁組件",
+                "slideInPanel": "側邊滑入面板",
+                "dialog": "模態對話框",
+                "drawer": "抽屜式導航",
+                "goTop": "返回頂部按鈕",
+                "scrollFetch": "下拉刷新與無限滾動",
+                "virtualScroller": "虛擬滾動列表",
+                "swiper": "自訂輪播滑塊",
+                "swiperJS": "Swiper.js 整合",
+                "youtube": "YouTube 播放器嵌入",
+                "wangEditor": "富文本編輯器",
+                "enterLabel": "打字機動畫效果"
+            },
+            "stats": {
+                "uiComponents": "UI 組件",
+                "categories": "組件分類",
+                "typescript": "TypeScript"
+            }
+        },
+        "cssDrawing": {
+            "heroTitle": "CSS 繪圖 & Anime.js",
+            "heroSubtitle": "探索純 CSS 圖形繪製與 anime.js 動畫整合"
+        },
+        "firebase": {
+            "heroTitle": "Firebase 測試",
+            "heroSubtitle": "Firebase Authentication、Firestore、Cloud Messaging 等功能測試",
+            "description": "原本在電子履歷中實作並測試的功能，由於該專案並沒有實作 PWA 等需要 Service Worker 的功能，因此在此專案嘗試整合 Service Worker 並做測試",
+            "resumeLink": "電子履歷 →"
+        },
+        "directiveEffects": {
+            "heroTitle": "Vue Directive Effects",
+            "heroSubtitle": "在 React 中重現 Vue Directives 的效果"
+        },
+        "sseTest": {
+            "heroTitle": "Server-Sent Events 測試",
+            "heroSubtitle": "測試 SSE 單向即時通訊功能"
+        },
+        "socketTest": {
+            "heroTitle": "WebSocket 測試",
+            "heroSubtitle": "測試原生 WebSocket 與 Socket.IO 即時通訊",
+            "description": "紀錄原生 WebSocket 以及由 socket.io 實作的結果"
+        },
+        "offline": {
+            "title": "目前離線",
+            "description": "請檢查您的網路連線",
+            "retryButton": "重試連線"
+        }
     }
-  }
 }
