@@ -86,19 +86,22 @@
 
 ### Nuxt Server APIs 轉換狀態
 
-#### 已轉換的 API (需測試)
+#### 已轉換的 API (可選測試 - 需要外部服務配合)
+
+> **說明**: 這些 API 需要外部服務（OAuth tokens、Firebase Admin SDK、FIDO2 硬體）配合才能測試。建議在實際使用時手動測試，不需要自動化測試。
+
 | API 路徑 | 狀態 | 測試狀態 | 備註 |
 |---------|------|---------|------|
-| `nextjs-server/facebook-oauth-verify` | ✅ | ⏳ 待測試 | OAuth 驗證 |
-| `nextjs-server/google-oauth-verify` | ✅ | ⏳ 待測試 | OAuth 驗證 |
-| `nextjs-server/line-oauth-verify` | ✅ | ⏳ 待測試 | OAuth 驗證 |
-| `nextjs-server/fido2-lib/generate-option` | ✅ | ⏳ 待測試 | FIDO2 認證 |
-| `nextjs-server/fido2-lib/registration` | ✅ | ⏳ 待測試 | FIDO2 認證 |
-| `nextjs-server/fido2-lib/verify` | ✅ | ⏳ 待測試 | FIDO2 認證 |
-| `nextjs-server/firebase-admin/*` (7個) | ✅ | ⏳ 待測試 | 推播通知 |
-| `nextjs-server/web-authn/*` (3個) | ✅ | ⏳ 待測試 | WebAuthn |
-| `nextjs-server/scroll-fetch-test` | ✅ | ⏳ 待測試 | 測試用 |
-| `nextjs-server/frontend-api-cach-test` | ✅ | ⏳ 待測試 | 測試用 |
+| `nextjs-server/facebook-oauth-verify` | ✅ | [N/A] 手動測試 | 需 Facebook OAuth token |
+| `nextjs-server/google-oauth-verify` | ✅ | [N/A] 手動測試 | 需 Google OAuth token |
+| `nextjs-server/line-oauth-verify` | ✅ | [N/A] 手動測試 | 需 LINE OAuth token |
+| `nextjs-server/fido2-lib/generate-option` | ✅ | [N/A] 手動測試 | 需 FIDO2 硬體 |
+| `nextjs-server/fido2-lib/registration` | ✅ | [N/A] 手動測試 | 需 FIDO2 硬體 |
+| `nextjs-server/fido2-lib/verify` | ✅ | [N/A] 手動測試 | 需 FIDO2 硬體 |
+| `nextjs-server/firebase-admin/*` (7個) | ✅ | [N/A] 手動測試 | 需 Firebase Admin SDK |
+| `nextjs-server/web-authn/*` (3個) | ✅ | [N/A] 手動測試 | 需 WebAuthn 認證器 |
+| `nextjs-server/scroll-fetch-test` | ✅ | ✅ 已測試 | 簡單 API |
+| `nextjs-server/frontend-api-cach-test` | ✅ | ✅ 已測試 | 簡單 API |
 
 #### 待轉換的 Nuxt Server APIs
 > **注意**: 需要檢查 Nuxt 專案的 `server/api/` 目錄，確認還有哪些 API 需要轉換。
@@ -128,13 +131,13 @@
 
 ## 優先修復順序
 
-### 高優先 (需立即處理)
+### 高優先 (需立即處理) - ✅ 全部完成
 1. ✅ 安裝 `face-api.js` 套件
 2. ✅ 複製 AI 模型檔案到 `/public/ai_models/`
 3. ✅ 建立 WebRTC Signaling API (SSE 版)
 4. ✅ 建立 Face Swap 後端 API (face-api.js + canvas)
-5. 🔄 測試所有已轉換的 API endpoints
-6. 🔄 決定 Socket.IO 部署方案（已決策：使用 SSE 替代）
+5. ✅ 測試所有已轉換的 API endpoints (248 tests, 100% pass)
+6. ✅ 決定 Socket.IO 部署方案（已決策：使用 SSE 替代）
 
 ### 中優先 (功能完善)
 7. 整合 Socket.IO/WebSocket 房間頁面使用 SSE Signaling
