@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import style from './page.module.scss';
 import '../page.scss';
 
@@ -7,13 +8,22 @@ const GoTopClient = dynamic(() => import('@/components/Demo/GoTop'));
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('pages.componentPages.goTop');
   return {
-    title: 'GoTop 回到頂部測試',
-    description: '向下滾動頁面,當滾動超過 100px 時會出現回到頂部按鈕'
+    title: t('title'),
+    description: t('description')
   };
 }
 
-export default function GoTopTestPage() {
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export default async function GoTopTestPage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations('pages.componentPages.goTop');
+
   const content = Array.from(
     { length: 50 },
     (_, i) =>
@@ -23,9 +33,9 @@ export default function GoTopTestPage() {
   return (
     <div className={style.go_top_test_page}>
       <GTMScnOpen />
-      <h1>GoTop 回到頂部測試</h1>
+      <h1>{t('title')}</h1>
       <p className={style['go_top_test_page-description']}>
-        向下滾動頁面,當滾動超過 100px 時會出現回到頂部按鈕
+        {t('description')}
       </p>
 
       <div className={style['go_top_test_page-section']}>

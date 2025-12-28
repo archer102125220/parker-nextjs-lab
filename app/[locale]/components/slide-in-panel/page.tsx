@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import style from './page.module.scss';
 
 const SlideInPanelTest = dynamic(
@@ -7,18 +8,27 @@ const SlideInPanelTest = dynamic(
 );
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('pages.componentPages.slideInPanel');
   return {
-    title: 'SlideInPanel 滑入通知面板測試',
-    description: '展示滑入通知面板的各種類型'
+    title: t('title'),
+    description: t('description')
   };
 }
 
-export default function SlideInPanelPage() {
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export default async function SlideInPanelPage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations('pages.componentPages.slideInPanel');
+
   return (
     <div className={style.slide_in_panel_test_page}>
-      <h1>SlideInPanel 滑入通知面板測試</h1>
+      <h1>{t('title')}</h1>
       <p className={style['slide_in_panel_test_page-description']}>
-        展示滑入通知面板的各種類型
+        {t('description')}
       </p>
       <SlideInPanelTest />
     </div>

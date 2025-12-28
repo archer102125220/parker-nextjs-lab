@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import Image from 'next/image';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { DefaultLayout } from '@/layout/default';
 import styles from './page.module.scss';
@@ -12,9 +13,10 @@ import {
 } from './data';
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('pages.about');
   return {
-    title: '關於本站',
-    description: 'Parker Next.js Lab - 關於本站'
+    title: t('heroTitle'),
+    description: t('heroSubtitle')
   };
 }
 
@@ -26,7 +28,10 @@ export default async function AboutPage(
   props: AboutPageProps
 ): Promise<ReactNode> {
   const { locale } = await props.params;
+  setRequestLocale(locale);
+
   const nonce = (await headers()).get('x-nonce') || '';
+  const t = await getTranslations('pages.about');
 
   // Get content based on locale
   const data: Section[] =
@@ -46,7 +51,7 @@ export default async function AboutPage(
 
         {data.length === 0 ? (
           <div className={styles['about_page-error']}>
-            <p>無法載入內容，請稍後再試。</p>
+            <p>{t('loadError')}</p>
           </div>
         ) : (
           <>

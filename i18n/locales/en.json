@@ -138,6 +138,88 @@
                 "typescript": "TypeScript"
             }
         },
+        "componentPages": {
+            "bannerDemo": {
+                "title": "Banner Carousel Test",
+                "description": "Demonstrating 3D carousel, drag support, keyboard navigation and autoplay"
+            },
+            "selector": {
+                "title": "Selector Dropdown Test",
+                "description": "Demonstrating dropdown select with various usage and customizations"
+            },
+            "phoneInput": {
+                "title": "PhoneInput Component Test",
+                "description": "Demonstrating international phone number input and validation"
+            },
+            "imageUpload": {
+                "title": "ImageUpload Component Test",
+                "description": "Demonstrating image upload, preview and cropping"
+            },
+            "switchButton": {
+                "title": "SwitchButton Component Test",
+                "description": "Demonstrating toggle switch button states"
+            },
+            "qrCode": {
+                "title": "QR Code Generator Test",
+                "description": "Demonstrating QR Code generation with custom styles"
+            },
+            "countdown": {
+                "title": "Countdown Component Test",
+                "description": "Demonstrating flip animation countdown/count-up timer"
+            },
+            "skeletonLoader": {
+                "title": "SkeletonLoader Component Test",
+                "description": "Demonstrating skeleton loading animation"
+            },
+            "tabs": {
+                "title": "Tabs Component Test",
+                "description": "Demonstrating multi-functional tab switching"
+            },
+            "slideInPanel": {
+                "title": "SlideInPanel Component Test",
+                "description": "Demonstrating side slide-in panel animation"
+            },
+            "dialog": {
+                "title": "Dialog Component Test",
+                "description": "Demonstrating modal dialog usage"
+            },
+            "drawer": {
+                "title": "Drawer Navigation Test",
+                "description": "Demonstrating drawer navigation animation"
+            },
+            "goTop": {
+                "title": "GoTop Component Test",
+                "description": "Demonstrating smooth scroll to top"
+            },
+            "scrollFetch": {
+                "title": "ScrollFetch Component Test",
+                "description": "Demonstrating pull-to-refresh and infinite scroll"
+            },
+            "virtualScroller": {
+                "title": "VirtualScroller Component Test",
+                "description": "Demonstrating virtual scrolling for large datasets"
+            },
+            "swiper": {
+                "title": "Swiper Custom Component Test",
+                "description": "Demonstrating custom carousel slider"
+            },
+            "swiperJS": {
+                "title": "SwiperJS Integration Test",
+                "description": "Demonstrating Swiper.js library integration"
+            },
+            "youtube": {
+                "title": "YouTube Player Test",
+                "description": "Demonstrating YouTube video embedding and control"
+            },
+            "wangEditor": {
+                "title": "WangEditor Rich Text Test",
+                "description": "Demonstrating rich text editor functionality"
+            },
+            "enterLabel": {
+                "title": "EnterLabel Typewriter Test",
+                "description": "Demonstrating typewriter animation effect"
+            }
+        },
         "cssDrawing": {
             "heroTitle": "CSS Drawing Lab",
             "heroSubtitle": "Explore pure CSS graphics and anime.js animation integration",
@@ -206,6 +288,11 @@
             "heroTitle": "WebSocket Test",
             "heroSubtitle": "Testing native WebSocket and Socket.IO real-time communication",
             "description": "Recording results of native WebSocket and socket.io implementations"
+        },
+        "about": {
+            "heroTitle": "About",
+            "heroSubtitle": "Parker Next.js Lab - About This Site",
+            "loadError": "Unable to load content, please try again later."
         },
         "offline": {
             "title": "You are offline",

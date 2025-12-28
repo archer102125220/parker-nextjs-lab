@@ -1,18 +1,27 @@
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import style from './page.module.scss';
 
 const SelectorTestClient = dynamic(() => import('@/components/Demo/SelectorTest'));
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('pages.componentPages.selector');
   return {
-    title: 'Selector 下拉選單組件測試',
-    description: '展示下拉選單的各種用法和自訂功能'
+    title: t('title'),
+    description: t('description')
   };
 }
 
-export default function SelectorPage() {
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export default async function SelectorPage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   return (
     <div className={style.selector_test_page}>
       <GTMScnOpen />

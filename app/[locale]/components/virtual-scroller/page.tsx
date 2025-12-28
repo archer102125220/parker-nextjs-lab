@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import style from './page.module.scss';
 
 const VirtualScrollerTest = dynamic(
@@ -7,18 +8,27 @@ const VirtualScrollerTest = dynamic(
 );
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('pages.componentPages.virtualScroller');
   return {
-    title: 'Virtual Scroller 虛擬滾動測試',
-    description: '虛擬滾動技術,只渲染可見區域的項目,大幅提升大量數據的渲染性能'
+    title: t('title'),
+    description: t('description')
   };
 }
 
-export default function VirtualScrollerTestPage() {
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export default async function VirtualScrollerTestPage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations('pages.componentPages.virtualScroller');
+
   return (
     <div className={style.virtual_scroller_test_page}>
-      <h1>Virtual Scroller 虛擬滾動測試</h1>
+      <h1>{t('title')}</h1>
       <p className={style['virtual_scroller_test_page-description']}>
-        虛擬滾動技術,只渲染可見區域的項目,大幅提升大量數據的渲染性能
+        {t('description')}
       </p>
       <VirtualScrollerTest />
     </div>

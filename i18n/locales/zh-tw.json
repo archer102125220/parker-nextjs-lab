@@ -138,6 +138,88 @@
                 "typescript": "TypeScript"
             }
         },
+        "componentPages": {
+            "bannerDemo": {
+                "title": "Banner 輪播組件測試",
+                "description": "展示 3D 輪播效果、拖曳支援、鍵盤導航和自動播放功能"
+            },
+            "selector": {
+                "title": "Selector 下拉選單組件測試",
+                "description": "展示下拉選單的各種用法和自訂功能"
+            },
+            "phoneInput": {
+                "title": "PhoneInput 電話輸入組件測試",
+                "description": "展示國際電話號碼輸入與驗證"
+            },
+            "imageUpload": {
+                "title": "ImageUpload 圖片上傳組件測試",
+                "description": "展示圖片上傳、預覽和裁切功能"
+            },
+            "switchButton": {
+                "title": "SwitchButton 開關按鈕組件測試",
+                "description": "展示開關切換按鈕的各種狀態"
+            },
+            "qrCode": {
+                "title": "QR Code 生成器測試",
+                "description": "展示 QR Code 生成與自訂樣式"
+            },
+            "countdown": {
+                "title": "Countdown 倒數計時組件測試",
+                "description": "展示翻牌動畫效果的倒數/正數計時器"
+            },
+            "skeletonLoader": {
+                "title": "SkeletonLoader 骨架載入組件測試",
+                "description": "展示載入中骨架動畫效果"
+            },
+            "tabs": {
+                "title": "Tabs 分頁組件測試",
+                "description": "展示多功能分頁切換組件"
+            },
+            "slideInPanel": {
+                "title": "SlideInPanel 側邊滑入面板測試",
+                "description": "展示側邊滑入面板動畫效果"
+            },
+            "dialog": {
+                "title": "Dialog 對話框組件測試",
+                "description": "展示模態對話框的各種用法"
+            },
+            "drawer": {
+                "title": "Drawer 抽屜導航組件測試",
+                "description": "展示抽屜式導航動畫效果"
+            },
+            "goTop": {
+                "title": "GoTop 返回頂部組件測試",
+                "description": "展示平滑滾動返回頂部功能"
+            },
+            "scrollFetch": {
+                "title": "ScrollFetch 滾動載入組件測試",
+                "description": "展示下拉刷新與無限滾動功能"
+            },
+            "virtualScroller": {
+                "title": "VirtualScroller 虛擬滾動組件測試",
+                "description": "展示大量資料虛擬滾動優化"
+            },
+            "swiper": {
+                "title": "Swiper 自訂輪播組件測試",
+                "description": "展示自訂輪播滑塊功能"
+            },
+            "swiperJS": {
+                "title": "SwiperJS 整合測試",
+                "description": "展示 Swiper.js 庫整合效果"
+            },
+            "youtube": {
+                "title": "YouTube 播放器組件測試",
+                "description": "展示 YouTube 影片嵌入和控制"
+            },
+            "wangEditor": {
+                "title": "WangEditor 富文本編輯器測試",
+                "description": "展示富文本編輯器功能"
+            },
+            "enterLabel": {
+                "title": "EnterLabel 打字機動畫測試",
+                "description": "展示打字機動畫效果"
+            }
+        },
         "cssDrawing": {
             "heroTitle": "CSS 繪圖實驗室",
             "heroSubtitle": "探索純 CSS 圖形繪製與 anime.js 動畫整合",
@@ -206,6 +288,11 @@
             "heroTitle": "WebSocket 測試",
             "heroSubtitle": "測試原生 WebSocket 與 Socket.IO 即時通訊",
             "description": "紀錄原生 WebSocket 以及由 socket.io 實作的結果"
+        },
+        "about": {
+            "heroTitle": "關於本站",
+            "heroSubtitle": "Parker Next.js Lab - 關於本站",
+            "loadError": "無法載入內容，請稍後再試。"
         },
         "offline": {
             "title": "目前離線",
