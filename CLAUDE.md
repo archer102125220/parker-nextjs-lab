@@ -99,5 +99,6 @@ async function Page({ params }: Props) {
 - This applies to ALL lint suppression mechanisms
 
 ## Full Documentation
-- English: [docs/coding-standards.md](docs/coding-standards.md)
-- 繁體中文: [docs/coding-standards.zh-tw.md](docs/coding-standards.zh-tw.md)
+- English: [docs/guides/coding-standards.md](docs/guides/coding-standards.md)
+- 繁體中文: [docs/guides/coding-standards.zh-tw.md](docs/guides/coding-standards.zh-tw.md)
+- 問題排解: [docs/guides/troubleshooting.md](docs/guides/troubleshooting.md)

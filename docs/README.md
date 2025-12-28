@@ -53,6 +53,11 @@ docs/
 - TypeScript 最佳實踐
 - 組件結構規範
 
+### [troubleshooting.md](./guides/troubleshooting.md)
+**問題排解指南**
+- React DevTools Suspense 邊界錯誤
+- 常見開發問題及解決方案
+
 ---
 
 ## ✅ 已完成的文檔 (completed/)
