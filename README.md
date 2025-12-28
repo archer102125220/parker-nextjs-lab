@@ -309,6 +309,30 @@ Full-page Client Components for feature demonstrations, using PascalCase naming:
 | `useFirebase` | Firebase utilities |
 | `useGTMTrack` | GTM event tracking |
 
+### useLayoutEffect vs useEffect
+
+When synchronizing external props to internal state that affects **visual rendering** (e.g., slider/swiper position), use `useLayoutEffect` instead of `useEffect`:
+
+```tsx
+// ✅ CORRECT: Prevents visual flickering
+useLayoutEffect(() => {
+  setSliderIndex(externalValue);
+}, [externalValue]);
+
+// ❌ WRONG: May cause visual flickering
+useEffect(() => {
+  setSliderIndex(externalValue);
+}, [externalValue]);
+```
+
+| Scenario | Use |
+|----------|-----|
+| Sync props to state affecting **layout/position** | `useLayoutEffect` |
+| Data fetching, subscriptions, timers | `useEffect` |
+| DOM measurements before paint | `useLayoutEffect` |
+
+> ⚠️ **Note**: `useLayoutEffect` runs synchronously before browser paint, so avoid heavy computations.
+
 ## 💎 TypeScript Best Practices
 
 This project follows **strict type safety** standards, completely avoiding the use of `any` types.

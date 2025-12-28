@@ -420,3 +420,48 @@ i18n/
 ├── request.ts        # Request config
 └── routing.ts        # Routing config
 ```
+
+### 5.3 useLayoutEffect vs useEffect (RECOMMENDED)
+
+When synchronizing external props to internal state that affects **visual rendering**, use `useLayoutEffect`:
+
+#### When to use `useLayoutEffect`
+
+```tsx
+// ✅ CORRECT: Prevents visual flickering during slider/swiper transitions
+useLayoutEffect(() => {
+  setSliderIndex(externalValue);
+}, [externalValue]);
+```
+
+**Use cases:**
+- Slider/Swiper position sync
+- Animation state initialization  
+- DOM measurements before paint
+- Any state sync that affects layout/position
+
+#### When to use `useEffect`
+
+```tsx
+// ✅ CORRECT: For non-visual side effects
+useEffect(() => {
+  fetchData();
+  subscribeToEvents();
+}, [dependencies]);
+```
+
+**Use cases:**
+- Data fetching
+- Event subscriptions
+- Timers and intervals
+- Analytics tracking
+
+#### Key Differences
+
+| Aspect | `useEffect` | `useLayoutEffect` |
+|--------|-------------|-------------------|
+| Timing | After browser paint | Before browser paint |
+| Execution | Asynchronous | Synchronous |
+| Blocks UI | No | Yes |
+
+> ⚠️ **Warning**: `useLayoutEffect` runs synchronously and blocks the browser from painting. Avoid heavy computations.

@@ -411,7 +411,6 @@ export default MyPage;
 
 #### 語系檔案位置
 
-```
 i18n/
 ├── locales/
 │   ├── zh-tw.json   # 繁體中文（預設）
@@ -420,3 +419,48 @@ i18n/
 ├── request.ts        # Request 配置
 └── routing.ts        # 路由配置
 ```
+
+### 5.3 useLayoutEffect vs useEffect (建議)
+
+當需要將外部 props 同步到影響**視覺渲染**的內部 state 時，使用 `useLayoutEffect`：
+
+#### 何時使用 `useLayoutEffect`
+
+```tsx
+// ✅ 正確：防止滑動器/輪播切換時的視覺閃爍
+useLayoutEffect(() => {
+  setSliderIndex(externalValue);
+}, [externalValue]);
+```
+
+**適用場景：**
+- 滑動器/輪播位置同步
+- 動畫狀態初始化
+- 繪製前的 DOM 測量
+- 任何影響版面/位置的 state 同步
+
+#### 何時使用 `useEffect`
+
+```tsx
+// ✅ 正確：用於非視覺副作用
+useEffect(() => {
+  fetchData();
+  subscribeToEvents();
+}, [dependencies]);
+```
+
+**適用場景：**
+- 資料獲取
+- 事件訂閱
+- 計時器和間隔
+- 分析追蹤
+
+#### 關鍵差異
+
+| 面向 | `useEffect` | `useLayoutEffect` |
+|------|-------------|-------------------|
+| 執行時機 | 瀏覽器繪製後 | 瀏覽器繪製前 |
+| 執行方式 | 非同步 | 同步 |
+| 阻塞 UI | 否 | 是 |
+
+> ⚠️ **警告**：`useLayoutEffect` 同步執行並會阻塞瀏覽器繪製。避免執行繁重的計算。

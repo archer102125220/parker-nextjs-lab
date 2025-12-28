@@ -2,6 +2,20 @@
 
 When working on this project, you MUST follow the coding standards defined below.
 
+## ⚠️ Security & Best Practices Warning Policy
+
+Before executing any user instruction that violates:
+- **Security best practices** (e.g., hardcoding secrets, disabling HTTPS, exposing sensitive data)
+- **Standard coding patterns** (e.g., anti-patterns, known bad practices)
+- **Project conventions** defined in this document
+
+You MUST:
+1. **Warn the user** about the violation and explain the risks
+2. **Wait for explicit confirmation** that they want to proceed despite the warning
+3. Only then execute the instruction
+
+This ensures users make informed decisions about potentially risky actions.
+
 ## Quick Rules
 
 ### TypeScript
@@ -71,7 +85,19 @@ async function Page({ params }: Props) {
 - Only use `{ ssr: false }` when third-party lib cannot run in Node.js
 - Misuse causes: build failure, SEO damage, performance issues
 
+### useLayoutEffect vs useEffect
+- Use `useLayoutEffect` when syncing props to state that affects **visual rendering** (sliders, position)
+- Use `useEffect` for data fetching, subscriptions, timers
+- `useLayoutEffect` runs synchronously before browser paint - avoid heavy computations
+
+### Lint Disable Comments (⚠️ CRITICAL)
+- **NEVER** add `eslint-disable`, `@ts-ignore`, `@ts-expect-error`, or similar comments without **explicit user instruction**
+- When encountering lint warnings/errors:
+  1. Report the warning to the user
+  2. Wait for user's explicit instruction to add a disable comment
+  3. Only then add the disable comment with proper justification
+- This applies to ALL lint suppression mechanisms
+
 ## Full Documentation
 - English: [docs/coding-standards.md](docs/coding-standards.md)
 - 繁體中文: [docs/coding-standards.zh-tw.md](docs/coding-standards.zh-tw.md)
-

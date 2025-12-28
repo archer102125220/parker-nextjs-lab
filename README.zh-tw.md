@@ -309,6 +309,30 @@ tests/         # Playwright E2E 測試（12 測試）
 | `useFirebase` | Firebase 工具 |
 | `useGTMTrack` | GTM 事件追蹤 |
 
+### useLayoutEffect vs useEffect
+
+當需要將外部 props 同步到內部 state 且會影響**視覺渲染**時（例如：滑動器/輪播位置），使用 `useLayoutEffect` 而非 `useEffect`：
+
+```tsx
+// ✅ 正確：防止視覺閃爍
+useLayoutEffect(() => {
+  setSliderIndex(externalValue);
+}, [externalValue]);
+
+// ❌ 錯誤：可能導致視覺閃爍
+useEffect(() => {
+  setSliderIndex(externalValue);
+}, [externalValue]);
+```
+
+| 情境 | 使用 |
+|------|------|
+| 同步 props 到影響**版面/位置**的 state | `useLayoutEffect` |
+| 資料獲取、訂閱、計時器 | `useEffect` |
+| 繪製前的 DOM 測量 | `useLayoutEffect` |
+
+> ⚠️ **注意**：`useLayoutEffect` 在瀏覽器繪製前同步執行，因此避免執行繁重的計算。
+
 ## 💎 TypeScript 最佳實踐
 
 本專案採用**嚴格的型別安全**標準，完全避免使用 `any` 型別。

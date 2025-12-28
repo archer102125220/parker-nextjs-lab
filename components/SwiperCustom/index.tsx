@@ -4,6 +4,7 @@ import {
   useRef,
   useState,
   useEffect,
+  useLayoutEffect,
   useCallback,
   useMemo,
   ReactNode,
@@ -146,6 +147,7 @@ export function SwiperCustom({
   const [isDragging, setIsDragging] = useState(false);
   const [isSliderMoving, setIsSliderMoving] = useState(false);
   const [currentDeltaX, setCurrentDeltaX] = useState(0);
+  const [contentWidth, setContentWidth] = useState(1);
 
   // Refs for event handler values (to avoid stale closures)
   const isDraggingRef = useRef(false);
@@ -184,23 +186,34 @@ export function SwiperCustom({
   );
 
   // Update active index when value changes
-  useEffect(() => {
+  useLayoutEffect(() => {
     const swiperIndex = getCurrentSwiperIndex(value, slideList);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSliderActiveIndex(swiperIndex);
     sliderActiveIndexRef.current = swiperIndex;
   }, [value, slideList, getCurrentSwiperIndex]);
 
-  // Get content width for calculations
-  const getContentWidth = useCallback(() => {
-    return sliderContentRef.current?.clientWidth || 1;
+  // Update content width from ref (only in effects, not during render)
+  useEffect(() => {
+    const updateWidth = () => {
+      const width = sliderContentRef.current?.clientWidth || 1;
+      setContentWidth(width);
+    };
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
   }, []);
+
+  // Get content width for calculations (returns state value, not ref)
+  const getContentWidth = useCallback(() => {
+    return contentWidth;
+  }, [contentWidth]);
 
   // Calculate slide X positions
   const getSlideXList = useCallback(() => {
     if (!Array.isArray(slideList)) return [];
-    const contentWidth = getContentWidth();
     return slideList.map((_, index) => index * contentWidth * -1);
-  }, [slideList, getContentWidth]);
+  }, [slideList, contentWidth]);
 
   // Calculate current deltaX based on dragging state
   const calculateDeltaX = useCallback(() => {
@@ -505,9 +518,16 @@ export function SwiperCustom({
           onMouseDown={handleChangeStart}
           onTouchStart={handleChangeStart}
         >
-          {slideList.map((slide, index) => (
+          {slideList.map((slide, index) => {
+            const slotKey = slotNameKey ? slide[slotNameKey] : undefined;
+            const keyValue = (typeof slotKey === 'string' || typeof slotKey === 'number')
+              ? slotKey
+              : (typeof slide.slotName === 'string' || typeof slide.slotName === 'number')
+                ? slide.slotName
+                : index;
+            return (
             <div
-              key={slide[slotNameKey ?? ''] ?? slide.slotName ?? index}
+              key={keyValue}
               className="swiper_custom-content-wrapper-slide"
             >
               <div className="swiper_custom-content-wrapper-slide-center">
@@ -516,7 +536,8 @@ export function SwiperCustom({
                 </div>
               </div>
             </div>
-          ))}
+          );
+          })}
         </div>
       </div>
     </div>
