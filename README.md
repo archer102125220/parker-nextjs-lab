@@ -1,5 +1,7 @@
 # Parker's Next.js Laboratory
 
+[![GitHub](https://img.shields.io/badge/GitHub-parker--nextjs--lab-blue?logo=github)](https://github.com/archer102125220/parker-nextjs-lab)
+
 [繁體中文說明](./README.zh-tw.md)
 
 A comprehensive Next.js laboratory project showcasing modern web development practices, internationalization, Firebase integration, and custom component libraries.

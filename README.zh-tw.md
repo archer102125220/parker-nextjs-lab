@@ -1,5 +1,7 @@
 # Parker 的 Next.js 實驗室
 
+[![GitHub](https://img.shields.io/badge/GitHub-parker--nextjs--lab-blue?logo=github)](https://github.com/archer102125220/parker-nextjs-lab)
+
 [English README](./README.md)
 
 一個展示現代網頁開發實踐的綜合性 Next.js 實驗室專案，包含國際化、Firebase 整合和自定義組件庫。

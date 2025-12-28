@@ -49,7 +49,7 @@ export function Footer(props: FooterProps): ReactNode {
           variant="body2"
           color="text.secondary"
           align="center"
-          className="footer-text"
+          className="footer-content-text"
           nonce={clientNonce}
           sx={{ mb: 1 }}
         >
@@ -59,12 +59,21 @@ export function Footer(props: FooterProps): ReactNode {
           variant="body2"
           color="text.secondary"
           align="center"
-          className="footer-links"
+          className="footer-content-link_list"
           nonce={clientNonce}
         >
-          <Link href="/about" className="footer-link">
+          <Link href="/about" className="footer-content-link_list-link">
             關於本站
           </Link>
+          <span className="footer-content-link_list-separator">|</span>
+          <a
+            href="https://github.com/archer102125220/parker-nextjs-lab"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-content-link_list-link"
+          >
+            GitHub
+          </a>
         </Typography>
       </div>
     </Box>

@@ -10,21 +10,27 @@
         max-width: 1200px;
         margin: 0 auto;
         text-align: center;
-    }
 
-    &-text {
-        font-size: 0.875rem;
-        color: var(--footer-text-color, rgba(0, 0, 0, 0.6));
-        margin: 0;
-    }
+        &-text {
+            font-size: 0.875rem;
+            color: var(--footer-text-color, rgba(0, 0, 0, 0.6));
+            margin: 0;
+        }
 
-    &-link {
-        color: inherit;
-        text-decoration: underline;
-        transition: opacity 0.2s;
+        &-link_list {
+            &-link {
+                color: inherit;
+                text-decoration: underline;
+                transition: opacity 0.2s;
 
-        &:hover {
-            opacity: 0.7;
+                &:hover {
+                    opacity: 0.7;
+                }
+            }
+
+            &-separator {
+                margin: 0 8px;
+            }
         }
     }
 
