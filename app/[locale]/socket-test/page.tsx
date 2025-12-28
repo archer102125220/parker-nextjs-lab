@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import dynamic from 'next/dynamic';
 import styles from './page.module.scss';
 
@@ -7,13 +8,21 @@ const SocketTestIndex = dynamic(
 );
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('pages.socketTest');
   return {
-    title: 'Socket 測試列表',
-    description: '紀錄原生 WebSocket 以及由 socket.io 實作的結果'
+    title: t('heroTitle'),
+    description: t('heroSubtitle')
   };
 }
 
-export default function SocketTestPage() {
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export default async function SocketTestPage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   return (
     <section className={styles.socket_test_page}>
       <SocketTestIndex />

@@ -145,7 +145,37 @@
 - `yarn seed` - 載入範例資料到資料庫
 
 ### 國際化
+
+**指令：**
 - `yarn create-i18n` - 從 Google Sheets 產生 i18n 檔案
+
+**在 App Router 中使用 `next-intl` 4.x：**
+
+本專案使用 `next-intl` 4.x 進行國際化。當建立使用翻譯的 Server Components 頁面時，**必須**在使用任何翻譯函式前調用 `setRequestLocale(locale)`。
+
+```tsx
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+async function MyPage({ params }: Props) {
+  const { locale } = await params;
+  
+  // 必要：在使用翻譯前設定 locale
+  setRequestLocale(locale);
+  
+  const t = await getTranslations('pages.myPage');
+  return <h1>{t('title')}</h1>;
+}
+```
+
+> ⚠️ **重要**：若未調用 `setRequestLocale`，Server Components 將無法取得正確的語系，翻譯會回退到預設語言。
+
+**語系檔案位置：**
+- `i18n/locales/zh-tw.json` - 繁體中文（預設）
+- `i18n/locales/en.json` - 英文
 
 ### 測試與效能
 

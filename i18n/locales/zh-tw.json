@@ -65,29 +65,39 @@
         "home": {
             "heroTitle": "Parker's Next.js Lab",
             "heroSubtitle": "探索現代前端技術 — WebRTC、AI 換臉、PWA、Firebase 等實驗性功能",
-            "categories": {
-                "customComponents": {
-                    "title": "🎨 自訂組件",
-                    "description": "表單、導航、展示等可重用 UI 組件"
-                },
-                "realtime": {
-                    "title": "📡 即時通訊",
-                    "description": "WebSocket、SSE、WebRTC 通訊技術"
-                },
-                "aiDevice": {
-                    "title": "🤖 AI & 裝置",
-                    "description": "AI 換臉、攝影機、麥克風等裝置整合"
-                },
-                "devTools": {
-                    "title": "🛠️ 開發工具",
-                    "description": "CSS 繪圖、Vue 指令效果等實驗"
-                }
+            "sections": {
+                "customComponents": "🎨 自訂組件",
+                "realtime": "🔌 即時通訊",
+                "aiDevice": "🤖 AI & 裝置",
+                "devTools": "🔧 開發工具"
             },
             "links": {
-                "components": {
-                    "label": "組件庫",
-                    "description": "20+ 可重用 UI 組件"
-                }
+                "components": "組件庫",
+                "componentsDesc": "20+ 可重用 UI 組件",
+                "cssDrawing": "CSS 繪圖",
+                "cssDrawingDesc": "純 CSS 圖形與動畫",
+                "directiveEffects": "指令效果",
+                "directiveEffectsDesc": "懶載入、波紋效果",
+                "webRTC": "WebRTC 視訊",
+                "webRTCDesc": "P2P 視訊通話",
+                "socketIO": "Socket.IO",
+                "socketIODesc": "WebSocket 即時通訊",
+                "sse": "SSE 測試",
+                "sseDesc": "Server-Sent Events",
+                "faceSwap": "AI 換臉",
+                "faceSwapDesc": "face-api.js 人臉辨識",
+                "webCam": "相機測試",
+                "webCamDesc": "MediaDevices API",
+                "webAuthn": "WebAuthn",
+                "webAuthnDesc": "生物辨識驗證",
+                "firebase": "Firebase",
+                "firebaseDesc": "推播、認證整合",
+                "hooks": "Hooks 測試",
+                "hooksDesc": "自訂 React Hooks",
+                "route": "路由測試",
+                "routeDesc": "i18n 路由管理",
+                "about": "關於本站",
+                "aboutDesc": "專案資訊"
             }
         },
         "components": {
@@ -129,18 +139,64 @@
             }
         },
         "cssDrawing": {
-            "heroTitle": "CSS 繪圖 & Anime.js",
-            "heroSubtitle": "探索純 CSS 圖形繪製與 anime.js 動畫整合"
+            "heroTitle": "CSS 繪圖實驗室",
+            "heroSubtitle": "探索純 CSS 圖形繪製與 anime.js 動畫整合",
+            "demos": {
+                "triangle": {
+                    "label": "🔺 CSS 三角形",
+                    "description": "使用 border 繪製各方向三角形"
+                },
+                "triangleFull": {
+                    "label": "📐 三角形滿版",
+                    "description": "滿版三角形佈局效果"
+                },
+                "triangleAnime": {
+                    "label": "✨ 三角形動畫",
+                    "description": "結合 anime.js 的動態效果"
+                },
+                "hexagon": {
+                    "label": "⬡ CSS 六邊形",
+                    "description": "純 CSS 繪製蜂巢六邊形"
+                },
+                "svgColor": {
+                    "label": "🎨 SVG 換色",
+                    "description": "動態替換 SVG 圖示顏色"
+                }
+            }
         },
         "firebase": {
-            "heroTitle": "Firebase 測試",
-            "heroSubtitle": "Firebase Authentication、Firestore、Cloud Messaging 等功能測試",
-            "description": "原本在電子履歷中實作並測試的功能，由於該專案並沒有實作 PWA 等需要 Service Worker 的功能，因此在此專案嘗試整合 Service Worker 並做測試",
-            "resumeLink": "電子履歷 →"
+            "heroTitle": "Firebase 整合",
+            "heroSubtitle": "Cloud Messaging、認證、PWA 與 Service Worker 整合測試",
+            "description1": "原本在{link}中實作並測試的功能",
+            "description2": "由於該專案並沒有實作 PWA 等需要 Service Worker 的功能，因此在此專案嘗試整合 Service Worker 並做測試",
+            "resumeLink": "電子履歷 →",
+            "features": {
+                "fcm": "📲 FCM 推播通知",
+                "auth": "🔐 身份認證",
+                "pwa": "⚙️ PWA 整合",
+                "sw": "🔔 Service Worker"
+            },
+            "demos": {
+                "cloudMessaging": {
+                    "label": "📲 FCM 推播通知",
+                    "description": "Firebase Cloud Messaging 推播測試後台"
+                }
+            }
         },
         "directiveEffects": {
-            "heroTitle": "Vue Directive Effects",
-            "heroSubtitle": "在 React 中重現 Vue Directives 的效果"
+            "heroTitle": "Directive Effects",
+            "heroSubtitle": "自訂實作的視覺效果 — 避免套件版本相容性問題",
+            "note": "Vue Directives 在 React 中不存在，這些功能已轉換為 Custom Hooks 或 Components",
+            "demos": {
+                "lazyload": {
+                    "label": "🖼️ 圖片懶載入",
+                    "description": "使用 Intersection Observer API 實現的圖片懶載入效果"
+                },
+                "ripple": {
+                    "label": "💫 點擊波紋",
+                    "description": "仿 Material Design 的按鈕點擊波紋動畫效果"
+                }
+            }
         },
         "sseTest": {
             "heroTitle": "Server-Sent Events 測試",

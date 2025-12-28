@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { Messages } from 'next-intl';
 import { NextIntlClientProvider } from 'next-intl';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -19,15 +20,16 @@ export type BodyProps = {
   children: ReactNode;
   params: Promise<{ locale: string }>;
   locale: string;
+  messages: Messages;
   nonce?: string;
 };
 
 export function Body(props: BodyProps): ReactNode {
-  const { children, params, locale, nonce } = props;
+  const { children, params, locale, messages, nonce } = props;
 
   return (
     <body>
-      <NextIntlClientProvider locale={locale}>
+      <NextIntlClientProvider locale={locale} messages={messages}>
         <ReduxInit params={params} nonce={nonce}>
           <MuiCacheProvider nonce={nonce}>
             <MuiThemeProvider>

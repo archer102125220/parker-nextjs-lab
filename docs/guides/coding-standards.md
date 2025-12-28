@@ -369,3 +369,54 @@ Only in these rare cases:
 3. **Performance Degradation**: Increases first contentful paint (FCP/LCP)
 4. **Layout Shift**: May cause page content to jump
 
+### 5.2 Internationalization (next-intl 4.x) (MANDATORY)
+
+This project uses `next-intl` 4.x for internationalization. **Every page using translations in Server Components MUST follow this pattern:**
+
+#### Required Pattern
+
+```tsx
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+async function MyPage({ params }: Props) {
+  const { locale } = await params;
+  
+  // MANDATORY: Call before any translation functions
+  setRequestLocale(locale);
+  
+  const t = await getTranslations('pages.myPage');
+  return <h1>{t('title')}</h1>;
+}
+
+export default MyPage;
+```
+
+#### Key Rules
+
+| Rule | Description |
+|------|-------------|
+| `setRequestLocale` first | Must be called BEFORE `getTranslations` or `getMessages` |
+| Page must have `params` | Every page needs `params: Promise<{ locale: string }>` |
+| Layout also needs it | `app/[locale]/layout.tsx` must also call `setRequestLocale` |
+
+#### Consequences of Missing `setRequestLocale`
+
+- ❌ Server Components will default to the fallback language (zh-tw)
+- ❌ Language switching from URL (`/en` vs `/zh-tw`) will not work for page content
+- ✅ Client Components (Header, etc.) will still work correctly
+
+#### Language Files Location
+
+```
+i18n/
+├── locales/
+│   ├── zh-tw.json   # Traditional Chinese (default)
+│   └── en.json      # English
+├── navigation.ts     # Navigation utilities
+├── request.ts        # Request config
+└── routing.ts        # Routing config
+```

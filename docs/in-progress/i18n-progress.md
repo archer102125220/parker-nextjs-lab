@@ -7,13 +7,13 @@
 | 項目 | 狀態 | 備註 |
 |------|------|------|
 | 語系包結構建立 | ✅ 完成 | `pages`, `common` 區塊 |
-| 首頁 (`/`) | 🔶 結構完成 | 待整合到 TSX |
-| 組件庫 (`/components`) | 🔶 結構完成 | 待整合到 TSX |
-| CSS 繪圖 (`/css-drawing`) | 🔶 結構完成 | 待整合到 TSX |
-| Firebase (`/firebase`) | 🔶 結構完成 | 待整合到 TSX |
-| Directive Effects | 🔶 結構完成 | 待整合到 TSX |
-| SSE Test | 🔶 結構完成 | 待整合到 TSX |
-| Socket Test | 🔶 結構完成 | 待整合到 TSX |
+| 首頁 (`/`) | ✅ 完成 | Hero, sections, links |
+| 組件庫 (`/components`) | ✅ 完成 | categories, items, stats |
+| CSS 繪圖 (`/css-drawing`) | ✅ 完成 | hero, demos |
+| Firebase (`/firebase`) | ✅ 完成 | hero, features, demos |
+| Directive Effects | ✅ 完成 | hero, note, demos |
+| SSE Test | ✅ 完成 | metadata |
+| Socket Test | ✅ 完成 | metadata |
 | About 頁面 | ⬜ 待處理 | |
 
 ## 組件頁面詳細進度
@@ -96,4 +96,5 @@ i18n/locales/
 
 ## 更新日誌
 
+- **2025-12-28**: 修正 i18n 語系切換問題，所有頁面添加 `setRequestLocale(locale)`
 - **2025-12-27**: 建立語系包結構和進度表

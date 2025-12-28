@@ -3,7 +3,7 @@ import createNextIntlPlugin from 'next-intl/plugin';
 import withSerwistInit from '@serwist/next';
 
 // https://next-intl.dev/docs/getting-started/app-router/with-i18n-routing
-const withNextIntl = createNextIntlPlugin();
+const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 // https://serwist.pages.dev/docs/next/getting-started
 const withSerwist = withSerwistInit({

@@ -65,29 +65,39 @@
         "home": {
             "heroTitle": "Parker's Next.js Lab",
             "heroSubtitle": "Explore modern frontend technologies — WebRTC, AI Face Swap, PWA, Firebase and more",
-            "categories": {
-                "customComponents": {
-                    "title": "🎨 Custom Components",
-                    "description": "Reusable UI components for forms, navigation, and display"
-                },
-                "realtime": {
-                    "title": "📡 Real-time Communication",
-                    "description": "WebSocket, SSE, WebRTC communication technologies"
-                },
-                "aiDevice": {
-                    "title": "🤖 AI & Devices",
-                    "description": "AI face swap, camera, microphone device integration"
-                },
-                "devTools": {
-                    "title": "🛠️ Dev Tools",
-                    "description": "CSS drawing, Vue directive effects experiments"
-                }
+            "sections": {
+                "customComponents": "🎨 Custom Components",
+                "realtime": "🔌 Real-time",
+                "aiDevice": "🤖 AI & Devices",
+                "devTools": "🔧 Dev Tools"
             },
             "links": {
-                "components": {
-                    "label": "Component Library",
-                    "description": "20+ reusable UI components"
-                }
+                "components": "Component Library",
+                "componentsDesc": "20+ reusable UI components",
+                "cssDrawing": "CSS Drawing",
+                "cssDrawingDesc": "Pure CSS graphics & animations",
+                "directiveEffects": "Directive Effects",
+                "directiveEffectsDesc": "Lazy loading, ripple effects",
+                "webRTC": "WebRTC Video",
+                "webRTCDesc": "P2P video calls",
+                "socketIO": "Socket.IO",
+                "socketIODesc": "WebSocket real-time",
+                "sse": "SSE Test",
+                "sseDesc": "Server-Sent Events",
+                "faceSwap": "AI Face Swap",
+                "faceSwapDesc": "face-api.js recognition",
+                "webCam": "Camera Test",
+                "webCamDesc": "MediaDevices API",
+                "webAuthn": "WebAuthn",
+                "webAuthnDesc": "Biometric authentication",
+                "firebase": "Firebase",
+                "firebaseDesc": "Push notifications, auth",
+                "hooks": "Hooks Test",
+                "hooksDesc": "Custom React Hooks",
+                "route": "Route Test",
+                "routeDesc": "i18n routing",
+                "about": "About",
+                "aboutDesc": "Project info"
             }
         },
         "components": {
@@ -102,14 +112,14 @@
             },
             "items": {
                 "selector": "Custom dropdown selector",
-                "phoneInput": "International phone number input",
+                "phoneInput": "International phone input",
                 "imageUpload": "Image upload with preview",
                 "switchButton": "Toggle switch button",
                 "banner": "Carousel banner",
                 "qrCode": "QR Code generator",
-                "countdown": "Multi-format countdown timer",
+                "countdown": "Multi-format countdown",
                 "skeletonLoader": "Skeleton loading animation",
-                "tabs": "Multi-functional tabs component",
+                "tabs": "Multi-functional tabs",
                 "slideInPanel": "Slide-in side panel",
                 "dialog": "Modal dialog",
                 "drawer": "Drawer navigation",
@@ -120,7 +130,7 @@
                 "swiperJS": "Swiper.js integration",
                 "youtube": "YouTube player embed",
                 "wangEditor": "Rich text editor",
-                "enterLabel": "Typewriter animation effect"
+                "enterLabel": "Typewriter animation"
             },
             "stats": {
                 "uiComponents": "UI Components",
@@ -129,18 +139,64 @@
             }
         },
         "cssDrawing": {
-            "heroTitle": "CSS Drawing & Anime.js",
-            "heroSubtitle": "Explore pure CSS graphics and anime.js animation integration"
+            "heroTitle": "CSS Drawing Lab",
+            "heroSubtitle": "Explore pure CSS graphics and anime.js animation integration",
+            "demos": {
+                "triangle": {
+                    "label": "🔺 CSS Triangle",
+                    "description": "Draw triangles using border in all directions"
+                },
+                "triangleFull": {
+                    "label": "📐 Full Triangle",
+                    "description": "Full-page triangle layout effect"
+                },
+                "triangleAnime": {
+                    "label": "✨ Triangle Animation",
+                    "description": "Dynamic effects with anime.js"
+                },
+                "hexagon": {
+                    "label": "⬡ CSS Hexagon",
+                    "description": "Pure CSS honeycomb hexagon"
+                },
+                "svgColor": {
+                    "label": "🎨 SVG Color",
+                    "description": "Dynamically change SVG icon colors"
+                }
+            }
         },
         "firebase": {
-            "heroTitle": "Firebase Testing",
-            "heroSubtitle": "Firebase Authentication, Firestore, Cloud Messaging feature testing",
-            "description": "Features originally implemented in my resume project. Since that project doesn't implement PWA or Service Worker features, this project attempts to integrate and test Service Workers.",
-            "resumeLink": "Portfolio →"
+            "heroTitle": "Firebase Integration",
+            "heroSubtitle": "Cloud Messaging, Auth, PWA & Service Worker integration testing",
+            "description1": "Features originally implemented in {link}",
+            "description2": "Since that project doesn't use PWA or Service Workers, this project integrates and tests them.",
+            "resumeLink": "Portfolio →",
+            "features": {
+                "fcm": "📲 FCM Push Notifications",
+                "auth": "🔐 Authentication",
+                "pwa": "⚙️ PWA Integration",
+                "sw": "🔔 Service Worker"
+            },
+            "demos": {
+                "cloudMessaging": {
+                    "label": "📲 FCM Push Notifications",
+                    "description": "Firebase Cloud Messaging push test dashboard"
+                }
+            }
         },
         "directiveEffects": {
-            "heroTitle": "Vue Directive Effects",
-            "heroSubtitle": "Recreating Vue Directives effects in React"
+            "heroTitle": "Directive Effects",
+            "heroSubtitle": "Custom visual effects — avoiding package version compatibility issues",
+            "note": "Vue Directives don't exist in React, these features have been converted to Custom Hooks or Components",
+            "demos": {
+                "lazyload": {
+                    "label": "🖼️ Image Lazy Loading",
+                    "description": "Image lazy loading using Intersection Observer API"
+                },
+                "ripple": {
+                    "label": "💫 Ripple Effect",
+                    "description": "Material Design-style button click ripple animation"
+                }
+            }
         },
         "sseTest": {
             "heroTitle": "Server-Sent Events Test",

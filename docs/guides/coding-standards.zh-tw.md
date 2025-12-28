@@ -369,3 +369,54 @@ const DemoComponent = dynamic(() => import('@/components/Demo/Example'), { ssr: 
 3. **效能下降**：增加首次載入時間（FCP/LCP）
 4. **Layout Shift**：可能造成頁面跳動
 
+### 5.2 國際化 (next-intl 4.x) (強制)
+
+本專案使用 `next-intl` 4.x 進行國際化。**所有在 Server Components 中使用翻譯的頁面必須遵循此模式：**
+
+#### 必要模式
+
+```tsx
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+async function MyPage({ params }: Props) {
+  const { locale } = await params;
+  
+  // 強制：必須在任何翻譯函式之前調用
+  setRequestLocale(locale);
+  
+  const t = await getTranslations('pages.myPage');
+  return <h1>{t('title')}</h1>;
+}
+
+export default MyPage;
+```
+
+#### 關鍵規則
+
+| 規則 | 說明 |
+|------|------|
+| `setRequestLocale` 優先 | 必須在 `getTranslations` 或 `getMessages` 之前調用 |
+| 頁面必須有 `params` | 每個頁面都需要 `params: Promise<{ locale: string }>` |
+| Layout 也需要 | `app/[locale]/layout.tsx` 也必須調用 `setRequestLocale` |
+
+#### 缺少 `setRequestLocale` 的後果
+
+- ❌ Server Components 會預設使用回退語言（zh-tw）
+- ❌ 從 URL 切換語言（`/en` vs `/zh-tw`）對頁面內容無效
+- ✅ Client Components（Header 等）仍可正常運作
+
+#### 語系檔案位置
+
+```
+i18n/
+├── locales/
+│   ├── zh-tw.json   # 繁體中文（預設）
+│   └── en.json      # 英文
+├── navigation.ts     # 導航工具
+├── request.ts        # Request 配置
+└── routing.ts        # 路由配置
+```

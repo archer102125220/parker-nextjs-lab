@@ -145,7 +145,37 @@ A comprehensive Next.js laboratory project showcasing modern web development pra
 - `yarn seed` - Seed database with sample data
 
 ### Internationalization
+
+**Commands:**
 - `yarn create-i18n` - Generate i18n files from Google Sheets
+
+**Using `next-intl` 4.x with App Router:**
+
+This project uses `next-intl` 4.x for internationalization. When creating pages that use translations in Server Components, you **MUST** call `setRequestLocale(locale)` before using any translation functions.
+
+```tsx
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+async function MyPage({ params }: Props) {
+  const { locale } = await params;
+  
+  // Required: Set locale before using translations
+  setRequestLocale(locale);
+  
+  const t = await getTranslations('pages.myPage');
+  return <h1>{t('title')}</h1>;
+}
+```
+
+> ⚠️ **Critical**: Without `setRequestLocale`, Server Components will not receive the correct locale and translations will default to the fallback language.
+
+**Language files location:**
+- `i18n/locales/zh-tw.json` - Traditional Chinese (default)
+- `i18n/locales/en.json` - English
 
 ### Testing & Performance
 

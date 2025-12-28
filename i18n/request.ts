@@ -6,6 +6,7 @@ import { routing } from '@/i18n/routing';
 export default getRequestConfig(async ({ requestLocale }) => {
   // Typically corresponds to the `[locale]` segment
   const requested = await requestLocale;
+  
   const locale = hasLocale(routing.locales, requested)
     ? requested
     : routing.defaultLocale;
@@ -15,3 +16,4 @@ export default getRequestConfig(async ({ requestLocale }) => {
     messages: (await import(`@/i18n/locales/${locale}.json`)).default
   };
 });
+

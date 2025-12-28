@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { hasLocale } from 'next-intl';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getMessages, setRequestLocale } from 'next-intl/server';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Roboto } from 'next/font/google';
@@ -81,11 +81,17 @@ async function LocaleLayout(props: Readonly<LocaleLayout>): Promise<ReactNode> {
     notFound();
   }
 
+  // Enable static rendering - CRITICAL for next-intl 4.x
+  setRequestLocale(locale);
+
+  // Get messages for the current locale
+  const messages = await getMessages();
+
   return (
     <html lang={locale} className={roboto.variable}>
       <PolyfillEvent />
       <LayoutHead nonce={nonce} />
-      <LayoutBody params={params} locale={locale} nonce={nonce}>
+      <LayoutBody params={params} locale={locale} messages={messages} nonce={nonce}>
         {children}
       </LayoutBody>
     </html>

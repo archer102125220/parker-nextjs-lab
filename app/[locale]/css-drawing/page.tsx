@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 
 import GTMScnOpen from '@/components/Google/GTMScnOpen';
@@ -9,55 +10,45 @@ import { DefaultLayout } from '@/layout/default';
 import style from './page.module.scss';
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('pages.cssDrawing');
   return {
-    title: 'CSS 繪圖與動畫',
-    description: '純 CSS 實現的圖形繪製與 anime.js 動畫效果'
+    title: t('heroTitle'),
+    description: t('heroSubtitle')
   };
 }
 
+// Demo 配置使用 translation keys
 const CSS_DEMOS = [
-  {
-    href: '/css-drawing/triangle-test',
-    label: '🔺 CSS 三角形',
-    description: '使用 border 繪製各方向三角形'
-  },
-  {
-    href: '/css-drawing/triangle-full-test',
-    label: '📐 三角形滿版',
-    description: '滿版三角形佈局效果'
-  },
-  {
-    href: '/css-drawing/triangle-anime-test',
-    label: '✨ 三角形動畫',
-    description: '結合 anime.js 的動態效果'
-  },
-  {
-    href: '/css-drawing/hexagon-test',
-    label: '⬡ CSS 六邊形',
-    description: '純 CSS 繪製蜂巢六邊形'
-  },
-  {
-    href: '/css-drawing/svg-color-change',
-    label: '🎨 SVG 換色',
-    description: '動態替換 SVG 圖示顏色'
-  }
+  { href: '/css-drawing/triangle-test', demoKey: 'triangle' },
+  { href: '/css-drawing/triangle-full-test', demoKey: 'triangleFull' },
+  { href: '/css-drawing/triangle-anime-test', demoKey: 'triangleAnime' },
+  { href: '/css-drawing/hexagon-test', demoKey: 'hexagon' },
+  { href: '/css-drawing/svg-color-change', demoKey: 'svgColor' }
 ] as const;
 
-async function CssDrawing(): Promise<ReactNode> {
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+async function CssDrawing({ params }: Props): Promise<ReactNode> {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const headersData = await headers();
-  const _nonce = headersData.get('x-nonce') || '';
+  const nonce = headersData.get('x-nonce') || '';
+  const t = await getTranslations('pages.cssDrawing');
 
   return (
-    <DefaultLayout nonce={_nonce}>
+    <DefaultLayout nonce={nonce}>
       <main className={style.css_animejs_page}>
         <GTMScnOpen />
 
         {/* Hero Section */}
         <section className={style['css_animejs_page-hero']}>
           <span className={style['css_animejs_page-hero-icon']}>✏️</span>
-          <h1 className={style['css_animejs_page-hero-title']}>CSS 繪圖實驗室</h1>
+          <h1 className={style['css_animejs_page-hero-title']}>{t('heroTitle')}</h1>
           <p className={style['css_animejs_page-hero-subtitle']}>
-            探索純 CSS 圖形繪製與 anime.js 動畫整合
+            {t('heroSubtitle')}
           </p>
         </section>
 
@@ -70,10 +61,10 @@ async function CssDrawing(): Promise<ReactNode> {
               className={style['css_animejs_page-link_list-link']}
             >
               <span style={{ fontSize: '1.25rem', fontWeight: 600 }}>
-                {demo.label}
+                {t(`demos.${demo.demoKey}.label`)}
               </span>
               <span style={{ fontSize: '0.9rem', color: '#666' }}>
-                {demo.description}
+                {t(`demos.${demo.demoKey}.description`)}
               </span>
             </Link>
           ))}

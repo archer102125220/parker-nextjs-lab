@@ -53,6 +53,18 @@ When working on this project, you MUST follow the coding standards defined below
 - ALLOWED: MUI `sx`, CSS variable passing
 - FORBIDDEN: static values, dynamic calculations
 
+### Internationalization (next-intl 4.x)
+- **ALWAYS** call `setRequestLocale(locale)` in Server Components before `getTranslations`
+- Page must receive `params: Promise<{ locale: string }>` prop
+- Pattern:
+```tsx
+async function Page({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale); // BEFORE getTranslations
+  const t = await getTranslations('pages.myPage');
+}
+```
+
 ### Next.js Dynamic Import (⚠️ CRITICAL)
 - ✅ `dynamic(() => import(...))` - Default, SSR enabled
 - ❌ `dynamic(() => import(...), { ssr: false })` - AVOID unless absolutely necessary

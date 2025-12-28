@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import dynamic from 'next/dynamic';
 import { Card, CardContent, CardActionArea, Typography } from '@mui/material';
@@ -7,29 +8,30 @@ import styles from './page.module.scss';
 
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
 
+// Demo 配置
 const DEMO_LINKS = [
-  {
-    path: '/directive-effects/lazyload-test',
-    label: '🖼️ 圖片懶載入',
-    labelEn: 'Lazy Load Test',
-    description: '使用 Intersection Observer API 實現的圖片懶載入效果'
-  },
-  {
-    path: '/directive-effects/ripple-test',
-    label: '💫 點擊波紋',
-    labelEn: 'Ripple Effect Test',
-    description: '仿 Material Design 的按鈕點擊波紋動畫效果'
-  }
+  { path: '/directive-effects/lazyload-test', demoKey: 'lazyload' },
+  { path: '/directive-effects/ripple-test', demoKey: 'ripple' }
 ] as const;
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('pages.directiveEffects');
   return {
-    title: 'Directive Effects 效果測試',
-    description: '自訂實作的 Directive Effects - 包含懶載入和波紋效果'
+    title: t('heroTitle'),
+    description: t('heroSubtitle')
   };
 }
 
-export default function DirectiveEffectsPage(): React.ReactNode {
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export default async function DirectiveEffectsPage({ params }: Props): Promise<React.ReactNode> {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  const t = await getTranslations('pages.directiveEffects');
+
   return (
     <main className={styles.directive_effects_page}>
       <GTMScnOpen />
@@ -38,19 +40,17 @@ export default function DirectiveEffectsPage(): React.ReactNode {
       <section className={styles['directive_effects_page-hero']}>
         <span className={styles['directive_effects_page-hero-icon']}>✨</span>
         <h1 className={styles['directive_effects_page-hero-title']}>
-          Directive Effects
+          {t('heroTitle')}
         </h1>
         <p className={styles['directive_effects_page-hero-subtitle']}>
-          自訂實作的視覺效果 — 避免套件版本相容性問題
+          {t('heroSubtitle')}
         </p>
       </section>
 
       {/* Note */}
       <div className={styles['directive_effects_page-note']}>
         <span>💡</span>
-        <span>
-          Vue Directives 在 React 中不存在，這些功能已轉換為 Custom Hooks 或 Components
-        </span>
+        <span>{t('note')}</span>
       </div>
 
       {/* Demo Cards */}
@@ -65,10 +65,10 @@ export default function DirectiveEffectsPage(): React.ReactNode {
               <CardActionArea>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
-                    {link.label}
+                    {t(`demos.${link.demoKey}.label`)}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {link.description}
+                    {t(`demos.${link.demoKey}.description`)}
                   </Typography>
                 </CardContent>
               </CardActionArea>
