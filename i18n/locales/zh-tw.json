@@ -249,9 +249,8 @@
         "firebase": {
             "heroTitle": "Firebase 整合",
             "heroSubtitle": "Cloud Messaging、認證、PWA 與 Service Worker 整合測試",
-            "description1": "原本在{link}中實作並測試的功能",
+            "description1": "原本在<link>電子履歷</link>中實作並測試的功能",
             "description2": "由於該專案並沒有實作 PWA 等需要 Service Worker 的功能，因此在此專案嘗試整合 Service Worker 並做測試",
-            "resumeLink": "電子履歷 →",
             "features": {
                 "fcm": "📲 FCM 推播通知",
                 "auth": "🔐 身份認證",

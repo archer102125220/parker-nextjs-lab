@@ -300,9 +300,17 @@ export default function DemoWebAuthn(): React.ReactNode {
         </a>
       </Box>
 
-      <Image
+      {/* <Image
         className={style['web_authn_page-banner']}
         src="/img/web-authn/web-authn-v.06.webp"
+        alt="WebAuthn Banner"
+        width={1200}
+        height={400}
+        priority
+      /> */}
+      <Image
+        className={style['web_rtc_page-banner']}
+        src="/img/icon/Next.jsLab.v.01.svg"
         alt="WebAuthn Banner"
         width={1200}
         height={400}

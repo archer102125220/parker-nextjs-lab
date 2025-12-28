@@ -249,9 +249,8 @@
         "firebase": {
             "heroTitle": "Firebase Integration",
             "heroSubtitle": "Cloud Messaging, Auth, PWA & Service Worker integration testing",
-            "description1": "Features originally implemented in {link}",
+            "description1": "Features originally implemented in <link>Portfolio</link>",
             "description2": "Since that project doesn't use PWA or Service Workers, this project integrates and tests them.",
-            "resumeLink": "Portfolio →",
             "features": {
                 "fcm": "📲 FCM Push Notifications",
                 "auth": "🔐 Authentication",

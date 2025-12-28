@@ -45,9 +45,17 @@ export default function WebRTCIndex(): React.ReactNode {
         WebRTC 需要 Signaling Server 支援，在 serverless 環境可能受限。
       </Alert>
 
-      <Image
+      {/* <Image
         className={style['web_rtc_page-banner']}
         src="/banner/web-rtc.png"
+        alt="WebRTC Banner"
+        width={600}
+        height={400}
+        priority
+      /> */}
+      <Image
+        className={style['web_rtc_page-banner']}
+        src="/img/icon/Next.jsLab.v.01.svg"
         alt="WebRTC Banner"
         width={600}
         height={400}
