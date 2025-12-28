@@ -77,13 +77,20 @@ export interface SwiperCustomProps {
 function getEventX(
   e: MouseEvent | TouchEvent | ReactMouseEvent | ReactTouchEvent
 ): number {
-  if ('pageX' in e) return e.pageX;
-  if ('clientX' in e) return e.clientX;
-  if ('targetTouches' in e && e.targetTouches[0]) {
-    return e.targetTouches[0].pageX || e.targetTouches[0].clientX;
+  // Type assertions needed because 'in' operator doesn't narrow union types properly
+  if ('pageX' in e && typeof (e as MouseEvent).pageX === 'number') {
+    return (e as MouseEvent).pageX;
   }
-  if ('changedTouches' in e && e.changedTouches[0]) {
-    return e.changedTouches[0].pageX || e.changedTouches[0].clientX;
+  if ('clientX' in e && typeof (e as MouseEvent).clientX === 'number') {
+    return (e as MouseEvent).clientX;
+  }
+  if ('targetTouches' in e) {
+    const touch = (e as TouchEvent).targetTouches[0];
+    if (touch) return touch.pageX || touch.clientX;
+  }
+  if ('changedTouches' in e) {
+    const touch = (e as TouchEvent).changedTouches[0];
+    if (touch) return touch.pageX || touch.clientX;
   }
   return 0;
 }
@@ -91,13 +98,20 @@ function getEventX(
 function getEventY(
   e: MouseEvent | TouchEvent | ReactMouseEvent | ReactTouchEvent
 ): number {
-  if ('pageY' in e) return e.pageY;
-  if ('clientY' in e) return e.clientY;
-  if ('targetTouches' in e && e.targetTouches[0]) {
-    return e.targetTouches[0].pageY || e.targetTouches[0].clientY;
+  // Type assertions needed because 'in' operator doesn't narrow union types properly
+  if ('pageY' in e && typeof (e as MouseEvent).pageY === 'number') {
+    return (e as MouseEvent).pageY;
   }
-  if ('changedTouches' in e && e.changedTouches[0]) {
-    return e.changedTouches[0].pageY || e.changedTouches[0].clientY;
+  if ('clientY' in e && typeof (e as MouseEvent).clientY === 'number') {
+    return (e as MouseEvent).clientY;
+  }
+  if ('targetTouches' in e) {
+    const touch = (e as TouchEvent).targetTouches[0];
+    if (touch) return touch.pageY || touch.clientY;
+  }
+  if ('changedTouches' in e) {
+    const touch = (e as TouchEvent).changedTouches[0];
+    if (touch) return touch.pageY || touch.clientY;
   }
   return 0;
 }
