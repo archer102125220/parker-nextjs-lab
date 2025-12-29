@@ -76,9 +76,17 @@ export default function SocketTestIndex(): React.ReactNode {
         伺服器（如 Railway、Render 等）。
       </Alert>
 
-      <Image
+      {/* <Image
         className={styles['socket_test_page-banner']}
         src="/img/socket/socket-v.05.webp"
+        alt="Socket Banner"
+        width={1200}
+        height={400}
+        priority
+      /> */}
+      <Image
+        className={styles['socket_test_page-banner']}
+        src="/img/icon/Next.jsLab.v.01.svg"
         alt="Socket Banner"
         width={1200}
         height={400}
