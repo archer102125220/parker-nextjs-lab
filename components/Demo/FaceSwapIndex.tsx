@@ -9,11 +9,16 @@ import {
   CardContent,
   CardActions,
   Button,
-  Chip
+  Chip,
+  Alert
 } from '@mui/material';
 import MonitorIcon from '@mui/icons-material/Monitor';
 import StorageIcon from '@mui/icons-material/Storage';
 import style from '@/app/[locale]/face-swap/page.module.scss';
+
+// 檢測是否為 Vercel serverless 環境
+const isVercelEnv = process.env.NEXT_PUBLIC_VERCEL === '1' || 
+                    process.env.NEXT_PUBLIC_VERCEL_ENV !== undefined;
 
 export default function FaceSwapIndex(): React.ReactNode {
   const locale = useLocale();
@@ -67,8 +72,8 @@ export default function FaceSwapIndex(): React.ReactNode {
         >
           <Chip
             className={style['face_swap_page-cards-card-chip']}
-            label="開發中"
-            color="warning"
+            label={isVercelEnv ? 'Serverless 不支援' : '開發中'}
+            color={isVercelEnv ? 'error' : 'warning'}
             size="small"
           />
           <CardContent>
@@ -79,15 +84,27 @@ export default function FaceSwapIndex(): React.ReactNode {
             <Typography variant="body2" color="text.secondary">
               使用 Node.js 後端 + AI 模型，效果更精緻，敬請期待！
             </Typography>
+            {isVercelEnv && (
+              <Alert severity="warning" sx={{ mt: 2 }}>
+                此功能需要執行 AI 模型，無法在 Vercel Serverless
+                環境中運作。請在本地環境或支援長時間運行的伺服器上使用此功能。
+              </Alert>
+            )}
           </CardContent>
           <CardActions>
-            <Button
-              component={Link}
-              href={`/${locale}/face-swap/backend`}
-              color="primary"
-            >
-              查看
-            </Button>
+            {isVercelEnv ? (
+              <Button color="primary" disabled>
+                Serverless 環境不支援
+              </Button>
+            ) : (
+              <Button
+                component={Link}
+                href={`/${locale}/face-swap/backend`}
+                color="primary"
+              >
+                查看
+              </Button>
+            )}
           </CardActions>
         </Card>
       </div>
