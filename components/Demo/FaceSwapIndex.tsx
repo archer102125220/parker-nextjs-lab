@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import {
   Typography,
   Card,
@@ -22,6 +22,7 @@ const isVercelEnv = process.env.NEXT_PUBLIC_VERCEL === '1' ||
 
 export default function FaceSwapIndex(): React.ReactNode {
   const locale = useLocale();
+  const t = useTranslations('pages.faceSwap');
 
   return (
     <>
@@ -35,14 +36,14 @@ export default function FaceSwapIndex(): React.ReactNode {
       />
 
       <Typography variant="h4" className={style['face_swap_page-title']}>
-        AI 人臉替換
+        {t('title')}
       </Typography>
       <Typography
         variant="body1"
         color="text.secondary"
         className={style['face_swap_page-subtitle']}
       >
-        選擇實作版本
+        {t('subtitle')}
       </Typography>
 
       <div className={style['face_swap_page-cards']}>
@@ -50,10 +51,10 @@ export default function FaceSwapIndex(): React.ReactNode {
           <CardContent>
             <Typography variant="h6" gutterBottom>
               <MonitorIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
-              純前端版本
+              {t('frontend.title')}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              使用 face-api.js + Canvas 實現，適合快速測試，效果較基礎。
+              {t('frontend.description')}
             </Typography>
           </CardContent>
           <CardActions>
@@ -62,7 +63,7 @@ export default function FaceSwapIndex(): React.ReactNode {
               href={`/${locale}/face-swap/frontend`}
               color="primary"
             >
-              進入
+              {t('frontend.button')}
             </Button>
           </CardActions>
         </Card>
@@ -72,29 +73,28 @@ export default function FaceSwapIndex(): React.ReactNode {
         >
           <Chip
             className={style['face_swap_page-cards-card-chip']}
-            label={isVercelEnv ? 'Serverless 不支援' : '開發中'}
+            label={isVercelEnv ? t('backend.chipServerless') : t('backend.chipDeveloping')}
             color={isVercelEnv ? 'error' : 'warning'}
             size="small"
           />
           <CardContent>
             <Typography variant="h6" gutterBottom>
               <StorageIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
-              後端 AI 版本
+              {t('backend.title')}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              使用 Node.js 後端 + AI 模型，效果更精緻，敬請期待！
+              {t('backend.description')}
             </Typography>
             {isVercelEnv && (
               <Alert severity="warning" sx={{ mt: 2 }}>
-                此功能需要執行 AI 模型，無法在 Vercel Serverless
-                環境中運作。請在本地環境或支援長時間運行的伺服器上使用此功能。
+                {t('backend.serverlessWarning')}
               </Alert>
             )}
           </CardContent>
           <CardActions>
             {isVercelEnv ? (
               <Button color="primary" disabled>
-                Serverless 環境不支援
+                {t('backend.serverlessButton')}
               </Button>
             ) : (
               <Button
@@ -102,7 +102,7 @@ export default function FaceSwapIndex(): React.ReactNode {
                 href={`/${locale}/face-swap/backend`}
                 color="primary"
               >
-                查看
+                {t('backend.button')}
               </Button>
             )}
           </CardActions>
@@ -111,3 +111,4 @@ export default function FaceSwapIndex(): React.ReactNode {
     </>
   );
 }
+

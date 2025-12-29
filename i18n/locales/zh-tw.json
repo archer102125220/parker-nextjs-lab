@@ -340,6 +340,24 @@
             "log": {
                 "title": "操作記錄"
             }
+        },
+        "faceSwap": {
+            "title": "AI 人臉替換",
+            "subtitle": "選擇實作版本",
+            "frontend": {
+                "title": "純前端版本",
+                "description": "使用 face-api.js + Canvas 實現，適合快速測試，效果較基礎。",
+                "button": "進入"
+            },
+            "backend": {
+                "title": "後端 AI 版本",
+                "description": "使用 Node.js 後端 + AI 模型，效果更精緻，敬請期待！",
+                "button": "查看",
+                "chipDeveloping": "開發中",
+                "chipServerless": "Serverless 不支援",
+                "serverlessWarning": "此功能需要執行 AI 模型，無法在 Vercel Serverless 環境中運作。請在本地環境或支援長時間運行的伺服器上使用此功能。",
+                "serverlessButton": "Serverless 環境不支援"
+            }
         }
     }
 }
