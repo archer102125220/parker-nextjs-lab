@@ -1259,6 +1259,33 @@ yarn test:coverage
 - **工具**: QRCode, PWALoading
 - **Hooks**: useDebounce, useThrottle, useLocalStorage, useMediaQuery, useIntersectionObserver
 
+## 🤖 AI Agent 規則
+
+本專案包含 AI Agent（Claude、Cursor 等）的程式碼規則，以確保一致的程式碼生成：
+
+### 規則檔案
+
+| 檔案 | 用途 |
+|------|------|
+| `CLAUDE.md` | Claude AI 快速參考 |
+| `.cursor/rules/css-naming.mdc` | CSS/SCSS 命名規範 |
+| `.cursor/rules/css-property-order.mdc` | CSS 屬性順序 |
+| `.cursor/rules/security-policy.mdc` | 資安警告政策 |
+| `.cursor/rules/lint-policy.mdc` | Lint 禁用註解政策 |
+| `.cursor/rules/typescript.mdc` | TypeScript 型別安全規則 |
+| `.cursor/rules/i18n.mdc` | 國際化規則 |
+
+### 相關文件
+
+| 文件 | 說明 |
+|------|------|
+| [程式碼規範](./docs/guides/coding-standards.md) | 完整程式碼規範 (English) |
+| [程式碼規範 (中文)](./docs/guides/coding-standards.zh-tw.md) | 完整程式碼規範 |
+| [前端測試設計指南](./docs/guides/frontend-testing-guide.md) | 測試設計原則 (English) |
+| [前端測試設計指南 (中文)](./docs/guides/frontend-testing-guide.zh-tw.md) | 測試設計原則 |
+
+> 💡 人類開發者也可以參考這些規則以維持一致的程式碼風格。
+
 ## 📝 授權
 
 此專案採用 MIT 授權條款 - 詳見 [LICENSE](LICENSE) 檔案。
@@ -1266,3 +1293,4 @@ yarn test:coverage
 ---
 
 **Parker 的 Next.js 實驗室** - 現代網頁開發展示
+

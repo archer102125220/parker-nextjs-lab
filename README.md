@@ -1259,6 +1259,33 @@ yarn test:coverage
 - **Utility**: QRCode, PWALoading
 - **Hooks**: useDebounce, useThrottle, useLocalStorage, useMediaQuery, useIntersectionObserver
 
+## 🤖 AI Agent Rules
+
+This project includes coding rules for AI agents (Claude, Cursor, etc.) to ensure consistent code generation:
+
+### Rule Files
+
+| File | Purpose |
+|------|---------|
+| `CLAUDE.md` | Quick reference for Claude AI |
+| `.cursor/rules/css-naming.mdc` | CSS/SCSS naming conventions |
+| `.cursor/rules/css-property-order.mdc` | CSS property order |
+| `.cursor/rules/security-policy.mdc` | Security warning policy |
+| `.cursor/rules/lint-policy.mdc` | Lint disable comment policy |
+| `.cursor/rules/typescript.mdc` | TypeScript type safety rules |
+| `.cursor/rules/i18n.mdc` | Internationalization rules |
+
+### Documentation
+
+| Document | Description |
+|----------|-------------|
+| [Coding Standards](./docs/guides/coding-standards.md) | Complete coding standards |
+| [Coding Standards (中文)](./docs/guides/coding-standards.zh-tw.md) | 完整程式碼規範 |
+| [Frontend Testing Guide](./docs/guides/frontend-testing-guide.md) | Testing design principles |
+| [Frontend Testing Guide (中文)](./docs/guides/frontend-testing-guide.zh-tw.md) | 測試設計原則 |
+
+> 💡 Human developers can also reference these rules for consistent coding practices.
+
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
