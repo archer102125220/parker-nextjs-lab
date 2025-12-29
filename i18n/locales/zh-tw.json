@@ -92,6 +92,8 @@
                 "webAuthnDesc": "生物辨識驗證",
                 "firebase": "Firebase",
                 "firebaseDesc": "推播、認證整合",
+                "indexedDB": "IndexedDB",
+                "indexedDBDesc": "本地端資料庫 ORM",
                 "hooks": "Hooks 測試",
                 "hooksDesc": "自訂 React Hooks",
                 "route": "路由測試",
@@ -297,6 +299,47 @@
             "title": "目前離線",
             "description": "請檢查您的網路連線",
             "retryButton": "重試連線"
+        },
+        "indexedDBDemo": {
+            "title": "IndexedDB ORM 展示",
+            "description": "輕量級 IndexedDB 本地端資料庫操作工具",
+            "hero": {
+                "title": "IndexedDB ORM 展示",
+                "subtitle": "本地端資料庫操作示範",
+                "description": "使用輕量級 ORM 工具進行 IndexedDB 資料庫操作，支援 Sequelize 風格和鏈式 API"
+            },
+            "status": {
+                "label": "資料庫",
+                "connected": "已連線",
+                "disconnected": "未連線"
+            },
+            "form": {
+                "title": "新增使用者",
+                "name": "姓名",
+                "email": "電子郵件",
+                "age": "年齡",
+                "add": "新增"
+            },
+            "query": {
+                "title": "查詢使用者",
+                "min_age": "最小年齡",
+                "max_age": "最大年齡",
+                "search": "搜尋",
+                "load_all": "載入全部"
+            },
+            "list": {
+                "title": "使用者列表",
+                "empty": "尚無資料",
+                "years": "歲"
+            },
+            "bulk": {
+                "title": "批量操作",
+                "add_sample": "新增範例資料",
+                "clear_all": "清空全部"
+            },
+            "log": {
+                "title": "操作記錄"
+            }
         }
     }
 }

@@ -92,6 +92,8 @@
                 "webAuthnDesc": "Biometric authentication",
                 "firebase": "Firebase",
                 "firebaseDesc": "Push notifications, auth",
+                "indexedDB": "IndexedDB",
+                "indexedDBDesc": "Local database ORM",
                 "hooks": "Hooks Test",
                 "hooksDesc": "Custom React Hooks",
                 "route": "Route Test",
@@ -297,6 +299,47 @@
             "title": "You are offline",
             "description": "Please check your internet connection",
             "retryButton": "Retry connection"
+        },
+        "indexedDBDemo": {
+            "title": "IndexedDB ORM Demo",
+            "description": "Lightweight ORM utility for IndexedDB operations",
+            "hero": {
+                "title": "IndexedDB ORM Demo",
+                "subtitle": "Local Database Operations",
+                "description": "Lightweight ORM utility for IndexedDB operations, supporting both Sequelize-style and chainable API"
+            },
+            "status": {
+                "label": "Database",
+                "connected": "Connected",
+                "disconnected": "Disconnected"
+            },
+            "form": {
+                "title": "Add User",
+                "name": "Name",
+                "email": "Email",
+                "age": "Age",
+                "add": "Add"
+            },
+            "query": {
+                "title": "Query Users",
+                "min_age": "Min Age",
+                "max_age": "Max Age",
+                "search": "Search",
+                "load_all": "Load All"
+            },
+            "list": {
+                "title": "User List",
+                "empty": "No data available",
+                "years": "years old"
+            },
+            "bulk": {
+                "title": "Bulk Operations",
+                "add_sample": "Add Sample Data",
+                "clear_all": "Clear All"
+            },
+            "log": {
+                "title": "Activity Log"
+            }
         }
     }
 }

@@ -39,6 +39,7 @@ const LINK_SECTIONS = [
     titleKey: 'sections.devTools',
     links: [
       { href: '/firebase', labelKey: 'links.firebase', descKey: 'links.firebaseDesc', icon: '🔥' },
+      { href: '/indexeddb-demo', labelKey: 'links.indexedDB', descKey: 'links.indexedDBDesc', icon: '💾' },
       { href: '/hooks-test', labelKey: 'links.hooks', descKey: 'links.hooksDesc', icon: '🪝' },
       { href: '/route', labelKey: 'links.route', descKey: 'links.routeDesc', icon: '🛤️' },
       { href: '/about', labelKey: 'links.about', descKey: 'links.aboutDesc', icon: 'ℹ️' }
