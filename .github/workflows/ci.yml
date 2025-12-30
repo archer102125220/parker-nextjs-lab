@@ -55,6 +55,7 @@ jobs:
   e2e-test:
     name: E2E Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -69,7 +70,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps
 
       - name: Build application
         run: yarn build
@@ -80,7 +81,7 @@ jobs:
         run: |
           yarn start &
           sleep 10
-          npx playwright test --project=chromium
+          npx playwright test
         env:
           CI: true
 
