@@ -1,5 +1,7 @@
 import { useSyncExternalStore } from 'react';
 
+import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
+
 import type { firebaseConfig, Firestore } from '@/utils/third-party/firebase';
 import { firebase } from '@/utils/third-party/firebase';
 
@@ -10,27 +12,25 @@ export function useFirebaseInit(
   scope: string = '/',
   callback?: (firebase?: firebase) => void
 ): useFirebaseType {
-  if (subscribeFirebase.Firebase instanceof firebase === false) {
-    if (typeof config === 'object' && config !== null) {
-      // TODO: Fix side-effect triggering issues
-      // eslint-disable-next-line react-hooks/immutability
+  useIsomorphicLayoutEffect(() => {
+    if (subscribeFirebase.Firebase === null) {
       subscribeFirebase.Firebase = new firebase(config);
-    } else {
-      throw new Error('missing Firebase');
-    }
 
-    if (subscribeFirebase.firebaseInited === false) {
-      subscribeFirebase.Firebase.initializeWithServiceWorker(
-        scope,
-        null,
-        null,
-        callback
-      );
-      // TODO: Fix side-effect triggering issues
-      // eslint-disable-next-line react-hooks/immutability
-      subscribeFirebase.firebaseInited = true;
+      if (subscribeFirebase.firebaseInited === false) {
+        subscribeFirebase.Firebase.initializeWithServiceWorker(
+          scope,
+          null,
+          null,
+          callback
+        );
+        subscribeFirebase.firebaseInited = true;
+      }
+    } else {
+      console.log('Firebase already initialized');
+      // Optional: Update config if changed (if the new config is different)
+      // subscribeFirebase.Firebase.configUpdate(config, false); // Pass false to avoid full re-init if just updating config
     }
-  }
+  }, [config, scope, callback]);
 
   return useFirebase(config, scope, callback);
 }
@@ -39,27 +39,25 @@ export function useFirebase(
   scope: string = '/',
   callback?: (firebase?: firebase) => void
 ): useFirebaseType {
-  if (subscribeFirebase.Firebase instanceof firebase === false) {
-    if (typeof config === 'object' && config !== null) {
-      // TODO: Fix side-effect triggering issues
-      // eslint-disable-next-line react-hooks/immutability
-      subscribeFirebase.Firebase = new firebase(config);
-    } else {
-      throw new Error('missing Firebase');
-    }
+  useIsomorphicLayoutEffect(() => {
+    if (subscribeFirebase.Firebase === null) {
+      if (typeof config === 'object' && config !== null) {
+        subscribeFirebase.Firebase = new firebase(config);
+      } else {
+        throw new Error('missing Firebase');
+      }
 
-    if (subscribeFirebase.firebaseInited === false) {
-      subscribeFirebase.Firebase.initializeWithServiceWorker(
-        scope,
-        null,
-        null,
-        callback
-      );
-      // TODO: Fix side-effect triggering issues
-      // eslint-disable-next-line react-hooks/immutability
-      subscribeFirebase.firebaseInited = true;
+      if (subscribeFirebase.firebaseInited === false) {
+        subscribeFirebase.Firebase.initializeWithServiceWorker(
+          scope,
+          null,
+          null,
+          callback
+        );
+        subscribeFirebase.firebaseInited = true;
+      }
     }
-  }
+  }, [config, scope, callback]);
 
   return useSyncExternalStore<useFirebaseType>(
     subscribeFirebase.subscribe,
