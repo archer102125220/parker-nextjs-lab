@@ -22,6 +22,24 @@ A comprehensive Next.js laboratory project showcasing modern web development pra
 - **🎥 WebRTC**: Real-time video chat with SSE signaling
 - **🤖 AI/ML**: Face detection and face swap features with face-api.js
 
+## 🤖 AI Agent Rules
+
+This project includes configuration files for AI code assistants to ensure consistent code style:
+
+- **[CLAUDE.md](./CLAUDE.md)** - Rules for [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) (Anthropic)
+- **[.cursor/rules/](./.cursor/rules/)** - Rules for [Cursor IDE](https://docs.cursor.com/context/rules)
+  - `typescript.mdc` - TypeScript conventions
+  - `css-naming.mdc` - CSS naming conventions (Modified BEM)
+  - `css-property-order.mdc` - CSS property ordering
+  - `file-organization.mdc` - File organization standards
+  - `inline-styles.mdc` - Inline style policies
+  - `i18n.mdc` - Internationalization rules
+  - `react-hooks.mdc` - React Hooks best practices
+  - `security-policy.mdc` - Security policies
+  - `lint-policy.mdc` - Lint disable comment policies
+
+> 📖 Full coding standards: [docs/guides/coding-standards.md](docs/guides/coding-standards.md)
+
 ## 🚀 Quick Start
 
 ### Prerequisites

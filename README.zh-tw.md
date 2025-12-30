@@ -22,6 +22,24 @@
 - **🎥 WebRTC**: 使用 SSE 信令的即時視訊聊天
 - **🤖 AI/ML**: 使用 face-api.js 的人臉偵測和換臉功能
 
+## 🤖 AI 輔助工具規則
+
+本專案包含 AI 程式碼助理的設定檔，以確保一致的程式碼風格：
+
+- **[CLAUDE.md](./CLAUDE.md)** - [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview)（Anthropic）規則
+- **[.cursor/rules/](./.cursor/rules/)** - [Cursor IDE](https://docs.cursor.com/context/rules) 規則
+  - `typescript.mdc` - TypeScript 規範
+  - `css-naming.mdc` - CSS 命名規範（改良式 BEM）
+  - `css-property-order.mdc` - CSS 屬性順序
+  - `file-organization.mdc` - 檔案組織標準
+  - `inline-styles.mdc` - 行內樣式政策
+  - `i18n.mdc` - 國際化規則
+  - `react-hooks.mdc` - React Hooks 最佳實踐
+  - `security-policy.mdc` - 安全性政策
+  - `lint-policy.mdc` - Lint 禁用註解政策
+
+> 📖 完整編碼規範：[docs/guides/coding-standards.zh-tw.md](docs/guides/coding-standards.zh-tw.md)
+
 ## 🚀 快速開始
 
 ### 前置需求
