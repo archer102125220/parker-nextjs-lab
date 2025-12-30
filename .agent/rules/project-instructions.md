@@ -20,3 +20,10 @@ This ensures users make informed decisions about potentially risky actions.
 - English: [docs/guides/coding-standards.md](docs/guides/coding-standards.md)
 - 繁體中文: [docs/guides/coding-standards.zh-tw.md](docs/guides/coding-standards.zh-tw.md)
 - 問題排解: [docs/guides/troubleshooting.md](docs/guides/troubleshooting.md)
+
+## 🛠️ Build & Dev Tooling (Webpack Required)
+Due to SCSS `:export` syntax incompatibility with Turbopack, you MUST use the following scripts:
+- **Dev**: `yarn dev:webpack` (HTTP) or `yarn dev-https:webpack` (HTTPS)
+- **Build**: `yarn build:webpack`
+
+**Do NOT use `yarn dev` or `yarn build` as they may attempt to use Turbopack or lack necessary configurations.**
