@@ -112,7 +112,9 @@ export function ScrollFetchDemo(props: ScrollFetchDemoProps): ReactNode {
   useEffect(
     function () {
       if (error !== null && page > 1) {
-        setPage(0);
+        setTimeout(() => {
+          setPage(0);
+        }, 0);
       }
     },
     [error, page]

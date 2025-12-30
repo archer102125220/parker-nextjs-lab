@@ -15,6 +15,10 @@ const config: Config = {
     '<rootDir>/.next/',
     '<rootDir>/tests/' // Exclude Playwright tests
   ],
+  transformIgnorePatterns: [
+    // Transform ES modules causing issues (jest-axe)
+    'node_modules/(?!(jest-axe|@testing-library|@babel)/)'
+  ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1'
   },

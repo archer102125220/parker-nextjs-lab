@@ -1,7 +1,7 @@
 'use client';
 // https://developers.google.com/youtube/iframe_api_reference?hl=zh-tw
 import type { RefObject, Ref } from 'react';
-import { useRef, useEffect } from 'react';
+import { useRef, useImperativeHandle } from 'react';
 
 import { useYoutube } from '@/hooks/useYoutube';
 
@@ -84,23 +84,7 @@ export function Youtube(props: YoutubeProps) {
     } as any
   );
 
-  useEffect(() => {
-    const handle: YoutubeHandle = { youtbue };
-    if (typeof instanceRef === 'function') {
-      instanceRef(handle);
-      return () => {
-        instanceRef(null);
-      };
-    }
-    if (instanceRef && 'current' in instanceRef) {
-      (instanceRef as RefObject<YoutubeHandle | null>).current = handle;
-      return () => {
-        if (instanceRef && 'current' in instanceRef) {
-          (instanceRef as RefObject<YoutubeHandle | null>).current = null;
-        }
-      };
-    }
-  }, [youtbue, instanceRef]);
+  useImperativeHandle(instanceRef, () => ({ youtbue }), [youtbue]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function playerReady(e: any, ...arg: any[]) {

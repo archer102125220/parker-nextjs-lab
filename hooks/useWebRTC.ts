@@ -112,10 +112,14 @@ export function useWebRTC(options: UseWebRTCOptions = {}): UseWebRTCReturn {
   const {
     iceServers = DEFAULT_ICE_SERVERS,
     localStream = null,
-    onIceCandidate,
-    onRemoteStream,
-    onConnectionStateChange,
-    onIceConnectionStateChange
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onIceCandidate: _onIceCandidate,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onRemoteStream: _onRemoteStream,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onConnectionStateChange: _onConnectionStateChange,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onIceConnectionStateChange: _onIceConnectionStateChange
   } = options;
 
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
@@ -127,8 +131,10 @@ export function useWebRTC(options: UseWebRTCOptions = {}): UseWebRTCReturn {
     useState<RTCPeerConnectionState | null>(null);
   const [remoteStreams, setRemoteStreams] = useState<MediaStream[]>([]);
 
-  // 更新 options ref
-  optionsRef.current = options;
+  // Update options ref safely
+  useEffect(() => {
+    optionsRef.current = options;
+  }, [options]);
 
   /**
    * 初始化 RTCPeerConnection
@@ -323,7 +329,10 @@ export function useWebRTC(options: UseWebRTCOptions = {}): UseWebRTCReturn {
   // 自動加入本地串流
   useEffect(() => {
     if (localStream) {
-      addLocalStream(localStream);
+      // Use setTimeout to avoid synchronous state update in effect
+      setTimeout(() => {
+        addLocalStream(localStream);
+      }, 0);
     }
   }, [localStream, addLocalStream]);
 

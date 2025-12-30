@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 type TrackData = {
   event: string;
   url: string;
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 function handleGtmTrack(trackData: TrackData): void | NodeJS.Timeout {

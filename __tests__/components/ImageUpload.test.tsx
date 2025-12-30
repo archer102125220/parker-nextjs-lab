@@ -9,11 +9,13 @@ const mockFileReaderResult = 'data:image/png;base64,mockImageData';
 class MockFileReader {
   onload: ((e: ProgressEvent<FileReader>) => void) | null = null;
   result: string | null = mockFileReaderResult;
-  
+
   readAsDataURL() {
     setTimeout(() => {
       if (this.onload) {
-        this.onload({ target: { result: this.result } } as ProgressEvent<FileReader>);
+        this.onload({
+          target: { result: this.result }
+        } as ProgressEvent<FileReader>);
       }
     }, 0);
   }
@@ -50,7 +52,9 @@ describe('ImageUpload Component', () => {
   it('applies custom className', () => {
     render(<ImageUpload className="custom-uploader" />);
 
-    const wrapper = document.querySelector('.image_upload_wrapper.custom-uploader');
+    const wrapper = document.querySelector(
+      '.image_upload-wrapper.custom-uploader'
+    );
     expect(wrapper).toBeInTheDocument();
   });
 
@@ -59,7 +63,7 @@ describe('ImageUpload Component', () => {
 
     const input = document.querySelector('input[type="file"]');
     expect(input).toBeInTheDocument();
-    expect(input).toHaveClass('image_upload_input_hidden');
+    expect(input).toHaveClass('image_upload-input');
   });
 
   it('accepts only images by default', () => {
@@ -102,7 +106,9 @@ describe('ImageUpload Component', () => {
     const handleChange = jest.fn();
     render(<ImageUpload onChange={handleChange} />);
 
-    const input = document.querySelector('input[type="file"]') as HTMLInputElement;
+    const input = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
     const file = new File(['test'], 'test.png', { type: 'image/png' });
 
     fireEvent.change(input, { target: { files: [file] } });
@@ -114,7 +120,9 @@ describe('ImageUpload Component', () => {
     const handleError = jest.fn();
     render(<ImageUpload onError={handleError} />);
 
-    const input = document.querySelector('input[type="file"]') as HTMLInputElement;
+    const input = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
     const file = new File(['test'], 'test.txt', { type: 'text/plain' });
 
     fireEvent.change(input, { target: { files: [file] } });
@@ -126,8 +134,12 @@ describe('ImageUpload Component', () => {
     const handleError = jest.fn();
     render(<ImageUpload onError={handleError} maxSize={1024} />);
 
-    const input = document.querySelector('input[type="file"]') as HTMLInputElement;
-    const largeFile = new File(['x'.repeat(2048)], 'large.png', { type: 'image/png' });
+    const input = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+    const largeFile = new File(['x'.repeat(2048)], 'large.png', {
+      type: 'image/png'
+    });
     Object.defineProperty(largeFile, 'size', { value: 2048 });
 
     fireEvent.change(input, { target: { files: [largeFile] } });

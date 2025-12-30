@@ -24,7 +24,7 @@ const nextConfig: NextConfig = withSerwist(
       }
       return config;
     },
-    transpilePackages: ['mui-color-input'],
+    transpilePackages: ['mui-color-input', 'jest-axe'],
     /* config options here */
     sassOptions: {
       additionalData:

@@ -28,7 +28,13 @@ describe('Banner Component', () => {
   });
 
   it('renders with custom className', () => {
-    render(<Banner banners={mockBanners} className="custom-banner" autoplay={false} />);
+    render(
+      <Banner
+        banners={mockBanners}
+        className="custom-banner"
+        autoplay={false}
+      />
+    );
 
     const banner = document.querySelector('.banner.custom-banner');
     expect(banner).toBeInTheDocument();
@@ -37,17 +43,27 @@ describe('Banner Component', () => {
   it('shows navigation buttons by default', () => {
     render(<Banner banners={mockBanners} autoplay={false} />);
 
-    const prevButton = document.querySelector('.banner-nav-prev');
-    const nextButton = document.querySelector('.banner-nav-next');
+    const prevButton = document.querySelector(
+      '.banner-nav[css-position="prev"]'
+    );
+    const nextButton = document.querySelector(
+      '.banner-nav[css-position="next"]'
+    );
     expect(prevButton).toBeInTheDocument();
     expect(nextButton).toBeInTheDocument();
   });
 
   it('hides navigation when showNavigation is false', () => {
-    render(<Banner banners={mockBanners} showNavigation={false} autoplay={false} />);
+    render(
+      <Banner banners={mockBanners} showNavigation={false} autoplay={false} />
+    );
 
-    const prevButton = document.querySelector('.banner-nav-prev');
-    const nextButton = document.querySelector('.banner-nav-next');
+    const prevButton = document.querySelector(
+      '.banner-nav[css-position="prev"]'
+    );
+    const nextButton = document.querySelector(
+      '.banner-nav[css-position="next"]'
+    );
     expect(prevButton).not.toBeInTheDocument();
     expect(nextButton).not.toBeInTheDocument();
   });
@@ -55,22 +71,28 @@ describe('Banner Component', () => {
   it('shows indicators by default', () => {
     render(<Banner banners={mockBanners} autoplay={false} />);
 
-    const indicators = document.querySelectorAll('.banner-indicator');
+    const indicators = document.querySelectorAll('.banner-indicators-item');
     expect(indicators.length).toBe(3);
   });
 
   it('hides indicators when showIndicators is false', () => {
-    render(<Banner banners={mockBanners} showIndicators={false} autoplay={false} />);
+    render(
+      <Banner banners={mockBanners} showIndicators={false} autoplay={false} />
+    );
 
-    const indicators = document.querySelectorAll('.banner-indicator');
+    const indicators = document.querySelectorAll('.banner-indicators-item');
     expect(indicators.length).toBe(0);
   });
 
   it('calls onChange when navigating', () => {
     const handleChange = jest.fn();
-    render(<Banner banners={mockBanners} onChange={handleChange} autoplay={false} />);
+    render(
+      <Banner banners={mockBanners} onChange={handleChange} autoplay={false} />
+    );
 
-    const nextButton = document.querySelector('.banner-nav-next');
+    const nextButton = document.querySelector(
+      '.banner-nav[css-position="next"]'
+    );
     fireEvent.click(nextButton!);
 
     expect(handleChange).toHaveBeenCalledWith(1);
@@ -78,9 +100,18 @@ describe('Banner Component', () => {
 
   it('navigates to previous slide', () => {
     const handleChange = jest.fn();
-    render(<Banner banners={mockBanners} value={2} onChange={handleChange} autoplay={false} />);
+    render(
+      <Banner
+        banners={mockBanners}
+        value={2}
+        onChange={handleChange}
+        autoplay={false}
+      />
+    );
 
-    const prevButton = document.querySelector('.banner-nav-prev');
+    const prevButton = document.querySelector(
+      '.banner-nav[css-position="prev"]'
+    );
     fireEvent.click(prevButton!);
 
     expect(handleChange).toHaveBeenCalledWith(1);
@@ -88,9 +119,11 @@ describe('Banner Component', () => {
 
   it('navigates via indicator click', () => {
     const handleChange = jest.fn();
-    render(<Banner banners={mockBanners} onChange={handleChange} autoplay={false} />);
+    render(
+      <Banner banners={mockBanners} onChange={handleChange} autoplay={false} />
+    );
 
-    const indicators = document.querySelectorAll('.banner-indicator');
+    const indicators = document.querySelectorAll('.banner-indicators-item');
     fireEvent.click(indicators[2]);
 
     expect(handleChange).toHaveBeenCalledWith(2);
@@ -98,7 +131,9 @@ describe('Banner Component', () => {
 
   it('autoplays by default', () => {
     const handleChange = jest.fn();
-    render(<Banner banners={mockBanners} onChange={handleChange} interval={1000} />);
+    render(
+      <Banner banners={mockBanners} onChange={handleChange} interval={1000} />
+    );
 
     act(() => {
       jest.advanceTimersByTime(1000);
@@ -109,7 +144,14 @@ describe('Banner Component', () => {
 
   it('does not autoplay when autoplay is false', () => {
     const handleChange = jest.fn();
-    render(<Banner banners={mockBanners} onChange={handleChange} autoplay={false} interval={1000} />);
+    render(
+      <Banner
+        banners={mockBanners}
+        onChange={handleChange}
+        autoplay={false}
+        interval={1000}
+      />
+    );
 
     act(() => {
       jest.advanceTimersByTime(3000);
@@ -120,7 +162,9 @@ describe('Banner Component', () => {
 
   it('handles keyboard navigation', () => {
     const handleChange = jest.fn();
-    render(<Banner banners={mockBanners} onChange={handleChange} autoplay={false} />);
+    render(
+      <Banner banners={mockBanners} onChange={handleChange} autoplay={false} />
+    );
 
     const banner = document.querySelector('.banner');
     fireEvent.keyDown(banner!, { key: 'ArrowRight' });
@@ -131,7 +175,7 @@ describe('Banner Component', () => {
   it('applies 3D effect when 3 or more banners', () => {
     render(<Banner banners={mockBanners} autoplay={false} />);
 
-    const banner = document.querySelector('.banner.banner-3d');
+    const banner = document.querySelector('.banner[css-has-3d="true"]');
     expect(banner).toBeInTheDocument();
   });
 
