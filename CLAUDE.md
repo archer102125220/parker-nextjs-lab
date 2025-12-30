@@ -98,6 +98,13 @@ async function Page({ params }: Props) {
   3. Only then add the disable comment with proper justification
 - This applies to ALL lint suppression mechanisms
 
+### Build & Dev Tooling (Webpack Required) (⚠️ CRITICAL)
+- **ALWAYS use Webpack**: This project uses SCSS `:export` syntax which is currently incompatible with Turbopack.
+- **Dev**: Use `yarn dev:webpack` (HTTP) or `yarn dev-https:webpack` (HTTPS)
+- **Build**: Use `yarn build:webpack`
+- **Do NOT use**: `yarn dev` or `yarn build` (Turbopack default)
+
+
 ## Full Documentation
 - English: [docs/guides/coding-standards.md](docs/guides/coding-standards.md)
 - 繁體中文: [docs/guides/coding-standards.zh-tw.md](docs/guides/coding-standards.zh-tw.md)

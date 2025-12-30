@@ -465,3 +465,16 @@ useEffect(() => {
 | Blocks UI | No | Yes |
 
 > ⚠️ **Warning**: `useLayoutEffect` runs synchronously and blocks the browser from painting. Avoid heavy computations.
+
+### 5.4 Build & Dev Tooling (MANDATORY)
+
+Due to SCSS `:export` syntax incompatibility with Turbopack, you MUST use the following scripts:
+
+- **Development**:
+  - `yarn dev:webpack` (HTTP)
+  - `yarn dev-https:webpack` (HTTPS - Required for WebRTC/WebAuthn)
+- **Production Build**:
+  - `yarn build:webpack`
+
+**FORBIDDEN**: Do not use `yarn dev` or `yarn build` directly as they may default to Turbopack or lack necessary configurations.
+

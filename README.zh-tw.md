@@ -39,6 +39,7 @@
   - `react-hooks.mdc` - React Hooks 最佳實踐
   - `security-policy.mdc` - 安全性政策
   - `lint-policy.mdc` - Lint 禁用註解政策
+  - `build-tools.mdc` - 建置與開發工具（強制 Webpack）
 
 > 📖 完整編碼規範：[docs/guides/coding-standards.zh-tw.md](docs/guides/coding-standards.zh-tw.md)
 
@@ -88,16 +89,16 @@
 
 5. **啟動開發伺服器**
    ```bash
-   # 使用 Turbopack（預設，較快）
-   yarn dev
+   ```bash
+   # ⚠️ 使用 Turbopack（請避免 - 與 SCSS :export 不相容）
+   # yarn dev
    
-   # 使用 Webpack（本專案推薦）
+   # ✅ 使用 Webpack（強制）
    yarn dev:webpack
    
-   # 使用 HTTPS + Turbopack（WebRTC/WebAuthn 必須）
-   yarn dev-https
-   
-   # 使用 HTTPS + Webpack（推薦）
+   # ✅ 使用 HTTPS + Webpack（WebRTC/WebAuthn 必須）
+   yarn dev-https:webpack
+
    yarn dev-https:webpack
    ```
 

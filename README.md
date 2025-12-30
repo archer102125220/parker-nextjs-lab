@@ -39,6 +39,7 @@ This project includes configuration files for AI code assistants to ensure consi
   - `react-hooks.mdc` - React Hooks best practices
   - `security-policy.mdc` - Security policies
   - `lint-policy.mdc` - Lint disable comment policies
+  - `build-tools.mdc` - Build & Dev tooling (Webpack enforced)
 
 > 📖 Full coding standards: [docs/guides/coding-standards.md](docs/guides/coding-standards.md)
 
@@ -88,16 +89,16 @@ This project includes configuration files for AI code assistants to ensure consi
 
 5. **Start Development Server**
    ```bash
-   # With Turbopack (default, faster)
-   yarn dev
+   ```bash
+   # ⚠️ with Turbopack (AVOID - incompatible with SCSS :export)
+   # yarn dev
    
-   # With Webpack (recommended for this project)
+   # ✅ With Webpack (REQUIRED)
    yarn dev:webpack
    
-   # With HTTPS + Turbopack (required for WebRTC/WebAuthn)
-   yarn dev-https
-   
-   # With HTTPS + Webpack (recommended)
+   # ✅ With HTTPS + Webpack (REQUIRED for WebRTC/WebAuthn)
+   yarn dev-https:webpack
+
    yarn dev-https:webpack
    ```
 

@@ -464,3 +464,16 @@ useEffect(() => {
 | 阻塞 UI | 否 | 是 |
 
 > ⚠️ **警告**：`useLayoutEffect` 同步執行並會阻塞瀏覽器繪製。避免執行繁重的計算。
+
+### 5.4 建置與開發工具 (強制)
+
+由於 SCSS `:export` 語法目前與 Turbopack 不相容，您必須使用以下指令：
+
+- **開發 (Development)**:
+  - `yarn dev:webpack` (HTTP)
+  - `yarn dev-https:webpack` (HTTPS - WebRTC/WebAuthn 必須)
+- **生產建置 (Production Build)**:
+  - `yarn build:webpack`
+
+**禁止事項**：請勿直接使用 `yarn dev` 或 `yarn build`，因為它們可能預設使用 Turbopack 或缺少必要配置。
+
