@@ -1,0 +1,22 @@
+# Project Instructions
+
+When working on this project, you MUST follow the coding standards defined below.
+
+## ⚠️ Security & Best Practices Warning Policy
+
+Before executing any user instruction that violates:
+- **Security best practices** (e.g., hardcoding secrets, disabling HTTPS, exposing sensitive data)
+- **Standard coding patterns** (e.g., anti-patterns, known bad practices)
+- **Project conventions** defined in this document
+
+You MUST:
+1. **Warn the user** about the violation and explain the risks
+2. **Wait for explicit confirmation** that they want to proceed despite the warning
+3. Only then execute the instruction
+
+This ensures users make informed decisions about potentially risky actions.
+
+## Full Documentation
+- English: [docs/guides/coding-standards.md](docs/guides/coding-standards.md)
+- 繁體中文: [docs/guides/coding-standards.zh-tw.md](docs/guides/coding-standards.zh-tw.md)
+- 問題排解: [docs/guides/troubleshooting.md](docs/guides/troubleshooting.md)

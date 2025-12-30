@@ -26,7 +26,9 @@
 
 本專案包含 AI 程式碼助理的設定檔，以確保一致的程式碼風格：
 
-- **[CLAUDE.md](./CLAUDE.md)** - [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview)（Anthropic）規則
+- **[GEMINI.md](./GEMINI.md)** - [Gemini Code Assist / Gemini CLI](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/configuration.md#example-context-file-content-eg-geminimd)（[中文文件 - 非官方](https://gemini-cli.gh.miniasp.com/cli/configuration.html#context-%E6%AA%94%E6%A1%88%E5%85%A7%E5%AE%B9%E7%AF%84%E4%BE%8B-%E4%BE%8B%E5%A6%82-gemini-md)）（Google）規則
+- **[.agent/rules/](./.agent/rules/)** - [Antigravity](https://codelabs.developers.google.com/getting-started-google-antigravity?hl=zh-tw#8)（Google）規則
+- **[CLAUDE.md](./CLAUDE.md)** - [Claude Code](http://platform.claude.com/docs/en/agent-sdk/modifying-system-prompts#methods-of-modification)（Anthropic）規則
 - **[.cursor/rules/](./.cursor/rules/)** - [Cursor IDE](https://docs.cursor.com/context/rules) 規則
   - `typescript.mdc` - TypeScript 規範
   - `css-naming.mdc` - CSS 命名規範（改良式 BEM）

@@ -26,7 +26,9 @@ A comprehensive Next.js laboratory project showcasing modern web development pra
 
 This project includes configuration files for AI code assistants to ensure consistent code style:
 
-- **[CLAUDE.md](./CLAUDE.md)** - Rules for [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) (Anthropic)
+- **[GEMINI.md](./GEMINI.md)** - Rules for [Gemini Code Assist / Gemini CLI](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/configuration.md#example-context-file-content-eg-geminimd) ([中文文件 - 非官方](https://gemini-cli.gh.miniasp.com/cli/configuration.html#context-%E6%AA%94%E6%A1%88%E5%85%A7%E5%AE%B9%E7%AF%84%E4%BE%8B-%E4%BE%8B%E5%A6%82-gemini-md)) (Google)
+- **[.agent/rules/](./.agent/rules/)** - Rules for [Antigravity](https://codelabs.developers.google.com/getting-started-google-antigravity?hl=en#8) (Google)
+- **[CLAUDE.md](./CLAUDE.md)** - Rules for [Claude Code](http://platform.claude.com/docs/en/agent-sdk/modifying-system-prompts#methods-of-modification) (Anthropic)
 - **[.cursor/rules/](./.cursor/rules/)** - Rules for [Cursor IDE](https://docs.cursor.com/context/rules)
   - `typescript.mdc` - TypeScript conventions
   - `css-naming.mdc` - CSS naming conventions (Modified BEM)
