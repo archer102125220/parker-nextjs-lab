@@ -16,7 +16,8 @@ const LINK_SECTIONS = [
     links: [
       { href: '/components', labelKey: 'links.components', descKey: 'links.componentsDesc', icon: '📦' },
       { href: '/css-drawing', labelKey: 'links.cssDrawing', descKey: 'links.cssDrawingDesc', icon: '✏️' },
-      { href: '/directive-effects', labelKey: 'links.directiveEffects', descKey: 'links.directiveEffectsDesc', icon: '✨' }
+      { href: '/directive-effects', labelKey: 'links.directiveEffects', descKey: 'links.directiveEffectsDesc', icon: '✨' },
+      { href: '/krpano-demo', labelKey: 'links.krpano', descKey: 'links.krpanoDesc', icon: '🌐' }
     ]
   },
   {

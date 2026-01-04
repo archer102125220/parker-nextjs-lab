@@ -99,7 +99,9 @@
                 "route": "路由測試",
                 "routeDesc": "i18n 路由管理",
                 "about": "關於本站",
-                "aboutDesc": "專案資訊"
+                "aboutDesc": "專案資訊",
+                "krpano": "360 全景展示",
+                "krpanoDesc": "Krpano 全景查看器整合"
             }
         },
         "components": {

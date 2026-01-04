@@ -99,7 +99,9 @@
                 "route": "Route Test",
                 "routeDesc": "i18n routing",
                 "about": "About",
-                "aboutDesc": "Project info"
+                "aboutDesc": "Project info",
+                "krpano": "360 Panorama",
+                "krpanoDesc": "Krpano viewer integration"
             }
         },
         "components": {
