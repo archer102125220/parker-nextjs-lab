@@ -358,6 +358,12 @@
                 "serverlessWarning": "This feature requires running an AI model and cannot work in Vercel Serverless environment. Please use this feature in a local environment or on a server that supports long-running processes.",
                 "serverlessButton": "Not Supported in Serverless"
             }
+        },
+        "krpanoDemo": {
+            "title": "Krpano 360 Panorama Demo",
+            "description": "Integrating Krpano 360 panorama viewer with hotspot toggle functionality",
+            "instructionTitle": "🌐 Krpano 360 Panorama Demo",
+            "instructionContent": "Click Hotspot A (center) to toggle Hotspot B (30° right) visibility"
         }
     }
 }

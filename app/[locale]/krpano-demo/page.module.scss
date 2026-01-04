@@ -1,0 +1,92 @@
+.krpano_demo_page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+
+.krpano_demo {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.krpano_demo-header {
+  text-align: center;
+}
+
+.krpano_demo-title {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.krpano_demo-description {
+  margin: 0;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.krpano_demo-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  overflow: hidden;
+  border-radius: 12px;
+  background: #000;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.krpano_demo-viewer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.krpano_demo-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.krpano_demo-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.krpano_demo-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+}
+
+.krpano_demo-button:active {
+  transform: translateY(0);
+}
+
+@media (width <= 768px) {
+  .krpano_demo_page {
+    padding: 1rem;
+  }
+
+  .krpano_demo-title {
+    font-size: 1.5rem;
+  }
+
+  .krpano_demo-description {
+    font-size: 0.875rem;
+  }
+}
