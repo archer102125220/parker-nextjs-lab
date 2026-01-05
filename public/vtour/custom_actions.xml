@@ -1,0 +1,19 @@
+<krpano>
+  <!-- 
+    Action to toggle the visibility of a target hotspot.
+    Arguments:
+    %1 - Name of the hotspot to toggle.
+  -->
+  <action name="toggle_visibility">
+    if(hotspot[%1].visible,
+      set(hotspot[%1].visible, false);
+    ,
+      set(hotspot[%1].visible, true);
+    );
+  </action>
+
+  <!-- 
+    Refined action specifically for the requirement:
+    "Clicking A to let B hide (if shown) or show (if hidden)."
+  -->
+</krpano>

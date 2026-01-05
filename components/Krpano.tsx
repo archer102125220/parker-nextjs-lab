@@ -70,7 +70,7 @@ const DEFAULT_HOTSPOT_A: HotspotConfig = {
   atv: 0,
   scale: 0.5,
   visible: true,
-  onclick: 'toggle_b_visibility();'
+  onclick: 'toggle_visibility(hotspot_B);'
 };
 
 const DEFAULT_HOTSPOT_B: HotspotConfig = {
@@ -191,17 +191,6 @@ const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
             krpanoRef.current = krpano;
             initializedRef.current = true;
 
-            // 添加切換 action (使用固定的 hotspot_B 名稱)
-            if (enableToggle) {
-              const hotspotBName = mergedHotspotB.name;
-              krpano.call(
-                `addaction(toggle_b_visibility, ` +
-                  `if(hotspot[${hotspotBName}].visible, ` +
-                  `set(hotspot[${hotspotBName}].visible, false), ` +
-                  `set(hotspot[${hotspotBName}].visible, true)))`
-              );
-            }
-
             // 添加熱點
             addHotspot(krpano, mergedHotspotA);
             addHotspot(krpano, mergedHotspotB);
@@ -246,20 +235,18 @@ const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
     const krpano = krpanoRef.current;
     if (!krpano || !initializedRef.current) return;
 
+    const hotspotAName = mergedHotspotA.name;
     const hotspotBName = mergedHotspotB.name;
-    // 重新定義 action
+
     if (enableToggle) {
-      krpano.call(
-        `addaction(toggle_b_visibility, ` +
-          `if(hotspot[${hotspotBName}].visible, ` +
-          `set(hotspot[${hotspotBName}].visible, false), ` +
-          `set(hotspot[${hotspotBName}].visible, true)))`
+      krpano.set(
+        `hotspot[${hotspotAName}].onclick`,
+        `toggle_visibility(${hotspotBName})`
       );
     } else {
-      // 如果停用，可以在這裡移除 action 或做其他處理
-      // 但目前簡單處理，保持 action 存在，由外部邏輯決定是否調用
+      krpano.set(`hotspot[${hotspotAName}].onclick`, '');
     }
-  }, [enableToggle, mergedHotspotB.name]);
+  }, [enableToggle, mergedHotspotA.name, mergedHotspotB.name]);
 
   // 提供給外部的方法
   const toggleHotspotA = useCallback(() => {
@@ -283,8 +270,8 @@ const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
       console.warn('toggleHotspotB: toggle 功能已停用');
       return;
     }
-    krpano.call('toggle_b_visibility()');
-  }, [enableToggle]);
+    krpano.call(`toggle_visibility(${mergedHotspotB.name})`);
+  }, [enableToggle, mergedHotspotB.name]);
 
   const setHotspotVisible = useCallback(
     (hotspotName: string, visible: boolean) => {
