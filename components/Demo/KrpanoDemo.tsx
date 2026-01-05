@@ -92,8 +92,8 @@ export default function KrpanoDemo({
         className={style['krpano_demo-loading']}
         css-is-loaded={isLoaded ? 'true' : 'false'}
       >
-        <div className={style['krpano_demo-loading_spinner']} />
-        <p className={style['krpano_demo-loading_text']}>{loadingText}</p>
+        <div className={style['krpano_demo-loading-spinner']} />
+        <p className={style['krpano_demo-loading-text']}>{loadingText}</p>
       </div>
 
       {/* Header */}
@@ -118,10 +118,18 @@ export default function KrpanoDemo({
 
       {/* Controls */}
       <div className={style['krpano_demo-controls']}>
-        <Button variant="contained" onClick={handleToggleHotspotA}>
+        <Button
+          variant="contained"
+          className={style['krpano_demo-controls-button']}
+          onClick={handleToggleHotspotA}
+        >
           {toggleHotspotALabel}
         </Button>
-        <Button variant="contained" onClick={handleToggleHotspotB}>
+        <Button
+          variant="contained"
+          className={style['krpano_demo-controls-button']}
+          onClick={handleToggleHotspotB}
+        >
           {toggleHotspotBLabel}
         </Button>
 
@@ -129,6 +137,8 @@ export default function KrpanoDemo({
           <Button
             key={scene.name}
             variant="contained"
+            className={style['krpano_demo-controls-button']}
+            css-type="scene"
             onClick={() => handleLoadScene(scene.name)}
           >
             {scene.label}
