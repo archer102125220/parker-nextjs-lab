@@ -30,6 +30,9 @@ export default async function KrpanoDemoPage({ params }: Props) {
       <KrpanoDemo
         instructionTitle={t('instructionTitle')}
         instructionContent={t('instructionContent')}
+        loadingText={t('loadingText')}
+        toggleHotspotALabel={t('toggleHotspotA')}
+        toggleHotspotBLabel={t('toggleHotspotB')}
         scenes={[
           {
             name: 'scene_bryan_goff_iuyhxaia8ea_unsplash',

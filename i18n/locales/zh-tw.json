@@ -366,6 +366,9 @@
             "description": "整合 Krpano 360 全景查看器，實現圖片熱點切換功能",
             "instructionTitle": "🌐 Krpano 360 全景展示",
             "instructionContent": "點擊熱點 A（中央）來切換熱點 B（右側 30°）的顯示/隱藏狀態",
+            "loadingText": "載入全景中...",
+            "toggleHotspotA": "切換熱點 A",
+            "toggleHotspotB": "切換熱點 B",
             "scenes": {
                 "scene1": "場景 1 (極光)",
                 "scene2": "場景 2 (港口)"

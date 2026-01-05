@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import Button from '@mui/material/Button';
 
@@ -24,6 +24,12 @@ interface KrpanoDemoProps {
   instructionContent?: string;
   /** 場景列表 */
   scenes?: Array<{ name: string; label: string }>;
+  /** 載入中文字 */
+  loadingText?: string;
+  /** 熱點 A 按鈕文字 */
+  toggleHotspotALabel?: string;
+  /** 熱點 B 按鈕文字 */
+  toggleHotspotBLabel?: string;
 }
 
 const DEFAULT_SCENES = [
@@ -42,8 +48,14 @@ export default function KrpanoDemo({
   enableToggle = true,
   instructionTitle = '操作說明',
   instructionContent = '點擊熱點 A 來切換熱點 B 的顯示/隱藏狀態',
-  scenes = DEFAULT_SCENES
+  scenes = DEFAULT_SCENES,
+  loadingText = '載入全景中...',
+  toggleHotspotALabel = 'Toggle Hotspot A',
+  toggleHotspotBLabel = 'Toggle Hotspot B'
 }: KrpanoDemoProps) {
+  // 載入狀態
+  const [isLoaded, setIsLoaded] = useState(false);
+
   // 使用 State 管理狀態，而非透過 Ref 命令式操作
   const [currentScene, setCurrentScene] = useState(startScene);
   const [isHotspotAVisible, setIsHotspotAVisible] = useState(
@@ -52,6 +64,10 @@ export default function KrpanoDemo({
   const [isHotspotBVisible, setIsHotspotBVisible] = useState(
     hotspotB?.visible ?? true
   );
+
+  const handleReady = useCallback(() => {
+    setIsLoaded(true);
+  }, []);
 
   const handleToggleHotspotA = () => {
     setIsHotspotAVisible((prev) => !prev);
@@ -71,11 +87,22 @@ export default function KrpanoDemo({
 
   return (
     <div className={style.krpano_demo}>
+      {/* Loading Overlay */}
+      <div
+        className={style['krpano_demo-loading']}
+        css-is-loaded={isLoaded ? 'true' : 'false'}
+      >
+        <div className={style['krpano_demo-loading_spinner']} />
+        <p className={style['krpano_demo-loading_text']}>{loadingText}</p>
+      </div>
+
+      {/* Header */}
       <div className={style['krpano_demo-header']}>
         <h1 className={style['krpano_demo-title']}>{instructionTitle}</h1>
         <p className={style['krpano_demo-description']}>{instructionContent}</p>
       </div>
 
+      {/* VR Viewer */}
       <div className={style['krpano_demo-container']}>
         <Krpano
           xml={xml}
@@ -85,15 +112,17 @@ export default function KrpanoDemo({
           hotspotB={mergedHotspotB}
           enableToggle={enableToggle}
           className={style['krpano_demo-viewer']}
+          onReady={handleReady}
         />
       </div>
 
+      {/* Controls */}
       <div className={style['krpano_demo-controls']}>
         <Button variant="contained" onClick={handleToggleHotspotA}>
-          Toggle Hotspot A
+          {toggleHotspotALabel}
         </Button>
         <Button variant="contained" onClick={handleToggleHotspotB}>
-          Toggle Hotspot B
+          {toggleHotspotBLabel}
         </Button>
 
         {scenes.map((scene) => (
