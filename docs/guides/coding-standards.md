@@ -478,5 +478,5 @@ Due to SCSS `:export` syntax incompatibility with Turbopack, you MUST use the fo
 
 **FORBIDDEN**: Do not use `yarn dev` or `yarn build` directly as they may default to Turbopack or lack necessary configurations.
 
-**Environment Check**: When starting the development server, ALWAYS check if `NEXT_PUBLIC_API_BASE` and `NEXT_PUBLIC_DOMAIN` in `.env` match the port/domain settings in `package.json` scripts. If there is a mismatch (e.g., .env port 3000 vs script port 3001), you MUST wait for user confirmation before proceeding.
+**Environment Check**: When starting the development server, ALWAYS check if `NEXT_PUBLIC_API_BASE` and `NEXT_PUBLIC_DOMAIN` in `.env` match the port/domain settings in `package.json` scripts. If there is a mismatch (e.g., .env port 3000 vs script port 3001), OR if `.env` is gitignored and unreadable by the IDE, you MUST wait for user confirmation before proceeding.
 

@@ -103,7 +103,7 @@ async function Page({ params }: Props) {
 - **Dev**: Use `yarn dev:webpack` (HTTP) or `yarn dev-https:webpack` (HTTPS)
 - **Build**: Use `yarn build:webpack`
 - **Do NOT use**: `yarn dev` or `yarn build` (Turbopack default)
-- **Environment Check**: When starting the development server, ALWAYS check if `NEXT_PUBLIC_API_BASE` and `NEXT_PUBLIC_DOMAIN` in `.env` match the port/domain settings in `package.json` scripts. If there is a mismatch (e.g., .env port 3000 vs script port 3001), you MUST wait for user confirmation before proceeding.
+- **Environment Check**: When starting the development server, ALWAYS check if `NEXT_PUBLIC_API_BASE` and `NEXT_PUBLIC_DOMAIN` in `.env` match the port/domain settings in `package.json` scripts. If there is a mismatch (e.g., .env port 3000 vs script port 3001), OR if `.env` is gitignored and unreadable by the IDE, you MUST wait for user confirmation before proceeding.
 
 ## Full Documentation
 - English: [docs/guides/coding-standards.md](docs/guides/coding-standards.md)

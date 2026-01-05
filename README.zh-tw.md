@@ -161,7 +161,7 @@
 - `yarn dev-https` - 使用 HTTPS + Turbopack（埠 3000）
 - `yarn dev-https:webpack` - 使用 HTTPS + Webpack
 
-> **環境檢查**：啟動開發伺服器時，**務必**檢查 `.env` 中的 `NEXT_PUBLIC_API_BASE` 和 `NEXT_PUBLIC_DOMAIN` 設定是否與 `package.json` 中的啟動指令一致（特別是埠號）。如果不一致（例如：.env 使用 3000 但指令使用 3001），在此之前**必須**詢問使用者是否確認使用當前 `.env` 設定。
+> **環境檢查**：啟動開發伺服器時，**務必**檢查 `.env` 中的 `NEXT_PUBLIC_API_BASE` 和 `NEXT_PUBLIC_DOMAIN` 設定是否與 `package.json` 中的啟動指令一致（特別是埠號）。如果不一致（例如：.env 使用 3000 但指令使用 3001），或當 `.env` 被 gitignore 且 IDE 無法讀取時，在此之前**必須**詢問使用者是否確認使用當前 `.env` 設定。
 
 ### 資料庫
 - `yarn initDB` - 初始化資料庫（刪除、建立、遷移、種子資料）
