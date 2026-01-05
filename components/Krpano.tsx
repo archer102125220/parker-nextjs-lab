@@ -59,7 +59,7 @@ export interface KrpanoRef {
 // 默認熱點配置
 const DEFAULT_HOTSPOT_A: HotspotConfig = {
   name: 'hotspot_A',
-  url: '/vtour/skin/vtourskin_hotspot.png',
+  url: '/krpano/skin/vtourskin_hotspot.png',
   ath: 0,
   atv: 0,
   scale: 0.5,
@@ -69,7 +69,7 @@ const DEFAULT_HOTSPOT_A: HotspotConfig = {
 
 const DEFAULT_HOTSPOT_B: HotspotConfig = {
   name: 'hotspot_B',
-  url: '/vtour/skin/vtourskin_mapspot.png',
+  url: '/krpano/skin/vtourskin_mapspot.png',
   ath: 30,
   atv: 0,
   scale: 0.5,
@@ -114,7 +114,7 @@ function updateHotspot(krpano: KrpanoInstance, config: HotspotConfig) {
 
 const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
   {
-    xml = '/vtour/tour.xml',
+    xml = '/krpano/tour.xml',
     startScene,
     currentScene,
     hotspotA,
@@ -158,7 +158,7 @@ const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
         }
 
         const script = document.createElement('script');
-        script.src = '/vtour/tour.js';
+        script.src = '/krpano/tour.js';
         script.async = true;
         script.onload = () => resolve();
         script.onerror = () =>
