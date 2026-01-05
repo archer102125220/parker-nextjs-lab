@@ -30,6 +30,16 @@ export default async function KrpanoDemoPage({ params }: Props) {
       <KrpanoDemo
         instructionTitle={t('instructionTitle')}
         instructionContent={t('instructionContent')}
+        scenes={[
+          {
+            name: 'scene_bryan_goff_iuyhxaia8ea_unsplash',
+            label: t('scenes.scene1')
+          },
+          {
+            name: 'scene_timothy_oldfield_luufnhochru_unsplash',
+            label: t('scenes.scene2')
+          }
+        ]}
       />
     </div>
   );

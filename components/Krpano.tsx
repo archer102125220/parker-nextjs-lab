@@ -102,6 +102,11 @@ declare global {
 // 添加單個熱點的輔助函數
 function addHotspot(krpano: KrpanoInstance, config: HotspotConfig) {
   krpano.call(`addhotspot(${config.name})`);
+  updateHotspot(krpano, config);
+}
+
+// 更新熱點屬性的輔助函數
+function updateHotspot(krpano: KrpanoInstance, config: HotspotConfig) {
   krpano.set(`hotspot[${config.name}].url`, config.url);
   krpano.set(`hotspot[${config.name}].ath`, config.ath);
   krpano.set(`hotspot[${config.name}].atv`, config.atv);
@@ -144,7 +149,7 @@ const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
     [hotspotB]
   );
 
-  // 初始化 Krpano 並添加熱點
+  // 初始化 Krpano
   useEffect(() => {
     if (initializedRef.current) return;
 
@@ -160,7 +165,8 @@ const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
         script.src = '/vtour/tour.js';
         script.async = true;
         script.onload = () => resolve();
-        script.onerror = () => reject(new Error('Failed to load Krpano tour.js'));
+        script.onerror = () =>
+          reject(new Error('Failed to load Krpano tour.js'));
         document.head.appendChild(script);
       });
     };
@@ -217,7 +223,43 @@ const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
       krpanoRef.current = null;
       initializedRef.current = false;
     };
-  }, [xml, startScene, bgcolor, enableToggle, mergedHotspotA, mergedHotspotB, onReady, containerId, panoId]);
+    // 依賴項只包含初始化需要的參數，避免重複初始化
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [xml, startScene, bgcolor, onReady, containerId, panoId]);
+
+  // 監聽熱點 A 更新
+  useEffect(() => {
+    const krpano = krpanoRef.current;
+    if (!krpano || !initializedRef.current) return;
+    updateHotspot(krpano, mergedHotspotA);
+  }, [mergedHotspotA]);
+
+  // 監聽熱點 B 更新
+  useEffect(() => {
+    const krpano = krpanoRef.current;
+    if (!krpano || !initializedRef.current) return;
+    updateHotspot(krpano, mergedHotspotB);
+  }, [mergedHotspotB]);
+
+  // 監聽 enableToggle 更新
+  useEffect(() => {
+    const krpano = krpanoRef.current;
+    if (!krpano || !initializedRef.current) return;
+
+    const hotspotBName = mergedHotspotB.name;
+    // 重新定義 action
+    if (enableToggle) {
+      krpano.call(
+        `addaction(toggle_b_visibility, ` +
+          `if(hotspot[${hotspotBName}].visible, ` +
+          `set(hotspot[${hotspotBName}].visible, false), ` +
+          `set(hotspot[${hotspotBName}].visible, true)))`
+      );
+    } else {
+      // 如果停用，可以在這裡移除 action 或做其他處理
+      // 但目前簡單處理，保持 action 存在，由外部邏輯決定是否調用
+    }
+  }, [enableToggle, mergedHotspotB.name]);
 
   // 提供給外部的方法
   const toggleHotspotA = useCallback(() => {

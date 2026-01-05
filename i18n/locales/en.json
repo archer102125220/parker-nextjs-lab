@@ -365,7 +365,11 @@
             "title": "Krpano 360 Panorama Demo",
             "description": "Integrating Krpano 360 panorama viewer with hotspot toggle functionality",
             "instructionTitle": "🌐 Krpano 360 Panorama Demo",
-            "instructionContent": "Click Hotspot A (center) to toggle Hotspot B (30° right) visibility"
+            "instructionContent": "Click Hotspot A (center) to toggle Hotspot B (30° right) visibility",
+            "scenes": {
+                "scene1": "Scene 1 (Aurora)",
+                "scene2": "Scene 2 (Harbor)"
+            }
         }
     }
 }

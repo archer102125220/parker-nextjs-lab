@@ -30,7 +30,7 @@ const DEFAULT_SCENES = [
   { name: 'scene_bryan_goff_iuyhxaia8ea_unsplash', label: '場景 1 (極光)' },
   {
     name: 'scene_timothy_oldfield_luufnhochru_unsplash',
-    label: '場景 2 (雪景)'
+    label: '場景 2 (港口)'
   }
 ];
 
