@@ -86,6 +86,9 @@ export default function KrpanoDemo({
 
   const toggleDebug = () => setIsDebug((prev) => !prev);
   const toggleInfo = () => setIsInfoOpen((prev) => !prev);
+  
+  const [isControlsOpen, setIsControlsOpen] = useState(true);
+  const toggleControls = () => setIsControlsOpen((prev) => !prev);
 
   // 整合 Props 與 State
   const mergedHotspotA = { ...hotspotA, visible: isHotspotAVisible };
@@ -123,77 +126,90 @@ export default function KrpanoDemo({
       </div>
 
       {/* Controls */}
-      <div className={style['krpano_demo-controls']}>
+      <div 
+        className={style['krpano_demo-controls']}
+        data-open={isControlsOpen}
+      >
+        {/* Toggle Button */}
+        <button
+          className={style['krpano_demo-controls-toggle']}
+          onClick={toggleControls}
+          aria-label={isControlsOpen ? '收起選單' : '展開選單'}
+        >
+          {isControlsOpen ? '▶' : '◀'}
+        </button>
         
-        {/* Info Group */}
-        <div className={style['krpano_demo-controls-group']}>
-           <div className={style['krpano_demo-controls-label']}>說明文件</div>
-           <Button
-              variant="text"
-              onClick={toggleInfo}
-              className={style['krpano_demo-controls-button']}
-              data-variant="info"
-            >
-              {isInfoOpen ? '收起說明' : '顯示說明'}
-            </Button>
-            
-            <div 
-              className={style['krpano_demo-drawer']} 
-              data-expanded={isInfoOpen}
-            >
-               <div className={style['krpano_demo-drawer-content']}>
-                 <p className={style['krpano_demo-description']}>{instructionContent}</p>
-                 <div className={style['krpano_demo-debug-info']}>
-                    <p><strong>除錯模式：</strong>開啟後可查看執行紀錄。</p>
-                    <p><strong>快捷鍵：</strong>按下 <code>~</code> 鍵可開關 Log。</p>
+        <div className={style['krpano_demo-controls-scroll-area']}>
+          {/* Info Group */}
+          <div className={style['krpano_demo-controls-group']}>
+             <div className={style['krpano_demo-controls-label']}>說明文件</div>
+             <Button
+                variant="text"
+                onClick={toggleInfo}
+                className={style['krpano_demo-controls-button']}
+                data-variant="info"
+              >
+                {isInfoOpen ? '收起說明' : '顯示說明'}
+              </Button>
+              
+              <div 
+                className={style['krpano_demo-drawer']} 
+                data-expanded={isInfoOpen}
+              >
+                 <div className={style['krpano_demo-drawer-content']}>
+                   <p className={style['krpano_demo-description']}>{instructionContent}</p>
+                   <div className={style['krpano_demo-debug-info']}>
+                      <p><strong>除錯模式：</strong>開啟後可查看執行紀錄。</p>
+                      <p><strong>快捷鍵：</strong>按下 <code>~</code> 鍵可開關 Log。</p>
+                   </div>
                  </div>
-               </div>
-            </div>
-        </div>
+              </div>
+          </div>
 
-        <div className={style['krpano_demo-controls-group']}>
-            <div className={style['krpano_demo-controls-label']}>熱點控制</div>
-            <Button
-              variant="contained"
-              className={style['krpano_demo-controls-button']}
-              onClick={handleToggleHotspotA}
-            >
-              {toggleHotspotALabel}
-            </Button>
-            <Button
-              variant="contained"
-              className={style['krpano_demo-controls-button']}
-              onClick={handleToggleHotspotB}
-            >
-              {toggleHotspotBLabel}
-            </Button>
-        </div>
-
-        <div className={style['krpano_demo-controls-group']}>
-           <div className={style['krpano_demo-controls-label']}>場景切換</div>
-            {scenes.map((scene) => (
+          <div className={style['krpano_demo-controls-group']}>
+              <div className={style['krpano_demo-controls-label']}>熱點控制</div>
               <Button
-                key={scene.name}
                 variant="contained"
                 className={style['krpano_demo-controls-button']}
-                css-type="scene"
-                onClick={() => handleLoadScene(scene.name)}
+                onClick={handleToggleHotspotA}
               >
-                {scene.label}
+                {toggleHotspotALabel}
               </Button>
-            ))}
-        </div>
+              <Button
+                variant="contained"
+                className={style['krpano_demo-controls-button']}
+                onClick={handleToggleHotspotB}
+              >
+                {toggleHotspotBLabel}
+              </Button>
+          </div>
 
-        <div className={style['krpano_demo-controls-group']}>
-           <div className={style['krpano_demo-controls-label']}>開發工具</div>
-            <Button
-              variant="outlined"
-              color={isDebug ? 'warning' : 'primary'}
-              className={style['krpano_demo-controls-button']}
-              onClick={toggleDebug}
-            >
-              {isDebug ? '關閉 Log' : '開啟 Log'}
-            </Button>
+          <div className={style['krpano_demo-controls-group']}>
+             <div className={style['krpano_demo-controls-label']}>場景切換</div>
+              {scenes.map((scene) => (
+                <Button
+                  key={scene.name}
+                  variant="contained"
+                  className={style['krpano_demo-controls-button']}
+                  css-type="scene"
+                  onClick={() => handleLoadScene(scene.name)}
+                >
+                  {scene.label}
+                </Button>
+              ))}
+          </div>
+
+          <div className={style['krpano_demo-controls-group']}>
+             <div className={style['krpano_demo-controls-label']}>開發工具</div>
+              <Button
+                variant="outlined"
+                color={isDebug ? 'warning' : 'primary'}
+                className={style['krpano_demo-controls-button']}
+                onClick={toggleDebug}
+              >
+                {isDebug ? '關閉 Log' : '開啟 Log'}
+              </Button>
+          </div>
         </div>
       </div>
     </div>
