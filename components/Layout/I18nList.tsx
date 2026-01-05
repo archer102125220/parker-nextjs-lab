@@ -18,7 +18,14 @@ import LinkButton from '@/components/Link/Button';
 
 import './i18n_list.scss';
 
-export function I18nList(): ReactNode {
+interface I18nListProps {
+  className?: string;
+  nonce?: string;
+  color?: "inherit" | "primary" | "secondary" | "success" | "error" | "info" | "warning";
+}
+
+export function I18nList(props: I18nListProps): ReactNode {
+  const { className, color } = props;
   const pathname = usePathnameWithLocale(); // Includes locale: /zh-tw/...
   const locale = useLocale();
   // const t = useTranslations();
@@ -52,8 +59,9 @@ export function I18nList(): ReactNode {
       <Button 
         ref={triggerRef} 
         onClick={handleOpen} 
-        className="i18n_list-trigger"
+        className={`i18n_list-trigger ${className || ''}`}
         nonce={clientNonce}
+        color={color}
       >
         {/* {t(locale)} */}
         {locale === 'zh-tw' ? '中文' : 'English'}

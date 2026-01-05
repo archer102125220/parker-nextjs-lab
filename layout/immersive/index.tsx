@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { Link } from '@/i18n/navigation';
 import { Box, CssBaseline, Fab } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { I18nList } from '@/components/Layout/I18nList';
 
 import './layout.scss';
 
@@ -57,6 +58,11 @@ export function ImmersiveLayout(props: ImmersiveLayoutProps): ReactNode {
         {/* 主內容區域 */}
         <Box component="main" className="immersive_layout-content">
           {children}
+        </Box>
+
+        {/* 語言切換按鈕 */}
+        <Box className="immersive_layout-i18n">
+          <I18nList color="inherit" />
         </Box>
       </Box>
     </>
