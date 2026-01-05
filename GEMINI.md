@@ -23,11 +23,24 @@ This ensures users make informed decisions about potentially risky actions.
 - Use `as unknown as Type` for assertions, NEVER `as any`
 
 ### CSS/SCSS Naming (Modified BEM)
-- Block: `.countdown`
-- Element: `.countdown-title` (hyphen `-`)
-- Multi-word: `.image_upload` (underscore `_`)
-- State: `[css-is-active='true']` (HTML attr with `css-` prefix)
-- CSS variables: `--editor_height` (underscore `_`)
+- **Block**: `.countdown` (Single word)
+- **Element**: `.countdown-title` (hyphen `-` separates Block-Element)
+- **Sub-Element**: `.countdown-title-icon` (hyphen `-` separates Element-SubElement)
+- **Multi-word Segment**: `.image_upload` (underscore `_` separates words **WITHIN** a single segment)
+- **State**: `[css-is-active='true']` (HTML attr with `css-` prefix)
+- **CSS variables**: `--editor_height` (underscore `_`)
+
+#### 🛑 Critical Disambiguation for Gemini:
+- **Hierarchy (Hyphen `-`)**: Use when adding a new structural level or generic container.
+  - ✅ `.controls-group` (`group` is a sub-element of `controls`)
+  - ✅ `.card-body` (`body` is a sub-element of `card`)
+- **Multi-word Segment (Underscore `_`)**: Use when the name describes a SINGLE specific concept that happens to need two words.
+  - ✅ `.scroll_area` (A "scroll area" is one specific thing)
+  - ✅ `.debug_info` (Information about debugging)
+  - ✅ `.image_upload` (Upload component for images)
+- **Rule of Thumb**: If it's a generic container noun (group, wrapper, container, inner), it's likely a Sub-Element (`-`). If it's a specific descriptive noun phrase, it's a Multi-word Segment (`_`).
+
+#### Other Rules:
 - NEVER use `__` (double underscore) or `--` (double hyphen)
 - Use HTML attributes for states/variants: `[css-color='red']`, `[css-is-disabled='true']`
 - Each element MUST have only ONE className
@@ -55,6 +68,15 @@ This ensures users make informed decisions about potentially risky actions.
   - ✅ Good: `.footer-link { ... }` (unique class)
   - ✅ Exception: Dynamic content areas (e.g., `.content p { ... }`)
   - ✅ Exception: Third-party content (e.g., `:global a { ... }` in WangEditor)
+
+#### Style Reuse Strategy (Strict)
+- **Single Page Reuse**: Define `%placeholder_name` at the top of the SCSS file and use `@extend` in the specific element classes.
+- **Multi-Page Reuse**: Define in `styles/placeholders/` and use `@use`.
+- **Primary Goal**: Maintain unique unique class names for every structural element to ensure instant file/element location in DevTools.
+
+#### Strict Nesting (Hierarchy Reflection)
+- Class names MUST generally reflect the DOM containment hierarchy if it aids context.
+- Example: If `group` is inside `scroll_area`, it should be named `scroll_area-group`, not just `group` (unless `group` is a top-level independent abstraction).
 
 ### Demo Components (`components/Demo/`)
 - Full-page Client Components for feature demonstrations

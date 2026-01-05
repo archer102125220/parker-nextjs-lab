@@ -154,30 +154,42 @@ export default function KrpanoDemo({
 
         <div className={style['krpano_demo-controls-scroll_area']}>
           {/* Info Group */}
-          <div className={style['krpano_demo-controls-group']}>
-            <div className={style['krpano_demo-controls-group-label']}>
+          <div className={style['krpano_demo-controls-scroll_area-group']}>
+            <div
+              className={
+                style['krpano_demo-controls-scroll_area-group-label']
+              }
+            >
               說明文件
             </div>
             <Button
               variant="text"
               onClick={toggleInfo}
-              className={style['krpano_demo-controls-group-button']}
+              className={
+                style['krpano_demo-controls-scroll_area-group-button']
+              }
               css-variant="info"
             >
               {isInfoOpen ? '收起說明' : '顯示說明'}
             </Button>
 
             <div
-              className={style['krpano_demo-controls-group-drawer']}
+              className={
+                style['krpano_demo-controls-scroll_area-group-drawer']
+              }
               css-expanded={`${isInfoOpen}`}
             >
               <div
-                className={style['krpano_demo-controls-group-drawer-content']}
+                className={
+                  style[
+                    'krpano_demo-controls-scroll_area-group-drawer-content'
+                  ]
+                }
               >
                 <p
                   className={
                     style[
-                      'krpano_demo-controls-group-drawer-content-description'
+                      'krpano_demo-controls-scroll_area-group-drawer-content-description'
                     ]
                   }
                 >
@@ -186,7 +198,7 @@ export default function KrpanoDemo({
                 <div
                   className={
                     style[
-                      'krpano_demo-controls-group-drawer-content-debug_info'
+                      'krpano_demo-controls-scroll_area-group-drawer-content-debug_info'
                     ]
                   }
                 >
@@ -201,21 +213,37 @@ export default function KrpanoDemo({
             </div>
           </div>
 
-          <div className={style['krpano_demo-controls-group']}>
-            <div className={style['krpano_demo-controls-group-label']}>
+          <div className={style['krpano_demo-controls-scroll_area-group']}>
+            <div
+              className={
+                style['krpano_demo-controls-scroll_area-group-label']
+              }
+            >
               熱點控制
             </div>
-            <div className={style['krpano_demo-controls-group-hotspot']}>
+            <div
+              className={
+                style['krpano_demo-controls-scroll_area-group-hotspot']
+              }
+            >
               <Button
                 variant="contained"
-                className={style['krpano_demo-controls-group-hotspot-button']}
+                className={
+                  style[
+                    'krpano_demo-controls-scroll_area-group-hotspot-button'
+                  ]
+                }
                 onClick={handleToggleHotspotA}
               >
                 {toggleHotspotALabel}
               </Button>
               <Button
                 variant="contained"
-                className={style['krpano_demo-controls-group-hotspot-button']}
+                className={
+                  style[
+                    'krpano_demo-controls-scroll_area-group-hotspot-button'
+                  ]
+                }
                 onClick={handleToggleHotspotB}
               >
                 {toggleHotspotBLabel}
@@ -223,16 +251,28 @@ export default function KrpanoDemo({
             </div>
           </div>
 
-          <div className={style['krpano_demo-controls-group']}>
-            <div className={style['krpano_demo-controls-group-label']}>
+          <div className={style['krpano_demo-controls-scroll_area-group']}>
+            <div
+              className={
+                style['krpano_demo-controls-scroll_area-group-label']
+              }
+            >
               場景切換
             </div>
-            <div className={style['krpano_demo-controls-group-scene']}>
+            <div
+              className={
+                style['krpano_demo-controls-scroll_area-group-scene']
+              }
+            >
               {scenes.map((scene) => (
                 <Button
                   key={scene.name}
                   variant="contained"
-                  className={style['krpano_demo-controls-group-scene-button']}
+                  className={
+                    style[
+                      'krpano_demo-controls-scroll_area-group-scene-button'
+                    ]
+                  }
                   css-type="scene"
                   onClick={() => handleLoadScene(scene.name)}
                 >
@@ -242,14 +282,20 @@ export default function KrpanoDemo({
             </div>
           </div>
 
-          <div className={style['krpano_demo-controls-group']}>
-            <div className={style['krpano_demo-controls-group-label']}>
+          <div className={style['krpano_demo-controls-scroll_area-group']}>
+            <div
+              className={
+                style['krpano_demo-controls-scroll_area-group-label']
+              }
+            >
               開發工具
             </div>
             <Button
               variant="outlined"
               color={isDebug ? 'warning' : 'primary'}
-              className={style['krpano_demo-controls-group-button']}
+              className={
+                style['krpano_demo-controls-scroll_area-group-button']
+              }
               onClick={toggleDebug}
             >
               {isDebug ? '關閉 Log' : '開啟 Log'}
