@@ -118,7 +118,7 @@ export default function KrpanoDemo({
 
       {/* Header */}
       <div className={style['krpano_demo-header']}>
-        <h1 className={style['krpano_demo-title']}>{instructionTitle}</h1>
+        <h1 className={style['krpano_demo-header-title']}>{instructionTitle}</h1>
       </div>
 
       {/* VR Viewer */}
@@ -130,7 +130,7 @@ export default function KrpanoDemo({
           hotspotA={mergedHotspotA}
           hotspotB={mergedHotspotB}
           enableToggle={enableToggle}
-          className={style['krpano_demo-viewer']}
+          className={style['krpano_demo-container-viewer']}
           onReady={handleReady}
           debug={isDebug}
         />
@@ -153,23 +153,23 @@ export default function KrpanoDemo({
         <div className={style['krpano_demo-controls-scroll-area']}>
           {/* Info Group */}
           <div className={style['krpano_demo-controls-group']}>
-             <div className={style['krpano_demo-controls-label']}>說明文件</div>
+             <div className={style['krpano_demo-controls-group-label']}>說明文件</div>
              <Button
                 variant="text"
                 onClick={toggleInfo}
-                className={style['krpano_demo-controls-button']}
+                className={style['krpano_demo-controls-group-button']}
                 data-variant="info"
               >
                 {isInfoOpen ? '收起說明' : '顯示說明'}
               </Button>
               
               <div 
-                className={style['krpano_demo-drawer']} 
+                className={style['krpano_demo-controls-group-drawer']} 
                 data-expanded={isInfoOpen}
               >
-                 <div className={style['krpano_demo-drawer-content']}>
-                   <p className={style['krpano_demo-description']}>{instructionContent}</p>
-                   <div className={style['krpano_demo-debug-info']}>
+                 <div className={style['krpano_demo-controls-group-drawer-content']}>
+                   <p className={style['krpano_demo-controls-group-drawer-content-description']}>{instructionContent}</p>
+                   <div className={style['krpano_demo-controls-group-drawer-content-debug_info']}>
                       <p><strong>除錯模式：</strong>開啟後可查看執行紀錄。</p>
                       <p><strong>快捷鍵：</strong>按下 <code>~</code> 鍵可開關 Log。</p>
                    </div>
@@ -178,17 +178,17 @@ export default function KrpanoDemo({
           </div>
 
           <div className={style['krpano_demo-controls-group']}>
-              <div className={style['krpano_demo-controls-label']}>熱點控制</div>
+              <div className={style['krpano_demo-controls-group-label']}>熱點控制</div>
               <Button
                 variant="contained"
-                className={style['krpano_demo-controls-button']}
+                className={style['krpano_demo-controls-group-button']}
                 onClick={handleToggleHotspotA}
               >
                 {toggleHotspotALabel}
               </Button>
               <Button
                 variant="contained"
-                className={style['krpano_demo-controls-button']}
+                className={style['krpano_demo-controls-group-button']}
                 onClick={handleToggleHotspotB}
               >
                 {toggleHotspotBLabel}
@@ -196,12 +196,12 @@ export default function KrpanoDemo({
           </div>
 
           <div className={style['krpano_demo-controls-group']}>
-             <div className={style['krpano_demo-controls-label']}>場景切換</div>
+             <div className={style['krpano_demo-controls-group-label']}>場景切換</div>
               {scenes.map((scene) => (
                 <Button
                   key={scene.name}
                   variant="contained"
-                  className={style['krpano_demo-controls-button']}
+                  className={style['krpano_demo-controls-group-button']}
                   css-type="scene"
                   onClick={() => handleLoadScene(scene.name)}
                 >
@@ -211,11 +211,11 @@ export default function KrpanoDemo({
           </div>
 
           <div className={style['krpano_demo-controls-group']}>
-             <div className={style['krpano_demo-controls-label']}>開發工具</div>
+             <div className={style['krpano_demo-controls-group-label']}>開發工具</div>
               <Button
                 variant="outlined"
                 color={isDebug ? 'warning' : 'primary'}
-                className={style['krpano_demo-controls-button']}
+                className={style['krpano_demo-controls-group-button']}
                 onClick={toggleDebug}
               >
                 {isDebug ? '關閉 Log' : '開啟 Log'}

@@ -43,12 +43,12 @@
     inset: 0;
     z-index: 1;
     background: #0a0a0a;
-  }
 
-  // Element: Viewer
-  &-viewer {
-    width: 100%;
-    height: 100%;
+    // Nested Element: Viewer
+    &-viewer {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   // Element: Loading Overlay
@@ -109,32 +109,19 @@
     @media (width <= 768px) {
       padding: 1rem;
     }
-  }
 
-  // Element: Title
-  &-title {
-    margin: 0 0 0.5rem;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #fff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 12px rgba(0, 0, 0, 0.5);
-    letter-spacing: 0.05em;
+    // Nested Element: Title
+    &-title {
+      margin: 0 0 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 12px rgba(0, 0, 0, 0.5);
+      letter-spacing: 0.05em;
 
-    @media (width <= 768px) {
-      font-size: 1.25rem;
-    }
-  }
-
-  // Element: Description
-  &-description {
-    margin: 0;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.95);
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
-
-    @media (width <= 768px) {
-      font-size: 0.8rem;
+      @media (width <= 768px) {
+        font-size: 1.25rem;
+      }
     }
   }
 
@@ -232,131 +219,144 @@
       gap: 0.5rem;
       margin-bottom: 1.5rem;
       pointer-events: auto;
-    }
 
-    // Nested Element: Label
-    &-label {
-      margin-right: 0.25rem;
-      margin-bottom: 0.25rem;
-      padding: 4px 8px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.9);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      background: rgba(0, 0, 0, 0.6);
-      border-radius: 4px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(4px);
-    }
+      // Nested Element: Label
+      &-label {
+        margin-right: 0.25rem;
+        margin-bottom: 0.25rem;
+        padding: 4px 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(4px);
+      }
 
-    // Nested Element: Button
-    &-button {
-      min-width: auto;
-      padding: 0.6rem 1.2rem;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #fff;
-      text-transform: none;
-      background: rgba(0, 0, 0, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 2rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(8px);
-      cursor: pointer;
-      pointer-events: auto;
-      transition: all 0.2s ease;
-
-      &:hover {
+      // Nested Element: Button
+      &-button {
+        min-width: auto;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
+        font-weight: 600;
         color: #fff;
-        background: rgba(0, 0, 0, 0.85);
-        border-color: #fff;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-        transform: translateY(-2px);
-      }
-
-      &:active {
-        transform: translateY(0);
-      }
-
-      @media (width <= 768px) {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.7rem;
-      }
-
-      &[data-variant='info'] {
-        color: #ffd700;
-        border-color: rgba(255, 215, 0, 0.4);
+        text-transform: none;
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(8px);
+        cursor: pointer;
+        pointer-events: auto;
+        transition: all 0.2s ease;
 
         &:hover {
-          background: rgba(255, 215, 0, 0.15);
-          border-color: #ffd700;
+          color: #fff;
+          background: rgba(0, 0, 0, 0.85);
+          border-color: #fff;
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+          transform: translateY(-2px);
         }
-      }
 
-      &[css-type='scene'] {
-        background: linear-gradient(
-          135deg,
-          rgba(102, 126, 234, 0.5) 0%,
-          rgba(118, 75, 162, 0.5) 100%
-        );
-        border-color: rgba(102, 126, 234, 0.4);
+        &:active {
+          transform: translateY(0);
+        }
 
-        &:hover {
+        @media (width <= 768px) {
+          padding: 0.4rem 0.8rem;
+          font-size: 0.7rem;
+        }
+
+        &[data-variant='info'] {
+          color: #ffd700;
+          border-color: rgba(255, 215, 0, 0.4);
+
+          &:hover {
+            background: rgba(255, 215, 0, 0.15);
+            border-color: #ffd700;
+          }
+        }
+
+        &[css-type='scene'] {
           background: linear-gradient(
             135deg,
-            rgba(102, 126, 234, 0.8) 0%,
-            rgba(118, 75, 162, 0.8) 100%
+            rgba(102, 126, 234, 0.5) 0%,
+            rgba(118, 75, 162, 0.5) 100%
           );
-          border-color: #fff;
+          border-color: rgba(102, 126, 234, 0.4);
+
+          &:hover {
+            background: linear-gradient(
+              135deg,
+              rgba(102, 126, 234, 0.8) 0%,
+              rgba(118, 75, 162, 0.8) 100%
+            );
+            border-color: #fff;
+          }
         }
       }
-    }
-  }
 
-  // Element: Info Drawer
-  &-drawer {
-    width: 240px;
-    max-height: 0;
-    overflow: hidden;
-    margin-top: 0;
-    background: rgba(0, 0, 0, 0.9);
-    border-radius: 12px;
-    opacity: 0;
-    backdrop-filter: blur(12px);
-    transition: 
-      max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-      opacity 0.3s ease,
-      margin-top 0.3s ease;
+      // Nested Element: Drawer
+      &-drawer {
+        width: 240px;
+        max-height: 0;
+        overflow: hidden;
+        margin-top: 0;
+        background: rgba(0, 0, 0, 0.9);
+        border-radius: 12px;
+        opacity: 0;
+        backdrop-filter: blur(12px);
+        transition: 
+          max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 0.3s ease,
+          margin-top 0.3s ease;
 
-    &[data-expanded='true'] {
-      max-height: 500px;
-      margin-top: 0.5rem;
-      opacity: 1;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
+        &[data-expanded='true'] {
+          max-height: 500px;
+          margin-top: 0.5rem;
+          opacity: 1;
+          box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+        }
 
-    // Nested Element: Content
-    &-content {
-      padding: 1rem;
-      font-size: 0.85rem;
-      line-height: 1.6;
-      color: rgba(255, 255, 255, 0.95);
-      text-align: left;
-    }
-  }
+        // Nested Element: Content
+        &-content {
+          padding: 1rem;
+          font-size: 0.85rem;
+          line-height: 1.6;
+          color: rgba(255, 255, 255, 0.95);
+          text-align: left;
 
-  // Element: Debug Info
-  &-debug-info {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+          // Nested Element: Description
+          &-description {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
 
-    p {
-      margin: 0.25rem 0;
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.7);
+            @media (width <= 768px) {
+              font-size: 0.8rem;
+            }
+          }
+
+          // Nested Element: Debug Info
+          &-debug_info {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+            p {
+              margin: 0.25rem 0;
+              font-size: 0.8rem;
+              color: rgba(255, 255, 255, 0.7);
+            }
+          }
+        }
+      }
     }
   }
 }
