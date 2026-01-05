@@ -28,7 +28,12 @@
    - 事件系統 (`<events>`)
    - 插件 (Plugins) 應用 (WebVR, Gyro)
    - `include` 模組化管理
-   - 除錯技巧
+
+### 5. [除錯與開發工具](./05-debugging.md)
+   - 啟用除錯模式 (Debug Mode)
+   - 內建變數檢視器
+   - VTour Editor
+   - Next.js 整合除錯
 
 ## 為什麼選擇 Krpano？
 

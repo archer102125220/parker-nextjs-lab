@@ -30,7 +30,7 @@ export interface HotspotConfig {
 
 // Krpano 組件 Props
 export interface KrpanoProps {
-  /** XML 配置文件路徑，默認為 '/vtour/tour.xml' */
+  /** XML 配置文件路徑，默認為 '/krpano/tour.xml' */
   xml?: string;
   /** 初始場景名稱 - 僅用於組件掛載時 */
   startScene?: string;
@@ -48,6 +48,8 @@ export interface KrpanoProps {
   className?: string;
   /** 載入完成回調 */
   onReady?: (krpano: KrpanoInstance) => void;
+  /** 是否開啟 Debug Log 視窗 */
+  debug?: boolean;
 }
 
 // Krpano Ref 方法 (僅保留作為逃生艙的實例獲取)
@@ -122,7 +124,8 @@ const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
     enableToggle = true,
     bgcolor = '#000000',
     className,
-    onReady
+    onReady,
+    debug = false
   },
   ref
 ) {
@@ -253,6 +256,17 @@ const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
       krpano.set(`hotspot[${hotspotAName}].onclick`, '');
     }
   }, [enableToggle, mergedHotspotA.name, mergedHotspotB.name]);
+
+  // 監聽 debug 更新
+  useEffect(() => {
+    const krpano = krpanoRef.current;
+    if (!krpano || !initializedRef.current) return;
+    
+    // 動態設定 debugmode
+    krpano.set('debugmode', debug);
+    // 開啟/關閉 Log 視窗
+    krpano.call(`showlog(${debug})`);
+  }, [debug]);
 
   const getInstance = useCallback(() => krpanoRef.current, []);
 
