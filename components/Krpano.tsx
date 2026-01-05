@@ -52,6 +52,8 @@ export interface KrpanoProps {
   debug?: boolean;
   /** 動態文字圖層內容 (i18n) */
   textLayerContent?: string;
+  /** 場景完全載入完成回調 (在 onReady 之後，場景圖像載入完成時觸發) */
+  onLoadComplete?: (krpano: KrpanoInstance) => void;
 }
 
 // Krpano Ref 方法 (僅保留作為逃生艙的實例獲取)
@@ -94,6 +96,7 @@ declare global {
       onready?: (krpano: KrpanoInstance) => void;
     }) => void;
     removepano?: (id: string) => void;
+    onKrpanoLoadComplete?: () => void;
   }
 }
 
@@ -116,6 +119,30 @@ function updateHotspot(krpano: KrpanoInstance, config: HotspotConfig) {
   }
 }
 
+// 初始化或更新文字圖層的輔助函數
+const TEXT_LAYER_NAME = 'i18n_text_layer';
+function initOrUpdateTextLayer(krpano: KrpanoInstance, content?: string) {
+  if (content) {
+    // 檢查圖層是否存在，如果不存在則創建
+    const existingLayer = krpano.get(`layer[${TEXT_LAYER_NAME}]`);
+    if (!existingLayer) {
+      krpano.call(`addlayer(${TEXT_LAYER_NAME})`);
+      krpano.set(`layer[${TEXT_LAYER_NAME}].type`, 'text');
+      krpano.set(`layer[${TEXT_LAYER_NAME}].align`, 'bottom');
+      krpano.set(`layer[${TEXT_LAYER_NAME}].x`, '0');
+      krpano.set(`layer[${TEXT_LAYER_NAME}].y`, '10%');
+      krpano.set(`layer[${TEXT_LAYER_NAME}].css`, 'font-size:24px; color:white; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); font-weight: bold;');
+      krpano.set(`layer[${TEXT_LAYER_NAME}].bg`, false);
+    }
+    // 更新文字內容
+    krpano.set(`layer[${TEXT_LAYER_NAME}].html`, content);
+    krpano.set(`layer[${TEXT_LAYER_NAME}].visible`, true);
+  } else {
+    // 如果沒有內容，隱藏圖層
+    krpano.set(`layer[${TEXT_LAYER_NAME}].visible`, false);
+  }
+}
+
 const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
   {
     xml = '/krpano/tour.xml',
@@ -128,7 +155,8 @@ const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
     className,
     onReady,
     debug = false,
-    textLayerContent
+    textLayerContent,
+    onLoadComplete
   },
   ref
 ) {
@@ -196,6 +224,16 @@ const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
             // 添加熱點
             addHotspot(krpano, mergedHotspotA);
             addHotspot(krpano, mergedHotspotB);
+
+            // 定義統一的 onloadcomplete 回調，整合內部邏輯與外部 callback
+            window.onKrpanoLoadComplete = () => {
+              initOrUpdateTextLayer(krpano, textLayerContent);
+              onLoadComplete?.(krpano);
+            };
+
+            // 使用 events.onloadcomplete 事件，在場景完全載入後觸發
+            // 這是 Krpano 官方推薦的方式，比 delayedcall 更可靠
+            krpano.set('events.onloadcomplete', 'jscall(onKrpanoLoadComplete())');
 
             onReady?.(krpano);
           }
@@ -271,32 +309,12 @@ const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
     krpano.call(`showlog(${debug})`);
   }, [debug]);
 
-  // 監聽 textLayerContent 更新 - 動態文字圖層
+  // 監聯 textLayerContent 更新 - 動態文字圖層
   useEffect(() => {
     const krpano = krpanoRef.current;
     if (!krpano || !initializedRef.current) return;
 
-    const layerName = 'i18n_text_layer';
-    
-    if (textLayerContent) {
-      // 檢查圖層是否存在，如果不存在則創建
-      const existingLayer = krpano.get(`layer[${layerName}]`);
-      if (!existingLayer) {
-        krpano.call(`addlayer(${layerName})`);
-        krpano.set(`layer[${layerName}].type`, 'text');
-        krpano.set(`layer[${layerName}].align`, 'bottom');
-        krpano.set(`layer[${layerName}].x`, '0');
-        krpano.set(`layer[${layerName}].y`, '10%');
-        krpano.set(`layer[${layerName}].css`, 'font-size:24px; color:white; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); font-weight: bold;');
-        krpano.set(`layer[${layerName}].bg`, false);
-      }
-      // 更新文字內容
-      krpano.set(`layer[${layerName}].html`, textLayerContent);
-      krpano.set(`layer[${layerName}].visible`, true);
-    } else {
-      // 如果沒有內容，隱藏圖層
-      krpano.set(`layer[${layerName}].visible`, false);
-    }
+    initOrUpdateTextLayer(krpano, textLayerContent);
   }, [textLayerContent]);
 
   const getInstance = useCallback(() => krpanoRef.current, []);
