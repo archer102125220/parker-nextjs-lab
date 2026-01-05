@@ -1,10 +1,10 @@
 'use client';
 
-import { useRef } from 'react';
+import { useState } from 'react';
 
 import Button from '@mui/material/Button';
 
-import Krpano, { KrpanoRef, HotspotConfig } from '@/components/Krpano';
+import Krpano, { HotspotConfig } from '@/components/Krpano';
 import style from '@/app/[locale]/krpano-demo/page.module.scss';
 
 interface KrpanoDemoProps {
@@ -44,19 +44,30 @@ export default function KrpanoDemo({
   instructionContent = '點擊熱點 A 來切換熱點 B 的顯示/隱藏狀態',
   scenes = DEFAULT_SCENES
 }: KrpanoDemoProps) {
-  const krpanoRef = useRef<KrpanoRef>(null);
+  // 使用 State 管理狀態，而非透過 Ref 命令式操作
+  const [currentScene, setCurrentScene] = useState(startScene);
+  const [isHotspotAVisible, setIsHotspotAVisible] = useState(
+    hotspotA?.visible ?? true
+  );
+  const [isHotspotBVisible, setIsHotspotBVisible] = useState(
+    hotspotB?.visible ?? true
+  );
 
   const handleToggleHotspotA = () => {
-    krpanoRef.current?.toggleHotspotA();
+    setIsHotspotAVisible((prev) => !prev);
   };
 
   const handleToggleHotspotB = () => {
-    krpanoRef.current?.toggleHotspotB();
+    setIsHotspotBVisible((prev) => !prev);
   };
 
   const handleLoadScene = (sceneName: string) => {
-    krpanoRef.current?.loadScene(sceneName);
+    setCurrentScene(sceneName);
   };
+
+  // 整合 Props 與 State
+  const mergedHotspotA = { ...hotspotA, visible: isHotspotAVisible };
+  const mergedHotspotB = { ...hotspotB, visible: isHotspotBVisible };
 
   return (
     <div className={style.krpano_demo}>
@@ -67,11 +78,11 @@ export default function KrpanoDemo({
 
       <div className={style['krpano_demo-container']}>
         <Krpano
-          ref={krpanoRef}
           xml={xml}
           startScene={startScene}
-          hotspotA={hotspotA}
-          hotspotB={hotspotB}
+          currentScene={currentScene}
+          hotspotA={mergedHotspotA}
+          hotspotB={mergedHotspotB}
           enableToggle={enableToggle}
           className={style['krpano_demo-viewer']}
         />

@@ -32,8 +32,10 @@ export interface HotspotConfig {
 export interface KrpanoProps {
   /** XML 配置文件路徑，默認為 '/vtour/tour.xml' */
   xml?: string;
-  /** 初始場景名稱 */
+  /** 初始場景名稱 - 僅用於組件掛載時 */
   startScene?: string;
+  /** 當前場景名稱 - 用於動態切換 */
+  currentScene?: string;
   /** 熱點 A 配置 */
   hotspotA?: Partial<HotspotConfig>;
   /** 熱點 B 配置 */
@@ -48,17 +50,9 @@ export interface KrpanoProps {
   onReady?: (krpano: KrpanoInstance) => void;
 }
 
-// Krpano Ref 方法
+// Krpano Ref 方法 (僅保留作為逃生艙的實例獲取)
 export interface KrpanoRef {
-  /** 切換熱點 A 的顯示/隱藏 */
-  toggleHotspotA: () => void;
-  /** 切換熱點 B 的顯示/隱藏 */
-  toggleHotspotB: () => void;
-  /** 設置熱點可見性 */
-  setHotspotVisible: (hotspotName: string, visible: boolean) => void;
-  /** 載入場景 */
-  loadScene: (sceneName: string) => void;
-  /** 獲取 Krpano 實例（進階用途） */
+  /** 獲取 Krpano 實例（僅限進階用途，盡量透過 props 控制） */
   getInstance: () => KrpanoInstance | null;
 }
 
@@ -122,6 +116,7 @@ const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
   {
     xml = '/vtour/tour.xml',
     startScene,
+    currentScene,
     hotspotA,
     hotspotB,
     enableToggle = true,
@@ -217,6 +212,16 @@ const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [xml, startScene, bgcolor, onReady, containerId, panoId]);
 
+  // 監聽當前場景更新
+  useEffect(() => {
+    const krpano = krpanoRef.current;
+    if (!krpano || !initializedRef.current || !currentScene) return;
+
+    // 如果當前場景與目標場景不同（Krpano API 查詢當前場景有點複雜，這裡直接呼叫 loadscene）
+    // 或者可以信任 React 的 diff
+    krpano.call(`loadscene(${currentScene}, null, MERGE, BLEND(0.5))`);
+  }, [currentScene]);
+
   // 監聽熱點 A 更新
   useEffect(() => {
     const krpano = krpanoRef.current;
@@ -249,61 +254,15 @@ const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
     }
   }, [enableToggle, mergedHotspotA.name, mergedHotspotB.name]);
 
-  // 提供給外部的方法
-  const toggleHotspotA = useCallback(() => {
-    const krpano = krpanoRef.current;
-    if (!krpano) {
-      console.warn('toggleHotspotA: Krpano 尚未載入完成');
-      return;
-    }
-    const hotspotName = mergedHotspotA.name;
-    const currentVisible = krpano.get(`hotspot[${hotspotName}].visible`);
-    krpano.set(`hotspot[${hotspotName}].visible`, !currentVisible);
-  }, [mergedHotspotA.name]);
-
-  const toggleHotspotB = useCallback(() => {
-    const krpano = krpanoRef.current;
-    if (!krpano) {
-      console.warn('toggleHotspotB: Krpano 尚未載入完成');
-      return;
-    }
-    if (!enableToggle) {
-      console.warn('toggleHotspotB: toggle 功能已停用');
-      return;
-    }
-    krpano.call(`toggle_visibility(${mergedHotspotB.name})`);
-  }, [enableToggle, mergedHotspotB.name]);
-
-  const setHotspotVisible = useCallback(
-    (hotspotName: string, visible: boolean) => {
-      const krpano = krpanoRef.current;
-      if (krpano) {
-        krpano.set(`hotspot[${hotspotName}].visible`, visible);
-      }
-    },
-    []
-  );
-
-  const loadScene = useCallback((sceneName: string) => {
-    const krpano = krpanoRef.current;
-    if (krpano) {
-      krpano.call(`loadscene(${sceneName}, null, MERGE)`);
-    }
-  }, []);
-
   const getInstance = useCallback(() => krpanoRef.current, []);
 
   // 透過 ref 暴露方法
   useImperativeHandle(
     ref,
     () => ({
-      toggleHotspotA,
-      toggleHotspotB,
-      setHotspotVisible,
-      loadScene,
       getInstance
     }),
-    [toggleHotspotA, toggleHotspotB, setHotspotVisible, loadScene, getInstance]
+    [getInstance]
   );
 
   return <div id={containerId} ref={containerRef} className={className} />;
