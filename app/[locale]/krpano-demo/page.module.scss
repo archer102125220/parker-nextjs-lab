@@ -233,6 +233,36 @@
       }
     }
 
+    // Nested Element: Toggle Button
+    &-toggle {
+      position: absolute;
+      top: 1rem;
+      left: -28px;
+      z-index: 35;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 48px;
+      padding: 0;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.8);
+      cursor: pointer;
+      pointer-events: auto;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-right: none;
+      border-radius: 8px 0 0 8px;
+      backdrop-filter: blur(4px);
+      transition: all 0.2s ease;
+
+      &:hover {
+        color: #fff;
+        background: rgba(0, 0, 0, 0.4);
+        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+      }
+    }
+
     // Nested Element: Scroll Area
     &-scroll_area {
       display: flex;
