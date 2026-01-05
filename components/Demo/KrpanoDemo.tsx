@@ -40,6 +40,85 @@ const DEFAULT_SCENES = [
   }
 ];
 
+// Button Styles
+const commonButtonSx = {
+  minWidth: 'auto',
+  padding: { xs: '0.4rem 0.8rem', md: '0.6rem 1.2rem' },
+  fontSize: { xs: '0.7rem', md: '0.85rem' },
+  fontWeight: 600,
+  color: '#fff',
+  textTransform: 'none',
+  background: 'rgba(0, 0, 0, 0.6)',
+  border: '1px solid rgba(255, 255, 255, 0.3)',
+  borderRadius: '2rem',
+  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)',
+  backdropFilter: 'blur(8px)',
+  pointerEvents: 'auto',
+  transition: 'all 0.2s ease',
+  '&:hover': {
+    color: '#fff',
+    background: 'rgba(0, 0, 0, 0.85)',
+    borderColor: '#fff',
+    boxShadow: '0 6px 20px rgba(0, 0, 0, 0.6)',
+    transform: 'translateY(-2px)',
+  },
+  '&:active': {
+    transform: 'translateY(0)',
+  },
+};
+
+const infoButtonSx = {
+  ...commonButtonSx,
+  color: '#ffd700',
+  borderColor: 'rgba(255, 215, 0, 0.4)',
+  '&:hover': {
+    ...commonButtonSx['&:hover'],
+    background: 'rgba(255, 215, 0, 0.15)',
+    borderColor: '#ffd700',
+  },
+};
+
+const sceneButtonSx = {
+  ...commonButtonSx,
+  background:
+    'linear-gradient(135deg, rgba(102, 126, 234, 0.5) 0%, rgba(118, 75, 162, 0.5) 100%)',
+  borderColor: 'rgba(102, 126, 234, 0.4)',
+  '&:hover': {
+    ...commonButtonSx['&:hover'],
+    background:
+      'linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%)',
+    borderColor: '#fff',
+  },
+};
+
+const toggleButtonSx = {
+  position: 'absolute',
+  top: '1rem',
+  left: -28,
+  zIndex: 35,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: 28,
+  height: 48,
+  minWidth: 0,
+  padding: 0,
+  fontSize: '0.8rem',
+  color: 'rgba(255, 255, 255, 0.8)',
+  background: 'rgba(0, 0, 0, 0.2)',
+  border: '1px solid rgba(255, 255, 255, 0.1)',
+  borderRight: 'none',
+  borderRadius: '8px 0 0 8px',
+  backdropFilter: 'blur(4px)',
+  pointerEvents: 'auto',
+  transition: 'all 0.2s ease',
+  '&:hover': {
+    color: '#fff',
+    background: 'rgba(0, 0, 0, 0.4)',
+    boxShadow: '-2px 0 8px rgba(0, 0, 0, 0.2)',
+  },
+};
+
 export default function KrpanoDemo({
   xml,
   startScene,
@@ -144,39 +223,40 @@ export default function KrpanoDemo({
         css-is-debug={`${isDebug}`}
       >
         {/* Toggle Button */}
-        <button
-          className={style['krpano_demo-controls-toggle']}
+        <Button
+          sx={{
+            ...toggleButtonSx,
+            ...(!isControlsOpen && {
+              background: 'rgba(0, 0, 0, 0.5)',
+              '&:hover': {
+                background: 'rgba(0, 0, 0, 0.8)',
+              },
+            }),
+          }}
           onClick={toggleControls}
           aria-label={isControlsOpen ? '收起選單' : '展開選單'}
         >
           {isControlsOpen ? '▶' : '◀'}
-        </button>
+        </Button>
 
         <div className={style['krpano_demo-controls-scroll_area']}>
           {/* Info Group */}
           <div className={style['krpano_demo-controls-scroll_area-group']}>
             <div
-              className={
-                style['krpano_demo-controls-scroll_area-group-label']
-              }
+              className={style['krpano_demo-controls-scroll_area-group-label']}
             >
               說明文件
             </div>
             <Button
               variant="text"
               onClick={toggleInfo}
-              className={
-                style['krpano_demo-controls-scroll_area-group-button']
-              }
-              css-variant="info"
+              sx={infoButtonSx}
             >
               {isInfoOpen ? '收起說明' : '顯示說明'}
             </Button>
 
             <div
-              className={
-                style['krpano_demo-controls-scroll_area-group-drawer']
-              }
+              className={style['krpano_demo-controls-scroll_area-group-drawer']}
               css-expanded={`${isInfoOpen}`}
             >
               <div
@@ -215,9 +295,7 @@ export default function KrpanoDemo({
 
           <div className={style['krpano_demo-controls-scroll_area-group']}>
             <div
-              className={
-                style['krpano_demo-controls-scroll_area-group-label']
-              }
+              className={style['krpano_demo-controls-scroll_area-group-label']}
             >
               熱點控制
             </div>
@@ -228,22 +306,14 @@ export default function KrpanoDemo({
             >
               <Button
                 variant="contained"
-                className={
-                  style[
-                    'krpano_demo-controls-scroll_area-group-hotspot-button'
-                  ]
-                }
+                sx={commonButtonSx}
                 onClick={handleToggleHotspotA}
               >
                 {toggleHotspotALabel}
               </Button>
               <Button
                 variant="contained"
-                className={
-                  style[
-                    'krpano_demo-controls-scroll_area-group-hotspot-button'
-                  ]
-                }
+                sx={commonButtonSx}
                 onClick={handleToggleHotspotB}
               >
                 {toggleHotspotBLabel}
@@ -253,27 +323,18 @@ export default function KrpanoDemo({
 
           <div className={style['krpano_demo-controls-scroll_area-group']}>
             <div
-              className={
-                style['krpano_demo-controls-scroll_area-group-label']
-              }
+              className={style['krpano_demo-controls-scroll_area-group-label']}
             >
               場景切換
             </div>
             <div
-              className={
-                style['krpano_demo-controls-scroll_area-group-scene']
-              }
+              className={style['krpano_demo-controls-scroll_area-group-scene']}
             >
               {scenes.map((scene) => (
                 <Button
                   key={scene.name}
                   variant="contained"
-                  className={
-                    style[
-                      'krpano_demo-controls-scroll_area-group-scene-button'
-                    ]
-                  }
-                  css-type="scene"
+                  sx={sceneButtonSx}
                   onClick={() => handleLoadScene(scene.name)}
                 >
                   {scene.label}
@@ -284,18 +345,14 @@ export default function KrpanoDemo({
 
           <div className={style['krpano_demo-controls-scroll_area-group']}>
             <div
-              className={
-                style['krpano_demo-controls-scroll_area-group-label']
-              }
+              className={style['krpano_demo-controls-scroll_area-group-label']}
             >
               開發工具
             </div>
             <Button
               variant="outlined"
               color={isDebug ? 'warning' : 'primary'}
-              className={
-                style['krpano_demo-controls-scroll_area-group-button']
-              }
+              sx={commonButtonSx}
               onClick={toggleDebug}
             >
               {isDebug ? '關閉 Log' : '開啟 Log'}

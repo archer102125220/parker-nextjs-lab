@@ -31,67 +31,7 @@
 // Main Block: .krpano_demo
 // ========================================
 
-%button {
-  min-width: auto;
-  padding: 0.6rem 1.2rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #fff;
-  text-transform: none;
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
-  cursor: pointer;
-  pointer-events: auto;
-  transition: all 0.2s ease;
 
-  &:hover {
-    color: #fff;
-    background: rgba(0, 0, 0, 0.85);
-    border-color: #fff;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-    transform: translateY(-2px);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-
-  @media (width <= 768px) {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.7rem;
-  }
-
-  &[css-variant='info'] {
-    color: #ffd700;
-    border-color: rgba(255, 215, 0, 0.4);
-
-    &:hover {
-      background: rgba(255, 215, 0, 0.15);
-      border-color: #ffd700;
-    }
-  }
-
-  &[css-type='scene'] {
-    background: linear-gradient(
-      135deg,
-      rgba(102, 126, 234, 0.5) 0%,
-      rgba(118, 75, 162, 0.5) 100%
-    );
-    border-color: rgba(102, 126, 234, 0.4);
-
-    &:hover {
-      background: linear-gradient(
-        135deg,
-        rgba(102, 126, 234, 0.8) 0%,
-        rgba(118, 75, 162, 0.8) 100%
-      );
-      border-color: #fff;
-    }
-  }
-}
 .krpano_demo {
   position: relative;
   display: flex;
@@ -208,14 +148,7 @@
     &[css-open='false'] {
       transform: translateX(calc(100% + 1rem));
 
-      // Nested Toggle Hover State
-      .krpano_demo-controls-toggle {
-        background: rgba(0, 0, 0, 0.5);
 
-        &:hover {
-          background: rgba(0, 0, 0, 0.8);
-        }
-      }
     }
 
     &[css-open='true'][css-is-debug='true'] {
@@ -233,35 +166,7 @@
       }
     }
 
-    // Nested Element: Toggle Button
-    &-toggle {
-      position: absolute;
-      top: 1rem;
-      left: -28px;
-      z-index: 35;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 48px;
-      padding: 0;
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.8);
-      cursor: pointer;
-      pointer-events: auto;
-      background: rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-right: none;
-      border-radius: 8px 0 0 8px;
-      backdrop-filter: blur(4px);
-      transition: all 0.2s ease;
 
-      &:hover {
-        color: #fff;
-        background: rgba(0, 0, 0, 0.4);
-        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
-      }
-    }
 
     // Nested Element: Scroll Area
     &-scroll_area {
@@ -292,10 +197,7 @@
           margin-bottom: 1.5rem;
         }
 
-        // Nested Element: Default Button (Direct Child)
-        &-button {
-          @extend %button;
-        }
+
 
         // Nested Element: Label
         &-label {
@@ -317,19 +219,14 @@
           display: flex;
           gap: 0.5rem;
 
-          // Nested Element: Button
-          &-button {
-            @extend %button;
-          }
+
         }
 
         &-scene {
           display: flex;
           gap: 0.5rem;
 
-          &-button {
-            @extend %button;
-          }
+
         }
 
         // Nested Element: Drawer
