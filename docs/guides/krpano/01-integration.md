@@ -10,7 +10,7 @@ Krpano 是一個基於瀏覽器的全景查看器，核心檔案為 `tour.js`。
 通常將 Krpano 的輸出的資源放置在 `public/` 目錄下：
 ```
 public/
-  └── vtour/
+  └── krpano/
       ├── tour.js       # 核心引擎 (必須)
       ├── tour.xml      # 主設定檔 (必須)
       ├── skin/         # 皮膚資源
@@ -48,7 +48,7 @@ export interface KrpanoRef {
 ```tsx
 import { useEffect, useRef } from 'react';
 
-const Krpano = ({ xml = '/vtour/tour.xml' }: KrpanoProps) => {
+const Krpano = ({ xml = '/krpano/tour.xml' }: KrpanoProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const initialized = useRef(false); // 防止 React 18 Strict Mode 重複執行
 
@@ -60,7 +60,7 @@ const Krpano = ({ xml = '/vtour/tour.xml' }: KrpanoProps) => {
       if (window.embedpano) return;
       return new Promise((resolve) => {
         const script = document.createElement('script');
-        script.src = '/vtour/tour.js';
+        script.src = '/krpano/tour.js';
         script.onload = resolve;
         document.head.appendChild(script);
       });

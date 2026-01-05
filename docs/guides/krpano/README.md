@@ -36,4 +36,4 @@ Krpano 是目前市場上功能最強大、靈活性最高的前端全景查看�
 
 ## 快速開始
 
-如果您正在維護本專案，請參考 `components/Krpano.tsx` 與 `public/vtour/` 目錄下的檔案結構。本指南中的範例代碼大多基於此專案的實作方式。
+如果您正在維護本專案，請參考 `components/Krpano.tsx` 與 `public/krpano/` 目錄下的檔案結構。本指南中的範例代碼大多基於此專案的實作方式。
