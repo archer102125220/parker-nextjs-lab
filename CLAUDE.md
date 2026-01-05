@@ -56,6 +56,15 @@ This ensures users make informed decisions about potentially risky actions.
   - ✅ Exception: Dynamic content areas (e.g., `.content p { ... }`)
   - ✅ Exception: Third-party content (e.g., `:global a { ... }` in WangEditor)
 
+#### Style Reuse Strategy (Strict)
+- **Single Page Reuse**: Define `%placeholder_name` at the top of the SCSS file and use `@extend` in the specific element classes.
+- **Multi-Page Reuse**: Define in `styles/placeholders/` and use `@use`.
+- **Primary Goal**: Maintain unique unique class names for every structural element to ensure instant file/element location in DevTools.
+
+#### Strict Nesting (Hierarchy Reflection)
+- Class names MUST generally reflect the DOM containment hierarchy if it aids context.
+- Example: If `group` is inside `scroll_area`, it should be named `scroll_area-group`, not just `group` (unless `group` is a top-level independent abstraction).
+
 ### Demo Components (`components/Demo/`)
 - Full-page Client Components for feature demonstrations
 - Naming: PascalCase (e.g., `BannerDemo.tsx`, `LazyLoadTest.tsx`)

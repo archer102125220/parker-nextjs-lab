@@ -530,6 +530,10 @@ The project adopts a **Modified BEM Naming Convention**, cleverly sacrificing st
 - ✅ **Use HTML attributes for states and variants**
 - ✅ **HTML attributes MUST start with `css-`**
 
+#### Strict Nesting (Hierarchy Reflection)
+- **Class names MUST generally reflect the DOM containment hierarchy** if it aids context.
+- **Example**: If `group` is inside `scroll_area`, it should be named `scroll_area-group`, not just `group` (unless `group` is a top-level independent abstraction).
+
 ```tsx
 // ✅ CORRECT: Single className + HTML attribute
 <Box className={style.demo_box} css-color="red">
@@ -602,9 +606,14 @@ To quickly identify problematic elements in browser dev tools, the project uses 
 
 ---
 
-### SCSS Placeholders Style Reuse
+### Style Reuse Strategy (Strict)
 
-The project uses **SCSS Placeholders (`%name`)** to achieve style reuse, reducing code duplication and improving maintainability.
+The project uses **SCSS Placeholders (`%name`)** to achieve style reuse, adhering to a strict strategy to maintain unique class names.
+
+#### Strategy Rules:
+- **Single Page Reuse**: Define `%placeholder_name` at the top of the SCSS file and use `@extend` in the specific element classes.
+- **Multi-Page Reuse**: Define in `styles/placeholders/` and use `@use`.
+- **Primary Goal**: Maintain unique unique class names for every structural element to ensure instant file/element location in DevTools.
 
 #### Why Use Placeholders?
 

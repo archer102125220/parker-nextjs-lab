@@ -525,6 +525,10 @@ const detection = await detectFace(img as unknown as faceApi.TNetInput);
 - ✅ **使用 HTML 屬性處理狀態和變體**
 - ✅ **HTML 屬性必須以 `css-` 開頭**
 
+#### 嚴格巢狀 (Strict Nesting) - 反映 DOM 層級
+- **Class 名稱應反映 DOM 的包含層級**（若有助於語境理解）。
+- **範例**：如果 `group` 在 `scroll_area` 內部，它應該命名為 `scroll_area-group`，而不僅僅是 `group`（除非 `group` 是一個頂層的獨立抽象）。
+
 ```tsx
 // ✅ 正確：單一 className + HTML 屬性
 <Box className={style.demo_box} css-color="red">
@@ -596,9 +600,14 @@ const detection = await detectFace(img as unknown as faceApi.TNetInput);
 
 ---
 
-### SCSS Placeholders 樣式複用
+### 樣式複用策略 (Style Reuse Strategy) - 嚴格模式
 
-專案使用 **SCSS Placeholders（`%name`）** 來實現樣式複用，減少重複代碼並提高可維護性。
+專案使用 **SCSS Placeholders（`%name`）** 來實現樣式複用，並遵循嚴格策略以維護唯一的 Class 名稱。
+
+#### 策略規則：
+- **單頁複用 (Single Page Reuse)**：在該頁 SCSS 頂部定義 `%placeholder_name` 並在特定元素中使用 `@extend`。
+- **多頁複用 (Multi-Page Reuse)**：定義在 `styles/placeholders/` 並使用 `@use` 引入。
+- **主要目標**：為每個結構元素維護**唯一且獨立**的 class name，確保能透過 DevTools 快速定位檔案與元素。
 
 #### 為什麼使用 Placeholders？
 

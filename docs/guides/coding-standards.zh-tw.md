@@ -143,6 +143,10 @@ const element = document.getElementById('id') as unknown as CustomElement;
 .button--red { }     // 不要使用 --（應改用 HTML 屬性）
 ```
 
+#### 嚴格巢狀 (Strict Nesting) - 反映 DOM 層級
+- **Class 名稱應反映 DOM 的包含層級**（若有助於語境理解）。
+- **範例**：如果 `group` 在 `scroll_area` 內部，它應該命名為 `scroll_area-group`，而不僅僅是 `group`（除非 `group` 是一個頂層的獨立抽象）。
+
 ### 2.3 頁面根類別命名 (強制)
 
 - **頁面根元素必須使用**：`[頁面名稱]_page` 格式
@@ -150,6 +154,22 @@ const element = document.getElementById('id') as unknown as CustomElement;
 - **組件根元素必須使用**：`[組件名稱]` 格式
   - 範例：`.scroll_fetch`, `.image_upload`, `.countdown`
 - **每個頁面必須有唯一的根類別名稱** - 不可在頁面間共用
+
+---
+
+...
+
+#### 必須事項：
+- ✅ 跨頁面共用樣式必須定義在 `styles/placeholders/`
+- ✅ 透過 `@use '@/styles/placeholders' as *;` 引入 placeholders
+- ✅ 如果頁面有相似 DOM，建立接受 `pageClassName` prop 的**組件**
+
+#### 樣式複用策略 (Style Reuse Strategy) - 嚴格模式
+- **單頁複用 (Single Page Reuse)**：在該頁 SCSS 頂部定義 `%placeholder_name` 並在特定元素中使用 `@extend`。
+- **多頁複用 (Multi-Page Reuse)**：定義在 `styles/placeholders/` 並使用 `@use` 引入。
+- **主要目標**：為每個結構元素維護**唯一且獨立**的 class name，確保能透過 DevTools 快速定位檔案與元素。
+
+### 2.5 組件與頁面識別模式 (強制)
 
 ```scss
 // ✅ 正確 - 所有元素嵌套在頁面根類別下
