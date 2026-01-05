@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Button from '@mui/material/Button';
 
@@ -89,6 +89,17 @@ export default function KrpanoDemo({
   
   const [isControlsOpen, setIsControlsOpen] = useState(true);
   const toggleControls = () => setIsControlsOpen((prev) => !prev);
+  
+  // Auto-collapse controls after initial load
+  useEffect(() => {
+    if (isLoaded) {
+      const timer = setTimeout(() => {
+        setIsControlsOpen(false);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoaded]);
+
 
   // 整合 Props 與 State
   const mergedHotspotA = { ...hotspotA, visible: isHotspotAVisible };
