@@ -102,6 +102,7 @@ declare global {
 // 添加單個熱點的輔助函數
 function addHotspot(krpano: KrpanoInstance, config: HotspotConfig) {
   krpano.call(`addhotspot(${config.name})`);
+  krpano.set(`hotspot[${config.name}].keep`, true);
   updateHotspot(krpano, config);
 }
 
