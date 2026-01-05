@@ -161,6 +161,8 @@ This project includes configuration files for AI code assistants to ensure consi
 - `yarn dev-https` - Start with HTTPS + Turbopack (port 3000)
 - `yarn dev-https:webpack` - Start with HTTPS + Webpack
 
+> **Environment Check**: When starting the development server, ALWAYS check if `NEXT_PUBLIC_API_BASE` and `NEXT_PUBLIC_DOMAIN` in `.env` match the port/domain settings in `package.json` scripts. If there is a mismatch (e.g., .env port 3000 vs script port 3001), you MUST wait for user confirmation before proceeding.
+
 ### Database
 - `yarn initDB` - Initialize database (drop, create, migrate, seed)
 - `yarn createDB` - Create database
