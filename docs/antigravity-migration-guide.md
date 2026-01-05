@@ -49,30 +49,44 @@
 
 ## 如何匯入 (繼承) 到新電腦
 
-### macOS / Linux
+我也為您準備了自動化匯入腳本。
 
-1.  **準備目錄**：
-    ```bash
-    mkdir -p ~/.gemini/antigravity/brain
-    ```
-2.  **解壓縮**：
-    ```bash
-    unzip ~/Downloads/antigravity_memory_xxxx.zip -d ~/.gemini/antigravity/brain/
-    ```
+### 方法一：使用腳本自動匯入 (推薦)
 
-### Windows
+將 `.zip` 備份檔複製到新電腦的專案目錄下的 `antigravity-exports/`，然後執行：
 
-1.  **準備目錄**：
-    預設位置在 `C:\Users\[使用者名稱]\.gemini\antigravity\brain`。
-    您可以在 PowerShell 中執行：
-    ```powershell
-    New-Item -ItemType Directory -Path "$env:USERPROFILE\.gemini\antigravity\brain" -Force
-    ```
+#### macOS / Linux
+```bash
+bash scripts/import_antigravity_memory.sh
+```
 
-2.  **解壓縮**：
-    將 zip 檔解壓至上述目錄。確保解壓後的結構為 `...brain\[SESSION_ID]\...`，而不是多那一層資料夾。
+或指定特定的 zip 檔：
+```bash
+bash scripts/import_antigravity_memory.sh ~/Downloads/antigravity_memory_xxxx.zip
+```
 
----
+#### Windows
+```powershell
+.\scripts\import_antigravity_memory.ps1
+```
+
+或指定特定的 zip 檔：
+```powershell
+.\scripts\import_antigravity_memory.ps1 -ZipFile "C:\Users\Parker\Downloads\antigravity_memory_xxx.zip"
+```
+
+### 方法二：手動解壓縮
+
+#### macOS / Linux
+```bash
+mkdir -p ~/.gemini/antigravity/brain
+unzip ~/Downloads/antigravity_memory_xxxx.zip -d ~/.gemini/antigravity/brain/
+```
+
+#### Windows
+1.  預設位置在 `C:\Users\[使用者名稱]\.gemini\antigravity\brain`
+2.  將 zip 檔解壓至上述目錄
+3.  確保解壓後的結構為 `...brain\[SESSION_ID]\...`
 
 ### 步驟 3：繼承記憶
 
