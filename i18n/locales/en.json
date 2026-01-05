@@ -372,7 +372,22 @@
             "scenes": {
                 "scene1": "Scene 1 (Aurora)",
                 "scene2": "Scene 2 (Harbor)"
-            }
+            },
+            "controls": {
+                "docLabel": "Documentation",
+                "hotspotLabel": "Hotspot Control",
+                "sceneLabel": "Scene Switch",
+                "devToolsLabel": "Dev Tools",
+                "showInfo": "Show Info",
+                "hideInfo": "Hide Info",
+                "debugModeDesc": "Debug Mode: Enable to view execution log.",
+                "shortcutDesc": "Shortcut: Press ~ key to toggle log.",
+                "openLog": "Open Log",
+                "closeLog": "Close Log",
+                "collapseMenu": "Collapse Menu",
+                "expandMenu": "Expand Menu"
+            },
+            "dynamicText": "Welcome to 360 Panorama"
         }
     }
 }

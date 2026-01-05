@@ -372,7 +372,22 @@
             "scenes": {
                 "scene1": "場景 1 (極光)",
                 "scene2": "場景 2 (港口)"
-            }
+            },
+            "controls": {
+                "docLabel": "說明文件",
+                "hotspotLabel": "熱點控制",
+                "sceneLabel": "場景切換",
+                "devToolsLabel": "開發工具",
+                "showInfo": "顯示說明",
+                "hideInfo": "收起說明",
+                "debugModeDesc": "除錯模式：開啟後可查看執行紀錄。",
+                "shortcutDesc": "快捷鍵：按下 ~ 鍵可開關 Log。",
+                "openLog": "開啟 Log",
+                "closeLog": "關閉 Log",
+                "collapseMenu": "收起選單",
+                "expandMenu": "展開選單"
+            },
+            "dynamicText": "歡迎來到 360 全景世界"
         }
     }
 }

@@ -33,6 +33,19 @@ export default async function KrpanoDemoPage({ params }: Props) {
         loadingText={t('loadingText')}
         toggleHotspotALabel={t('toggleHotspotA')}
         toggleHotspotBLabel={t('toggleHotspotB')}
+        docLabel={t('controls.docLabel')}
+        hotspotLabel={t('controls.hotspotLabel')}
+        sceneLabel={t('controls.sceneLabel')}
+        devToolsLabel={t('controls.devToolsLabel')}
+        showInfoLabel={t('controls.showInfo')}
+        hideInfoLabel={t('controls.hideInfo')}
+        debugModeDesc={t('controls.debugModeDesc')}
+        shortcutDesc={t('controls.shortcutDesc')}
+        openLogLabel={t('controls.openLog')}
+        closeLogLabel={t('controls.closeLog')}
+        collapseMenuLabel={t('controls.collapseMenu')}
+        expandMenuLabel={t('controls.expandMenu')}
+        dynamicText={t('dynamicText')}
         scenes={[
           {
             name: 'scene_bryan_goff_iuyhxaia8ea_unsplash',

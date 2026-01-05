@@ -30,6 +30,32 @@ interface KrpanoDemoProps {
   toggleHotspotALabel?: string;
   /** 熱點 B 按鈕文字 */
   toggleHotspotBLabel?: string;
+  /** 說明文件標籤 */
+  docLabel?: string;
+  /** 熱點控制標籤 */
+  hotspotLabel?: string;
+  /** 場景切換標籤 */
+  sceneLabel?: string;
+  /** 開發工具標籤 */
+  devToolsLabel?: string;
+  /** 顯示說明按鈕文字 */
+  showInfoLabel?: string;
+  /** 隱藏說明按鈕文字 */
+  hideInfoLabel?: string;
+  /** 除錯模式說明 */
+  debugModeDesc?: string;
+  /** 快捷鍵說明 */
+  shortcutDesc?: string;
+  /** 開啟 Log 按鈕文字 */
+  openLogLabel?: string;
+  /** 關閉 Log 按鈕文字 */
+  closeLogLabel?: string;
+  /** 收起選單按鈕文字 */
+  collapseMenuLabel?: string;
+  /** 展開選單按鈕文字 */
+  expandMenuLabel?: string;
+  /** Krpano 動態文字 */
+  dynamicText?: string;
 }
 
 const DEFAULT_SCENES = [
@@ -130,7 +156,20 @@ export default function KrpanoDemo({
   scenes = DEFAULT_SCENES,
   loadingText = '載入全景中...',
   toggleHotspotALabel = 'Toggle Hotspot A',
-  toggleHotspotBLabel = 'Toggle Hotspot B'
+  toggleHotspotBLabel = 'Toggle Hotspot B',
+  docLabel = '說明文件',
+  hotspotLabel = '熱點控制',
+  sceneLabel = '場景切換',
+  devToolsLabel = '開發工具',
+  showInfoLabel = '顯示說明',
+  hideInfoLabel = '收起說明',
+  debugModeDesc = '除錯模式：開啟後可查看執行紀錄。',
+  shortcutDesc = '快捷鍵：按下 ~ 鍵可開關 Log。',
+  openLogLabel = '開啟 Log',
+  closeLogLabel = '關閉 Log',
+  collapseMenuLabel = '收起選單',
+  expandMenuLabel = '展開選單',
+  dynamicText
 }: KrpanoDemoProps) {
   // 載入狀態
   const [isLoaded, setIsLoaded] = useState(false);
@@ -213,6 +252,7 @@ export default function KrpanoDemo({
           className={style['krpano_demo-container-viewer']}
           onReady={handleReady}
           debug={isDebug}
+          textLayerContent={dynamicText}
         />
       </div>
 
@@ -234,7 +274,7 @@ export default function KrpanoDemo({
             }),
           }}
           onClick={toggleControls}
-          aria-label={isControlsOpen ? '收起選單' : '展開選單'}
+          aria-label={isControlsOpen ? collapseMenuLabel : expandMenuLabel}
         >
           {isControlsOpen ? '▶' : '◀'}
         </Button>
@@ -245,14 +285,14 @@ export default function KrpanoDemo({
             <div
               className={style['krpano_demo-controls-scroll_area-group-label']}
             >
-              說明文件
+              {docLabel}
             </div>
             <Button
               variant="text"
               onClick={toggleInfo}
               sx={infoButtonSx}
             >
-              {isInfoOpen ? '收起說明' : '顯示說明'}
+              {isInfoOpen ? hideInfoLabel : showInfoLabel}
             </Button>
 
             <div
@@ -282,12 +322,8 @@ export default function KrpanoDemo({
                     ]
                   }
                 >
-                  <p>
-                    <strong>除錯模式：</strong>開啟後可查看執行紀錄。
-                  </p>
-                  <p>
-                    <strong>快捷鍵：</strong>按下 <code>~</code> 鍵可開關 Log。
-                  </p>
+                  <p>{debugModeDesc}</p>
+                  <p>{shortcutDesc}</p>
                 </div>
               </div>
             </div>
@@ -297,7 +333,7 @@ export default function KrpanoDemo({
             <div
               className={style['krpano_demo-controls-scroll_area-group-label']}
             >
-              熱點控制
+              {hotspotLabel}
             </div>
             <div
               className={
@@ -325,7 +361,7 @@ export default function KrpanoDemo({
             <div
               className={style['krpano_demo-controls-scroll_area-group-label']}
             >
-              場景切換
+              {sceneLabel}
             </div>
             <div
               className={style['krpano_demo-controls-scroll_area-group-scene']}
@@ -347,7 +383,7 @@ export default function KrpanoDemo({
             <div
               className={style['krpano_demo-controls-scroll_area-group-label']}
             >
-              開發工具
+              {devToolsLabel}
             </div>
             <Button
               variant="outlined"
@@ -355,7 +391,7 @@ export default function KrpanoDemo({
               sx={commonButtonSx}
               onClick={toggleDebug}
             >
-              {isDebug ? '關閉 Log' : '開啟 Log'}
+              {isDebug ? closeLogLabel : openLogLabel}
             </Button>
           </div>
         </div>

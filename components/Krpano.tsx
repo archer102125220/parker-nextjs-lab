@@ -50,6 +50,8 @@ export interface KrpanoProps {
   onReady?: (krpano: KrpanoInstance) => void;
   /** 是否開啟 Debug Log 視窗 */
   debug?: boolean;
+  /** 動態文字圖層內容 (i18n) */
+  textLayerContent?: string;
 }
 
 // Krpano Ref 方法 (僅保留作為逃生艙的實例獲取)
@@ -125,7 +127,8 @@ const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
     bgcolor = '#000000',
     className,
     onReady,
-    debug = false
+    debug = false,
+    textLayerContent
   },
   ref
 ) {
@@ -267,6 +270,34 @@ const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
     // 開啟/關閉 Log 視窗
     krpano.call(`showlog(${debug})`);
   }, [debug]);
+
+  // 監聽 textLayerContent 更新 - 動態文字圖層
+  useEffect(() => {
+    const krpano = krpanoRef.current;
+    if (!krpano || !initializedRef.current) return;
+
+    const layerName = 'i18n_text_layer';
+    
+    if (textLayerContent) {
+      // 檢查圖層是否存在，如果不存在則創建
+      const existingLayer = krpano.get(`layer[${layerName}]`);
+      if (!existingLayer) {
+        krpano.call(`addlayer(${layerName})`);
+        krpano.set(`layer[${layerName}].type`, 'text');
+        krpano.set(`layer[${layerName}].align`, 'bottom');
+        krpano.set(`layer[${layerName}].x`, '0');
+        krpano.set(`layer[${layerName}].y`, '10%');
+        krpano.set(`layer[${layerName}].css`, 'font-size:24px; color:white; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); font-weight: bold;');
+        krpano.set(`layer[${layerName}].bg`, false);
+      }
+      // 更新文字內容
+      krpano.set(`layer[${layerName}].html`, textLayerContent);
+      krpano.set(`layer[${layerName}].visible`, true);
+    } else {
+      // 如果沒有內容，隱藏圖層
+      krpano.set(`layer[${layerName}].visible`, false);
+    }
+  }, [textLayerContent]);
 
   const getInstance = useCallback(() => krpanoRef.current, []);
 
