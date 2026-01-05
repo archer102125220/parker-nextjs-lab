@@ -30,6 +30,68 @@
 // ========================================
 // Main Block: .krpano_demo
 // ========================================
+
+%button {
+  min-width: auto;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  text-transform: none;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: #fff;
+    background: rgba(0, 0, 0, 0.85);
+    border-color: #fff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (width <= 768px) {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.7rem;
+  }
+
+  &[css-variant='info'] {
+    color: #ffd700;
+    border-color: rgba(255, 215, 0, 0.4);
+
+    &:hover {
+      background: rgba(255, 215, 0, 0.15);
+      border-color: #ffd700;
+    }
+  }
+
+  &[css-type='scene'] {
+    background: linear-gradient(
+      135deg,
+      rgba(102, 126, 234, 0.5) 0%,
+      rgba(118, 75, 162, 0.5) 100%
+    );
+    border-color: rgba(102, 126, 234, 0.4);
+
+    &:hover {
+      background: linear-gradient(
+        135deg,
+        rgba(102, 126, 234, 0.8) 0%,
+        rgba(118, 75, 162, 0.8) 100%
+      );
+      border-color: #fff;
+    }
+  }
+}
 .krpano_demo {
   position: relative;
   display: flex;
@@ -116,7 +178,9 @@
       font-size: 1.5rem;
       font-weight: 700;
       color: #fff;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 12px rgba(0, 0, 0, 0.5);
+      text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.8),
+        0 0 12px rgba(0, 0, 0, 0.5);
       letter-spacing: 0.05em;
 
       @media (width <= 768px) {
@@ -128,8 +192,9 @@
   // Element: Controls Panel
   &-controls {
     position: absolute;
-    top: 50%;
+    // top: 50%;
     right: 1rem;
+    bottom: 1rem;
     z-index: 30;
     display: flex;
     flex-direction: column;
@@ -140,7 +205,7 @@
     overflow: visible;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    &[data-open='false'] {
+    &[css-open='false'] {
       transform: translateX(calc(100% + 1rem));
 
       // Nested Toggle Hover State
@@ -153,24 +218,28 @@
       }
     }
 
+    &[css-open='true'][css-is-debug='true'] {
+      transform: translate(0, -10rem);
+    }
+
     @media (width <= 768px) {
       top: auto;
       bottom: 1rem;
       right: 0.5rem;
       transform: none;
 
-      &[data-open='false'] {
+      &[css-open='false'] {
         transform: translateX(calc(100% + 0.5rem));
       }
     }
 
     // Nested Element: Scroll Area
-    &-scroll-area {
+    &-scroll_area {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
       max-height: 90vh;
-      padding: 1rem;
+      padding: 0.5rem;
       overflow-y: auto;
       background: rgba(0, 0, 0, 0.2);
       border-radius: 16px 0 0 16px;
@@ -217,8 +286,11 @@
       flex-direction: column;
       align-items: flex-end;
       gap: 0.5rem;
-      margin-bottom: 1.5rem;
       pointer-events: auto;
+
+      &:not(:last-child) {
+        margin-bottom: 1.5rem;
+      }
 
       // Nested Element: Label
       &-label {
@@ -236,66 +308,22 @@
         backdrop-filter: blur(4px);
       }
 
-      // Nested Element: Button
-      &-button {
-        min-width: auto;
-        padding: 0.6rem 1.2rem;
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: #fff;
-        text-transform: none;
-        background: rgba(0, 0, 0, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 2rem;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(8px);
-        cursor: pointer;
-        pointer-events: auto;
-        transition: all 0.2s ease;
+      &-hotspot {
+        display: flex;
+        gap: 0.5rem;
 
-        &:hover {
-          color: #fff;
-          background: rgba(0, 0, 0, 0.85);
-          border-color: #fff;
-          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-          transform: translateY(-2px);
+        // Nested Element: Button
+        &-button {
+          @extend %button;
         }
+      }
 
-        &:active {
-          transform: translateY(0);
-        }
+      &-scene {
+        display: flex;
+        gap: 0.5rem;
 
-        @media (width <= 768px) {
-          padding: 0.4rem 0.8rem;
-          font-size: 0.7rem;
-        }
-
-        &[data-variant='info'] {
-          color: #ffd700;
-          border-color: rgba(255, 215, 0, 0.4);
-
-          &:hover {
-            background: rgba(255, 215, 0, 0.15);
-            border-color: #ffd700;
-          }
-        }
-
-        &[css-type='scene'] {
-          background: linear-gradient(
-            135deg,
-            rgba(102, 126, 234, 0.5) 0%,
-            rgba(118, 75, 162, 0.5) 100%
-          );
-          border-color: rgba(102, 126, 234, 0.4);
-
-          &:hover {
-            background: linear-gradient(
-              135deg,
-              rgba(102, 126, 234, 0.8) 0%,
-              rgba(118, 75, 162, 0.8) 100%
-            );
-            border-color: #fff;
-          }
+        &-button {
+          @extend %button;
         }
       }
 
@@ -309,12 +337,12 @@
         border-radius: 12px;
         opacity: 0;
         backdrop-filter: blur(12px);
-        transition: 
+        transition:
           max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
           opacity 0.3s ease,
           margin-top 0.3s ease;
 
-        &[data-expanded='true'] {
+        &[css-expanded='true'] {
           max-height: 500px;
           margin-top: 0.5rem;
           opacity: 1;
@@ -371,6 +399,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
