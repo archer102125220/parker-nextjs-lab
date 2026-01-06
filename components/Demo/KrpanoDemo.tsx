@@ -3,6 +3,11 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import Krpano, { HotspotConfig } from '@/components/Krpano';
 import style from '@/app/[locale]/krpano-demo/page.module.scss';
@@ -52,6 +57,24 @@ interface KrpanoDemoProps {
   expandMenuLabel?: string;
   /** Krpano 動態文字 */
   dynamicText?: string;
+  /** 新增熱點標籤 */
+  addHotspotLabel?: string;
+  /** 熱點名稱標籤 */
+  hotspotNameLabel?: string;
+  /** 水平角度標籤 */
+  hotspotAthLabel?: string;
+  /** 垂直角度標籤 */
+  hotspotAtvLabel?: string;
+  /** 確認新增標籤 */
+  confirmAddLabel?: string;
+  /** 取消標籤 */
+  cancelLabel?: string;
+  /** 自定義熱點標籤 */
+  customHotspotsLabel?: string;
+  /** 預設圖示標籤 */
+  presetIconLabel?: string;
+  /** 自定義 URL 標籤 */
+  customUrlLabel?: string;
 }
 
 const DEFAULT_SCENES = [
@@ -162,6 +185,61 @@ const toggleButtonSx = {
   },
 };
 
+const addButtonSx = {
+  ...commonButtonSx,
+  background:
+    'linear-gradient(135deg, rgba(76, 175, 80, 0.5) 0%, rgba(56, 142, 60, 0.5) 100%)',
+  borderColor: 'rgba(76, 175, 80, 0.4)',
+  '&:hover': {
+    ...commonButtonSx['&:hover'],
+    background:
+      'linear-gradient(135deg, rgba(76, 175, 80, 0.8) 0%, rgba(56, 142, 60, 0.8) 100%)',
+    borderColor: '#fff',
+  },
+};
+
+const textFieldSx = {
+  '& .MuiInputBase-root': {
+    color: '#fff',
+    fontSize: '0.85rem',
+  },
+  '& .MuiInputLabel-root': {
+    color: 'rgba(255, 255, 255, 0.7)',
+    fontSize: '0.8rem',
+  },
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'rgba(255, 255, 255, 0.5)',
+  },
+  '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+    borderColor: '#4caf50',
+  },
+  '& .MuiInputLabel-root.Mui-focused': {
+    color: '#4caf50',
+  },
+};
+
+const hotspotItemSx = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '0.5rem',
+  padding: '0.4rem 0.6rem',
+  background: 'rgba(255, 255, 255, 0.05)',
+  borderRadius: '0.5rem',
+  border: '1px solid rgba(255, 255, 255, 0.1)',
+  fontSize: '0.75rem',
+  color: 'rgba(255, 255, 255, 0.9)',
+};
+
+// 熱點圖片選項
+const HOTSPOT_ICONS = [
+  { label: 'Hotspot', url: '/krpano/skin/vtourskin_hotspot.png' },
+  { label: 'Map', url: '/krpano/skin/vtourskin_mapspot.png' },
+];
+
 export default function KrpanoDemo({
   xml,
   startScene,
@@ -184,7 +262,16 @@ export default function KrpanoDemo({
   closeLogLabel = '關閉 Log',
   collapseMenuLabel = '收起選單',
   expandMenuLabel = '展開選單',
-  dynamicText
+  dynamicText,
+  addHotspotLabel = '新增熱點',
+  hotspotNameLabel = '熱點名稱',
+  hotspotAthLabel = '水平角度 (ATH)',
+  hotspotAtvLabel = '垂直角度 (ATV)',
+  confirmAddLabel = '新增',
+  cancelLabel = '取消',
+  customHotspotsLabel = '自定義熱點',
+  presetIconLabel = '預設圖示',
+  customUrlLabel = '自定義 URL'
 }: KrpanoDemoProps) {
   // 載入狀態
   const [isLoaded, setIsLoaded] = useState(false);
@@ -226,6 +313,81 @@ export default function KrpanoDemo({
   const [isControlsOpen, setIsControlsOpen] = useState(true);
   const toggleControls = () => setIsControlsOpen((prev) => !prev);
 
+  // 自定義熱點狀態
+  const [customHotspots, setCustomHotspots] = useState<HotspotConfig[]>([]);
+  const [isAddFormOpen, setIsAddFormOpen] = useState(false);
+  const [newHotspotName, setNewHotspotName] = useState('');
+  const [newHotspotAth, setNewHotspotAth] = useState('0');
+  const [newHotspotAtv, setNewHotspotAtv] = useState('0');
+  const [selectedIconIndex, setSelectedIconIndex] = useState(0);
+  const [customUrl, setCustomUrl] = useState('');
+  const [iconTabIndex, setIconTabIndex] = useState(0); // 0: 預設, 1: 自定義 URL
+
+  // 取得最終使用的圖片 URL
+  const getHotspotUrl = useCallback(() => {
+    if (iconTabIndex === 1 && customUrl.trim()) {
+      return customUrl.trim();
+    }
+    return HOTSPOT_ICONS[selectedIconIndex].url;
+  }, [iconTabIndex, customUrl, selectedIconIndex]);
+
+  // 檢查表單是否有效
+  const isFormValid = useMemo(() => {
+    if (!newHotspotName.trim()) return false;
+    if (iconTabIndex === 1 && !customUrl.trim()) return false;
+    // 簡單的 URL 格式驗證
+    if (iconTabIndex === 1) {
+      const urlPattern = /^(https?:\/\/|\/).+/i;
+      if (!urlPattern.test(customUrl.trim())) return false;
+    }
+    return true;
+  }, [newHotspotName, iconTabIndex, customUrl]);
+
+  // 新增熱點
+  const handleAddHotspot = useCallback(() => {
+    if (!newHotspotName.trim()) return;
+
+    const newHotspot: HotspotConfig & { displayName?: string } = {
+      name: `custom_${Date.now()}`,
+      url: getHotspotUrl(),
+      ath: parseFloat(newHotspotAth) || 0,
+      atv: parseFloat(newHotspotAtv) || 0,
+      scale: 0.5,
+      visible: true,
+      onClick: (hotspot) => {
+        console.log('Clicked custom hotspot:', hotspot.name);
+      }
+    };
+
+    // 儲存顯示名稱到 closure 中
+    const displayName = newHotspotName.trim();
+    (newHotspot as HotspotConfig & { displayName: string }).displayName = displayName;
+
+    setCustomHotspots((prev) => [...prev, newHotspot]);
+    setHotspotVisibility((prev) => ({
+      ...prev,
+      [newHotspot.name]: true
+    }));
+
+    // 重置表單
+    setNewHotspotName('');
+    setNewHotspotAth('0');
+    setNewHotspotAtv('0');
+    setCustomUrl('');
+    setIconTabIndex(0);
+    setIsAddFormOpen(false);
+  }, [newHotspotName, newHotspotAth, newHotspotAtv, getHotspotUrl]);
+
+  // 刪除自定義熱點
+  const handleRemoveHotspot = useCallback((name: string) => {
+    setCustomHotspots((prev) => prev.filter((h) => h.name !== name));
+    setHotspotVisibility((prev) => {
+      const updated = { ...prev };
+      delete updated[name];
+      return updated;
+    });
+  }, []);
+
   // Auto-collapse controls after initial load
   useEffect(() => {
     if (isLoaded) {
@@ -238,11 +400,12 @@ export default function KrpanoDemo({
 
   // 使用 useMemo 合併熱點配置與可見性狀態
   const mergedHotspots = useMemo(() => {
-    return hotspots.map((hotspot) => ({
+    const allHotspots = [...hotspots, ...customHotspots];
+    return allHotspots.map((hotspot) => ({
       ...hotspot,
       visible: hotspotVisibility[hotspot.name] ?? hotspot.visible ?? true
     }));
-  }, [hotspots, hotspotVisibility]);
+  }, [hotspots, customHotspots, hotspotVisibility]);
 
   return (
     <div className={style.krpano_demo}>
@@ -409,6 +572,223 @@ export default function KrpanoDemo({
             >
               {isDebug ? closeLogLabel : openLogLabel}
             </Button>
+          </div>
+
+          {/* Add Hotspot Section */}
+          <div className={style['krpano_demo-controls-scroll_area-group']}>
+            <div
+              className={style['krpano_demo-controls-scroll_area-group-label']}
+            >
+              {customHotspotsLabel}
+            </div>
+
+            {/* Add Form Toggle */}
+            {!isAddFormOpen ? (
+              <Button
+                variant="contained"
+                sx={addButtonSx}
+                onClick={() => setIsAddFormOpen(true)}
+              >
+                + {addHotspotLabel}
+              </Button>
+            ) : (
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.5rem',
+                  padding: '0.75rem',
+                  background: 'rgba(0, 0, 0, 0.3)',
+                  borderRadius: '0.75rem',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                }}
+              >
+                <TextField
+                  label={hotspotNameLabel}
+                  value={newHotspotName}
+                  onChange={(e) => setNewHotspotName(e.target.value)}
+                  size="small"
+                  fullWidth
+                  sx={textFieldSx}
+                />
+                <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+                  <TextField
+                    label={hotspotAthLabel}
+                    value={newHotspotAth}
+                    onChange={(e) => setNewHotspotAth(e.target.value)}
+                    size="small"
+                    type="number"
+                    sx={{ ...textFieldSx, flex: 1 }}
+                  />
+                  <TextField
+                    label={hotspotAtvLabel}
+                    value={newHotspotAtv}
+                    onChange={(e) => setNewHotspotAtv(e.target.value)}
+                    size="small"
+                    type="number"
+                    sx={{ ...textFieldSx, flex: 1 }}
+                  />
+                </Box>
+                {/* Icon Selection with Tabs */}
+                <Box
+                  sx={{
+                    background: 'rgba(0, 0, 0, 0.2)',
+                    borderRadius: '0.5rem',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <Tabs
+                    value={iconTabIndex}
+                    onChange={(_, newValue) => setIconTabIndex(newValue)}
+                    variant="fullWidth"
+                    sx={{
+                      minHeight: 36,
+                      '& .MuiTab-root': {
+                        minHeight: 36,
+                        fontSize: '0.75rem',
+                        color: 'rgba(255, 255, 255, 0.7)',
+                        textTransform: 'none',
+                      },
+                      '& .Mui-selected': {
+                        color: '#4caf50 !important',
+                      },
+                      '& .MuiTabs-indicator': {
+                        backgroundColor: '#4caf50',
+                      },
+                    }}
+                  >
+                    <Tab label={presetIconLabel} />
+                    <Tab label={customUrlLabel} />
+                  </Tabs>
+
+                  {/* Tab Content */}
+                  <Box sx={{ padding: '0.5rem', minHeight: 56 }}>
+                    {iconTabIndex === 0 ? (
+                      // 預設圖示選擇
+                      <Box sx={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                        {HOTSPOT_ICONS.map((icon, index) => (
+                          <Button
+                            key={icon.url}
+                            variant={selectedIconIndex === index ? 'contained' : 'outlined'}
+                            size="small"
+                            onClick={() => setSelectedIconIndex(index)}
+                            sx={{
+                              ...commonButtonSx,
+                              padding: '0.3rem 0.6rem',
+                              fontSize: '0.7rem',
+                              ...(selectedIconIndex === index && {
+                                background: 'rgba(76, 175, 80, 0.6)',
+                                borderColor: '#4caf50',
+                              }),
+                            }}
+                          >
+                            {icon.label}
+                          </Button>
+                        ))}
+                      </Box>
+                    ) : (
+                      // 自定義 URL 輸入
+                      <TextField
+                        value={customUrl}
+                        onChange={(e) => setCustomUrl(e.target.value)}
+                        size="small"
+                        fullWidth
+                        placeholder="https://example.com/hotspot.png"
+                        error={customUrl.trim() !== '' && !/^(https?:\/\/|\/).+/i.test(customUrl.trim())}
+                        helperText={
+                          customUrl.trim() !== '' && !/^(https?:\/\/|\/).+/i.test(customUrl.trim())
+                            ? 'URL 必須以 http://, https:// 或 / 開頭'
+                            : ''
+                        }
+                        sx={{
+                          ...textFieldSx,
+                          '& .MuiFormHelperText-root': {
+                            color: '#ff5252',
+                            fontSize: '0.7rem',
+                            marginTop: '0.25rem',
+                          },
+                        }}
+                      />
+                    )}
+                  </Box>
+                </Box>
+                <Box sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                  <Button
+                    variant="text"
+                    size="small"
+                    onClick={() => setIsAddFormOpen(false)}
+                    sx={{ ...commonButtonSx, padding: '0.3rem 0.8rem' }}
+                  >
+                    {cancelLabel}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={handleAddHotspot}
+                    disabled={!isFormValid}
+                    sx={{ ...addButtonSx, padding: '0.3rem 0.8rem' }}
+                  >
+                    {confirmAddLabel}
+                  </Button>
+                </Box>
+              </Box>
+            )}
+
+            {/* Custom Hotspots List */}
+            {customHotspots.length > 0 && (
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.4rem',
+                  marginTop: '0.5rem',
+                }}
+              >
+                {customHotspots.map((hotspot) => (
+                  <Box key={hotspot.name} sx={hotspotItemSx}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        flex: 1,
+                        overflow: 'hidden',
+                      }}
+                    >
+                      <span style={{ fontWeight: 600 }}>
+                        {(hotspot as HotspotConfig & { displayName?: string }).displayName || hotspot.name.replace('custom_', '#')}
+                      </span>
+                      <span style={{ opacity: 0.6, fontSize: '0.7rem' }}>
+                        ({hotspot.ath.toFixed(1)}, {hotspot.atv.toFixed(1)})
+                      </span>
+                    </Box>
+                    <Box sx={{ display: 'flex', gap: '0.25rem' }}>
+                      <IconButton
+                        size="small"
+                        onClick={() => handleToggleHotspot(hotspot.name)}
+                        sx={{
+                          color: hotspotVisibility[hotspot.name] ? '#4caf50' : 'rgba(255,255,255,0.4)',
+                          padding: '0.2rem',
+                        }}
+                      >
+                        {hotspotVisibility[hotspot.name] ? '●' : '○'}
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        onClick={() => handleRemoveHotspot(hotspot.name)}
+                        sx={{
+                          color: 'rgba(255, 100, 100, 0.8)',
+                          padding: '0.2rem',
+                          '&:hover': { color: '#ff5252' },
+                        }}
+                      >
+                        ×
+                      </IconButton>
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+            )}
           </div>
         </div>
       </div>
