@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 
 import Button from '@mui/material/Button';
 
@@ -12,12 +12,8 @@ interface KrpanoDemoProps {
   xml?: string;
   /** 初始場景 */
   startScene?: string;
-  /** 熱點 A 配置 */
-  hotspotA?: Partial<HotspotConfig>;
-  /** 熱點 B 配置 */
-  hotspotB?: Partial<HotspotConfig>;
-  /** 是否啟用切換功能 */
-  enableToggle?: boolean;
+  /** 熱點配置陣列 */
+  hotspots?: HotspotConfig[];
   /** 說明文字 - 標題 */
   instructionTitle?: string;
   /** 說明文字 - 內容 */
@@ -63,6 +59,27 @@ const DEFAULT_SCENES = [
   {
     name: 'scene_timothy_oldfield_luufnhochru_unsplash',
     label: '場景 2 (港口)'
+  }
+];
+
+// 預設熱點配置
+const DEFAULT_HOTSPOTS: HotspotConfig[] = [
+  {
+    name: 'hotspot_A',
+    url: '/krpano/skin/vtourskin_hotspot.png',
+    ath: 0,
+    atv: 0,
+    scale: 0.5,
+    visible: true,
+    krpanoOnClick: 'toggle_visibility(hotspot_B)'
+  },
+  {
+    name: 'hotspot_B',
+    url: '/krpano/skin/vtourskin_mapspot.png',
+    ath: 30,
+    atv: 0,
+    scale: 0.5,
+    visible: true
   }
 ];
 
@@ -148,9 +165,7 @@ const toggleButtonSx = {
 export default function KrpanoDemo({
   xml,
   startScene,
-  hotspotA,
-  hotspotB,
-  enableToggle = true,
+  hotspots = DEFAULT_HOTSPOTS,
   instructionTitle = '操作說明',
   instructionContent = '點擊熱點 A 來切換熱點 B 的顯示/隱藏狀態',
   scenes = DEFAULT_SCENES,
@@ -176,12 +191,15 @@ export default function KrpanoDemo({
 
   // 使用 State 管理狀態，而非透過 Ref 命令式操作
   const [currentScene, setCurrentScene] = useState(startScene);
-  const [isHotspotAVisible, setIsHotspotAVisible] = useState(
-    hotspotA?.visible ?? true
-  );
-  const [isHotspotBVisible, setIsHotspotBVisible] = useState(
-    hotspotB?.visible ?? true
-  );
+
+  // 熱點可見性狀態 (使用 Map 來追蹤每個熱點的可見性)
+  const [hotspotVisibility, setHotspotVisibility] = useState<Record<string, boolean>>(() => {
+    const initial: Record<string, boolean> = {};
+    hotspots.forEach((h) => {
+      initial[h.name] = h.visible ?? true;
+    });
+    return initial;
+  });
 
   const [isDebug, setIsDebug] = useState(false);
   const [isInfoOpen, setIsInfoOpen] = useState(false);
@@ -190,13 +208,13 @@ export default function KrpanoDemo({
     setIsLoaded(true);
   }, []);
 
-  const handleToggleHotspotA = () => {
-    setIsHotspotAVisible((prev) => !prev);
-  };
-
-  const handleToggleHotspotB = () => {
-    setIsHotspotBVisible((prev) => !prev);
-  };
+  // 通用的切換熱點可見性函數
+  const handleToggleHotspot = useCallback((name: string) => {
+    setHotspotVisibility((prev) => ({
+      ...prev,
+      [name]: !prev[name]
+    }));
+  }, []);
 
   const handleLoadScene = (sceneName: string) => {
     setCurrentScene(sceneName);
@@ -218,9 +236,13 @@ export default function KrpanoDemo({
     }
   }, [isLoaded]);
 
-  // 整合 Props 與 State
-  const mergedHotspotA = { ...hotspotA, visible: isHotspotAVisible };
-  const mergedHotspotB = { ...hotspotB, visible: isHotspotBVisible };
+  // 使用 useMemo 合併熱點配置與可見性狀態
+  const mergedHotspots = useMemo(() => {
+    return hotspots.map((hotspot) => ({
+      ...hotspot,
+      visible: hotspotVisibility[hotspot.name] ?? hotspot.visible ?? true
+    }));
+  }, [hotspots, hotspotVisibility]);
 
   return (
     <div className={style.krpano_demo}>
@@ -246,9 +268,7 @@ export default function KrpanoDemo({
           xml={xml}
           startScene={startScene}
           currentScene={currentScene}
-          hotspotA={mergedHotspotA}
-          hotspotB={mergedHotspotB}
-          enableToggle={enableToggle}
+          hotspots={mergedHotspots}
           className={style['krpano_demo-container-viewer']}
           onReady={handleReady}
           debug={isDebug}
@@ -340,20 +360,16 @@ export default function KrpanoDemo({
                 style['krpano_demo-controls-scroll_area-group-hotspot']
               }
             >
-              <Button
-                variant="contained"
-                sx={commonButtonSx}
-                onClick={handleToggleHotspotA}
-              >
-                {toggleHotspotALabel}
-              </Button>
-              <Button
-                variant="contained"
-                sx={commonButtonSx}
-                onClick={handleToggleHotspotB}
-              >
-                {toggleHotspotBLabel}
-              </Button>
+              {hotspots.map((hotspot, index) => (
+                <Button
+                  key={hotspot.name}
+                  variant="contained"
+                  sx={commonButtonSx}
+                  onClick={() => handleToggleHotspot(hotspot.name)}
+                >
+                  {index === 0 ? toggleHotspotALabel : toggleHotspotBLabel}
+                </Button>
+              ))}
             </div>
           </div>
 
