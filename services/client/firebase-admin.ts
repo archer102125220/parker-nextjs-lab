@@ -4,8 +4,14 @@ import { request } from '@/utils/request';
 const prefix = '/nextjs-server/firebase-admin';
 
 export const GET_getMessageTokens = unstable_cache(
-  async function () {
-    return request.get(`${prefix}/get-push-notification-tokens`);
+  async function (
+    useServiceWorkerCache: boolean = false,
+    useCache: boolean = false
+  ) {
+    return request.get(`${prefix}/get-push-notification-tokens`, {
+      useServiceWorkerCache,
+      useCache
+    });
   },
   ['GET_getMessageTokens'],
   {
