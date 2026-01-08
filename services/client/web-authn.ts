@@ -1,21 +1,40 @@
+import { unstable_cache } from 'next/cache';
 import { request } from '@/utils/request';
 
 const prefix = '/nextjs-server/web-authn';
 
-// TODO
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function GET_webAuthnGenerateChallenge(payload: any) {
-  return request.get(`${prefix}/generate-challenge`, payload);
-}
+export const GET_webAuthnGenerateChallenge = unstable_cache(
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async function (payload: any) {
+    return request.get(`${prefix}/generate-challenge`, payload);
+  },
+  ['GET_webAuthnGenerateChallenge'],
+  {
+    revalidate: 60 * 60 * 24
+  }
+);
 
-// TODO
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function POST_webAuthnRegistration(payload: any) {
-  return request.post(`${prefix}/registration`, payload);
-}
+export const POST_webAuthnRegistration = unstable_cache(
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async function (payload: any) {
+    return request.post(`${prefix}/registration`, payload);
+  },
+  ['POST_webAuthnRegistration'],
+  {
+    revalidate: 60 * 60 * 24
+  }
+);
 
-// TODO
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function POST_webAuthnVerify(payload: any) {
-  return request.post(`${prefix}/verify`, payload);
-}
+export const POST_webAuthnVerify = unstable_cache(
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async function (payload: any) {
+    return request.post(`${prefix}/verify`, payload);
+  },
+  ['POST_webAuthnVerify'],
+  {
+    revalidate: 60 * 60 * 24
+  }
+);
