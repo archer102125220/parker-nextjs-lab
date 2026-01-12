@@ -37,6 +37,7 @@ This project includes configuration files for AI code assistants to ensure consi
   - `inline-styles.mdc` - Inline style policies
   - `i18n.mdc` - Internationalization rules
   - `react-hooks.mdc` - React Hooks best practices
+  - `react-stable-api.mdc` - React Stable API policy (avoid experimental syntax)
   - `security-policy.mdc` - Security policies
   - `lint-policy.mdc` - Lint disable comment policies
   - `build-tools.mdc` - Build & Dev tooling (Webpack enforced)

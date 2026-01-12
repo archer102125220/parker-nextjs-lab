@@ -112,6 +112,27 @@ async function Page({ params }: Props) {
 - Use `useEffect` for data fetching, subscriptions, timers
 - `useLayoutEffect` runs synchronously before browser paint - avoid heavy computations
 
+### React Stable API Policy (⚠️ CRITICAL)
+- **Prioritize React Stable APIs**, **avoid experimental syntax**, and **use proper hook selection**
+- ✅ **Hook Selection Guidelines**:
+  | Scenario | Use |
+  |----------|-----|
+  | Expensive calculations | `useMemo` |
+  | Callbacks passed to children | `useCallback` |
+  | Prevent re-renders | `memo` |
+  | Access DOM / mutable values | `useRef` |
+  | Complex state logic | `useReducer` |
+  | Share state across components | `useContext` |
+  | Visual sync (prevent flicker) | `useLayoutEffect` |
+- ❌ **Avoid**: `use()` hook, `useOptimistic`, `useFormStatus`, `useFormState`, React Compiler/Forget, any "Canary" or "Experimental" features
+- ⚠️ **Anti-patterns**:
+  - DON'T use inline arrow functions in JSX when passing to memoized children → use `useCallback`
+  - DON'T recalculate values on every render → use `useMemo`
+  - DON'T use `useState` for values that don't need re-render → use `useRef`
+- 📦 **RTK vs useContext** (when using Redux Toolkit):
+  - **Use RTK**: Global app state, cross-page data, persisted state, RTK Query, state needing DevTools
+  - **Use useContext**: Theme/i18n Provider, local component tree state, third-party Provider (React Query, SWR)
+
 ### Lint Disable Comments (⚠️ CRITICAL)
 - **NEVER** add `eslint-disable`, `@ts-ignore`, `@ts-expect-error`, or similar comments without **explicit user instruction**
 - When encountering lint warnings/errors:

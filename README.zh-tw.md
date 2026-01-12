@@ -37,6 +37,7 @@
   - `inline-styles.mdc` - 行內樣式政策
   - `i18n.mdc` - 國際化規則
   - `react-hooks.mdc` - React Hooks 最佳實踐
+  - `react-stable-api.mdc` - React Stable API 政策（避免實驗性語法）
   - `security-policy.mdc` - 安全性政策
   - `lint-policy.mdc` - Lint 禁用註解政策
   - `build-tools.mdc` - 建置與開發工具（強制 Webpack）

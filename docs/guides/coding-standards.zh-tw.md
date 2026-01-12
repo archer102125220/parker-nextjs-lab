@@ -485,7 +485,47 @@ useEffect(() => {
 
 > ⚠️ **警告**：`useLayoutEffect` 同步執行並會阻塞瀏覽器繪製。避免執行繁重的計算。
 
-### 5.4 建置與開發工具 (強制)
+### 5.4 React Stable API 政策 (強制)
+
+本專案優先使用 **React Stable APIs**、**避免實驗性語法**，並要求**正確選擇 Hook**。
+
+#### Hook 選擇指南
+
+| 情境 | Hook |
+|------|------|
+| 昂貴的計算 | `useMemo` |
+| 傳遞給子組件的 callback | `useCallback` |
+| 防止不必要的重新渲染 | `memo` |
+| 存取 DOM / 可變值 | `useRef` |
+| 複雜狀態邏輯 | `useReducer` |
+| 跨組件共享狀態 | `useContext` |
+| 視覺同步（防止閃爍） | `useLayoutEffect` |
+
+#### 應避免的反模式
+
+- ❌ 不要在 JSX 中使用 inline arrow function 傳給 memoized 子組件 → 用 `useCallback`
+- ❌ 不要每次 render 都重新計算 → 用 `useMemo`
+- ❌ 不要用 `useState` 存不需要觸發 re-render 的值 → 用 `useRef`
+
+#### RTK vs useContext（使用 Redux Toolkit 時）
+
+| 使用 RTK | 使用 useContext |
+|----------|-----------------|
+| 全域應用狀態（用戶、購物車、通知） | Theme Provider（MUI ThemeContext） |
+| 跨頁面共享資料 | Locale/i18n（next-intl） |
+| 需持久化的狀態 | 局部組件樹狀態 |
+| 複雜非同步資料（RTK Query） | 第三方 Provider（React Query, SWR） |
+| 需要 DevTools 除錯的狀態 | 組件庫內部狀態（FormContext） |
+
+#### 應避免的實驗性功能
+
+- ❌ `use()` hook（實驗性）
+- ❌ `useOptimistic`（實驗性）
+- ❌ `useFormStatus` / `useFormState`（實驗性）
+- ❌ React Compiler / React Forget（實驗性）
+- ❌ 任何在 React 文件中標記為 "Canary" 或 "Experimental" 的功能
+
+### 5.5 建置與開發工具 (強制)
 
 由於 SCSS `:export` 語法目前與 Turbopack 不相容，您必須使用以下指令：
 

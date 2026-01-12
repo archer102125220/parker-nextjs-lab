@@ -1,0 +1,102 @@
+---
+description: React Stable API policy - prioritize stable APIs with proper hook selection
+globs:
+  - "components/**/*.tsx"
+  - "hooks/**/*.ts"
+  - "app/**/*.tsx"
+---
+
+# React Stable API Policy (⚠️ CRITICAL)
+
+## Rule
+
+This project prioritizes **React Stable APIs**, **avoids experimental syntax**, and requires **proper hook selection** based on use case.
+
+## ✅ Hook Selection Guidelines (MUST FOLLOW)
+
+When writing React code, you MUST select the appropriate hook for each scenario:
+
+### Performance Optimization (REQUIRED when applicable)
+| Scenario | Hook | Example |
+|----------|------|---------|
+| Expensive calculations | `useMemo` | `const filtered = useMemo(() => items.filter(...), [items])` |
+| Callback passed to child components | `useCallback` | `const handleClick = useCallback(() => {...}, [deps])` |
+| Prevent unnecessary re-renders | `memo` | `export default memo(MyComponent)` |
+
+### DOM & Refs
+| Scenario | Hook | Example |
+|----------|------|---------|
+| Access DOM elements | `useRef` | `const inputRef = useRef<HTMLInputElement>(null)` |
+| Store mutable values (no re-render) | `useRef` | `const timerRef = useRef<number>()` |
+| Expose methods to parent | `forwardRef` + `useImperativeHandle` | Forward ref pattern |
+
+### State Management
+| Scenario | Hook | Example |
+|----------|------|---------|
+| Simple state | `useState` | `const [count, setCount] = useState(0)` |
+| Complex state logic | `useReducer` | `const [state, dispatch] = useReducer(reducer, init)` |
+| Share state across components | `useContext` | `const theme = useContext(ThemeContext)` |
+
+### Side Effects
+| Scenario | Hook | Example |
+|----------|------|---------|
+| Data fetching, subscriptions, timers | `useEffect` | `useEffect(() => { fetch(...) }, [])` |
+| Visual rendering sync (prevent flicker) | `useLayoutEffect` | `useLayoutEffect(() => { setPosition(...) }, [])` |
+
+### RTK vs useContext (When using Redux Toolkit)
+
+When the project uses **RTK (Redux Toolkit)**, follow these guidelines:
+
+| Use RTK for | Use useContext for |
+|-------------|-------------------|
+| Global app state (user, cart, notifications) | Theme Provider (MUI ThemeContext) |
+| Cross-page shared data | Locale/i18n (next-intl) |
+| Persisted state | Local component tree state |
+| Complex async data (RTK Query) | Third-party Provider (React Query, SWR) |
+| State needing DevTools debugging | Component library internal state (FormContext) |
+
+**Quick Decision Rule:**
+```
+Need global, persistent, debuggable? → RTK
+Only in local component tree / Provider-based? → useContext
+```
+
+```tsx
+// ❌ BAD: Creating new function on every render when passed to child
+<ChildComponent onClick={() => handleClick(id)} />
+
+// ✅ GOOD: Memoized callback
+const memoizedClick = useCallback(() => handleClick(id), [id]);
+<ChildComponent onClick={memoizedClick} />
+
+// ❌ BAD: Recalculating on every render
+const expensiveResult = items.filter(i => i.active).map(i => transform(i));
+
+// ✅ GOOD: Memoized calculation
+const expensiveResult = useMemo(
+  () => items.filter(i => i.active).map(i => transform(i)),
+  [items]
+);
+
+// ❌ BAD: Using useState for values that don't need re-render
+const [timerIdState, setTimerId] = useState<number>();
+
+// ✅ GOOD: Using useRef for mutable values
+const timerIdRef = useRef<number>();
+```
+
+## ❌ Avoid: Experimental Features
+
+- `use()` hook (experimental)
+- `useOptimistic` (experimental)
+- `useFormStatus` (experimental, use stable alternatives)
+- `useFormState` (experimental, use stable alternatives)
+- React Compiler / React Forget (experimental)
+- Any feature marked as "Canary" or "Experimental" in React docs
+
+## Exceptions
+
+If an experimental feature is absolutely necessary:
+1. **Warn the user** about the experimental nature
+2. **Document the usage** with clear comments
+3. **Get explicit approval** before implementation
