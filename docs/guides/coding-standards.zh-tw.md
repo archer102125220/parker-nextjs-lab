@@ -509,6 +509,19 @@ Render → Commit → [useLayoutEffect] → Paint → [useEffect]
 
 本專案優先使用 **React Stable APIs**、**避免實驗性語法**，並要求**正確選擇 Hook**。
 
+#### 完整 React 19 Stable Hooks 列表
+
+| 分類 | Hooks |
+|------|-------|
+| 狀態 | `useState`, `useReducer` |
+| Context | `useContext` |
+| Ref | `useRef`, `useImperativeHandle` |
+| Effect | `useEffect`, `useLayoutEffect`, `useInsertionEffect` |
+| 效能 | `useMemo`, `useCallback` |
+| 排程 | `useTransition`, `useDeferredValue` |
+| 其他 | `useId`, `useSyncExternalStore`, `useDebugValue` |
+| React 19 新增 | `useActionState`, `useFormStatus`, `useOptimistic`, `use` |
+
 #### Hook 選擇指南
 
 | 情境 | Hook |
@@ -520,6 +533,9 @@ Render → Commit → [useLayoutEffect] → Paint → [useEffect]
 | 複雜狀態邏輯 | `useReducer` |
 | 跨組件共享狀態 | `useContext` |
 | 視覺同步（防止閃爍） | `useLayoutEffect` |
+| 表單 action 狀態（React 19） | `useActionState` |
+| 樂觀更新（React 19） | `useOptimistic` |
+| 非阻塞 UI 更新 | `useTransition` |
 
 #### 應避免的反模式
 
@@ -539,11 +555,9 @@ Render → Commit → [useLayoutEffect] → Paint → [useEffect]
 
 #### 應避免的實驗性功能
 
-- ❌ `use()` hook（實驗性）
-- ❌ `useOptimistic`（實驗性）
-- ❌ `useFormStatus` / `useFormState`（實驗性）
 - ❌ React Compiler / React Forget（實驗性）
 - ❌ 任何在 React 文件中標記為 "Canary" 或 "Experimental" 的功能
+- ❌ Unstable API（以 `unstable_` 為前綴）
 
 ### 5.5 建置與開發工具 (強制)
 

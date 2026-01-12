@@ -490,6 +490,19 @@ Render → Commit → [useLayoutEffect] → Paint → [useEffect]
 
 This project prioritizes **React Stable APIs**, **avoids experimental syntax**, and requires **proper hook selection**.
 
+#### Complete React 19 Stable Hooks
+
+| Category | Hooks |
+|----------|-------|
+| State | `useState`, `useReducer` |
+| Context | `useContext` |
+| Ref | `useRef`, `useImperativeHandle` |
+| Effect | `useEffect`, `useLayoutEffect`, `useInsertionEffect` |
+| Performance | `useMemo`, `useCallback` |
+| Scheduling | `useTransition`, `useDeferredValue` |
+| Other | `useId`, `useSyncExternalStore`, `useDebugValue` |
+| React 19 New | `useActionState`, `useFormStatus`, `useOptimistic`, `use` |
+
 #### Hook Selection Guidelines
 
 | Scenario | Hook |
@@ -501,6 +514,9 @@ This project prioritizes **React Stable APIs**, **avoids experimental syntax**, 
 | Complex state logic | `useReducer` |
 | Share state across components | `useContext` |
 | Visual sync (prevent flicker) | `useLayoutEffect` |
+| Form action state (React 19) | `useActionState` |
+| Optimistic updates (React 19) | `useOptimistic` |
+| Non-blocking UI updates | `useTransition` |
 
 #### Anti-Patterns to Avoid
 
@@ -520,11 +536,9 @@ This project prioritizes **React Stable APIs**, **avoids experimental syntax**, 
 
 #### Experimental Features to Avoid
 
-- ❌ `use()` hook (experimental)
-- ❌ `useOptimistic` (experimental)
-- ❌ `useFormStatus` / `useFormState` (experimental)
 - ❌ React Compiler / React Forget (experimental)
 - ❌ Any feature marked as "Canary" or "Experimental" in React docs
+- ❌ Unstable APIs (prefixed with `unstable_`)
 
 ### 5.5 Build & Dev Tooling (MANDATORY)
 

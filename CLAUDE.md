@@ -101,6 +101,7 @@ async function Page({ params }: Props) {
 
 ### React Stable API Policy (⚠️ CRITICAL)
 - **Prioritize React Stable APIs**, **avoid experimental syntax**, and **use proper hook selection**
+- ✅ **React 19 Stable Hooks**: `useState`, `useReducer`, `useContext`, `useRef`, `useImperativeHandle`, `useEffect`, `useLayoutEffect`, `useInsertionEffect`, `useMemo`, `useCallback`, `useTransition`, `useDeferredValue`, `useId`, `useSyncExternalStore`, `useDebugValue`, `useActionState`, `useFormStatus`, `useOptimistic`, `use`
 - ✅ **Hook Selection Guidelines**:
   | Scenario | Use |
   |----------|-----|
@@ -111,7 +112,10 @@ async function Page({ params }: Props) {
   | Complex state logic | `useReducer` |
   | Share state across components | `useContext` |
   | Visual sync (prevent flicker) | `useLayoutEffect` |
-- ❌ **Avoid**: `use()` hook, `useOptimistic`, `useFormStatus`, `useFormState`, React Compiler/Forget, any "Canary" or "Experimental" features
+  | Form action state (React 19) | `useActionState` |
+  | Optimistic updates (React 19) | `useOptimistic` |
+  | Non-blocking UI updates | `useTransition` |
+- ❌ **Avoid**: React Compiler/Forget (experimental), any "Canary" or "Experimental" features, unstable_ prefixed APIs
 - ⚠️ **Anti-patterns**:
   - DON'T use inline arrow functions in JSX when passing to memoized children → use `useCallback`
   - DON'T recalculate values on every render → use `useMemo`

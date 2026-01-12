@@ -12,40 +12,91 @@ globs:
 
 This project prioritizes **React Stable APIs**, **avoids experimental syntax**, and requires **proper hook selection** based on use case.
 
+## ✅ Complete React 19 Stable Hooks List
+
+### State Hooks
+| Hook | Description |
+|------|-------------|
+| `useState` | Declare and update state variables |
+| `useReducer` | Complex state logic (multiple sub-values or depends on previous state) |
+
+### Context Hook
+| Hook | Description |
+|------|-------------|
+| `useContext` | Subscribe to React Context, avoid prop drilling |
+
+### Ref Hooks
+| Hook | Description |
+|------|-------------|
+| `useRef` | Access DOM elements or store mutable values (no re-render) |
+| `useImperativeHandle` | Customize ref value exposed to parent (with forwardRef) |
+
+### Effect Hooks
+| Hook | Description |
+|------|-------------|
+| `useEffect` | Side effects (after paint, asynchronous) |
+| `useLayoutEffect` | Side effects (before paint, synchronous) |
+| `useInsertionEffect` | CSS-in-JS libraries, fires before useLayoutEffect |
+
+### Performance Optimization Hooks
+| Hook | Description |
+|------|-------------|
+| `useMemo` | Memoize calculated values |
+| `useCallback` | Memoize function definitions |
+
+### Scheduling Hooks
+| Hook | Description |
+|------|-------------|
+| `useTransition` | Mark UI updates as "transitions", can be interrupted |
+| `useDeferredValue` | Defer re-rendering of non-urgent UI |
+
+### Other Hooks
+| Hook | Description |
+|------|-------------|
+| `useId` | Generate stable unique IDs (SSR consistent) |
+| `useSyncExternalStore` | Subscribe to external stores |
+| `useDebugValue` | Custom label in DevTools |
+
+### React 19 New Hooks (Stable)
+| Hook | Description |
+|------|-------------|
+| `useActionState` | Simplify form action and submission state |
+| `useFormStatus` | Access form's pending status |
+| `useOptimistic` | Optimistic UI updates |
+| `use` | Read Promise/Context (can be called conditionally) |
+
 ## ✅ Hook Selection Guidelines (MUST FOLLOW)
 
-When writing React code, you MUST select the appropriate hook for each scenario:
-
 ### Performance Optimization (REQUIRED when applicable)
-| Scenario | Hook | Example |
-|----------|------|---------|
-| Expensive calculations | `useMemo` | `const filtered = useMemo(() => items.filter(...), [items])` |
-| Callback passed to child components | `useCallback` | `const handleClick = useCallback(() => {...}, [deps])` |
-| Prevent unnecessary re-renders | `memo` | `export default memo(MyComponent)` |
-
-### DOM & Refs
-| Scenario | Hook | Example |
-|----------|------|---------|
-| Access DOM elements | `useRef` | `const inputRef = useRef<HTMLInputElement>(null)` |
-| Store mutable values (no re-render) | `useRef` | `const timerRef = useRef<number>()` |
-| Expose methods to parent | `forwardRef` + `useImperativeHandle` | Forward ref pattern |
+| Scenario | Hook |
+|----------|------|
+| Expensive calculations | `useMemo` |
+| Callback passed to child components | `useCallback` |
+| Prevent unnecessary re-renders | `memo` |
 
 ### State Management
-| Scenario | Hook | Example |
-|----------|------|---------|
-| Simple state | `useState` | `const [count, setCount] = useState(0)` |
-| Complex state logic | `useReducer` | `const [state, dispatch] = useReducer(reducer, init)` |
-| Share state across components | `useContext` | `const theme = useContext(ThemeContext)` |
+| Scenario | Hook |
+|----------|------|
+| Simple state | `useState` |
+| Complex state logic | `useReducer` |
+| Share state across components | `useContext` |
+| Form action state (React 19) | `useActionState` |
+| Optimistic updates | `useOptimistic` |
 
 ### Side Effects
-| Scenario | Hook | Example |
-|----------|------|---------|
-| Data fetching, subscriptions, timers | `useEffect` | `useEffect(() => { fetch(...) }, [])` |
-| Visual rendering sync (prevent flicker) | `useLayoutEffect` | `useLayoutEffect(() => { setPosition(...) }, [])` |
+| Scenario | Hook |
+|----------|------|
+| Data fetching, subscriptions, timers | `useEffect` |
+| Visual rendering sync (prevent flicker) | `useLayoutEffect` |
+| CSS-in-JS style injection | `useInsertionEffect` |
+
+### Scheduling & Performance
+| Scenario | Hook |
+|----------|------|
+| Non-blocking UI updates | `useTransition` |
+| Defer non-urgent rendering | `useDeferredValue` |
 
 ### RTK vs useContext (When using Redux Toolkit)
-
-When the project uses **RTK (Redux Toolkit)**, follow these guidelines:
 
 | Use RTK for | Use useContext for |
 |-------------|-------------------|
@@ -60,6 +111,8 @@ When the project uses **RTK (Redux Toolkit)**, follow these guidelines:
 Need global, persistent, debuggable? → RTK
 Only in local component tree / Provider-based? → useContext
 ```
+
+## ❌ Anti-Patterns to Avoid
 
 ```tsx
 // ❌ BAD: Creating new function on every render when passed to child
@@ -85,18 +138,90 @@ const [timerIdState, setTimerId] = useState<number>();
 const timerIdRef = useRef<number>();
 ```
 
+## ✅ React 19 New Hooks Examples
+
+### useActionState - Form Action State
+```tsx
+// ✅ GOOD: Managing form submission state with useActionState
+async function submitForm(prevState: FormState, formData: FormData) {
+  const result = await saveData(formData);
+  return { success: result.ok, message: result.message };
+}
+
+function MyForm() {
+  const [state, formAction, isPending] = useActionState(submitForm, { success: false });
+  
+  return (
+    <form action={formAction}>
+      <input name="email" type="email" />
+      <button disabled={isPending}>
+        {isPending ? 'Submitting...' : 'Submit'}
+      </button>
+      {state.message && <p>{state.message}</p>}
+    </form>
+  );
+}
+```
+
+### useOptimistic - Optimistic UI Updates
+```tsx
+// ✅ GOOD: Optimistic update while waiting for server response
+function TodoList({ todos }: { todos: Todo[] }) {
+  const [optimisticTodos, addOptimisticTodo] = useOptimistic(
+    todos,
+    (state, newTodo: Todo) => [...state, { ...newTodo, pending: true }]
+  );
+  
+  async function addTodo(formData: FormData) {
+    const newTodo = { id: Date.now(), text: formData.get('text') as string };
+    addOptimisticTodo(newTodo); // Immediately show in UI
+    await saveTodoToServer(newTodo); // Then save to server
+  }
+  
+  return (
+    <form action={addTodo}>
+      {optimisticTodos.map(todo => (
+        <li key={todo.id} style={{ opacity: todo.pending ? 0.5 : 1 }}>
+          {todo.text}
+        </li>
+      ))}
+    </form>
+  );
+}
+```
+
+### useTransition - Non-blocking UI Updates
+```tsx
+// ✅ GOOD: Keep UI responsive during expensive state updates
+function SearchResults() {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<Item[]>([]);
+  const [isPending, startTransition] = useTransition();
+
+  function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    setQuery(value); // Urgent: update input immediately
+    
+    startTransition(() => {
+      // Non-urgent: can be interrupted
+      setResults(filterLargeDataset(value));
+    });
+  }
+  
+  return (
+    <>
+      <input value={query} onChange={handleSearch} />
+      {isPending && <Spinner />}
+      <ResultsList results={results} />
+    </>
+  );
+}
+```
+
 ## ❌ Avoid: Experimental Features
 
-- `use()` hook (experimental)
-- `useOptimistic` (experimental)
-- `useFormStatus` (experimental, use stable alternatives)
-- `useFormState` (experimental, use stable alternatives)
 - React Compiler / React Forget (experimental)
 - Any feature marked as "Canary" or "Experimental" in React docs
+- Unstable APIs (prefixed with `unstable_`)
 
-## Exceptions
 
-If an experimental feature is absolutely necessary:
-1. **Warn the user** about the experimental nature
-2. **Document the usage** with clear comments
-3. **Get explicit approval** before implementation
