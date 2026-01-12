@@ -4,7 +4,7 @@
 
 | 分類 | 總數 | 已完成 | 進行中 |
 |------|------|--------|--------|
-| Hooks | 32 | 0 | 0 |
+| Hooks | 32 | 32 | 0 |
 | Components | 110+ | 0 | 0 |
 | App Pages | 63 | 0 | 0 |
 
@@ -37,13 +37,13 @@
 - [x] [useTimeout.ts](../../hooks/useTimeout.ts) ✅ useRef
 - [x] [useWebSocket.ts](../../hooks/useWebSocket.ts) ✅ useRef/useCallback
 - [x] [useWindowSize.ts](../../hooks/useWindowSize.ts) ✅ 結構良好
-- [ ] [useRequest/index.ts](../../hooks/useRequest/index.ts)
-- [ ] [useRequest/useRequestInit.ts](../../hooks/useRequest/useRequestInit.ts)
-- [ ] [useSocketIoClient.ts](../../hooks/useSocketIoClient.ts)
-- [ ] [useTablet.ts](../../hooks/useTablet.ts)
-- [ ] [useWebRTC.ts](../../hooks/useWebRTC.ts)
-- [ ] [useYoutube.ts](../../hooks/useYoutube.ts)
-- [ ] [gitHub/useGitHubUsers.ts](../../hooks/gitHub/useGitHubUsers.ts)
+- [x] [useRequest/index.ts](../../hooks/useRequest/index.ts) ✅ 結構良好 (import type 已分開/正確)
+- [x] [useRequest/useRequestInit.ts](../../hooks/useRequest/useRequestInit.ts) ✅ 結構良好 (import type 已分開)
+- [x] [useSocketIoClient.ts](../../hooks/useSocketIoClient.ts) ✅ 結構良好 (動態 import 使用正確)
+- [x] [useTablet.ts](../../hooks/useTablet.ts) ✅ 結構良好
+- [x] [useWebRTC.ts](../../hooks/useWebRTC.ts) ✅ 結構良好 (useRef/useCallback 使用正確)
+- [x] [useYoutube.ts](../../hooks/useYoutube.ts) 🔧 已修正 `type RefObject`
+- [x] [gitHub/useGitHubUsers.ts](../../hooks/gitHub/useGitHubUsers.ts) ✅ 結構良好 (import type 已分開)
 
 ---
 

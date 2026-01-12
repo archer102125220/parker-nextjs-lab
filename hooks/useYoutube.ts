@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { RefObject } from 'react';
+import { useState, useEffect, type RefObject } from 'react';
 
 const UNSTARTED = -1;
 const ENDED = 0;
