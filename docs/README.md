@@ -191,6 +191,32 @@ docs/
 
 ---
 
+### 10. [react-hooks-refactoring-plan.md](./in-progress/react-hooks-refactoring-plan.md)
+**React Hooks 重構計畫**
+
+- **用途**: 檢視專案的 React Hooks 使用情況，優化為 React 19 Stable Hooks
+- **內容**:
+  - 現況分析（useState/useEffect 使用統計）
+  - 重構優先順序
+  - useReducer/useRef/useMemo/useCallback 優化機會
+  - React 19 新 Hooks 應用場景
+- **狀態**: 🔄 進行中（2026-01-12）
+- **適用對象**: React 開發者
+
+---
+
+### 11. [react-hooks-refactoring-task.md](./in-progress/react-hooks-refactoring-task.md)
+**React Hooks 重構進度追蹤**
+
+- **用途**: 追蹤 Hooks、Components、App Pages 的重構進度
+- **內容**:
+  - 32 個 Hooks 檢查清單
+  - 110+ 個 Components 檢查清單
+  - 63 個 App Pages 檢查清單
+  - 高優先級項目標記
+- **狀態**: 🔄 進行中（2026-01-12）
+- **適用對象**: React 開發者
+
 ## ⬜ 未開始的文檔 (pending/)
 
 ### 12. [css-compliance-fix-plan.md](./pending/css-compliance-fix-plan.md)
