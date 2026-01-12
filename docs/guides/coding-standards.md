@@ -466,6 +466,26 @@ useEffect(() => {
 
 > ⚠️ **Warning**: `useLayoutEffect` runs synchronously and blocks the browser from painting. Avoid heavy computations.
 
+#### Important: React Timing vs JavaScript async/await
+
+The terms "synchronous" and "asynchronous" here refer to **React's rendering cycle timing**, NOT JavaScript's `async/await`:
+
+| Concept | Meaning |
+|---------|---------|
+| **React timing (this section)** | When the hook runs relative to browser paint |
+| **JavaScript async/await** | Handling Promises for async operations (API calls, file I/O) |
+
+```
+React Rendering Flow:
+Render → Commit → [useLayoutEffect] → Paint → [useEffect]
+                       ↑ Synchronous           ↑ Asynchronous
+                   (blocks paint)          (after paint)
+```
+
+**Quick Summary:**
+- React synchronous/asynchronous → Affects **screen rendering order**
+- JavaScript async/await → Handles **asynchronous operations** (API, Timer, etc.)
+
 ### 5.4 React Stable API Policy (MANDATORY)
 
 This project prioritizes **React Stable APIs**, **avoids experimental syntax**, and requires **proper hook selection**.

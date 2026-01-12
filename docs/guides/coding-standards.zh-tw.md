@@ -485,6 +485,26 @@ useEffect(() => {
 
 > ⚠️ **警告**：`useLayoutEffect` 同步執行並會阻塞瀏覽器繪製。避免執行繁重的計算。
 
+#### 重要說明：React 時序 vs JavaScript async/await
+
+這裡的「同步」和「非同步」是指 **React 渲染週期的時序**，而非 JavaScript 的 `async/await`：
+
+| 概念 | 含義 |
+|------|------|
+| **React 時序（本節討論）** | Hook 相對於瀏覽器繪製的執行時機 |
+| **JavaScript async/await** | 處理 Promise 的非同步操作（API 呼叫、檔案 I/O） |
+
+```
+React 渲染流程：
+Render → Commit → [useLayoutEffect] → Paint → [useEffect]
+                       ↑ 同步                    ↑ 非同步
+                   （阻塞繪製）              （繪製後執行）
+```
+
+**簡單記憶：**
+- React 同步/非同步 → 影響**畫面渲染順序**
+- JavaScript async/await → 處理**非同步操作**（API、Timer 等）
+
 ### 5.4 React Stable API 政策 (強制)
 
 本專案優先使用 **React Stable APIs**、**避免實驗性語法**，並要求**正確選擇 Hook**。
