@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, type ReactNode } from 'react';
 import {
   Typography,
   Box,
@@ -13,7 +13,7 @@ import {
 import { useWebSocket } from '@/hooks/useWebSocket';
 import styles from '@/app/[locale]/socket-test/websocket/page.module.scss';
 
-export default function WebSocketTest(): React.ReactNode {
+export default function WebSocketTest(): ReactNode {
   const [messageList, setMessageList] = useState<unknown[]>([]);
   const [inputMessage, setInputMessage] = useState('');
 

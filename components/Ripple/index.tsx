@@ -1,12 +1,14 @@
 'use client';
 
-import React, {
+import {
   useRef,
   useCallback,
   forwardRef,
   type ReactNode,
   type PointerEvent,
-  type CSSProperties
+  type CSSProperties,
+  type MouseEvent,
+  type MutableRefObject
 } from 'react';
 
 import '@/components/Ripple/ripple.scss';
@@ -23,7 +25,7 @@ export interface RippleProps {
   /** Additional styles */
   style?: CSSProperties;
   /** Click handler */
-  onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+  onClick?: (event: MouseEvent<HTMLDivElement>) => void;
 }
 
 /**
@@ -108,7 +110,7 @@ export const Ripple = forwardRef<HTMLDivElement, RippleProps>(
       <div
         ref={(node) => {
           (
-            containerRef as React.MutableRefObject<HTMLDivElement | null>
+            containerRef as MutableRefObject<HTMLDivElement | null>
           ).current = node;
           if (typeof ref === 'function') {
             ref(node);

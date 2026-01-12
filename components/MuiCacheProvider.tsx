@@ -1,6 +1,5 @@
 'use client';
-import type { ReactNode } from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 // import { CacheProvider } from '@emotion/react';

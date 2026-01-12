@@ -1,6 +1,5 @@
 'use client';
-import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import MuiLink, { LinkProps as MuiLinkProps } from '@mui/material/Link';
 
 import { Link as I18nLink } from '@/i18n/navigation';

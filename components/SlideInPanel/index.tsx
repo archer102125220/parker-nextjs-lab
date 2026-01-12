@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, ReactNode } from 'react';
+import { useState, useEffect, useCallback, type ReactNode } from 'react';
 import './index.scss';
 
 export interface SlideInMessage {
@@ -57,7 +57,7 @@ export function SlideInPanel({
     const timestamp = Date.now();
     const id = `${timestamp}-${Math.random()}`;
     const newMessage: SlideInMessage = { content: value, timestamp, id };
-    
+
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMessageList((prev) => {
       const updated = [...prev, newMessage];
@@ -79,28 +79,46 @@ export function SlideInPanel({
     return () => clearTimeout(timer);
   }, [value, timeout, maxRow, onRemove]);
 
-  const handleRemoveMessage = useCallback((message: SlideInMessage, index: number) => {
-    onClose?.(message, index);
-    setMessageList((prev) => prev.filter((m) => m.id !== message.id));
-    onRemove?.(message, index);
-  }, [onClose, onRemove]);
+  const handleRemoveMessage = useCallback(
+    (message: SlideInMessage, index: number) => {
+      onClose?.(message, index);
+      setMessageList((prev) => prev.filter((m) => m.id !== message.id));
+      onRemove?.(message, index);
+    },
+    [onClose, onRemove]
+  );
 
-  const handleClick = useCallback((message: SlideInMessage, index: number) => {
-    if (userRemoveType === 'click') {
-      handleRemoveMessage(message, index);
-    }
-  }, [userRemoveType, handleRemoveMessage]);
+  const handleClick = useCallback(
+    (message: SlideInMessage, index: number) => {
+      if (userRemoveType === 'click') {
+        handleRemoveMessage(message, index);
+      }
+    },
+    [userRemoveType, handleRemoveMessage]
+  );
 
   const cssVariables = {
     '--slide_in_panel_list_top': typeof top === 'number' ? `${top}px` : top,
-    '--slide_in_panel_list_bottom': typeof bottom === 'number' ? `${bottom}px` : bottom,
+    '--slide_in_panel_list_bottom':
+      typeof bottom === 'number' ? `${bottom}px` : bottom,
     '--slide_in_panel_list_zIndex': zIndex,
-    '--message_item_height': typeof itemHeight === 'number' ? `${itemHeight}px` : itemHeight,
-    '--slide_in_panel_list_item_spacing': typeof itemSpacing === 'number' ? `${itemSpacing}px` : itemSpacing,
+    '--message_item_height':
+      typeof itemHeight === 'number' ? `${itemHeight}px` : itemHeight,
+    '--slide_in_panel_list_item_spacing':
+      typeof itemSpacing === 'number' ? `${itemSpacing}px` : itemSpacing,
     '--slide_in_panel_list_container_position': containerPosition,
-    '--slide_in_panel_list_width': containerPosition === 'fixed' ? '100vw' : '100%',
-    '--slide_in_panel_list_right': leftEnter ? undefined : (containerPosition === 'fixed' ? '-100vw' : '-100%'),
-    '--slide_in_panel_list_left': leftEnter ? (containerPosition === 'fixed' ? '-100vw' : '-100%') : undefined
+    '--slide_in_panel_list_width':
+      containerPosition === 'fixed' ? '100vw' : '100%',
+    '--slide_in_panel_list_right': leftEnter
+      ? undefined
+      : containerPosition === 'fixed'
+        ? '-100vw'
+        : '-100%',
+    '--slide_in_panel_list_left': leftEnter
+      ? containerPosition === 'fixed'
+        ? '-100vw'
+        : '-100%'
+      : undefined
   } as React.CSSProperties;
 
   if (messageList.length === 0) return null;
@@ -113,18 +131,24 @@ export function SlideInPanel({
     >
       {messageList.map((message, index) => {
         const bottomPosition = `calc(var(--message_item_height, 60px) * ${messageList.length - index - 1} + var(--slide_in_panel_list_item_spacing, 0px) * ${messageList.length - index})`;
-        
+
         return (
           <div
             key={message.id}
             className="slide_in_panel_list-message"
-            style={{
-              '--message_bottom': bottomPosition
-            } as React.CSSProperties}
+            style={
+              {
+                '--message_bottom': bottomPosition
+              } as React.CSSProperties
+            }
             css-left-enter={leftEnter ? 'true' : 'false'}
             onClick={() => handleClick(message, index)}
           >
-            {children ? children(message, index) : <p>{String(message.content)}</p>}
+            {children ? (
+              children(message, index)
+            ) : (
+              <p>{String(message.content)}</p>
+            )}
           </div>
         );
       })}

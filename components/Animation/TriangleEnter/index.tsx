@@ -1,6 +1,13 @@
 'use client';
-import type { ReactNode, ElementType } from 'react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+  type ElementType
+} from 'react';
 import animejs from 'animejs';
 
 import '@/components/Triangle/triangle.scss';

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, type ReactNode } from 'react';
 import { useParams } from 'next/navigation';
 import { useNextRouter } from '@/i18n/navigation';
 import { useLocale } from 'next-intl';
@@ -24,7 +24,7 @@ import { useSocketIoClient } from '@/hooks/useSocketIoClient';
 import { useWebRTC } from '@/hooks/useWebRTC';
 import style from '@/app/[locale]/web-rtc/socket-io/room/[roomId]/page.module.scss';
 
-export default function WebRTCSocketIORoom(): React.ReactNode {
+export default function WebRTCSocketIORoom(): ReactNode {
   const params = useParams();
   const router = useNextRouter();
   const locale = useLocale();

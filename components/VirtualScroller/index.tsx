@@ -1,6 +1,13 @@
 'use client';
 
-import { useState, useRef, useMemo, useCallback, ReactNode, CSSProperties } from 'react';
+import {
+  useState,
+  useRef,
+  useMemo,
+  useCallback,
+  type ReactNode,
+  type CSSProperties
+} from 'react';
 import './index.scss';
 
 export interface VirtualScrollerProps<T = unknown> {
@@ -52,11 +59,14 @@ export function VirtualScroller<T = unknown>({
   }, [items, visibleStart, visibleEnd]);
 
   // Handle scroll
-  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
-    const target = e.currentTarget;
-    setScrollTop(target.scrollTop);
-    onScroll?.(target.scrollTop);
-  }, [onScroll]);
+  const handleScroll = useCallback(
+    (e: React.UIEvent<HTMLDivElement>) => {
+      const target = e.currentTarget;
+      setScrollTop(target.scrollTop);
+      onScroll?.(target.scrollTop);
+    },
+    [onScroll]
+  );
 
   // CSS variables
   const cssVariables: VirtualScrollerCSSProperties = {

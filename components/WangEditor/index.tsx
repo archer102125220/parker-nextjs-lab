@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, type CSSProperties } from 'react';
 import { Editor, Toolbar } from '@wangeditor/editor-for-react';
 import { IDomEditor, IEditorConfig, IToolbarConfig } from '@wangeditor/editor';
 import '@wangeditor/editor/dist/css/style.css';
@@ -110,7 +110,7 @@ export function WangEditor({
       />
       <div
         className="wang_editor-container"
-        style={{ '--editor-height': heightValue } as React.CSSProperties}
+        style={{ '--editor-height': heightValue } as CSSProperties}
       >
         <Editor
           defaultConfig={defaultEditorConfig}

@@ -1,6 +1,12 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback, ReactNode } from 'react';
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  type ReactNode
+} from 'react';
 import './index.scss';
 
 export interface BannerItem {
@@ -23,7 +29,11 @@ export interface BannerProps {
   showNavigation?: boolean;
   transitionDuration?: number;
   className?: string;
-  children?: (banner: BannerItem, index: number, isActive: boolean) => ReactNode;
+  children?: (
+    banner: BannerItem,
+    index: number,
+    isActive: boolean
+  ) => ReactNode;
 }
 
 export function Banner({
@@ -41,11 +51,11 @@ export function Banner({
 }: BannerProps) {
   const [currentIndex, setCurrentIndex] = useState(value);
   const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
+  const startXRef = useRef(0);
   const [moveX, setMoveX] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-  
+
   const bannerRef = useRef<HTMLDivElement>(null);
   const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -61,11 +71,14 @@ export function Banner({
   }, [currentIndex, banners.length]);
 
   // Navigation
-  const goToSlide = useCallback((index: number) => {
-    if (index < 0 || index >= banners.length) return;
-    setCurrentIndex(index);
-    onChange?.(index);
-  }, [banners.length, onChange]);
+  const goToSlide = useCallback(
+    (index: number) => {
+      if (index < 0 || index >= banners.length) return;
+      setCurrentIndex(index);
+      onChange?.(index);
+    },
+    [banners.length, onChange]
+  );
 
   const handlePrev = useCallback(() => {
     goToSlide(getPrevIndex());
@@ -97,32 +110,38 @@ export function Banner({
   }, [autoplay, banners.length, interval, isHovered, isFocused, handleNext]);
 
   // Drag handling
-  const handleDragStart = useCallback((e: React.MouseEvent | React.TouchEvent) => {
-    setIsDragging(true);
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    setStartX(clientX);
-    setMoveX(0);
-  }, []);
+  const handleDragStart = useCallback(
+    (e: React.MouseEvent | React.TouchEvent) => {
+      setIsDragging(true);
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      startXRef.current = clientX;
+      setMoveX(0);
+    },
+    []
+  );
 
-  const handleDragMove = useCallback((e: MouseEvent | TouchEvent) => {
-    if (!isDragging) return;
-    
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    setMoveX(clientX - startX);
-  }, [isDragging, startX]);
+  const handleDragMove = useCallback(
+    (e: MouseEvent | TouchEvent) => {
+      if (!isDragging) return;
+
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      setMoveX(clientX - startXRef.current);
+    },
+    [isDragging]
+  );
 
   const handleDragEnd = useCallback(() => {
     if (!isDragging) return;
-    
+
     setIsDragging(false);
-    
+
     const threshold = 50;
     if (moveX > threshold) {
       handlePrev();
     } else if (moveX < -threshold) {
       handleNext();
     }
-    
+
     setMoveX(0);
   }, [isDragging, moveX, handlePrev, handleNext]);
 
@@ -144,15 +163,18 @@ export function Banner({
   }, [isDragging, handleDragMove, handleDragEnd]);
 
   // Keyboard navigation
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault();
-      handlePrev();
-    } else if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      handleNext();
-    }
-  }, [handlePrev, handleNext]);
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        handlePrev();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        handleNext();
+      }
+    },
+    [handlePrev, handleNext]
+  );
 
   // Get slide state
   const getSlideState = (index: number): string => {
@@ -171,11 +193,15 @@ export function Banner({
       ref={bannerRef}
       className={`banner ${className}`}
       css-has-3d={has3DEffect ? 'true' : 'false'}
-      style={{
-        '--banner-height': heightValue,
-        '--banner-transition-duration': isDragging ? '0ms' : `${transitionDuration}ms`,
-        '--banner-drag-offset': `${moveX}px`
-      } as React.CSSProperties}
+      style={
+        {
+          '--banner-height': heightValue,
+          '--banner-transition-duration': isDragging
+            ? '0ms'
+            : `${transitionDuration}ms`,
+          '--banner-drag-offset': `${moveX}px`
+        } as React.CSSProperties
+      }
       tabIndex={0}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -222,9 +248,15 @@ export function Banner({
                   )}
                   {(banner.title || banner.description) && (
                     <div className="banner-slide-content-text">
-                      {banner.title && <h3 className="banner-slide-content-text-title">{banner.title}</h3>}
+                      {banner.title && (
+                        <h3 className="banner-slide-content-text-title">
+                          {banner.title}
+                        </h3>
+                      )}
                       {banner.description && (
-                        <p className="banner-slide-content-text-description">{banner.description}</p>
+                        <p className="banner-slide-content-text-description">
+                          {banner.description}
+                        </p>
                       )}
                     </div>
                   )}

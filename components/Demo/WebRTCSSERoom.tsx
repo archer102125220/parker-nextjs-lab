@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, type ReactNode } from 'react';
 import { useParams } from 'next/navigation';
 import { useNextRouter } from '@/i18n/navigation';
 import { useLocale } from 'next-intl';
@@ -43,7 +43,7 @@ interface WebRTCSettings {
   isAnswer?: boolean;
 }
 
-export default function WebRTCSSERoom(): React.ReactNode {
+export default function WebRTCSSERoom(): ReactNode {
   const params = useParams();
   const router = useNextRouter();
   const locale = useLocale();
@@ -305,6 +305,9 @@ export default function WebRTCSSERoom(): React.ReactNode {
 
     init();
 
+    const localVideoElem = localVideoRef.current;
+    const remoteVideoElem = remoteVideoRef.current;
+
     return () => {
       mounted = false;
       if (localStreamRef.current) {
@@ -319,11 +322,11 @@ export default function WebRTCSSERoom(): React.ReactNode {
         eventSourceRef.current.close();
         eventSourceRef.current = null;
       }
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = null;
+      if (localVideoElem) {
+        localVideoElem.srcObject = null;
       }
-      if (remoteVideoRef.current) {
-        remoteVideoRef.current.srcObject = null;
+      if (remoteVideoElem) {
+        remoteVideoElem.srcObject = null;
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

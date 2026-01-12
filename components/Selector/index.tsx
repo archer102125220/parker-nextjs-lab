@@ -1,6 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo, CSSProperties, ReactNode } from 'react';
+import {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  type CSSProperties,
+  type ReactNode
+} from 'react';
 import './index.scss';
 
 export interface SelectorOption {
@@ -25,7 +32,11 @@ export interface SelectorProps {
   className?: string;
   prefixSlot?: (isOpen: boolean) => ReactNode;
   suffixSlot?: (isOpen: boolean) => ReactNode;
-  optionSlot?: (option: SelectorOption, index: number, selected: boolean) => ReactNode;
+  optionSlot?: (
+    option: SelectorOption,
+    index: number,
+    selected: boolean
+  ) => ReactNode;
   emptyText?: string;
 }
 
@@ -117,9 +128,11 @@ export function Selector({
     }
 
     if (hasTransition) {
-      vars['--select_suffix_arrow_icon_transition'] = 'transform 0.3s ease-in-out';
+      vars['--select_suffix_arrow_icon_transition'] =
+        'transform 0.3s ease-in-out';
       vars['--select_option_list_transition'] = 'height 0.3s ease-in-out';
-      vars['--select_option_list_item_selsected_transition'] = 'color, background-color 0.4s ease-in-out';
+      vars['--select_option_list_item_selsected_transition'] =
+        'color, background-color 0.4s ease-in-out';
     }
 
     if (typeof optionListLeft === 'number') {
@@ -141,16 +154,29 @@ export function Selector({
     }
 
     return vars;
-  }, [listHeight, isOpen, hasShadow, hasTransition, optionListTop, optionListLeft, optionListRight, optionListWidth]);
+  }, [
+    listHeight,
+    isOpen,
+    hasShadow,
+    hasTransition,
+    optionListTop,
+    optionListLeft,
+    optionListRight,
+    optionListWidth
+  ]);
 
   const displayValue = useMemo(() => {
     const currentOption = optionList.find((option) => {
-      const optionValue = valueKey ? (option[valueKey] as string | number) : (option.value ?? '');
+      const optionValue = valueKey
+        ? (option[valueKey] as string | number)
+        : (option.value ?? '');
       return optionValue === value;
     });
 
     if (currentOption) {
-      const display = displayKey ? (currentOption[displayKey] as string) : (currentOption.label ?? '');
+      const display = displayKey
+        ? (currentOption[displayKey] as string)
+        : (currentOption.label ?? '');
       return String(display);
     }
 
@@ -158,7 +184,9 @@ export function Selector({
   }, [value, optionList, valueKey, displayKey]);
 
   const isSelected = (option: SelectorOption) => {
-    const optionValue = valueKey ? (option[valueKey] as string | number) : (option.value ?? '');
+    const optionValue = valueKey
+      ? (option[valueKey] as string | number)
+      : (option.value ?? '');
     return value === optionValue;
   };
 
@@ -170,7 +198,9 @@ export function Selector({
   };
 
   const handleChange = (option: SelectorOption, index: number) => {
-    const newValue = valueKey ? (option[valueKey] as string | number) : (option.value ?? '');
+    const newValue = valueKey
+      ? (option[valueKey] as string | number)
+      : (option.value ?? '');
     if (value !== newValue) {
       onChange?.(newValue, index);
     }
@@ -183,9 +213,7 @@ export function Selector({
       style={cssVariables as CSSProperties}
       onClick={handleToggle}
     >
-      <div className="selector-prefix">
-        {prefixSlot?.(isOpen)}
-      </div>
+      <div className="selector-prefix">{prefixSlot?.(isOpen)}</div>
 
       <div className="selector-current_value">
         <p className="selector-current_value-label">{displayValue}</p>
@@ -204,7 +232,9 @@ export function Selector({
             {optionSlot ? (
               optionSlot(option, index, isSelected(option))
             ) : (
-              <p>{displayKey ? String(option[displayKey]) : (option.label ?? '')}</p>
+              <p>
+                {displayKey ? String(option[displayKey]) : (option.label ?? '')}
+              </p>
             )}
           </div>
         ))}

@@ -16,14 +16,16 @@
  * Deprecated: 2025-12-20
  */
 
-import type { ReactNode, ElementType, CSSProperties } from 'react';
 import {
   useRef,
   useState,
   useMemo,
   useCallback,
   useEffect,
-  useLayoutEffect
+  useLayoutEffect,
+  type ReactNode,
+  type ElementType,
+  type CSSProperties
 } from 'react';
 import type { DebouncedFunc } from 'lodash';
 import _debounce from 'lodash/debounce';

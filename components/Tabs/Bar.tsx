@@ -1,6 +1,12 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback, ReactNode } from 'react';
+import {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  type ReactNode
+} from 'react';
 import './Bar.scss';
 
 export interface Tab {
@@ -599,7 +605,10 @@ export function Tabs({
       ref={tabsContainerRef}
       style={cssVariables}
     >
-      <div className="tabs-header" css-is-vertical={vertical ? 'true' : 'false'}>
+      <div
+        className="tabs-header"
+        css-is-vertical={vertical ? 'true' : 'false'}
+      >
         {/* Prev Navigation Button */}
         {hasNavigation && showPrev && (
           <button

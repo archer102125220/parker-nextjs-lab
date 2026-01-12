@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type ReactNode, type FormEvent } from 'react';
 import { useNextRouter } from '@/i18n/navigation';
 import { useLocale } from 'next-intl';
 import { v4 as uuidv4 } from 'uuid';
@@ -34,7 +34,7 @@ export default function WebRTCRoomEntryCard({
   alertSeverity = 'warning',
   roomBasePath,
   pageClassName
-}: WebRTCRoomEntryCardProps): React.ReactNode {
+}: WebRTCRoomEntryCardProps): ReactNode {
   const router = useNextRouter();
   const locale = useLocale();
   const [roomId, setRoomId] = useState('');
@@ -47,7 +47,7 @@ export default function WebRTCRoomEntryCard({
     router.push(`/${locale}${roomBasePath}/${newRoomId}`);
   };
 
-  const handleJoinRoom = (e?: React.FormEvent) => {
+  const handleJoinRoom = (e?: FormEvent) => {
     e?.preventDefault();
     if (!disabledJoinLink) {
       router.push(`/${locale}${roomBasePath}/${roomId}`);

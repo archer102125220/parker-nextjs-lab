@@ -7,10 +7,10 @@ import {
   useLayoutEffect,
   useCallback,
   useMemo,
-  ReactNode,
-  CSSProperties,
-  MouseEvent as ReactMouseEvent,
-  TouchEvent as ReactTouchEvent
+  type ReactNode,
+  type CSSProperties,
+  type MouseEvent as ReactMouseEvent,
+  type TouchEvent as ReactTouchEvent
 } from 'react';
 import { classifySwipeDirection } from '@/utils/helpers/classify-swipe-direction';
 import './index.scss';
@@ -334,7 +334,7 @@ export function SwiperCustom({
         const currentSlide = slideList[sliderActiveIndexRef.current];
         const currentValue = valueKey
           ? currentSlide?.[valueKey]
-          : currentSlide?.value ?? currentSlide;
+          : (currentSlide?.value ?? currentSlide);
         onSliderMove(
           e,
           currentValue as string | number | SwiperCustomSlide,
@@ -388,7 +388,7 @@ export function SwiperCustom({
         const newSlide = slideList[newSliderActiveIndex] ?? {};
         const newValue = valueKey
           ? newSlide[valueKey]
-          : newSlide.value ?? newSlide;
+          : (newSlide.value ?? newSlide);
         if (onChange) {
           onChange(newValue as string | number | SwiperCustomSlide);
         }
@@ -431,7 +431,7 @@ export function SwiperCustom({
       const currentSlide = slideList[sliderActiveIndex];
       const currentValue = valueKey
         ? currentSlide?.[valueKey]
-        : currentSlide?.value ?? currentSlide;
+        : (currentSlide?.value ?? currentSlide);
       onSliderMoveEnd(
         currentValue as string | number | SwiperCustomSlide,
         sliderActiveIndex
@@ -445,7 +445,7 @@ export function SwiperCustom({
       const newSlide = slideList[newSliderActiveIndex] ?? {};
       const newValue = valueKey
         ? newSlide[valueKey]
-        : newSlide.value ?? newSlide;
+        : (newSlide.value ?? newSlide);
       if (onChange) {
         onChange(newValue as string | number | SwiperCustomSlide);
       }
@@ -460,7 +460,7 @@ export function SwiperCustom({
       const newSlide = slideList[newSliderActiveIndex] ?? {};
       const newValue = valueKey
         ? newSlide[valueKey]
-        : newSlide.value ?? newSlide;
+        : (newSlide.value ?? newSlide);
       if (onChange) {
         onChange(newValue as string | number | SwiperCustomSlide);
       }
@@ -520,23 +520,25 @@ export function SwiperCustom({
         >
           {slideList.map((slide, index) => {
             const slotKey = slotNameKey ? slide[slotNameKey] : undefined;
-            const keyValue = (typeof slotKey === 'string' || typeof slotKey === 'number')
-              ? slotKey
-              : (typeof slide.slotName === 'string' || typeof slide.slotName === 'number')
-                ? slide.slotName
-                : index;
+            const keyValue =
+              typeof slotKey === 'string' || typeof slotKey === 'number'
+                ? slotKey
+                : typeof slide.slotName === 'string' ||
+                    typeof slide.slotName === 'number'
+                  ? slide.slotName
+                  : index;
             return (
-            <div
-              key={keyValue}
-              className="swiper_custom-content-wrapper-slide"
-            >
-              <div className="swiper_custom-content-wrapper-slide-center">
-                <div className="swiper_custom-content-wrapper-slide-center-middle">
-                  {renderSlideContent(slide, index)}
+              <div
+                key={keyValue}
+                className="swiper_custom-content-wrapper-slide"
+              >
+                <div className="swiper_custom-content-wrapper-slide-center">
+                  <div className="swiper_custom-content-wrapper-slide-center-middle">
+                    {renderSlideContent(slide, index)}
+                  </div>
                 </div>
               </div>
-            </div>
-          );
+            );
           })}
         </div>
       </div>

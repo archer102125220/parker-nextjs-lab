@@ -1,6 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback, ElementType, CSSProperties } from 'react';
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  type ElementType,
+  type CSSProperties
+} from 'react';
 import './index.scss';
 
 export interface EnterLabelProps {
@@ -54,13 +61,13 @@ export function EnterLabel({
   const revealedCharsRef = useRef(0); // Track how many characters have been revealed
   const iterationCountRef = useRef(0); // Track iterations for current character
   const maxIterationsPerChar = 5; // Number of random chars to show before revealing real char
-  
+
   // Calculate delay per frame: speed is the total time per character
   // Divide by iterations to get time per frame
   const getFrameDelay = () => {
     return Math.floor(speedRef.current / maxIterationsPerChar);
   };
-  
+
   // Use refs to avoid callback recreation
   const labelRef = useRef(label);
   const randomLenRef = useRef(randomLen);
@@ -75,7 +82,6 @@ export function EnterLabel({
     speedRef.current = speed;
     onAnimationEndChangeRef.current = onAnimationEndChange;
   }, [label, randomLen, speed, onAnimationEndChange]);
-
 
   const handleEnterLabel = useCallback(() => {
     const targetLabel = labelRef.current;
@@ -197,7 +203,10 @@ export function EnterLabel({
   };
 
   return (
-    <TagName className={`animation_enter_label ${className}`} style={cssVariables}>
+    <TagName
+      className={`animation_enter_label ${className}`}
+      style={cssVariables}
+    >
       {enterLabel}
     </TagName>
   );

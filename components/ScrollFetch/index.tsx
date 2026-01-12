@@ -1,14 +1,18 @@
 'use client';
-import type {
-  ReactNode,
-  WheelEvent,
-  UIEvent,
-  FunctionComponent,
-  TouchEvent,
-  MouseEvent,
-  CSSProperties
+import {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  type ReactNode,
+  type WheelEvent,
+  type UIEvent,
+  type FunctionComponent,
+  type TouchEvent,
+  type MouseEvent,
+  type CSSProperties
 } from 'react';
-import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 
 import _debounce from 'lodash/debounce';
@@ -156,7 +160,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
     useState<boolean>(false);
   const [isPullStart, setIsPullStart] = useState<boolean>(false);
   const [isShowRefreshIcon, setIsShowRefreshIcon] = useState<boolean>(false);
-  const [startY, setStartY] = useState<number>(0);
+  const startYRef = useRef<number>(0);
   const [moveDistance, setMoveDistance] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -488,15 +492,14 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
       const touchEvent = e as TouchEvent;
       const mouseEvent = e as MouseEvent;
 
-      setStartY(
+      startYRef.current =
         touchEvent.targetTouches?.[0]?.clientY ||
-          touchEvent.targetTouches?.[0]?.pageY ||
-          touchEvent.changedTouches?.[0]?.clientY ||
-          touchEvent.changedTouches?.[0]?.pageY ||
-          mouseEvent.clientY ||
-          mouseEvent.pageY ||
-          mouseEvent.screenY
-      );
+        touchEvent.targetTouches?.[0]?.pageY ||
+        touchEvent.changedTouches?.[0]?.clientY ||
+        touchEvent.changedTouches?.[0]?.pageY ||
+        mouseEvent.clientY ||
+        mouseEvent.pageY ||
+        mouseEvent.screenY;
     },
     [
       windowIsScrollIng,
@@ -549,7 +552,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
       if (isPullStart === false) return;
 
       setIsPullStart(false);
-      setStartY(0);
+      startYRef.current = 0;
       setDuration(300);
 
       if (moveDistance <= 6) {
@@ -642,9 +645,9 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
         mouseEvent.clientY ||
         mouseEvent.pageY ||
         mouseEvent.screenY;
-      const move = currentClientY - startY;
+      const move = currentClientY - startYRef.current;
 
-      if (startY > 0 && move > 0) {
+      if (startYRef.current > 0 && move > 0) {
         setIsShowRefreshIcon(true);
         if (iosStyle === false) {
           setRefreshTriggerZIndex(2);
@@ -682,7 +685,6 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
       infinityLoading,
       refreshing,
       loading,
-      startY,
       handlePullEnd,
       handlePullStart,
       iosStyle,

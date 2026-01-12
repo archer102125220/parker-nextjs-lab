@@ -1,7 +1,6 @@
 'use client';
 // https://developers.google.com/youtube/iframe_api_reference?hl=zh-tw
-import type { RefObject, Ref } from 'react';
-import { useRef, useImperativeHandle } from 'react';
+import { useRef, useImperativeHandle, type RefObject, type Ref } from 'react';
 
 import { useYoutube } from '@/hooks/useYoutube';
 

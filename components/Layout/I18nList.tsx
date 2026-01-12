@@ -1,6 +1,11 @@
 'use client';
-import type { ReactNode } from 'react';
-import { useCallback, useRef, useState, useEffect } from 'react';
+import {
+  useCallback,
+  useState,
+  useEffect,
+  type ReactNode,
+  type MouseEvent
+} from 'react';
 import {
   useLocale
   // useTranslations
@@ -21,7 +26,14 @@ import './i18n_list.scss';
 interface I18nListProps {
   className?: string;
   nonce?: string;
-  color?: "inherit" | "primary" | "secondary" | "success" | "error" | "info" | "warning";
+  color?:
+    | 'inherit'
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'error'
+    | 'info'
+    | 'warning';
 }
 
 export function I18nList(props: I18nListProps): ReactNode {
@@ -32,16 +44,16 @@ export function I18nList(props: I18nListProps): ReactNode {
   const nonce = useAppSelector<string>((state) => state.system.nonce);
   // console.log(JSON.stringify({ I18nListNonce: nonce }));
 
-  const triggerRef = useRef<HTMLButtonElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   const [clientNonce, setClientNonce] = useState<string>('');
-  const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
-  const handleOpen = useCallback(() => {
-    setMenuOpen(true);
+  const handleOpen = useCallback((event: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
   }, []);
   const handleClose = useCallback(() => {
-    setMenuOpen(false);
+    setAnchorEl(null);
   }, []);
 
   useEffect(() => {
@@ -56,9 +68,8 @@ export function I18nList(props: I18nListProps): ReactNode {
 
   return (
     <div className="i18n_list">
-      <Button 
-        ref={triggerRef} 
-        onClick={handleOpen} 
+      <Button
+        onClick={handleOpen}
         className={`i18n_list-trigger ${className || ''}`}
         nonce={clientNonce}
         color={color}
@@ -68,12 +79,10 @@ export function I18nList(props: I18nListProps): ReactNode {
       </Button>
       {/*  https://mui.com/material-ui/react-menu/ */}
       <Menu
-        // TODO
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        anchorEl={triggerRef.current}
+        anchorEl={anchorEl}
         className="i18n_list-menu"
         nonce={clientNonce}
-        open={menuOpen}
+        open={open}
         onClose={handleClose}
         slotProps={{
           list: {
@@ -81,10 +90,10 @@ export function I18nList(props: I18nListProps): ReactNode {
           }
         }}
       >
-        <MenuItem 
+        <MenuItem
           className="i18n_list-item"
           css-active={isZhTw ? 'true' : 'false'}
-          nonce={clientNonce} 
+          nonce={clientNonce}
           onClick={handleClose}
         >
           <LinkButton
@@ -96,18 +105,17 @@ export function I18nList(props: I18nListProps): ReactNode {
             href={pathname.replace(/^\/zh-tw|^\/en/gi, '') || '/'}
             sx={{
               fontWeight: isZhTw ? 'bold' : 'normal',
-              color: (theme) =>
-                isZhTw ? theme.palette.primary.main : null
+              color: (theme) => (isZhTw ? theme.palette.primary.main : null)
             }}
           >
             中文
             {/* {t('zh-tw')} */}
           </LinkButton>
         </MenuItem>
-        <MenuItem 
+        <MenuItem
           className="i18n_list-item"
           css-active={isEn ? 'true' : 'false'}
-          nonce={clientNonce} 
+          nonce={clientNonce}
           onClick={handleClose}
         >
           <LinkButton
@@ -119,8 +127,7 @@ export function I18nList(props: I18nListProps): ReactNode {
             href={pathname.replace(/^\/zh-tw|^\/en/gi, '') || '/'}
             sx={{
               fontWeight: isEn ? 'bold' : 'normal',
-              color: (theme) =>
-                isEn ? theme.palette.primary.main : null
+              color: (theme) => (isEn ? theme.palette.primary.main : null)
             }}
           >
             English

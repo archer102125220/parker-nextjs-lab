@@ -1,11 +1,20 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo, CSSProperties } from 'react';
+import {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  type CSSProperties
+} from 'react';
 import './index.scss';
 
 const COUNTDOWN_TYPE_DOWN_VALUE = 'down';
 const COUNTDOWN_TYPE_UP_VALUE = 'up';
-const COUNTDOWN_TYPE_LIST = [COUNTDOWN_TYPE_DOWN_VALUE, COUNTDOWN_TYPE_UP_VALUE];
+const COUNTDOWN_TYPE_LIST = [
+  COUNTDOWN_TYPE_DOWN_VALUE,
+  COUNTDOWN_TYPE_UP_VALUE
+];
 
 export interface CountdownProps {
   modelValue?: number;
@@ -94,7 +103,8 @@ export function Countdown({
 
   // Countdown card array
   const contdownCard = useMemo(() => {
-    const safeInitialSeconds = typeof initialSeconds !== 'number' ? 0 : initialSeconds;
+    const safeInitialSeconds =
+      typeof initialSeconds !== 'number' ? 0 : initialSeconds;
     const safeEndSecond = typeof endSecond !== 'number' ? 0 : endSecond;
 
     const contdownCardList: number[] = [];
@@ -119,7 +129,7 @@ export function Countdown({
     ) {
       setCurrentNumber(initialSeconds);
       isInProgressRef.current = true;
-      
+
       // Wait for next frame to ensure DOM is ready before starting animation
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -131,12 +141,19 @@ export function Countdown({
       // Reset the in-progress flag when countdown is stopped
       isInProgressRef.current = false;
     }
-  }, [isCountdownStart, initialSeconds, endSecond, countdownType, onUpdateIsCountdownStart, onCountdownStart]);
+  }, [
+    isCountdownStart,
+    initialSeconds,
+    endSecond,
+    countdownType,
+    onUpdateIsCountdownStart,
+    onCountdownStart
+  ]);
 
   // Initial mount - set ready state after component is mounted
   useEffect(() => {
     if (hasStartedRef.current) return;
-    
+
     if (
       isCountdownStart === true &&
       typeof initialSeconds === 'number' &&
@@ -145,7 +162,7 @@ export function Countdown({
       setCurrentNumber(initialSeconds);
       hasStartedRef.current = true;
       isInProgressRef.current = true;
-      
+
       // Wait for next frame to ensure DOM is ready before starting animation
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -183,7 +200,7 @@ export function Countdown({
 
       // Calculate the next number
       let newCurrentNumber: number;
-      
+
       // Both modes count down (large to small)
       // The difference is only the animation direction (countdownType)
       if (initialSeconds > endSecond || initialSeconds < endSecond) {
@@ -198,7 +215,7 @@ export function Countdown({
       // and the new cardNumber will match the animation condition
       setCurrentNumber(newCurrentNumber);
       onCountdownStep?.(newCurrentNumber);
-      
+
       // Release the animation lock
       isAnimatingRef.current = false;
     });
@@ -226,7 +243,9 @@ export function Countdown({
                       ? 'true'
                       : 'false'
                   }
-                  data-css-is-end-second={cardNumber === endSecond ? 'true' : 'false'}
+                  data-css-is-end-second={
+                    cardNumber === endSecond ? 'true' : 'false'
+                  }
                   style={{
                     // Down mode: up part uses cardNumber (Nuxt line 19)
                     ['--down_enter_up_z_index' as string]: cardNumber
@@ -247,7 +266,8 @@ export function Countdown({
                   }
                   style={{
                     // Fix: both parts use same base to prevent hybrid display
-                    ['--down_enter_down_z_index' as string]: contdownCard.length - cardNumber
+                    ['--down_enter_down_z_index' as string]:
+                      contdownCard.length - cardNumber
                   }}
                 >
                   {cardNumber}
@@ -281,11 +301,14 @@ export function Countdown({
                       ? 'true'
                       : 'false'
                   }
-                  data-css-is-end-second={cardNumber === endSecond ? 'true' : 'false'}
+                  data-css-is-end-second={
+                    cardNumber === endSecond ? 'true' : 'false'
+                  }
                   data-css-card-up_leave_up={cardNumber.toString()}
                   style={{
                     // Up mode: exact Nuxt formula (line 60)
-                    ['--up_leave_up_z_index' as string]: contdownCard.length - cardNumber
+                    ['--up_leave_up_z_index' as string]:
+                      contdownCard.length - cardNumber
                   }}
                 >
                   {cardNumber}
@@ -300,7 +323,9 @@ export function Countdown({
                       ? 'true'
                       : 'false'
                   }
-                  data-css-is-end-second={cardNumber === endSecond ? 'true' : 'false'}
+                  data-css-is-end-second={
+                    cardNumber === endSecond ? 'true' : 'false'
+                  }
                   data-css-card-up_leave_down={cardNumber.toString()}
                   style={{
                     // Up mode: exact Nuxt formula (line 77)

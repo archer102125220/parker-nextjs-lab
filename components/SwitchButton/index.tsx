@@ -1,6 +1,12 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo, CSSProperties } from 'react';
+import {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  type CSSProperties
+} from 'react';
 import './index.scss';
 
 export interface SwitchButtonProps {
@@ -66,8 +72,8 @@ export function SwitchButton({
       '--switch_button_radius': radius
     };
 
-    const currentColor = checked ? (checkedColor || color) : color;
-    const currentBgColor = checked ? (checkedBgColor || bgColor) : bgColor;
+    const currentColor = checked ? checkedColor || color : color;
+    const currentBgColor = checked ? checkedBgColor || bgColor : bgColor;
 
     if (currentColor) {
       vars['--switch_button_color'] = currentColor;
@@ -78,7 +84,8 @@ export function SwitchButton({
     }
 
     if (!checked) {
-      vars['--switch_button_icon_left'] = iconWidth > 0 ? `calc(100% - ${iconWidth + 8}px)` : 'calc(100% - 39px)';
+      vars['--switch_button_icon_left'] =
+        iconWidth > 0 ? `calc(100% - ${iconWidth + 8}px)` : 'calc(100% - 39px)';
       vars['--switch_button_icon_right'] = 'auto';
       vars['--switch_button_label_padding_right'] = `${iconWidth}px`;
       vars['--switch_button_label_padding_left'] = '0';
@@ -144,7 +151,12 @@ export function SwitchButton({
         disabled={disabled}
         checked={checked}
         onChange={handleChange}
-        aria-label={ariaLabel || (checked ? (onLabel || checkedLabel || 'On') : (offLabel || label || 'Off'))}
+        aria-label={
+          ariaLabel ||
+          (checked
+            ? onLabel || checkedLabel || 'On'
+            : offLabel || label || 'Off')
+        }
       />
 
       <div ref={iconRef} className="switch_button-icon">

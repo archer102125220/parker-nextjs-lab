@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, type ReactNode } from 'react';
 import {
   Typography,
   Paper,
@@ -12,7 +12,7 @@ import {
 import { useSocketIoClient } from '@/hooks/useSocketIoClient';
 import styles from '@/app/[locale]/socket-test/socket-io/page.module.scss';
 
-export default function SocketIoTest(): React.ReactNode {
+export default function SocketIoTest(): ReactNode {
   const [messageList, setMessageList] = useState<unknown[]>([]);
   const [inputMessage, setInputMessage] = useState('');
 

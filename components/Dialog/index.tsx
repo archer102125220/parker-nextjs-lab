@@ -1,11 +1,14 @@
-import type {
-  MouseEvent,
-  MouseEventHandler,
-  ReactNode,
-  ElementType,
-  CSSProperties
+import {
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+  type MouseEvent,
+  type MouseEventHandler,
+  type ReactNode,
+  type ElementType,
+  type CSSProperties
 } from 'react';
-import { useState, useMemo, useCallback, useEffect } from 'react';
 import { Button } from '@mui/material';
 
 import '@/components/Dialog/dialog.scss';

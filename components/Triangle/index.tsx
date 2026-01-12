@@ -1,5 +1,10 @@
-import type { ReactNode, ElementType, CSSProperties, Ref } from 'react';
-import { useMemo } from 'react';
+import {
+  useMemo,
+  type ReactNode,
+  type ElementType,
+  type CSSProperties,
+  type Ref
+} from 'react';
 
 // 在這份組件import的話會出現css覆蓋問題，因此改由使用頁面import
 // import triangleStyle from '@/components/Triangle/triangle.module.scss';

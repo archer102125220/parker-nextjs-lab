@@ -1,6 +1,5 @@
 'use client';
-import type { ReactNode } from 'react';
-import { useCallback } from 'react';
+import { useCallback, type ReactNode } from 'react';
 import Image from 'next/image';
 import type { SxProps } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
@@ -89,4 +88,3 @@ export function Header(props: HeaderProps): ReactNode {
   );
 }
 export default Header;
-

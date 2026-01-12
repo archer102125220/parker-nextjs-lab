@@ -1,13 +1,17 @@
 'use client';
-import type {
-  ReactNode,
-  ElementType,
-  MouseEvent,
-  TouchEvent,
-  KeyboardEvent,
-  CSSProperties
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+  type ReactNode,
+  type ElementType,
+  type MouseEvent,
+  type TouchEvent,
+  type KeyboardEvent,
+  type CSSProperties
 } from 'react';
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
 import '@/components/Drawer/drawer.scss';
 import styles from '@/components/Drawer/drawer.module.scss';
@@ -127,6 +131,7 @@ export function Drawer(props: DrawerProps): ReactNode {
   // Refs
   const drawerWrappingRef = useRef<HTMLDivElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
+  const dragStartRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
   // State
   const [clientNonce, setClientNonce] = useState<string>('');
@@ -136,8 +141,6 @@ export function Drawer(props: DrawerProps): ReactNode {
   const [isDraging, setIsDraging] = useState<boolean>(false);
   const [dragDuration, setDragDuration] = useState<number>(INIT_DRAG_DURATION);
   const [dragMoveDistance, setDragMoveDistance] = useState<number>(0);
-  const [dragStartY, setDragStartY] = useState<number>(0);
-  const [dragStartX, setDragStartX] = useState<number>(0);
 
   // Computed values
   const anchor = useMemo<anchorType>(() => {
@@ -449,7 +452,7 @@ export function Drawer(props: DrawerProps): ReactNode {
           event.clientY ||
           event.pageY ||
           event.offsetY;
-        setDragStartY(clientY);
+        dragStartRef.current.y = clientY;
       } else if (isHorizontal === true) {
         const clientX =
           event.targetTouches?.[0]?.clientX ||
@@ -461,7 +464,7 @@ export function Drawer(props: DrawerProps): ReactNode {
           event.clientX ||
           event.pageX ||
           event.offsetX;
-        setDragStartX(clientX);
+        dragStartRef.current.x = clientX;
       }
     },
     [dragCloseDisabled, isVertical, isHorizontal]
@@ -477,7 +480,7 @@ export function Drawer(props: DrawerProps): ReactNode {
       let dragStart = 0;
 
       if (isVertical === true) {
-        dragStart = dragStartY;
+        dragStart = dragStartRef.current.y;
 
         const currentClientY =
           event.targetTouches?.[0]?.clientY ||
@@ -489,9 +492,9 @@ export function Drawer(props: DrawerProps): ReactNode {
           event.clientY ||
           event.pageY ||
           event.offsetY;
-        move = currentClientY - dragStartY;
+        move = currentClientY - dragStart;
       } else if (isHorizontal === true) {
-        dragStart = dragStartX;
+        dragStart = dragStartRef.current.x;
 
         const currentClientX =
           event.targetTouches?.[0]?.clientX ||
@@ -503,7 +506,7 @@ export function Drawer(props: DrawerProps): ReactNode {
           event.clientX ||
           event.pageX ||
           event.offsetX;
-        move = currentClientX - dragStartX;
+        move = currentClientX - dragStart;
       }
 
       const drawerRect = drawerRef.current?.getBoundingClientRect();
@@ -535,16 +538,13 @@ export function Drawer(props: DrawerProps): ReactNode {
       isDragStart,
       isVertical,
       isHorizontal,
-      dragStartY,
-      dragStartX,
       anchor
     ]
   );
 
   const handleDragEnd = useCallback(() => {
     setIsDragStart(false);
-    setDragStartY(0);
-    setDragStartX(0);
+    dragStartRef.current = { x: 0, y: 0 };
 
     let triggerNumber = 0;
     if (isVertical === true) {

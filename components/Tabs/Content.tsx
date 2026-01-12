@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import {
+  useState,
+  useCallback,
+  useEffect,
+  type ReactNode,
+  type CSSProperties
+} from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType } from 'swiper';
 import ScrollFetch from '@/components/ScrollFetch';
@@ -13,7 +19,7 @@ import './Content.scss';
 export interface Tab {
   value: string | number;
   label: string;
-  content?: React.ReactNode;
+  content?: ReactNode;
   disabled?: boolean;
   // ScrollFetch per-tab settings
   isNotScrollFetch?: boolean;
@@ -26,28 +32,33 @@ export interface TabsContentProps {
   value?: string | number;
   tabs: Tab[];
   children?:
-    | React.ReactNode
-    | ((tab: Tab, index: number, isActive: boolean, isTabMoving: boolean) => React.ReactNode);
-  
+    | ReactNode
+    | ((
+        tab: Tab,
+        index: number,
+        isActive: boolean,
+        isTabMoving: boolean
+      ) => ReactNode);
+
   // Height props
   height?: string | number;
   swiperHeight?: string | number;
   tabsContentHeight?: string | number;
-  
+
   // Styling
   className?: string;
-  
+
   // Events
   onChange?: (value: string | number, index: number) => void;
   onSliderMove?: () => void;
-  
+
   // Loading
   loading?: boolean;
-  renderLoading?: React.ReactNode;
-  
+  renderLoading?: ReactNode;
+
   // Custom renders
-  renderTabTop?: React.ReactNode;
-  
+  renderTabTop?: ReactNode;
+
   // ScrollFetch props
   scrollFetch?: boolean;
   refresh?: () => Promise<void> | void;
@@ -57,14 +68,14 @@ export interface TabsContentProps {
   pullingLabel?: string;
   loadingLabel?: string;
   iosStyle?: boolean;
-  
+
   // Infinite scroll
   infinityFetch?: () => Promise<void> | void;
   infinityDisable?: boolean;
   infinityBuffer?: number;
   infinityLabel?: string;
   infinityEndLabel?: string;
-  
+
   // Value key configuration
   valueKey?: string;
 }
@@ -113,7 +124,7 @@ export function TabsContent({
   const cssVariables = {
     '--tabs_content-height': contentHeightStyle,
     '--tabs_content-swiper-height': swiperHeightStyle
-  } as React.CSSProperties;
+  } as CSSProperties;
 
   // Helper functions
   const isNotScrollFetch = useCallback(
@@ -149,7 +160,7 @@ export function TabsContent({
     (swiper: SwiperType) => {
       const newIndex = swiper.realIndex;
       const newTab = tabs[newIndex];
-      
+
       if (newTab && onChange) {
         const tabValue = newTab[valueKey as keyof Tab] ?? newTab.value;
         onChange(tabValue as string | number, newIndex);
@@ -172,7 +183,7 @@ export function TabsContent({
   }, []);
 
   // Sync Swiper position when value prop changes (for TabsBar clicks)
-  React.useEffect(() => {
+  useEffect(() => {
     if (!swiperInstance || value === undefined) return;
 
     const targetIndex = tabs.findIndex((tab) => {
@@ -188,7 +199,8 @@ export function TabsContent({
   // Render slide content
   const renderSlideContent = useCallback(
     (tab: Tab, index: number) => {
-      const isActive = index === (swiperInstance?.realIndex ?? initialSlide) && !isTabMoving;
+      const isActive =
+        index === (swiperInstance?.realIndex ?? initialSlide) && !isTabMoving;
 
       const renderContent = () => {
         // If children is a function, call it with tab data
@@ -271,7 +283,8 @@ export function TabsContent({
       {renderTabTop}
 
       {/* Loading Slot */}
-      {renderLoading || (loading && <div className="tabs_content-loading">Loading...</div>)}
+      {renderLoading ||
+        (loading && <div className="tabs_content-loading">Loading...</div>)}
 
       <Swiper
         className="tabs_content-swiper"
@@ -285,7 +298,9 @@ export function TabsContent({
         threshold={10}
       >
         {tabs.map((tab, index) => (
-          <SwiperSlide key={String(tab[valueKey as keyof Tab] ?? tab.value ?? index)}>
+          <SwiperSlide
+            key={String(tab[valueKey as keyof Tab] ?? tab.value ?? index)}
+          >
             {renderSlideContent(tab, index)}
           </SwiperSlide>
         ))}
