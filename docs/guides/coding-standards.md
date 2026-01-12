@@ -13,6 +13,7 @@
 - **Use `as unknown as TargetType`** for type assertions when necessary (double assertion)
 - **NEVER use `as any`** - Always use `as unknown as TargetType` for safer assertions
 - **Add explanatory comments** when using type assertions to explain why it's necessary
+- **Use inline type imports** - `import { useState, type ReactNode } from 'react'`
 
 ```typescript
 // ❌ FORBIDDEN

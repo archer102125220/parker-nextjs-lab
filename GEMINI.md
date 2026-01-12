@@ -21,6 +21,7 @@ This ensures users make informed decisions about potentially risky actions.
 ### TypeScript
 - NEVER use `any` - use generics, `unknown`, or precise types
 - Use `as unknown as Type` for assertions, NEVER `as any`
+- Use **inline type imports**: `import { useState, type ReactNode } from 'react'`
 
 ### CSS/SCSS Naming (Modified BEM)
 - **Block**: `.countdown` (Single word)

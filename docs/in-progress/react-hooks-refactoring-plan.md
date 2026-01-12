@@ -38,6 +38,35 @@
 5. **表單處理 → `useActionState` + `useFormStatus`**
 6. **非阻塞 UI 更新 → `useTransition`**
 
+### 🔵 新增：Import Type 檢查
+
+7. **混合 import → 分離 `import type`**
+
+以下檔案需要將類型導入（ReactNode, CSSProperties 等）改為 `import type`：
+
+- [ ] `components/Banner/index.tsx`
+- [ ] `components/DialogModal/index.tsx`
+- [ ] `components/SlideInPanel/index.tsx`
+- [ ] `components/Tabs/Bar.tsx`
+- [ ] `components/Selector/index.tsx`
+- [ ] `components/Countdown/index.tsx`
+- [ ] `components/SwitchButton/index.tsx`
+- [ ] `components/VirtualScroller/index.tsx`
+- [ ] `components/Animation/EnterLabel/index.tsx`
+
+**修改範例：**
+```typescript
+// ❌ Before
+import { useState, useEffect, ReactNode, CSSProperties } from 'react';
+
+// ✅ After (inline type - 推薦)
+import { useState, useEffect, type ReactNode, type CSSProperties } from 'react';
+
+// ✅ After (分開寫)
+import { useState, useEffect } from 'react';
+import type { ReactNode, CSSProperties } from 'react';
+```
+
 ### 🟢 低優先級
 
 7. **樂觀更新 → `useOptimistic`**

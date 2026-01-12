@@ -13,6 +13,7 @@
 - **使用 `as unknown as TargetType`** 進行型別斷言（雙重斷言）
 - **永遠不要使用 `as any`** - 始終使用 `as unknown as TargetType` 更安全的斷言
 - **添加解釋性註解** - 使用型別斷言時解釋原因
+- **使用內聯型別導入** - `import { useState, type ReactNode } from 'react'`
 
 ```typescript
 // ❌ 禁止

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, RefObject } from 'react';
+import { useState, useEffect, useCallback, type RefObject } from 'react';
 
 export interface SwipeDirection {
   direction: 'up' | 'down' | 'left' | 'right' | null;

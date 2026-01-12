@@ -12,36 +12,36 @@
 
 ## 🪝 Hooks (32 個)
 
-- [ ] [useBeforeunload.ts](../../hooks/useBeforeunload.ts)
-- [ ] [useCameraStream.ts](../../hooks/useCameraStream.ts)
-- [ ] [useClassifySwipeDirection.ts](../../hooks/useClassifySwipeDirection.ts)
-- [ ] [useClickOutside.ts](../../hooks/useClickOutside.ts)
-- [ ] [useDayjs.ts](../../hooks/useDayjs.ts)
-- [ ] [useDebounce.ts](../../hooks/useDebounce.ts)
-- [ ] [useEventListener.ts](../../hooks/useEventListener.ts)
-- [ ] [useEventSource.ts](../../hooks/useEventSource.ts)
-- [ ] [useFacebook.ts](../../hooks/useFacebook.ts)
-- [ ] [useFirebase.ts](../../hooks/useFirebase.ts)
-- [ ] [useGTMTrack.ts](../../hooks/useGTMTrack.ts)
-- [ ] [useIntersectionObserver.ts](../../hooks/useIntersectionObserver.ts)
-- [ ] [useInterval.ts](../../hooks/useInterval.ts)
-- [ ] [useIsomorphicLayoutEffect.ts](../../hooks/useIsomorphicLayoutEffect.ts)
-- [ ] [useKeyPress.ts](../../hooks/useKeyPress.ts)
-- [ ] [useLazyLoad.ts](../../hooks/useLazyLoad.ts)
-- [ ] [useLocalStorage.ts](../../hooks/useLocalStorage.ts)
-- [ ] [useMediaQuery.ts](../../hooks/useMediaQuery.ts)
-- [ ] [useMobile.ts](../../hooks/useMobile.ts)
-- [ ] [usePostEventSource.ts](../../hooks/usePostEventSource.ts)
+- [x] [useBeforeunload.ts](../../hooks/useBeforeunload.ts) ✅ useRef/useCallback
+- [x] [useCameraStream.ts](../../hooks/useCameraStream.ts) ✅ 結構良好
+- [x] [useClassifySwipeDirection.ts](../../hooks/useClassifySwipeDirection.ts) 🔧 已修正 `type RefObject`
+- [x] [useClickOutside.ts](../../hooks/useClickOutside.ts) ✅ useRef
+- [x] [useDayjs.ts](../../hooks/useDayjs.ts) ✅ 已使用 import type
+- [x] [useDebounce.ts](../../hooks/useDebounce.ts) ✅ 結構良好
+- [x] [useEventListener.ts](../../hooks/useEventListener.ts) ✅ useRef
+- [x] [useEventSource.ts](../../hooks/useEventSource.ts) ✅ 已使用 import type
+- [x] [useFacebook.ts](../../hooks/useFacebook.ts) ✅ 結構良好
+- [x] [useFirebase.ts](../../hooks/useFirebase.ts) ✅ useSyncExternalStore
+- [x] [useGTMTrack.ts](../../hooks/useGTMTrack.ts) ✅ 結構良好
+- [x] [useIntersectionObserver.ts](../../hooks/useIntersectionObserver.ts) 🔧 已修正 `type RefObject`
+- [x] [useInterval.ts](../../hooks/useInterval.ts) ✅ useRef
+- [x] [useIsomorphicLayoutEffect.ts](../../hooks/useIsomorphicLayoutEffect.ts) ✅ 結構良好
+- [x] [useKeyPress.ts](../../hooks/useKeyPress.ts) ✅ useCallback/useMemo
+- [x] [useLazyLoad.ts](../../hooks/useLazyLoad.ts) ✅ 已使用 type RefObject
+- [x] [useLocalStorage.ts](../../hooks/useLocalStorage.ts) ✅ useCallback
+- [x] [useMediaQuery.ts](../../hooks/useMediaQuery.ts) ✅ 結構良好
+- [x] [useMobile.ts](../../hooks/useMobile.ts) ✅ useSyncExternalStore
+- [x] [usePostEventSource.ts](../../hooks/usePostEventSource.ts) ✅ 已使用 import type
+- [x] [useSessionStorage.ts](../../hooks/useSessionStorage.ts) ✅ useCallback
+- [x] [useThrottle.ts](../../hooks/useThrottle.ts) ✅ useRef/useCallback
+- [x] [useTimeout.ts](../../hooks/useTimeout.ts) ✅ useRef
+- [x] [useWebSocket.ts](../../hooks/useWebSocket.ts) ✅ useRef/useCallback
+- [x] [useWindowSize.ts](../../hooks/useWindowSize.ts) ✅ 結構良好
 - [ ] [useRequest/index.ts](../../hooks/useRequest/index.ts)
 - [ ] [useRequest/useRequestInit.ts](../../hooks/useRequest/useRequestInit.ts)
-- [ ] [useSessionStorage.ts](../../hooks/useSessionStorage.ts)
 - [ ] [useSocketIoClient.ts](../../hooks/useSocketIoClient.ts)
 - [ ] [useTablet.ts](../../hooks/useTablet.ts)
-- [ ] [useThrottle.ts](../../hooks/useThrottle.ts)
-- [ ] [useTimeout.ts](../../hooks/useTimeout.ts)
 - [ ] [useWebRTC.ts](../../hooks/useWebRTC.ts)
-- [ ] [useWebSocket.ts](../../hooks/useWebSocket.ts)
-- [ ] [useWindowSize.ts](../../hooks/useWindowSize.ts)
 - [ ] [useYoutube.ts](../../hooks/useYoutube.ts)
 - [ ] [gitHub/useGitHubUsers.ts](../../hooks/gitHub/useGitHubUsers.ts)
 
@@ -113,8 +113,8 @@
 
 ## 📝 檢查標準
 
-| 模式 | 建議 Hook |
-|------|-----------|
+| 模式 | 建議 Hook / 修改 |
+|------|-----------------|
 | 不需觸發 re-render 的值 | `useRef` |
 | 5+ 個相關 state | `useReducer` |
 | 昂貴的計算 | `useMemo` |
@@ -122,6 +122,7 @@
 | 影響視覺渲染的同步操作 | `useLayoutEffect` |
 | 表單處理 | `useActionState` |
 | 非阻塞更新 | `useTransition` |
+| **類型導入混在一般 import** | **`import type` 或 `type` inline** |
 
 ## 狀態說明
 
@@ -129,3 +130,4 @@
 - `[/]` 檢查中
 - `[x]` 已完成
 - `⭐` 高優先級
+
