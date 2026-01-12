@@ -498,7 +498,7 @@ This project prioritizes **React Stable APIs**, **avoids experimental syntax**, 
 | State | `useState`, `useReducer` |
 | Context | `useContext` |
 | Ref | `useRef`, `useImperativeHandle` |
-| Effect | `useEffect`, `useLayoutEffect`, `useInsertionEffect` |
+| Effect | `useEffect`, `useLayoutEffect`, `useInsertionEffect`, `useEffectEvent` |
 | Performance | `useMemo`, `useCallback` |
 | Scheduling | `useTransition`, `useDeferredValue` |
 | Other | `useId`, `useSyncExternalStore`, `useDebugValue` |
@@ -518,6 +518,7 @@ This project prioritizes **React Stable APIs**, **avoids experimental syntax**, 
 | Form action state (React 19) | `useActionState` |
 | Optimistic updates (React 19) | `useOptimistic` |
 | Non-blocking UI updates | `useTransition` |
+| Reactive events inside effects | `useEffectEvent` |
 
 #### Anti-Patterns to Avoid
 

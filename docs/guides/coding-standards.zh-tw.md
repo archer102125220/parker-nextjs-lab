@@ -517,7 +517,7 @@ Render → Commit → [useLayoutEffect] → Paint → [useEffect]
 | 狀態 | `useState`, `useReducer` |
 | Context | `useContext` |
 | Ref | `useRef`, `useImperativeHandle` |
-| Effect | `useEffect`, `useLayoutEffect`, `useInsertionEffect` |
+| Effect | `useEffect`, `useLayoutEffect`, `useInsertionEffect`, `useEffectEvent` |
 | 效能 | `useMemo`, `useCallback` |
 | 排程 | `useTransition`, `useDeferredValue` |
 | 其他 | `useId`, `useSyncExternalStore`, `useDebugValue` |
@@ -537,6 +537,7 @@ Render → Commit → [useLayoutEffect] → Paint → [useEffect]
 | 表單 action 狀態（React 19） | `useActionState` |
 | 樂觀更新（React 19） | `useOptimistic` |
 | 非阻塞 UI 更新 | `useTransition` |
+| Effect 內部響應式事件 | `useEffectEvent` |
 
 #### 應避免的反模式
 

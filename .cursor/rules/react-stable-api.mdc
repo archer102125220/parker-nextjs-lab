@@ -37,6 +37,7 @@ This project prioritizes **React Stable APIs**, **avoids experimental syntax**, 
 | `useEffect` | Side effects (after paint, asynchronous) |
 | `useLayoutEffect` | Side effects (before paint, synchronous) |
 | `useInsertionEffect` | CSS-in-JS libraries, fires before useLayoutEffect |
+| `useEffectEvent` | Capture reactive values for effect, without triggering re-run |
 
 ### Performance Optimization Hooks
 | Hook | Description |
@@ -89,6 +90,7 @@ This project prioritizes **React Stable APIs**, **avoids experimental syntax**, 
 | Data fetching, subscriptions, timers | `useEffect` |
 | Visual rendering sync (prevent flicker) | `useLayoutEffect` |
 | CSS-in-JS style injection | `useInsertionEffect` |
+| Reactive events inside effects | `useEffectEvent` |
 
 ### Scheduling & Performance
 | Scenario | Hook |

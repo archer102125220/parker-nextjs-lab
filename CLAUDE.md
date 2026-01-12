@@ -102,7 +102,7 @@ async function Page({ params }: Props) {
 
 ### React Stable API Policy (⚠️ CRITICAL)
 - **Prioritize React Stable APIs**, **avoid experimental syntax**, and **use proper hook selection**
-- ✅ **React 19 Stable Hooks**: `useState`, `useReducer`, `useContext`, `useRef`, `useImperativeHandle`, `useEffect`, `useLayoutEffect`, `useInsertionEffect`, `useMemo`, `useCallback`, `useTransition`, `useDeferredValue`, `useId`, `useSyncExternalStore`, `useDebugValue`, `useActionState`, `useFormStatus`, `useOptimistic`, `use`
+- ✅ **React 19 Stable Hooks**: `useState`, `useReducer`, `useContext`, `useRef`, `useImperativeHandle`, `useEffect`, `useLayoutEffect`, `useInsertionEffect`, `useEffectEvent`, `useMemo`, `useCallback`, `useTransition`, `useDeferredValue`, `useId`, `useSyncExternalStore`, `useDebugValue`, `useActionState`, `useFormStatus`, `useOptimistic`, `use`
 - ✅ **Hook Selection Guidelines**:
   | Scenario | Use |
   |----------|-----|
@@ -116,6 +116,7 @@ async function Page({ params }: Props) {
   | Form action state (React 19) | `useActionState` |
   | Optimistic updates (React 19) | `useOptimistic` |
   | Non-blocking UI updates | `useTransition` |
+  | Reactive events inside effects | `useEffectEvent` |
 - ❌ **Avoid**: React Compiler/Forget (experimental), any "Canary" or "Experimental" features, unstable_ prefixed APIs
 - ⚠️ **Anti-patterns**:
   - DON'T use inline arrow functions in JSX when passing to memoized children → use `useCallback`
