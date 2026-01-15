@@ -58,8 +58,8 @@
 ## 🧩 Components (高優先級)
 
 ### ⚠️ 需重構 - 多個 useState (建議 useReducer)
-- [ ] `Drawer/index.tsx` ⭐ (9 useState)
-- [ ] `Tabs/Bar.tsx` ⭐ (12 useState)
+- [x] `Drawer/index.tsx` ⭐ ✅ useReducer + useRef（4 個拖曳狀態合併，3 個 callback refs）
+- [x] `Tabs/Bar.tsx` ⭐ ✅ useReducer x 2（6 個導航狀態 + 2 個指示器狀態，12 → 3 useState）
 - [ ] `SwiperJs/index.tsx`
 - [ ] `SwiperCustom/index.tsx`
 - [ ] `ScrollFetch/index.tsx`

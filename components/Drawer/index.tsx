@@ -5,6 +5,7 @@ import {
   useRef,
   useCallback,
   useMemo,
+  useReducer,
   type ReactNode,
   type ElementType,
   type MouseEvent,
@@ -89,6 +90,63 @@ interface DrawerCssVariableType extends CSSProperties {
   '--drawer_animation_direction'?: string;
 }
 
+// Drag state reducer
+interface DragState {
+  isDragStart: boolean;
+  isDraging: boolean;
+  dragDuration: number;
+  dragMoveDistance: number;
+}
+
+type DragAction =
+  | { type: 'START_DRAG' }
+  | { type: 'UPDATE_MOVE'; distance: number }
+  | { type: 'SET_DRAGING'; value: boolean }
+  | { type: 'END_DRAG' }
+  | { type: 'RESET_AFTER_CLOSE' };
+
+const initialDragState: DragState = {
+  isDragStart: false,
+  isDraging: false,
+  dragDuration: INIT_DRAG_DURATION,
+  dragMoveDistance: 0
+};
+
+function dragReducer(state: DragState, action: DragAction): DragState {
+  switch (action.type) {
+    case 'START_DRAG':
+      return {
+        ...state,
+        isDragStart: true,
+        dragDuration: INIT_DRAG_DURATION,
+        dragMoveDistance: 0
+      };
+    case 'UPDATE_MOVE':
+      return {
+        ...state,
+        dragMoveDistance: action.distance
+      };
+    case 'SET_DRAGING':
+      return {
+        ...state,
+        isDraging: action.value
+      };
+    case 'END_DRAG':
+      return {
+        ...state,
+        isDragStart: false
+      };
+    case 'RESET_AFTER_CLOSE':
+      return {
+        ...state,
+        dragDuration: 300,
+        dragMoveDistance: 0
+      };
+    default:
+      return state;
+  }
+}
+
 export function Drawer(props: DrawerProps): ReactNode {
   const {
     nonce,
@@ -133,14 +191,14 @@ export function Drawer(props: DrawerProps): ReactNode {
   const drawerRef = useRef<HTMLDivElement>(null);
   const dragStartRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
-  // State
+  // Drag state with useReducer
+  const [dragState, dispatchDrag] = useReducer(dragReducer, initialDragState);
+  const { isDragStart, isDraging, dragDuration, dragMoveDistance } = dragState;
+
+  // Other state
   const [clientNonce, setClientNonce] = useState<string>('');
   const [opacityTrigger, setOpacityTrigger] = useState<boolean>(open);
   const [animationReverse, setAnimationReverse] = useState<boolean>(false);
-  const [isDragStart, setIsDragStart] = useState<boolean>(false);
-  const [isDraging, setIsDraging] = useState<boolean>(false);
-  const [dragDuration, setDragDuration] = useState<number>(INIT_DRAG_DURATION);
-  const [dragMoveDistance, setDragMoveDistance] = useState<number>(0);
 
   // Computed values
   const anchor = useMemo<anchorType>(() => {
@@ -366,37 +424,39 @@ export function Drawer(props: DrawerProps): ReactNode {
     animationReverse
   ]);
 
-  // Event handlers
+  // Callback refs for handlers called from useCallback (cannot use useEffectEvent)
+  const onChangeRef = useRef(onChange);
+  const onCloseRef = useRef(onClose);
+  const onOpenRef = useRef(onOpen);
 
-  const handleTransitionEnd = useCallback(
-    function transitionEnd() {
-      if (opacityTrigger === false && open === true) {
-        if (typeof onChange === 'function') {
-          onChange(false);
-        }
-        if (typeof onClose === 'function') {
-          onClose();
-        }
+  // Keep refs updated
+  useEffect(() => {
+    onChangeRef.current = onChange;
+    onCloseRef.current = onClose;
+    onOpenRef.current = onOpen;
+  }, [onChange, onClose, onOpen]);
 
-        setDragDuration(300);
-        setDragMoveDistance(0);
+  const handleTransitionEnd = useCallback(() => {
+    if (opacityTrigger === false && open === true) {
+      if (typeof onChangeRef.current === 'function') {
+        onChangeRef.current(false);
       }
-    },
-    [opacityTrigger, open, onChange, onClose]
-  );
-
-  const handleOpen = useCallback(
-    function _open() {
-      if (typeof onOpen === 'function') {
-        onOpen();
+      if (typeof onCloseRef.current === 'function') {
+        onCloseRef.current();
       }
+      dispatchDrag({ type: 'RESET_AFTER_CLOSE' });
+    }
+  }, [opacityTrigger, open]);
 
-      if (typeof document?.querySelector === 'function') {
-        document.querySelector('html')?.classList.add('drawer_open');
-      }
-    },
-    [onOpen]
-  );
+  const handleOpen = useCallback(() => {
+    if (typeof onOpenRef.current === 'function') {
+      onOpenRef.current();
+    }
+
+    if (typeof document?.querySelector === 'function') {
+      document.querySelector('html')?.classList.add('drawer_open');
+    }
+  }, []);
 
   const handleClose = useCallback(
     function _close() {
@@ -434,9 +494,7 @@ export function Drawer(props: DrawerProps): ReactNode {
     (e: DragEvent) => {
       if (dragCloseDisabled === true) return;
 
-      setIsDragStart(true);
-      setDragDuration(INIT_DRAG_DURATION);
-      setDragMoveDistance(0);
+      dispatchDrag({ type: 'START_DRAG' });
 
       // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       const event = e as any; // Type assertion for touch/mouse events
@@ -523,14 +581,16 @@ export function Drawer(props: DrawerProps): ReactNode {
             drawerRect.left + move <= drawerWrapperRect.left) ||
           (anchor === 'top' && drawerRect.top + move <= drawerWrapperRect.top)
         ) {
-          window.requestAnimationFrame(() => setDragMoveDistance(move));
+          window.requestAnimationFrame(() => 
+            dispatchDrag({ type: 'UPDATE_MOVE', distance: move })
+          );
         } else {
-          setDragMoveDistance(0);
+          dispatchDrag({ type: 'UPDATE_MOVE', distance: 0 });
         }
 
-        setIsDraging(true);
+        dispatchDrag({ type: 'SET_DRAGING', value: true });
       } else {
-        setIsDraging(false);
+        dispatchDrag({ type: 'SET_DRAGING', value: false });
       }
     },
     [
@@ -543,7 +603,7 @@ export function Drawer(props: DrawerProps): ReactNode {
   );
 
   const handleDragEnd = useCallback(() => {
-    setIsDragStart(false);
+    dispatchDrag({ type: 'END_DRAG' });
     dragStartRef.current = { x: 0, y: 0 };
 
     let triggerNumber = 0;
@@ -561,8 +621,7 @@ export function Drawer(props: DrawerProps): ReactNode {
     if (_dragMoveDistance >= triggerNumber) {
       handleClose();
     } else {
-      setDragDuration(300);
-      setDragMoveDistance(0);
+      dispatchDrag({ type: 'RESET_AFTER_CLOSE' });
     }
   }, [
     isVertical,

@@ -5,6 +5,7 @@ import {
   useRef,
   useEffect,
   useCallback,
+  useReducer,
   type ReactNode
 } from 'react';
 import './Bar.scss';
@@ -41,6 +42,84 @@ export interface TabsProps {
 
 const SCROLL_STEP = 150;
 
+// Navigation state reducer
+interface NavigationState {
+  showPrev: boolean;
+  showNext: boolean;
+  prevOpacity: number;
+  nextOpacity: number;
+  showFirstShadow: boolean;
+  showLastShadow: boolean;
+}
+
+type NavigationAction =
+  | { type: 'SET_PREV_VISIBILITY'; show: boolean; opacity: number }
+  | { type: 'SET_NEXT_VISIBILITY'; show: boolean; opacity: number }
+  | { type: 'SET_SHADOWS'; first: boolean; last: boolean }
+  | { type: 'UPDATE_NAVIGATION'; canScrollPrev: boolean; canScrollNext: boolean; limitShadow: boolean }
+  | { type: 'FORCE_SHOW_BUTTONS' };
+
+const initialNavigationState: NavigationState = {
+  showPrev: false,
+  showNext: false,
+  prevOpacity: 0,
+  nextOpacity: 0,
+  showFirstShadow: false,
+  showLastShadow: false
+};
+
+function navigationReducer(state: NavigationState, action: NavigationAction): NavigationState {
+  switch (action.type) {
+    case 'SET_PREV_VISIBILITY':
+      return { ...state, showPrev: action.show, prevOpacity: action.opacity };
+    case 'SET_NEXT_VISIBILITY':
+      return { ...state, showNext: action.show, nextOpacity: action.opacity };
+    case 'SET_SHADOWS':
+      return { ...state, showFirstShadow: action.first, showLastShadow: action.last };
+    case 'UPDATE_NAVIGATION':
+      return {
+        ...state,
+        prevOpacity: action.canScrollPrev ? 1 : 0,
+        nextOpacity: action.canScrollNext ? 1 : 0,
+        showFirstShadow: action.limitShadow ? action.canScrollPrev : state.showFirstShadow,
+        showLastShadow: action.limitShadow ? action.canScrollNext : state.showLastShadow
+      };
+    case 'FORCE_SHOW_BUTTONS':
+      return { ...state, showPrev: true, showNext: true };
+    default:
+      return state;
+  }
+}
+
+// Indicator style reducer
+interface IndicatorStyles {
+  indicatorStyle: { left: number; top: number; width: number; height: number };
+  hoverIndicatorStyle: { left: number; top: number; width: number; height: number; opacity: number };
+}
+
+type IndicatorAction =
+  | { type: 'SET_INDICATOR'; style: { left: number; top: number; width: number; height: number } }
+  | { type: 'SET_HOVER_INDICATOR'; style: { left: number; top: number; width: number; height: number; opacity: number } }
+  | { type: 'HIDE_HOVER_INDICATOR' };
+
+const initialIndicatorStyles: IndicatorStyles = {
+  indicatorStyle: { left: 0, top: 0, width: 0, height: 0 },
+  hoverIndicatorStyle: { left: 0, top: 0, width: 0, height: 0, opacity: 0 }
+};
+
+function indicatorReducer(state: IndicatorStyles, action: IndicatorAction): IndicatorStyles {
+  switch (action.type) {
+    case 'SET_INDICATOR':
+      return { ...state, indicatorStyle: action.style };
+    case 'SET_HOVER_INDICATOR':
+      return { ...state, hoverIndicatorStyle: action.style };
+    case 'HIDE_HOVER_INDICATOR':
+      return { ...state, hoverIndicatorStyle: { ...state.hoverIndicatorStyle, opacity: 0 } };
+    default:
+      return state;
+  }
+}
+
 export function Tabs({
   value,
   onChange,
@@ -63,27 +142,18 @@ export function Tabs({
   justifyContent,
   alignItems
 }: TabsProps) {
+  // Navigation state with useReducer
+  const [navState, dispatchNav] = useReducer(navigationReducer, initialNavigationState);
+  const { showPrev, showNext, prevOpacity, nextOpacity, showFirstShadow, showLastShadow } = navState;
+
+  // Indicator styles with useReducer
+  const [indicatorState, dispatchIndicator] = useReducer(indicatorReducer, initialIndicatorStyles);
+  const { indicatorStyle, hoverIndicatorStyle } = indicatorState;
+
+  // Simple UI state
   const [activeTab, setActiveTab] = useState(value ?? tabs[0]?.value ?? 0);
-  const [showPrev, setShowPrev] = useState(false);
-  const [showNext, setShowNext] = useState(false);
-  const [prevOpacity, setPrevOpacity] = useState(0);
-  const [nextOpacity, setNextOpacity] = useState(0);
-  const [showFirstShadow, setShowFirstShadow] = useState(false);
-  const [showLastShadow, setShowLastShadow] = useState(false);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-  const [hoverIndicatorStyle, setHoverIndicatorStyle] = useState({
-    left: 0,
-    top: 0,
-    width: 0,
-    height: 0,
-    opacity: 0
-  });
-  const [indicatorStyle, setIndicatorStyle] = useState({
-    left: 0,
-    top: 0,
-    width: 0,
-    height: 0
-  });
+  const [isDragging, setIsDragging] = useState(false);
 
   // Refs for DOM elements
   const tabsContainerRef = useRef<HTMLDivElement>(null);
@@ -141,21 +211,26 @@ export function Tabs({
         const tabRect = tabElement.getBoundingClientRect();
 
         if (vertical) {
-          setHoverIndicatorStyle({
-            left: 0,
-            top: tabRect.top - containerRect.top + containerElement.scrollTop,
-            width: 0,
-            height: tabRect.height,
-            opacity: 0.3
+          dispatchIndicator({
+            type: 'SET_HOVER_INDICATOR',
+            style: {
+              left: 0,
+              top: tabRect.top - containerRect.top + containerElement.scrollTop,
+              width: 0,
+              height: tabRect.height,
+              opacity: 0.3
+            }
           });
         } else {
-          setHoverIndicatorStyle({
-            left:
-              tabRect.left - containerRect.left + containerElement.scrollLeft,
-            top: 0,
-            width: tabRect.width,
-            height: 0,
-            opacity: 0.3
+          dispatchIndicator({
+            type: 'SET_HOVER_INDICATOR',
+            style: {
+              left: tabRect.left - containerRect.left + containerElement.scrollLeft,
+              top: 0,
+              width: tabRect.width,
+              height: 0,
+              opacity: 0.3
+            }
           });
         }
       }
@@ -166,7 +241,7 @@ export function Tabs({
   const handleMouseLeave = useCallback(() => {
     if (!hover) return;
     setHoverIndex(null);
-    setHoverIndicatorStyle((prev) => ({ ...prev, opacity: 0 }));
+    dispatchIndicator({ type: 'HIDE_HOVER_INDICATOR' });
   }, [hover]);
 
   // Mouse wheel scroll handler
@@ -188,8 +263,7 @@ export function Tabs({
     [vertical, scrollDisable]
   );
 
-  // Drag scroll state
-  const [isDragging, setIsDragging] = useState(false);
+  // Drag scroll state ref
   const dragStartRef = useRef({ x: 0, y: 0, scrollLeft: 0, scrollTop: 0 });
 
   // Drag scroll handlers
@@ -274,36 +348,47 @@ export function Tabs({
       if (vertical) {
         // Vertical mode
         if (variant === 'fullWidth') {
-          setIndicatorStyle({
-            left: 0,
-            top: (activeIndex / tabs.length) * 100,
-            width: 0,
-            height: 100 / tabs.length
+          dispatchIndicator({
+            type: 'SET_INDICATOR',
+            style: {
+              left: 0,
+              top: (activeIndex / tabs.length) * 100,
+              width: 0,
+              height: 100 / tabs.length
+            }
           });
         } else {
-          setIndicatorStyle({
-            left: 0,
-            top: tabRect.top - containerRect.top + containerElement.scrollTop,
-            width: 0,
-            height: tabRect.height
+          dispatchIndicator({
+            type: 'SET_INDICATOR',
+            style: {
+              left: 0,
+              top: tabRect.top - containerRect.top + containerElement.scrollTop,
+              width: 0,
+              height: tabRect.height
+            }
           });
         }
       } else {
         // Horizontal mode
         if (variant === 'fullWidth') {
-          setIndicatorStyle({
-            left: (activeIndex / tabs.length) * 100,
-            top: 0,
-            width: 100 / tabs.length,
-            height: 0
+          dispatchIndicator({
+            type: 'SET_INDICATOR',
+            style: {
+              left: (activeIndex / tabs.length) * 100,
+              top: 0,
+              width: 100 / tabs.length,
+              height: 0
+            }
           });
         } else {
-          setIndicatorStyle({
-            left:
-              tabRect.left - containerRect.left + containerElement.scrollLeft,
-            top: 0,
-            width: tabRect.width,
-            height: 0
+          dispatchIndicator({
+            type: 'SET_INDICATOR',
+            style: {
+              left: tabRect.left - containerRect.left + containerElement.scrollLeft,
+              top: 0,
+              width: tabRect.width,
+              height: 0
+            }
           });
         }
       }
@@ -321,29 +406,25 @@ export function Tabs({
       const canScrollUp = scrollTop > 0;
       const canScrollDown = scrollTop < scrollHeight - clientHeight - 1;
 
-      // Only update opacity here, showPrev/showNext will be updated by useEffect with delay
-      setPrevOpacity(canScrollUp ? 1 : 0);
-      setNextOpacity(canScrollDown ? 1 : 0);
-
-      // Update shadow visibility
-      if (limitShadow) {
-        setShowFirstShadow(canScrollUp);
-        setShowLastShadow(canScrollDown);
-      }
+      // Update navigation state with a single dispatch
+      dispatchNav({
+        type: 'UPDATE_NAVIGATION',
+        canScrollPrev: canScrollUp,
+        canScrollNext: canScrollDown,
+        limitShadow
+      });
     } else {
       const { scrollLeft, scrollWidth, clientWidth } = container;
       const canScrollLeft = scrollLeft > 0;
       const canScrollRight = scrollLeft < scrollWidth - clientWidth - 1;
 
-      // Only update opacity here, showPrev/showNext will be updated by useEffect with delay
-      setPrevOpacity(canScrollLeft ? 1 : 0);
-      setNextOpacity(canScrollRight ? 1 : 0);
-
-      // Update shadow visibility
-      if (limitShadow) {
-        setShowFirstShadow(canScrollLeft);
-        setShowLastShadow(canScrollRight);
-      }
+      // Update navigation state with a single dispatch
+      dispatchNav({
+        type: 'UPDATE_NAVIGATION',
+        canScrollPrev: canScrollLeft,
+        canScrollNext: canScrollRight,
+        limitShadow
+      });
     }
   }, [hasNavigation, vertical, limitShadow]);
 
@@ -503,8 +584,7 @@ export function Tabs({
   useEffect(() => {
     if (!isNavigationAbsolute) {
       // When not absolute, always show buttons (opacity controls visibility)
-      setShowPrev(true);
-      setShowNext(true);
+      dispatchNav({ type: 'FORCE_SHOW_BUTTONS' });
       return;
     }
 
@@ -512,20 +592,20 @@ export function Tabs({
       // Delay hiding to allow fade out animation
       const timer = setTimeout(() => {
         requestAnimationFrame(() => {
-          setShowPrev(false);
+          dispatchNav({ type: 'SET_PREV_VISIBILITY', show: false, opacity: 0 });
         });
       }, 300); // Match opacity transition duration
       return () => clearTimeout(timer);
     } else if (prevOpacity === 1 && !showPrev) {
       // Show immediately when needed
-      setShowPrev(true);
+      dispatchNav({ type: 'SET_PREV_VISIBILITY', show: true, opacity: 1 });
     }
   }, [prevOpacity, showPrev, isNavigationAbsolute]);
 
   useEffect(() => {
     if (!isNavigationAbsolute) {
       // When not absolute, always show buttons (opacity controls visibility)
-      setShowNext(true);
+      dispatchNav({ type: 'SET_NEXT_VISIBILITY', show: true, opacity: nextOpacity });
       return;
     }
 
@@ -533,13 +613,13 @@ export function Tabs({
       // Delay hiding to allow fade out animation
       const timer = setTimeout(() => {
         requestAnimationFrame(() => {
-          setShowNext(false);
+          dispatchNav({ type: 'SET_NEXT_VISIBILITY', show: false, opacity: 0 });
         });
       }, 300); // Match opacity transition duration
       return () => clearTimeout(timer);
     } else if (nextOpacity === 1 && !showNext) {
       // Show immediately when needed
-      setShowNext(true);
+      dispatchNav({ type: 'SET_NEXT_VISIBILITY', show: true, opacity: 1 });
     }
   }, [nextOpacity, showNext, isNavigationAbsolute]);
 
