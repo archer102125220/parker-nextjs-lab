@@ -136,23 +136,88 @@ export function initializeSocketIOServer(port: number = 3002): SocketIOServer {
   });
 
   // Socket.IO 測試命名空間
-  io.of('/socket.io').on('connection', (socket) => {
+  // 使用與 Native WebSocket 相同的 type/event 設計
+  const socketIoNamespace = io.of('/socket.io');
+
+  socketIoNamespace.on('connection', (socket) => {
     console.log('[Socket.IO /socket.io] Client connected:', socket.id);
 
-    socket.on('socket.io-test', (payload) => {
-      console.log('[Socket.IO /socket.io] Test message:', payload);
-      socket.emit('socket.io-test', payload);
+    // 處理訊息
+    socket.on('message', (payload: {
+      type?: 'broadcast' | 'room' | 'private';
+      event?: string;
+      room?: string;
+      data?: unknown;
+    }) => {
+      console.log('[Socket.IO /socket.io] Message:', payload);
+
+      // 先檢查特殊的系統事件
+      if (payload.event === 'joinRoom' && payload.room) {
+        socket.join(payload.room);
+        console.log(`[Socket.IO] Socket ${socket.id} joined room ${payload.room}`);
+        socket.emit('message', {
+          type: 'private',
+          event: 'joinedRoom',
+          room: payload.room,
+          data: { success: true }
+        });
+        return;
+      }
+
+      if (payload.event === 'leaveRoom' && payload.room) {
+        socket.leave(payload.room);
+        console.log(`[Socket.IO] Socket ${socket.id} left room ${payload.room}`);
+        socket.emit('message', {
+          type: 'private',
+          event: 'leftRoom',
+          room: payload.room,
+          data: { success: true }
+        });
+        return;
+      }
+
+      // 根據 type 決定傳送方式
+      switch (payload.type) {
+        case 'broadcast':
+          // 廣播給所有連線（包含發送者）
+          socketIoNamespace.emit('message', payload);
+          break;
+
+        case 'room':
+          // 推送給特定房間
+          if (payload.room) {
+            socketIoNamespace.to(payload.room).emit('message', payload);
+          } else {
+            socket.emit('message', {
+              type: 'private',
+              event: 'error',
+              data: { message: 'Room name required' }
+            });
+          }
+          break;
+
+        case 'private':
+        default:
+          // 私人訊息，只回傳給發送者
+          socket.emit('message', payload);
+          break;
+      }
     });
 
-    socket.on('message', (payload) => {
-      console.log('[Socket.IO /socket.io] Message:', payload);
-      socket.emit('message', payload);
+    // 相容舊的 socket.io-test 事件
+    socket.on('socket.io-test', (payload) => {
+      console.log('[Socket.IO /socket.io] Test message:', payload);
+      socketIoNamespace.emit('socket.io-test', payload);
     });
 
     socket.on('ping', (callback) => {
       if (typeof callback === 'function') {
         callback();
       }
+    });
+
+    socket.on('disconnect', () => {
+      console.log('[Socket.IO /socket.io] Client disconnected:', socket.id);
     });
   });
 

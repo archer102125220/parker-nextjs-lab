@@ -66,23 +66,12 @@ export default function WebRTCSocketIORoom(): ReactNode {
     }
   });
 
-  const webRTCRef = useRef({
-    createOffer,
-    createAnswer,
-    setRemoteDescription,
-    addIceCandidate
-  });
-
-  useEffect(() => {
-    webRTCRef.current = {
-      createOffer,
-      createAnswer,
-      setRemoteDescription,
-      addIceCandidate
-    };
-  }, [createOffer, createAnswer, setRemoteDescription, addIceCandidate]);
-
-  const socketRef = useRef<ReturnType<typeof useSocketIoClient>['getSocket'] extends () => infer T ? T : never>(null);
+  const socketRef =
+    useRef<
+      ReturnType<typeof useSocketIoClient>['getSocket'] extends () => infer T
+        ? T
+        : never
+    >(null);
 
   const {
     isConnected: isSocketConnected,
@@ -104,23 +93,23 @@ export default function WebRTCSocketIORoom(): ReactNode {
       },
       webrtcNewUser: async () => {
         if (isOfferRef.current) {
-          const offer = await webRTCRef.current.createOffer();
+          const offer = await createOffer();
           if (offer) {
             emit('webrtcDescription', offer);
           }
         }
       },
       webrtcDescription: async (payload: RTCSessionDescriptionInit) => {
-        await webRTCRef.current.setRemoteDescription(payload);
+        await setRemoteDescription(payload);
         if (payload.type === 'offer') {
-          const answer = await webRTCRef.current.createAnswer();
+          const answer = await createAnswer();
           if (answer) {
             emit('webrtcDescription', answer);
           }
         }
       },
       webrtcCandidate: async (payload: RTCIceCandidateInit) => {
-        await webRTCRef.current.addIceCandidate(payload);
+        await addIceCandidate(payload);
       }
     }
   });
@@ -129,7 +118,8 @@ export default function WebRTCSocketIORoom(): ReactNode {
     socketRef.current = getSocket();
   }, [getSocket, isSocketConnected]);
 
-  const isPeerConnected = iceConnectionState === 'connected' || iceConnectionState === 'completed';
+  const isPeerConnected =
+    iceConnectionState === 'connected' || iceConnectionState === 'completed';
 
   const handleCopyId = async () => {
     if (copiedId) return;
@@ -195,7 +185,9 @@ export default function WebRTCSocketIORoom(): ReactNode {
       } catch (err) {
         console.error('Camera access error:', err);
         if (mounted) {
-          setError('無法存取相機/麥克風。請確保已授予權限且使用 HTTPS/localhost。');
+          setError(
+            '無法存取相機/麥克風。請確保已授予權限且使用 HTTPS/localhost。'
+          );
         }
       }
     };
@@ -228,7 +220,11 @@ export default function WebRTCSocketIORoom(): ReactNode {
         WebRTC 視訊聊天室 (Socket.IO)
       </Typography>
 
-      <Typography variant="body2" color="text.secondary" className={style['web_rtc_socket_io_room_page-description']}>
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        className={style['web_rtc_socket_io_room_page-description']}
+      >
         配合 Socket.IO 做為 Signaling Server 實作
       </Typography>
 
@@ -239,57 +235,132 @@ export default function WebRTCSocketIORoom(): ReactNode {
       )}
 
       <Alert severity="info" sx={{ mb: 2 }}>
-        此為 WebRTC 示範頁面。Socket.IO Signaling 需要後端支援，在 serverless 環境可能無法運作。
+        此為 WebRTC 示範頁面。Socket.IO Signaling 需要後端支援，在 serverless
+        環境可能無法運作。
       </Alert>
 
-      <Paper className={style['web_rtc_socket_io_room_page-room_info']} onClick={handleCopyUrl}>
+      <Paper
+        className={style['web_rtc_socket_io_room_page-room_info']}
+        onClick={handleCopyUrl}
+      >
         <Typography variant="body2">
           目前配對 ID 為: <strong>{roomId}</strong>
         </Typography>
         <Chip
           size="small"
-          label={isPeerConnected ? '通話中' : isSocketConnected ? '等待連線' : 'Socket 連線中...'}
-          color={isPeerConnected ? 'success' : isSocketConnected ? 'primary' : 'default'}
+          label={
+            isPeerConnected
+              ? '通話中'
+              : isSocketConnected
+                ? '等待連線'
+                : 'Socket 連線中...'
+          }
+          color={
+            isPeerConnected
+              ? 'success'
+              : isSocketConnected
+                ? 'primary'
+                : 'default'
+          }
         />
         <Tooltip title={copiedId ? '已複製!' : '複製 ID'}>
-          <IconButton size="small" onClick={(e) => { e.stopPropagation(); handleCopyId(); }}>
-            {copiedId ? <CheckIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
+          <IconButton
+            size="small"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleCopyId();
+            }}
+          >
+            {copiedId ? (
+              <CheckIcon fontSize="small" />
+            ) : (
+              <ContentCopyIcon fontSize="small" />
+            )}
           </IconButton>
         </Tooltip>
         <Tooltip title={copiedUrl ? '已複製!' : '複製連結'}>
-          <IconButton size="small" onClick={(e) => { e.stopPropagation(); handleCopyUrl(); }}>
-            {copiedUrl ? <CheckIcon fontSize="small" /> : <LinkIcon fontSize="small" />}
+          <IconButton
+            size="small"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleCopyUrl();
+            }}
+          >
+            {copiedUrl ? (
+              <CheckIcon fontSize="small" />
+            ) : (
+              <LinkIcon fontSize="small" />
+            )}
           </IconButton>
         </Tooltip>
       </Paper>
 
       <div className={style['web_rtc_socket_io_room_page-video_container']}>
-        <Paper className={style['web_rtc_socket_io_room_page-video_container-local']} sx={{ p: 1 }}>
-          <Typography variant="subtitle2" gutterBottom>本地視訊</Typography>
-          <video ref={localVideoRef} className={style['web_rtc_socket_io_room_page-video_container-video']} autoPlay muted playsInline />
+        <Paper
+          className={style['web_rtc_socket_io_room_page-video_container-local']}
+          sx={{ p: 1 }}
+        >
+          <Typography variant="subtitle2" gutterBottom>
+            本地視訊
+          </Typography>
+          <video
+            ref={localVideoRef}
+            className={
+              style['web_rtc_socket_io_room_page-video_container-video']
+            }
+            autoPlay
+            muted
+            playsInline
+          />
         </Paper>
 
-        <Paper className={style['web_rtc_socket_io_room_page-video_container-remote']} sx={{ p: 1 }}>
-          <Typography variant="subtitle2" gutterBottom>遠端視訊</Typography>
-          <video ref={remoteVideoRef} className={style['web_rtc_socket_io_room_page-video_container-video']} autoPlay playsInline />
+        <Paper
+          className={
+            style['web_rtc_socket_io_room_page-video_container-remote']
+          }
+          sx={{ p: 1 }}
+        >
+          <Typography variant="subtitle2" gutterBottom>
+            遠端視訊
+          </Typography>
+          <video
+            ref={remoteVideoRef}
+            className={
+              style['web_rtc_socket_io_room_page-video_container-video']
+            }
+            autoPlay
+            playsInline
+          />
         </Paper>
       </div>
 
       <div className={style['web_rtc_socket_io_room_page-controls']}>
         <Tooltip title={isVideoEnabled ? '關閉視訊' : '開啟視訊'}>
-          <IconButton color={isVideoEnabled ? 'primary' : 'default'} onClick={toggleVideo} sx={{ bgcolor: isVideoEnabled ? 'primary.light' : 'grey.300' }}>
+          <IconButton
+            color={isVideoEnabled ? 'primary' : 'default'}
+            onClick={toggleVideo}
+            sx={{ bgcolor: isVideoEnabled ? 'primary.light' : 'grey.300' }}
+          >
             {isVideoEnabled ? <VideocamIcon /> : <VideocamOffIcon />}
           </IconButton>
         </Tooltip>
 
         <Tooltip title={isAudioEnabled ? '關閉麥克風' : '開啟麥克風'}>
-          <IconButton color={isAudioEnabled ? 'primary' : 'default'} onClick={toggleAudio} sx={{ bgcolor: isAudioEnabled ? 'primary.light' : 'grey.300' }}>
+          <IconButton
+            color={isAudioEnabled ? 'primary' : 'default'}
+            onClick={toggleAudio}
+            sx={{ bgcolor: isAudioEnabled ? 'primary.light' : 'grey.300' }}
+          >
             {isAudioEnabled ? <MicIcon /> : <MicOffIcon />}
           </IconButton>
         </Tooltip>
 
         <Tooltip title="結束通話">
-          <IconButton color="error" onClick={handleEndCall} sx={{ bgcolor: 'error.light' }}>
+          <IconButton
+            color="error"
+            onClick={handleEndCall}
+            sx={{ bgcolor: 'error.light' }}
+          >
             <CallEndIcon />
           </IconButton>
         </Tooltip>

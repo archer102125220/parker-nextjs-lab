@@ -1,63 +1,136 @@
 'use client';
 
-import { useState, useCallback, type ReactNode } from 'react';
+import { useState, useMemo, type ReactNode } from 'react';
 import {
   Typography,
+  Box,
   Paper,
   Button,
   TextField,
   Alert,
-  Chip
+  Chip,
+  Divider,
+  Stack,
+  ButtonGroup
 } from '@mui/material';
-import { useSocketIoClient } from '@/hooks/useSocketIoClient';
+import {
+  useSocketIoClient,
+  type SocketIOMessage
+} from '@/hooks/useSocketIoClient';
 import styles from '@/app/[locale]/socket-test/socket-io/page.module.scss';
 
 export default function SocketIoTest(): ReactNode {
-  const [messageList, setMessageList] = useState<unknown[]>([]);
+  const [messageList, setMessageList] = useState<SocketIOMessage[]>([]);
   const [inputMessage, setInputMessage] = useState('');
+  const [roomName, setRoomName] = useState('test-room');
+  const [currentRoom, setCurrentRoom] = useState<string | null>(null);
 
-  const handleSocketIoTest = useCallback((payload: unknown) => {
-    console.log('Received socket.io-test:', payload);
-    setMessageList((prev) => [
-      ...prev,
-      { event: 'socket.io-test', data: payload }
-    ]);
-  }, []);
+  // 處理收到的訊息
+  const handleMessage = useMemo(
+    () => (msg: SocketIOMessage) => {
+      console.log('Received message:', msg);
 
-  const handleMessage = useCallback((payload: unknown) => {
-    console.log('Received message:', payload);
-    setMessageList((prev) => [...prev, { event: 'message', data: payload }]);
-  }, []);
+      // 處理系統事件
+      if (msg.event === 'joinedRoom') {
+        setCurrentRoom(msg.room as string);
+        setMessageList((prev) => [
+          ...prev,
+          { ...msg, _system: true } as SocketIOMessage
+        ]);
+        return;
+      }
 
-  const { isConnected, connect, disconnect, emit, error } = useSocketIoClient({
+      if (msg.event === 'leftRoom') {
+        setCurrentRoom(null);
+        setMessageList((prev) => [
+          ...prev,
+          { ...msg, _system: true } as SocketIOMessage
+        ]);
+        return;
+      }
+
+      if (msg.event === 'error') {
+        setMessageList((prev) => [
+          ...prev,
+          { ...msg, _system: true } as SocketIOMessage
+        ]);
+        return;
+      }
+
+      // 一般訊息
+      setMessageList((prev) => [...prev, msg]);
+    },
+    []
+  );
+
+  const {
+    isConnected,
+    error,
+    connect,
+    disconnect,
+    broadcast,
+    sendToRoom,
+    sendPrivate,
+    joinRoom,
+    leaveRoom
+  } = useSocketIoClient({
     channel: '/socket.io',
     autoConnect: true,
     listeners: {
-      'socket.io-test': handleSocketIoTest,
       message: handleMessage,
       connect: () => console.log('[SocketIoPage] Connected'),
-      disconnect: () => console.log('[SocketIoPage] Disconnected')
+      disconnect: () => {
+        console.log('[SocketIoPage] Disconnected');
+        setCurrentRoom(null);
+      }
     }
   });
 
-  const handleSendMessage = () => {
+  // 發送廣播
+  const handleBroadcast = () => {
     if (!inputMessage.trim()) return;
-
-    const payload = {
-      message: inputMessage,
+    broadcast('chat:message', {
+      text: inputMessage,
       timestamp: new Date().toISOString()
-    };
-
-    emit('message', payload);
+    });
     setInputMessage('');
   };
 
-  const handleSendTestData = () => {
-    emit('socket.io-test', {
-      a: 'b',
-      c: [],
-      testData: 'socket.io test Data'
+  // 發送房間訊息
+  const handleRoomMessage = () => {
+    if (!inputMessage.trim() || !currentRoom) return;
+    sendToRoom(currentRoom, 'room:message', {
+      text: inputMessage,
+      timestamp: new Date().toISOString()
     });
+    setInputMessage('');
+  };
+
+  // 發送私人訊息（Echo）
+  const handlePrivateMessage = () => {
+    if (!inputMessage.trim()) return;
+    sendPrivate('echo', {
+      text: inputMessage,
+      timestamp: new Date().toISOString()
+    });
+    setInputMessage('');
+  };
+
+  // 加入房間
+  const handleJoinRoom = () => {
+    if (!roomName.trim()) return;
+    joinRoom(roomName);
+  };
+
+  // 離開房間
+  const handleLeaveRoom = () => {
+    if (!currentRoom) return;
+    leaveRoom(currentRoom);
+  };
+
+  // 清除訊息
+  const handleClearMessages = () => {
+    setMessageList([]);
   };
 
   return (
@@ -67,8 +140,8 @@ export default function SocketIoTest(): ReactNode {
       </Typography>
 
       <Alert severity="info" sx={{ mb: 2 }}>
-        注意：Socket.IO 需要伺服器端支援。在 serverless 環境（如
-        Vercel）中可能無法正常運作。
+        支援廣播、房間推送、私人訊息。使用 <code>type</code> 定義傳送類型，
+        <code>event</code> 定義事件名稱。
       </Alert>
 
       {error && (
@@ -77,69 +150,183 @@ export default function SocketIoTest(): ReactNode {
         </Alert>
       )}
 
-      <div className={styles['socket_io_page-controls']}>
-        <Chip
-          label={isConnected ? '已連線' : '未連線'}
-          color={isConnected ? 'success' : 'error'}
-        />
-        <Button
-          variant="contained"
-          onClick={() => (isConnected ? disconnect() : connect())}
-        >
-          {isConnected ? '斷線' : '連線'}
-        </Button>
-        <Button
-          variant="outlined"
-          onClick={handleSendTestData}
-          disabled={!isConnected}
-        >
-          發送測試資料
-        </Button>
-      </div>
+      {/* 連線狀態 */}
+      <Paper sx={{ p: 2, mb: 2 }}>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Chip
+            label={isConnected ? '已連線' : '未連線'}
+            color={isConnected ? 'success' : 'error'}
+          />
+          {currentRoom && (
+            <Chip
+              label={`房間: ${currentRoom}`}
+              color="primary"
+              variant="outlined"
+            />
+          )}
+          <Button
+            variant="contained"
+            onClick={() => (isConnected ? disconnect() : connect())}
+          >
+            {isConnected ? '斷線' : '連線'}
+          </Button>
+        </Stack>
+      </Paper>
 
+      {/* 房間管理 */}
+      <Paper sx={{ p: 2, mb: 2 }}>
+        <Typography variant="subtitle2" gutterBottom>
+          房間管理
+        </Typography>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <TextField
+            size="small"
+            value={roomName}
+            onChange={(e) => setRoomName(e.target.value)}
+            placeholder="房間名稱"
+            disabled={!isConnected}
+            sx={{ width: 200 }}
+          />
+          <Button
+            variant="outlined"
+            onClick={handleJoinRoom}
+            disabled={!isConnected || !roomName.trim() || !!currentRoom}
+          >
+            加入房間
+          </Button>
+          <Button
+            variant="outlined"
+            color="warning"
+            onClick={handleLeaveRoom}
+            disabled={!isConnected || !currentRoom}
+          >
+            離開房間
+          </Button>
+        </Stack>
+      </Paper>
+
+      {/* 發送訊息 */}
       <Paper sx={{ p: 2, mb: 2 }}>
         <Typography variant="subtitle2" gutterBottom>
           發送訊息
         </Typography>
-        <div className={styles['socket_io_page-message_form']}>
+        <Stack spacing={2}>
           <TextField
             fullWidth
             size="small"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="輸入訊息..."
-            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
             disabled={!isConnected}
           />
-          <Button
-            variant="contained"
-            onClick={handleSendMessage}
-            disabled={!isConnected || !inputMessage.trim()}
-          >
-            發送
-          </Button>
-        </div>
+          <ButtonGroup variant="contained" disabled={!isConnected}>
+            <Button
+              onClick={handleBroadcast}
+              disabled={!inputMessage.trim()}
+              color="primary"
+            >
+              廣播 (所有人)
+            </Button>
+            <Button
+              onClick={handleRoomMessage}
+              disabled={!inputMessage.trim() || !currentRoom}
+              color="secondary"
+            >
+              房間訊息
+            </Button>
+            <Button
+              onClick={handlePrivateMessage}
+              disabled={!inputMessage.trim()}
+              color="info"
+            >
+              私人 (Echo)
+            </Button>
+          </ButtonGroup>
+        </Stack>
       </Paper>
 
+      <Divider sx={{ my: 2 }} />
+
+      {/* 接收訊息 */}
       <Paper sx={{ p: 2 }}>
-        <Typography variant="subtitle2" gutterBottom>
-          接收到的訊息：
-        </Typography>
-        <div className={styles['socket_io_page-message_list']}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ mb: 1 }}
+        >
+          <Typography variant="subtitle2">
+            接收到的訊息 ({messageList.length})
+          </Typography>
+          <Button size="small" onClick={handleClearMessages}>
+            清除
+          </Button>
+        </Stack>
+        <Box
+          className={styles['socket_io_page-message_list']}
+          sx={{ maxHeight: 400, overflow: 'auto' }}
+        >
           {messageList.length === 0 ? (
             <Typography variant="body2" color="text.secondary">
               尚無訊息
             </Typography>
           ) : (
             messageList.map((msg, index) => (
-              <div key={index} className={styles['socket_io_page-message_list_item']}>
+              <Box
+                key={index}
+                className={styles['socket_io_page-message_list_item']}
+                sx={{
+                  mb: 1,
+                  p: 1,
+                  bgcolor: msg._system ? 'info.50' : 'grey.100',
+                  borderRadius: 1,
+                  borderLeft: msg._system
+                    ? '3px solid'
+                    : msg.type === 'broadcast'
+                      ? '3px solid'
+                      : msg.type === 'room'
+                        ? '3px solid'
+                        : 'none',
+                  borderLeftColor: msg._system
+                    ? 'info.main'
+                    : msg.type === 'broadcast'
+                      ? 'primary.main'
+                      : msg.type === 'room'
+                        ? 'secondary.main'
+                        : undefined
+                }}
+              >
+                <Stack direction="row" spacing={1} sx={{ mb: 0.5 }}>
+                  <Chip
+                    label={msg.type}
+                    size="small"
+                    color={
+                      msg.type === 'broadcast'
+                        ? 'primary'
+                        : msg.type === 'room'
+                          ? 'secondary'
+                          : 'default'
+                    }
+                  />
+                  {msg.event && (
+                    <Chip label={msg.event} size="small" variant="outlined" />
+                  )}
+                  {msg.room && (
+                    <Chip
+                      label={`房間: ${msg.room}`}
+                      size="small"
+                      variant="outlined"
+                      color="info"
+                    />
+                  )}
+                </Stack>
                 <pre className={styles['socket_io_page-message_list_content']}>
-                  {JSON.stringify(msg, null, 2)}
+                  {JSON.stringify(msg.data ?? msg, null, 2)}
                 </pre>
-              </div>
+              </Box>
             ))
           )}
-        </div>
+        </Box>
       </Paper>
     </>
   );

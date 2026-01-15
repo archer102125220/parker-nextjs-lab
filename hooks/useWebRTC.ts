@@ -1,4 +1,10 @@
-import { useRef, useState, useCallback, useEffect } from 'react';
+import {
+  useRef,
+  useState,
+  useCallback,
+  useEffect,
+  useEffectEvent
+} from 'react';
 
 /**
  * WebRTC 設定選項
@@ -112,18 +118,13 @@ export function useWebRTC(options: UseWebRTCOptions = {}): UseWebRTCReturn {
   const {
     iceServers = DEFAULT_ICE_SERVERS,
     localStream = null,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onIceCandidate: _onIceCandidate,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onRemoteStream: _onRemoteStream,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onConnectionStateChange: _onConnectionStateChange,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onIceConnectionStateChange: _onIceConnectionStateChange
+    onIceCandidate,
+    onRemoteStream,
+    onConnectionStateChange,
+    onIceConnectionStateChange
   } = options;
 
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
-  const optionsRef = useRef(options);
 
   const [iceConnectionState, setIceConnectionState] =
     useState<RTCIceConnectionState | null>(null);
@@ -131,107 +132,138 @@ export function useWebRTC(options: UseWebRTCOptions = {}): UseWebRTCReturn {
     useState<RTCPeerConnectionState | null>(null);
   const [remoteStreams, setRemoteStreams] = useState<MediaStream[]>([]);
 
-  // Update options ref safely
-  useEffect(() => {
-    optionsRef.current = options;
-  }, [options]);
+  // Use useEffectEvent for stable handlers
+  const handleIceCandidate = useEffectEvent((candidate: RTCIceCandidate) => {
+    onIceCandidate?.(candidate);
+  });
+
+  const handleRemoteStream = useEffectEvent((stream: MediaStream) => {
+    onRemoteStream?.(stream);
+  });
+
+  const handleConnectionStateChange = useEffectEvent(
+    (state: RTCPeerConnectionState) => {
+      onConnectionStateChange?.(state);
+    }
+  );
+
+  const handleIceConnectionStateChange = useEffectEvent(
+    (state: RTCIceConnectionState) => {
+      onIceConnectionStateChange?.(state);
+    }
+  );
 
   /**
-   * 初始化 RTCPeerConnection
+   * 新增本地串流
    */
-  const initPeerConnection = useCallback(() => {
-    if (typeof window === 'undefined') return null;
-    if (peerConnectionRef.current) return peerConnectionRef.current;
+  const addLocalStream = useCallback((stream: MediaStream) => {
+    const pc = peerConnectionRef.current;
+    if (!pc) return;
 
-    const config: RTCConfiguration = { iceServers };
-    const pc = new RTCPeerConnection(config);
-
-    // ICE Candidate 事件
-    pc.onicecandidate = (event) => {
-      if (event.candidate && optionsRef.current.onIceCandidate) {
-        optionsRef.current.onIceCandidate(event.candidate);
+    stream.getTracks().forEach((track) => {
+      // 檢查是否已經加入過這個 track
+      const senders = pc.getSenders();
+      const existingSender = senders.find((s) => s.track?.id === track.id);
+      if (!existingSender) {
+        pc.addTrack(track, stream);
       }
-    };
+    });
+  }, []);
 
-    // ICE 連線狀態變更
-    pc.oniceconnectionstatechange = () => {
-      setIceConnectionState(pc.iceConnectionState);
-      if (optionsRef.current.onIceConnectionStateChange) {
-        optionsRef.current.onIceConnectionStateChange(pc.iceConnectionState);
-      }
-    };
+  // Initialize RTCPeerConnection
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
 
-    // 連線狀態變更
-    pc.onconnectionstatechange = () => {
-      setConnectionState(pc.connectionState);
-      if (optionsRef.current.onConnectionStateChange) {
-        optionsRef.current.onConnectionStateChange(pc.connectionState);
-      }
-    };
+    // cleanup previous connection if exists
+    if (peerConnectionRef.current) {
+      peerConnectionRef.current.close();
+      peerConnectionRef.current = null;
+    }
 
-    // 收到遠端串流
-    pc.ontrack = (event) => {
-      if (event.streams && event.streams.length > 0) {
-        setRemoteStreams((prev) => {
-          const newStreams = event.streams.filter(
-            (stream) => !prev.some((s) => s.id === stream.id)
-          );
-          if (newStreams.length > 0) {
-            if (optionsRef.current.onRemoteStream) {
-              newStreams.forEach((stream) =>
-                optionsRef.current.onRemoteStream!(stream)
-              );
+    let pc: RTCPeerConnection | null = null;
+
+    const init = () => {
+      const config: RTCConfiguration = { iceServers };
+      pc = new RTCPeerConnection(config);
+
+      // ICE Candidate 事件
+      pc.onicecandidate = (event) => {
+        if (event.candidate) {
+          handleIceCandidate(event.candidate);
+        }
+      };
+
+      // ICE 連線狀態變更
+      pc.oniceconnectionstatechange = () => {
+        setIceConnectionState(pc!.iceConnectionState);
+        handleIceConnectionStateChange(pc!.iceConnectionState);
+      };
+
+      // 連線狀態變更
+      pc.onconnectionstatechange = () => {
+        setConnectionState(pc!.connectionState);
+        handleConnectionStateChange(pc!.connectionState);
+      };
+
+      // 收到遠端串流
+      pc.ontrack = (event) => {
+        if (event.streams && event.streams.length > 0) {
+          // 先取得新的串流，再更新狀態
+          const newStreams = event.streams;
+          newStreams.forEach((stream) => handleRemoteStream(stream));
+
+          setRemoteStreams((prev) => {
+            const filteredNewStreams = newStreams.filter(
+              (stream) => !prev.some((s) => s.id === stream.id)
+            );
+            if (filteredNewStreams.length > 0) {
+              return [...prev, ...filteredNewStreams];
             }
-            return [...prev, ...newStreams];
-          }
-          return prev;
-        });
+            return prev;
+          });
+        }
+      };
+
+      peerConnectionRef.current = pc;
+      setConnectionState(pc.connectionState);
+      setIceConnectionState(pc.iceConnectionState);
+
+      // Add local stream if exists
+      if (localStream) {
+        addLocalStream(localStream);
       }
     };
 
-    peerConnectionRef.current = pc;
-    setConnectionState(pc.connectionState);
-    setIceConnectionState(pc.iceConnectionState);
+    // Defer initialization to avoid set-state-in-effect issues
+    const timeoutId = setTimeout(init, 0);
 
-    return pc;
-  }, [iceServers]);
+    return () => {
+      clearTimeout(timeoutId);
+      if (pc) {
+        pc.close();
+      }
+      if (peerConnectionRef.current === pc) {
+        peerConnectionRef.current = null;
+      }
+      setConnectionState(null);
+      setIceConnectionState(null);
+      setRemoteStreams([]);
+    };
+  }, [iceServers, localStream, addLocalStream]); // Re-init if iceServers or localStream changes
 
   /**
    * 取得 PeerConnection 實例
    */
   const getPeerConnection = useCallback(() => {
-    if (!peerConnectionRef.current) {
-      return initPeerConnection();
-    }
     return peerConnectionRef.current;
-  }, [initPeerConnection]);
-
-  /**
-   * 新增本地串流
-   */
-  const addLocalStream = useCallback(
-    (stream: MediaStream) => {
-      const pc = getPeerConnection();
-      if (!pc) return;
-
-      stream.getTracks().forEach((track) => {
-        // 檢查是否已經加入過這個 track
-        const senders = pc.getSenders();
-        const existingSender = senders.find((s) => s.track?.id === track.id);
-        if (!existingSender) {
-          pc.addTrack(track, stream);
-        }
-      });
-    },
-    [getPeerConnection]
-  );
+  }, []);
 
   /**
    * 建立 Offer
    */
   const createOffer =
     useCallback(async (): Promise<RTCSessionDescriptionInit | null> => {
-      const pc = getPeerConnection();
+      const pc = peerConnectionRef.current;
       if (!pc) return null;
 
       try {
@@ -242,14 +274,14 @@ export function useWebRTC(options: UseWebRTCOptions = {}): UseWebRTCReturn {
         console.error('[useWebRTC] createOffer error:', err);
         return null;
       }
-    }, [getPeerConnection]);
+    }, []);
 
   /**
    * 建立 Answer
    */
   const createAnswer =
     useCallback(async (): Promise<RTCSessionDescriptionInit | null> => {
-      const pc = getPeerConnection();
+      const pc = peerConnectionRef.current;
       if (!pc) return null;
 
       try {
@@ -260,14 +292,14 @@ export function useWebRTC(options: UseWebRTCOptions = {}): UseWebRTCReturn {
         console.error('[useWebRTC] createAnswer error:', err);
         return null;
       }
-    }, [getPeerConnection]);
+    }, []);
 
   /**
    * 設定本地描述
    */
   const setLocalDescriptionFn = useCallback(
     async (description: RTCSessionDescriptionInit) => {
-      const pc = getPeerConnection();
+      const pc = peerConnectionRef.current;
       if (!pc) return;
 
       try {
@@ -276,7 +308,7 @@ export function useWebRTC(options: UseWebRTCOptions = {}): UseWebRTCReturn {
         console.error('[useWebRTC] setLocalDescription error:', err);
       }
     },
-    [getPeerConnection]
+    []
   );
 
   /**
@@ -284,7 +316,7 @@ export function useWebRTC(options: UseWebRTCOptions = {}): UseWebRTCReturn {
    */
   const setRemoteDescriptionFn = useCallback(
     async (description: RTCSessionDescriptionInit) => {
-      const pc = getPeerConnection();
+      const pc = peerConnectionRef.current;
       if (!pc) return;
 
       try {
@@ -293,7 +325,7 @@ export function useWebRTC(options: UseWebRTCOptions = {}): UseWebRTCReturn {
         console.error('[useWebRTC] setRemoteDescription error:', err);
       }
     },
-    [getPeerConnection]
+    []
   );
 
   /**
@@ -301,7 +333,7 @@ export function useWebRTC(options: UseWebRTCOptions = {}): UseWebRTCReturn {
    */
   const addIceCandidateFn = useCallback(
     async (candidate: RTCIceCandidateInit) => {
-      const pc = getPeerConnection();
+      const pc = peerConnectionRef.current;
       if (!pc) return;
 
       try {
@@ -310,7 +342,7 @@ export function useWebRTC(options: UseWebRTCOptions = {}): UseWebRTCReturn {
         console.error('[useWebRTC] addIceCandidate error:', err);
       }
     },
-    [getPeerConnection]
+    []
   );
 
   /**
@@ -325,23 +357,6 @@ export function useWebRTC(options: UseWebRTCOptions = {}): UseWebRTCReturn {
       setRemoteStreams([]);
     }
   }, []);
-
-  // 自動加入本地串流
-  useEffect(() => {
-    if (localStream) {
-      // Use setTimeout to avoid synchronous state update in effect
-      setTimeout(() => {
-        addLocalStream(localStream);
-      }, 0);
-    }
-  }, [localStream, addLocalStream]);
-
-  // Cleanup
-  useEffect(() => {
-    return () => {
-      close();
-    };
-  }, [close]);
 
   return {
     getPeerConnection,

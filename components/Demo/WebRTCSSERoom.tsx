@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback, type ReactNode } from 'react';
+import { useState, useEffect, useRef, useCallback, useEffectEvent, type ReactNode } from 'react';
 import { useParams } from 'next/navigation';
 import { useNextRouter } from '@/i18n/navigation';
 import { useLocale } from 'next-intl';
@@ -83,16 +83,36 @@ export default function WebRTCSSERoom(): ReactNode {
     }
   }, []);
 
-  const sendCandidatesToServerRef = useRef(
-    _debounce(async (candidates: RTCIceCandidate[], roomIdVal: string, userIdVal: string) => {
+  const sendCandidatesToServer = useEffectEvent((candidates: RTCIceCandidate[]) => {
+      // Logic for sending candidates
+       if (candidates.length === 0) return;
+       fetch('/api/web-rtc/candidate-list', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            roomId,
+            userId,
+            candidateList: candidates.map((c) => c.toJSON())
+          })
+        }).catch(() => console.error('Failed to send candidates'));
+  });
+  
+  // Debounce wrapper for candidates? 
+  // The original used debounce. useEffectEvent doesn't debounce.
+  // We can keep the debounce ref pattern for the *network request* if desired, 
+  // but simpler to just send or keep the ref.
+  // Actually, let's keep the debounce ref logic but call it from useEffectEvent.
+  
+  const sendCandidatesDebounced = useRef(
+    _debounce(async (candidates: RTCIceCandidate[], rId: string, uId: string) => {
       if (candidates.length === 0) return;
-      try {
+       try {
         await fetch('/api/web-rtc/candidate-list', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            roomId: roomIdVal,
-            userId: userIdVal,
+            roomId: rId,
+            userId: uId,
             candidateList: candidates.map((c) => c.toJSON())
           })
         });
@@ -102,13 +122,13 @@ export default function WebRTCSSERoom(): ReactNode {
     }, 200)
   );
 
-  const sendDescriptionToServerRef = useRef(
-    _debounce(async (description: RTCSessionDescriptionInit, roomIdVal: string, userIdVal: string) => {
+  const sendDescriptionDebounced = useRef(
+    _debounce(async (description: RTCSessionDescriptionInit, rId: string, uId: string) => {
       try {
         await fetch('/api/web-rtc/description', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ roomId: roomIdVal, userId: userIdVal, description })
+          body: JSON.stringify({ roomId: rId, userId: uId, description })
         });
       } catch {
         console.error('Failed to send description');
@@ -116,55 +136,46 @@ export default function WebRTCSSERoom(): ReactNode {
     }, 200)
   );
 
-  const sendCandidatesToServer = useCallback((candidates: RTCIceCandidate[]) => {
-    sendCandidatesToServerRef.current(candidates, roomId, userId);
-  }, [roomId, userId]);
+  const handleSendCandidates = useEffectEvent((candidates: RTCIceCandidate[]) => {
+      sendCandidatesDebounced.current(candidates, roomId, userId);
+  });
 
-  const sendDescriptionToServer = useCallback((description: RTCSessionDescriptionInit) => {
-    sendDescriptionToServerRef.current(description, roomId, userId);
-  }, [roomId, userId]);
+  const handleSendDescription = useEffectEvent((description: RTCSessionDescriptionInit) => {
+      sendDescriptionDebounced.current(description, roomId, userId);
+  });
 
-  const initPeerConnection = useCallback(() => {
-    const config: RTCConfiguration = {
-      iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' }
-      ]
-    };
-
-    const pc = new RTCPeerConnection(config);
-
-    pc.onicecandidate = (event) => {
+  const handleIceCandidate = useEffectEvent((event: RTCPeerConnectionIceEvent) => {
       if (event.candidate) {
         iceCandidatesRef.current.push(event.candidate);
-        sendCandidatesToServer(iceCandidatesRef.current);
+        handleSendCandidates(iceCandidatesRef.current);
       }
-    };
+  });
 
-    pc.oniceconnectionstatechange = () => {
+  const handleIceConnectionStateChange = useEffectEvent((pc: RTCPeerConnection) => {
       setConnectionState(pc.iceConnectionState);
       setIsConnected(pc.iceConnectionState === 'connected');
-    };
+  });
 
-    pc.ontrack = (event) => {
+  const handleTrack = useEffectEvent((event: RTCTrackEvent) => {
       if (remoteVideoRef.current && event.streams[0]) {
         remoteVideoRef.current.srcObject = event.streams[0];
       }
-    };
+  });
 
-    if (localStreamRef.current) {
-      localStreamRef.current.getTracks().forEach((track) => {
-        if (localStreamRef.current) {
-          pc.addTrack(track, localStreamRef.current);
-        }
-      });
-    }
+  // Effect to initialize PeerConnection
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    // We need to wait for localStream? 
+    // The original logic called initPeerConnection within init() which awaited initCamera.
+    // We can rely on a separate effect or just check localStreamRef in the main flow.
+    // However, since we refactored initCamera to be called once, we can init PC after that.
+    
+    // Actually, let's keep the main init effect structure but use stable handlers.
+  
+  }, []);
 
-    peerConnectionRef.current = pc;
-    return pc;
-  }, [sendCandidatesToServer]);
-
-  const handleWebRTCSettings = useCallback(async (settings: WebRTCSettings) => {
+  const handleWebRTCSettings = useEffectEvent(async (settings: WebRTCSettings) => {
     const pc = peerConnectionRef.current;
     if (!pc) return;
 
@@ -176,7 +187,7 @@ export default function WebRTCSSERoom(): ReactNode {
           if (pc.signalingState === 'closed') return;
           const offer = await pc.createOffer();
           await pc.setLocalDescription(offer);
-          sendDescriptionToServer(offer);
+          handleSendDescription(offer);
         } catch (err) {
           console.error('Failed to create offer:', err);
         }
@@ -195,7 +206,7 @@ export default function WebRTCSSERoom(): ReactNode {
           if (pc.signalingState === 'closed') return;
           const answer = await pc.createAnswer();
           await pc.setLocalDescription(answer);
-          sendDescriptionToServer(answer);
+          handleSendDescription(answer);
         }
       } catch (err) {
         console.error('Failed to set remote description:', err);
@@ -212,37 +223,11 @@ export default function WebRTCSSERoom(): ReactNode {
         }
       }
     }
-  }, [userId, isOffer, sendDescriptionToServer]);
+  });
 
-  const joinRoom = useCallback(async () => {
-    try {
-      await fetch('/api/web-rtc/join-room', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ roomId, userId })
-      });
+  // joinRoom logic moved to effect below to avoid dependency issues
+  // But we need to define it or call it.
 
-      const eventSource = new EventSource(`/api/web-rtc/subscription/${roomId}?userId=${userId}`);
-
-      eventSource.addEventListener('webrtc', (event) => {
-        try {
-          const settings: WebRTCSettings = JSON.parse(event.data);
-          handleWebRTCSettings(settings);
-        } catch (err) {
-          console.error('Failed to parse WebRTC settings:', err);
-        }
-      });
-
-      eventSource.onerror = () => {
-        console.error('SSE error');
-      };
-
-      eventSourceRef.current = eventSource;
-    } catch (err) {
-      console.error('Failed to join room:', err);
-      setError('無法加入房間');
-    }
-  }, [roomId, userId, handleWebRTCSettings]);
 
   const handleCopyId = async () => {
     if (copiedId) return;
@@ -298,9 +283,60 @@ export default function WebRTCSSERoom(): ReactNode {
       if (!mounted) return;
       await initCamera();
       if (!mounted) return;
-      initPeerConnection();
+      
+      // Init PC
+      const config: RTCConfiguration = {
+        iceServers: [
+            { urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'stun:stun1.l.google.com:19302' }
+        ]
+      };
+      const pc = new RTCPeerConnection(config);
+      
+      pc.onicecandidate = (e) => handleIceCandidate(e);
+      pc.oniceconnectionstatechange = () => handleIceConnectionStateChange(pc);
+      pc.ontrack = (e) => handleTrack(e);
+
+      if (localStreamRef.current) {
+          localStreamRef.current.getTracks().forEach((track) => {
+            if (localStreamRef.current) {
+              pc.addTrack(track, localStreamRef.current);
+            }
+          });
+      }
+
+      peerConnectionRef.current = pc;
+
       if (!mounted) return;
-      await joinRoom();
+      
+      // joinRoom logic inlined
+      try {
+        await fetch('/api/web-rtc/join-room', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ roomId, userId })
+        });
+
+        const eventSource = new EventSource(`/api/web-rtc/subscription/${roomId}?userId=${userId}`);
+
+        eventSource.addEventListener('webrtc', (event) => {
+            try {
+                const settings: WebRTCSettings = JSON.parse(event.data);
+                handleWebRTCSettings(settings);
+            } catch (err) {
+                console.error('Failed to parse WebRTC settings:', err);
+            }
+        });
+
+        eventSource.onerror = () => {
+            console.error('SSE error');
+        };
+
+        eventSourceRef.current = eventSource;
+      } catch (err) {
+        console.error('Failed to join room:', err);
+        setError('無法加入房間');
+      }
     };
 
     init();
@@ -330,7 +366,7 @@ export default function WebRTCSSERoom(): ReactNode {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [roomId, initCamera]);
 
   return (
     <>

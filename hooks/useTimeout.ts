@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useEffectEvent } from 'react';
 
 /**
  * Hook to execute a callback after a delay
@@ -13,12 +13,10 @@ export function useTimeout(
   callback: () => void,
   delay: number | null
 ): void {
-  const savedCallback = useRef(callback);
-
-  // Remember the latest callback
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
+  // Use useEffectEvent for stable callback
+  const onTimeout = useEffectEvent(() => {
+    callback();
+  });
 
   // Set up the timeout
   useEffect(() => {
@@ -27,10 +25,10 @@ export function useTimeout(
       return;
     }
 
-    const id = setTimeout(() => savedCallback.current(), delay);
+    const id = setTimeout(() => onTimeout(), delay);
 
     return () => clearTimeout(id);
-  }, [delay]);
+  }, [delay]); // onTimeout is stable
 }
 
 export default useTimeout;

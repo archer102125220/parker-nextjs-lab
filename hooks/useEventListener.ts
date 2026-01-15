@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useEffect, useEffectEvent } from 'react';
 
 /**
  * Hook to add event listener to window or element
@@ -17,13 +17,10 @@ export function useEventListener<K extends keyof WindowEventMap>(
   element?: Window | Document | HTMLElement | null,
   options?: AddEventListenerOptions
 ): void {
-  // Create a ref that stores handler
-  const savedHandler = useRef<(event: WindowEventMap[K]) => void>(handler);
-
-  // Update ref.current value if handler changes
-  useEffect(() => {
-    savedHandler.current = handler;
-  }, [handler]);
+  // Use useEffectEvent for stable handler
+  const stableHandler = useEffectEvent((event: Event) => {
+    handler(event as WindowEventMap[K]);
+  });
 
   useEffect(() => {
     // Define the listening target
@@ -33,9 +30,9 @@ export function useEventListener<K extends keyof WindowEventMap>(
       return;
     }
 
-    // Create event listener that calls handler function stored in ref
+    // Create event listener that calls stable handler
     const eventListener = (event: Event) => {
-      savedHandler.current(event as WindowEventMap[K]);
+      stableHandler(event);
     };
 
     targetElement.addEventListener(eventName, eventListener, options);
@@ -44,7 +41,7 @@ export function useEventListener<K extends keyof WindowEventMap>(
     return () => {
       targetElement.removeEventListener(eventName, eventListener, options);
     };
-  }, [eventName, element, options]);
+  }, [eventName, element, options]); // stableHandler is stable
 }
 
 export default useEventListener;

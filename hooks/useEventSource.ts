@@ -1,5 +1,11 @@
-import type { RefObject } from 'react';
-import { useEffect, useRef } from 'react';
+import {
+  type RefObject,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useEffectEvent
+} from 'react';
 
 import { dayjs } from '@/hooks/useDayjs';
 
@@ -39,6 +45,57 @@ export function useEventSource(
     timeoutTimestamp: null
   });
 
+  const [connectCount, setConnectCount] = useState(0);
+
+  // Use useEffectEvent to stabilize event handlers
+  const onOpen = useEffectEvent(async (event: Event) => {
+    handleCheckConnect();
+    if (typeof config?.open === 'function') {
+      await config.open(event);
+    }
+  });
+
+  const onMessage = useEffectEvent(async (event: MessageEvent) => {
+    handleCheckConnect();
+    if (typeof config?.message === 'function') {
+      await config.message(event);
+    }
+  });
+
+  const onError = useEffectEvent((event: Event) => {
+    if (typeof config?.error === 'function') {
+      config.error(event);
+    }
+  });
+
+  const onPing = useEffectEvent((event: Event) => {
+    if (typeof config?.ping === 'function') {
+      config.ping(event);
+    }
+  });
+
+  const handleCustomEvent = useEffectEvent(
+    (eventName: string, event: Event) => {
+      const targetEvent = config.eventList?.find((e) => e.name === eventName);
+      if (targetEvent && typeof targetEvent.handler === 'function') {
+        targetEvent.handler(event);
+      }
+    }
+  );
+
+  const reconnect = useCallback(() => {
+    EventSourceObj.current.lastMessgTime = null;
+    setConnectCount((c) => c + 1);
+  }, []);
+
+  // We need to access reconnect inside handleCheckConnect
+  // But handleCheckConnect is called by useEffectEvents
+  // Using a ref to hold reconnect allows us to call it without deps issues
+  const reconnectRef = useRef(reconnect);
+  useEffect(() => {
+    reconnectRef.current = reconnect;
+  }, [reconnect]);
+
   function handleCheckConnect() {
     if (EventSourceObj.current.timeoutTimestamp !== null) {
       clearTimeout(EventSourceObj.current.timeoutTimestamp);
@@ -49,9 +106,9 @@ export function useEventSource(
       EventSourceObj.current.lastMessgTime || dayjs().valueOf();
     const diff = nowDayjs.diff(lastMessgTimeDayjs, 'second');
 
+    // Reconnect if no message received for 10 seconds
     if (diff > 10) {
-      EventSourceObj.current.lastMessgTime = null;
-      return initEventSource(config);
+      return reconnectRef.current();
     }
 
     EventSourceObj.current.lastMessgTime = dayjs().valueOf();
@@ -60,85 +117,64 @@ export function useEventSource(
       1000 * 10
     );
   }
-  function initEventSource(currentConfig: EventSourceConfig = {}) {
-    if (
-      typeof window === 'undefined' ||
-      typeof window?.EventSource !== 'function'
-    )
-      return;
-
-    if (typeof EventSourceObj.current.croe?.close === 'function') {
-      EventSourceObj.current.croe.close();
-    }
-
-    const { channel: currentChannel = '/' } = currentConfig;
-
-    const path =
-      currentChannel.indexOf('/') === 0
-        ? SERVER_SENT_EVENT_BASE_PATH + currentChannel
-        : SERVER_SENT_EVENT_BASE_PATH + '/' + currentChannel;
-
-    const newEventSourceObj = new EventSource(DOMAIN + path);
-
-    // if (typeof currentConfig?.open === 'function') {
-    //   newEventSourceObj.addEventListener('open', currentConfig.open);
-    // }
-    newEventSourceObj.addEventListener('open', async function (...arg) {
-      handleCheckConnect();
-
-      if (typeof config?.open === 'function') {
-        await config.open(...arg);
-      }
-    });
-    if (typeof currentConfig?.error === 'function') {
-      newEventSourceObj.addEventListener('error', currentConfig.error);
-    }
-    // if (typeof currentConfig?.message === 'function') {
-    //   newEventSourceObj.addEventListener('message', currentConfig.message);
-    // }
-    newEventSourceObj.addEventListener('message', async function (...arg) {
-      handleCheckConnect();
-
-      if (typeof config?.message === 'function') {
-        await config.message(...arg);
-      }
-    });
-    if (typeof currentConfig?.ping === 'function') {
-      newEventSourceObj.addEventListener('ping', currentConfig.ping);
-    }
-
-    if (Array.isArray(currentConfig?.eventList) === true) {
-      currentConfig.eventList.forEach((event) => {
-        if (
-          typeof event.name === 'string' &&
-          typeof event.handler === 'function'
-        ) {
-          newEventSourceObj.addEventListener(event.name, event.handler);
-        }
-      });
-    }
-
-    EventSourceObj.current.croe = newEventSourceObj;
-  }
 
   useEffect(() => {
-    initEventSource(config);
+    let newEventSourceObj: EventSource | null = null;
+    const esObj = EventSourceObj.current;
 
-    // 在 effect 開始時複製 ref 的值
-    const timeoutTimestamp = EventSourceObj.current.timeoutTimestamp;
-    const croe = EventSourceObj.current.croe;
+    const initEventSource = (channel: string) => {
+      if (
+        typeof window === 'undefined' ||
+        typeof window?.EventSource !== 'function'
+      )
+        return;
 
-    return () => {
-      if (timeoutTimestamp !== null) {
-        clearTimeout(timeoutTimestamp);
+      // Cleanup previous if exists inside the effect scope logic
+      // But here we depend on cleanup function to do it
+
+      const path =
+        channel.indexOf('/') === 0
+          ? SERVER_SENT_EVENT_BASE_PATH + channel
+          : SERVER_SENT_EVENT_BASE_PATH + '/' + channel;
+
+      newEventSourceObj = new EventSource(DOMAIN + path);
+
+      // Attach stable event handlers
+      newEventSourceObj.addEventListener('open', (e) => onOpen(e));
+      newEventSourceObj.addEventListener('message', (e) => onMessage(e));
+      newEventSourceObj.addEventListener('error', (e) => onError(e));
+      newEventSourceObj.addEventListener('ping', (e) => onPing(e));
+
+      if (Array.isArray(config.eventList)) {
+        config.eventList.forEach((event) => {
+          if (typeof event.name === 'string') {
+            newEventSourceObj!.addEventListener(event.name, (e) =>
+              handleCustomEvent(event.name, e)
+            );
+          }
+        });
       }
-      if (typeof croe?.close === 'function') {
-        croe.close();
-      }
+
+      esObj.croe = newEventSourceObj;
+      esObj.lastMessgTime = dayjs().valueOf();
     };
-    // TODO
+
+    // Only initialize when channel changes
+    initEventSource(config.channel || '/');
+
+    // Cleanup
+    return () => {
+      if (esObj.timeoutTimestamp !== null) {
+        clearTimeout(esObj.timeoutTimestamp);
+      }
+      if (newEventSourceObj) {
+        newEventSourceObj.close();
+      }
+      esObj.croe = null;
+    };
+    // Reconnect on channel change or connectCount trigger
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config]);
+  }, [config.channel, connectCount]);
 
   return EventSourceObj;
 }

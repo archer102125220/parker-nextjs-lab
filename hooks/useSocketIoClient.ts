@@ -1,7 +1,24 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useEffectEvent
+} from 'react';
 
 // Make socket.io-client optional - only import if needed
 type Socket = ReturnType<typeof import('socket.io-client').io>;
+
+/**
+ * 訊息類型定義（與 Native WebSocket 相同）
+ */
+export interface SocketIOMessage {
+  type: 'broadcast' | 'room' | 'private';
+  event?: string;
+  room?: string;
+  data?: unknown;
+  [key: string]: unknown;
+}
 
 // 環境變數設定
 const getSocketIODomain = (): string => {
@@ -68,8 +85,7 @@ export interface UseSocketIoClientOptions<
    * @example
    * listeners: {
    *   connect: () => console.log('connected'),
-   *   message: (data: string) => console.log(data),
-   *   webrtcJoined: (payload: { isOffer: boolean }) => { ... }
+   *   message: (data: SocketIOMessage) => console.log(data),
    * }
    */
   listeners?: TListeners;
@@ -84,6 +100,17 @@ export interface UseSocketIoClientReturn {
   emit: (event: string, ...args: unknown[]) => void;
   on: (event: string, handler: (...args: unknown[]) => void) => void;
   off: (event: string, handler?: (...args: unknown[]) => void) => void;
+  // 新增的便利方法（與 Native WebSocket 相同）
+  /** 廣播給所有連線（使用 message 事件） */
+  broadcast: (event: string, data: unknown) => void;
+  /** 發送給特定房間（使用 message 事件） */
+  sendToRoom: (room: string, event: string, data: unknown) => void;
+  /** 發送私人訊息（使用 message 事件） */
+  sendPrivate: (event: string, data: unknown) => void;
+  /** 加入房間 */
+  joinRoom: (room: string) => void;
+  /** 離開房間 */
+  leaveRoom: (room: string) => void;
 }
 
 /**
@@ -94,28 +121,24 @@ export interface UseSocketIoClientReturn {
  * @returns Socket getter and connection utilities
  *
  * @example
- * // 基本使用
- * const { getSocket, isConnected, emit, on } = useSocketIoClient({
+ * // 使用新的 type/event 設計
+ * const { isConnected, broadcast, joinRoom, sendToRoom } = useSocketIoClient({
  *   channel: '/socket.io',
  *   autoConnect: true,
  *   listeners: {
- *     message: (data) => console.log(data)
- *   }
- * });
- *
- * @example
- * // 帶類型的監聽器
- * const { emit } = useSocketIoClient({
- *   channel: '/socket.io/web-rtc',
- *   listeners: {
- *     webrtcJoined: (payload: { isOffer: boolean }) => {
- *       console.log('isOffer:', payload.isOffer);
- *     },
- *     webrtcDescription: async (payload: RTCSessionDescriptionInit) => {
- *       await handleDescription(payload);
+ *     message: (msg: SocketIOMessage) => {
+ *       if (msg.event === 'chat:message') {
+ *         console.log('聊天:', msg.data);
+ *       }
  *     }
  *   }
  * });
+ *
+ * // 廣播
+ * broadcast('chat:message', { text: 'Hello!' });
+ * // 房間訊息
+ * joinRoom('game-room');
+ * sendToRoom('game-room', 'game:move', { x: 10 });
  */
 export function useSocketIoClient<
   TListeners extends DefaultListeners = DefaultListeners
@@ -130,130 +153,136 @@ export function useSocketIoClient<
   const socketRef = useRef<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  // Connection trigger state
+  const [shouldConnect, setShouldConnect] = useState(autoConnect);
+  const [connectCount, setConnectCount] = useState(0);
 
-  // 使用 useRef 來存儲 config，避免依賴變更導致無限重連
-  const configRef = useRef({ channel, options, listeners });
-  const initializedRef = useRef(false);
+  const listenersRef = useRef(listeners);
+  // Keep listeners ref up to date
+  useEffect(() => {
+    listenersRef.current = listeners;
+  }, [listeners]);
 
-  // 更新 configRef（不觸發重新渲染）
-  configRef.current = { channel, options, listeners };
+  // Use useEffectEvent for stable handlers
+  const handleConnect = useEffectEvent(() => {
+    console.log('[Socket.IO Client] Connected:', socketRef.current?.id);
+    setIsConnected(true);
+    setError(null);
+    if (typeof listenersRef.current.connect === 'function') {
+      listenersRef.current.connect();
+    }
+  });
+
+  const handleDisconnect = useEffectEvent((e: unknown) => {
+    console.log('[Socket.IO Client] Disconnected');
+    setIsConnected(false);
+    if (typeof listenersRef.current.disconnect === 'function') {
+      listenersRef.current.disconnect(e);
+    }
+  });
+
+  const handleConnectError = useEffectEvent((err: Error) => {
+    console.error('[Socket.IO Client] Connection error:', err);
+    setError(err);
+    setIsConnected(false);
+  });
+
+  // Effect to manage connection
+  useEffect(() => {
+    let socket: Socket | null = null;
+
+    if (!shouldConnect) {
+      return;
+    }
+
+    const init = async () => {
+      try {
+        const { io } = await import('socket.io-client');
+
+        const domain = getSocketIODomain();
+        const basePath = getSocketIOBasePath();
+        const namespace = channel;
+        const socketUrl = domain + namespace;
+
+        console.log(
+          '[Socket.IO Client] Connecting to:',
+          socketUrl,
+          'with path:',
+          basePath
+        );
+
+        socket = io(socketUrl, {
+          path: basePath, // 伺服器端的 Socket.IO 路徑
+          autoConnect: false,
+          transports: ['websocket'],
+          ...options
+        });
+
+        socket.on('connect', () => handleConnect());
+        socket.on('disconnect', (e: unknown) => handleDisconnect(e));
+        socket.on('connect_error', (e: Error) => handleConnectError(e));
+
+        // Dynamic listeners using ref
+        Object.keys(listenersRef.current).forEach((eventName) => {
+          if (!['connect', 'disconnect'].includes(eventName)) {
+            if (socket !== null) {
+              socket.on(eventName, (...args: unknown[]) => {
+                const handler = listenersRef.current[eventName];
+                if (handler) {
+                  handler(...args);
+                }
+              });
+            } else {
+              console.error(
+                '[Socket.IO Client] Socket is not initialized, cannot add listener for:',
+                eventName
+              );
+            }
+          }
+        });
+
+        // Manager errors
+        socket.io.on('error', (err: Error) => {
+          console.error('[Socket.IO Client] Manager error:', err);
+        });
+        socket.io.on('reconnect_error', (err: Error) => {
+          console.error('[Socket.IO Client] Reconnect error:', err);
+        });
+
+        socketRef.current = socket;
+        socket.connect();
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error(String(err)));
+      }
+    };
+
+    // Defer initialization
+    const timeoutId = setTimeout(() => {
+      init();
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (socket) {
+        socket.disconnect();
+        socket.removeAllListeners();
+      }
+      socketRef.current = null;
+      setIsConnected(false);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [channel, shouldConnect, connectCount]); // options mutable
 
   // Provide a getter function instead of direct ref access
   const getSocket = useCallback(() => socketRef.current, []);
 
   const connect = useCallback(() => {
-    if (typeof window === 'undefined') return;
-    if (socketRef.current?.connected) return;
-    if (initializedRef.current) return; // 防止重複初始化
-
-    initializedRef.current = true;
-
-    try {
-      // Dynamic import of socket.io-client
-      import('socket.io-client')
-        .then(({ io }) => {
-          const domain = getSocketIODomain();
-          const basePath = getSocketIOBasePath();
-          const {
-            channel: currentChannel,
-            options: currentOptions,
-            listeners: currentListeners
-          } = configRef.current;
-
-          // Socket.IO 的 path 是伺服器端路徑（固定為 /socket.io）
-          // namespace 是命名空間（如 /、/socket.io、/socket.io/room）
-          // 連線 URL = domain + namespace
-          const namespace = currentChannel;
-          const socketUrl = domain + namespace;
-
-          console.log(
-            '[Socket.IO Client] Connecting to:',
-            socketUrl,
-            'with path:',
-            basePath
-          );
-
-          const newSocket = io(socketUrl, {
-            path: basePath, // 伺服器端的 Socket.IO 路徑
-            autoConnect: false,
-            transports: ['websocket'],
-            ...currentOptions
-          });
-
-          newSocket.on('connect', () => {
-            console.log('[Socket.IO Client] Connected:', newSocket.id);
-            setIsConnected(true);
-            setError(null);
-
-            // 觸發自定義 connect listener
-            if (typeof currentListeners.connect === 'function') {
-              currentListeners.connect();
-            }
-          });
-
-          newSocket.on('disconnect', () => {
-            console.log('[Socket.IO Client] Disconnected');
-            setIsConnected(false);
-
-            // 觸發自定義 disconnect listener
-            if (typeof currentListeners.disconnect === 'function') {
-              currentListeners.disconnect();
-            }
-          });
-
-          newSocket.on('connect_error', (err: Error) => {
-            console.error('[Socket.IO Client] Connection error:', err);
-            setError(err);
-            setIsConnected(false);
-          });
-
-          // 註冊其他自定義 listeners
-          Object.keys(currentListeners).forEach((eventName) => {
-            if (!['connect', 'disconnect'].includes(eventName)) {
-              if (typeof currentListeners[eventName] === 'function') {
-                newSocket.on(eventName, currentListeners[eventName]);
-              }
-            }
-          });
-
-          // Manager 層級的錯誤處理
-          newSocket.io.on('error', (err) => {
-            console.error('[Socket.IO Client] Manager error:', err);
-          });
-
-          newSocket.io.on('reconnect_error', (err) => {
-            console.error('[Socket.IO Client] Reconnect error:', err);
-          });
-
-          newSocket.io.on('reconnect_failed', () => {
-            console.error('[Socket.IO Client] Reconnect failed');
-          });
-
-          socketRef.current = newSocket;
-          newSocket.connect();
-        })
-        .catch((err) => {
-          initializedRef.current = false;
-          setError(
-            new Error(
-              'socket.io-client not installed. Run: npm install socket.io-client'
-            )
-          );
-          console.error('Failed to load socket.io-client:', err);
-        });
-    } catch (err) {
-      initializedRef.current = false;
-      setError(err as Error);
-    }
-  }, []); // 移除所有依賴，使用 configRef
+    setShouldConnect(true);
+    setConnectCount((c) => c + 1);
+  }, []);
 
   const disconnect = useCallback(() => {
-    if (socketRef.current) {
-      socketRef.current.disconnect();
-      socketRef.current = null;
-      setIsConnected(false);
-      initializedRef.current = false; // 重置初始化狀態以允許重新連線
-    }
+    setShouldConnect(false);
   }, []);
 
   const emit = useCallback((event: string, ...args: unknown[]) => {
@@ -284,15 +313,60 @@ export function useSocketIoClient<
     []
   );
 
-  useEffect(() => {
-    if (autoConnect) {
-      connect();
-    }
+  // === 新增的便利方法（與 Native WebSocket 相同設計） ===
 
-    return () => {
-      disconnect();
-    };
-  }, [autoConnect, connect, disconnect]);
+  // 廣播給所有連線
+  const broadcast = useCallback(
+    (event: string, data: unknown) => {
+      const message: SocketIOMessage = { type: 'broadcast', event, data };
+      emit('message', message);
+    },
+    [emit]
+  );
+
+  // 發送給特定房間
+  const sendToRoom = useCallback(
+    (room: string, event: string, data: unknown) => {
+      const message: SocketIOMessage = { type: 'room', room, event, data };
+      emit('message', message);
+    },
+    [emit]
+  );
+
+  // 發送私人訊息
+  const sendPrivate = useCallback(
+    (event: string, data: unknown) => {
+      const message: SocketIOMessage = { type: 'private', event, data };
+      emit('message', message);
+    },
+    [emit]
+  );
+
+  // 加入房間
+  const joinRoom = useCallback(
+    (room: string) => {
+      const message: SocketIOMessage = {
+        type: 'private',
+        event: 'joinRoom',
+        room
+      };
+      emit('message', message);
+    },
+    [emit]
+  );
+
+  // 離開房間
+  const leaveRoom = useCallback(
+    (room: string) => {
+      const message: SocketIOMessage = {
+        type: 'private',
+        event: 'leaveRoom',
+        room
+      };
+      emit('message', message);
+    },
+    [emit]
+  );
 
   return {
     getSocket,
@@ -302,7 +376,12 @@ export function useSocketIoClient<
     disconnect,
     emit,
     on,
-    off
+    off,
+    broadcast,
+    sendToRoom,
+    sendPrivate,
+    joinRoom,
+    leaveRoom
   };
 }
 

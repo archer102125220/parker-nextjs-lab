@@ -4,139 +4,225 @@
 
 | 分類 | 總數 | 已完成 | 進行中 |
 |------|------|--------|--------|
-| Hooks | 32 | 0 | 0 |
-| Components | 110+ | 0 | 0 |
+| Hooks | 32 | 7 | 0 |
+| Components | 110+ | 3 | 0 |
 | App Pages | 63 | 0 | 0 |
 
 ---
 
 ## 🪝 Hooks (32 個)
 
-- [ ] [useBeforeunload.ts](../../hooks/useBeforeunload.ts)
-- [ ] [useCameraStream.ts](../../hooks/useCameraStream.ts)
-- [ ] [useClassifySwipeDirection.ts](../../hooks/useClassifySwipeDirection.ts)
-- [ ] [useClickOutside.ts](../../hooks/useClickOutside.ts)
-- [ ] [useDayjs.ts](../../hooks/useDayjs.ts)
-- [ ] [useDebounce.ts](../../hooks/useDebounce.ts)
-- [ ] [useEventListener.ts](../../hooks/useEventListener.ts)
-- [ ] [useEventSource.ts](../../hooks/useEventSource.ts)
-- [ ] [useFacebook.ts](../../hooks/useFacebook.ts)
-- [ ] [useFirebase.ts](../../hooks/useFirebase.ts)
-- [ ] [useGTMTrack.ts](../../hooks/useGTMTrack.ts)
-- [ ] [useIntersectionObserver.ts](../../hooks/useIntersectionObserver.ts)
-- [ ] [useInterval.ts](../../hooks/useInterval.ts)
-- [ ] [useIsomorphicLayoutEffect.ts](../../hooks/useIsomorphicLayoutEffect.ts)
-- [ ] [useKeyPress.ts](../../hooks/useKeyPress.ts)
-- [ ] [useLazyLoad.ts](../../hooks/useLazyLoad.ts)
-- [ ] [useLocalStorage.ts](../../hooks/useLocalStorage.ts)
-- [ ] [useMediaQuery.ts](../../hooks/useMediaQuery.ts)
-- [ ] [useMobile.ts](../../hooks/useMobile.ts)
-- [ ] [usePostEventSource.ts](../../hooks/usePostEventSource.ts)
-- [ ] [useSessionStorage.ts](../../hooks/useSessionStorage.ts)
-- [ ] [useThrottle.ts](../../hooks/useThrottle.ts)
-- [ ] [useTimeout.ts](../../hooks/useTimeout.ts)
-- [ ] [useWebSocket.ts](../../hooks/useWebSocket.ts)
-- [ ] [useWindowSize.ts](../../hooks/useWindowSize.ts)
-- [ ] [useRequest/index.ts](../../hooks/useRequest/index.ts)
-- [ ] [useRequest/useRequestInit.ts](../../hooks/useRequest/useRequestInit.ts)
-- [ ] [useSocketIoClient.ts](../../hooks/useSocketIoClient.ts)
-- [ ] [useTablet.ts](../../hooks/useTablet.ts)
-- [ ] [useWebRTC.ts](../../hooks/useWebRTC.ts)
-- [ ] [useYoutube.ts](../../hooks/useYoutube.ts)
-- [ ] [gitHub/useGitHubUsers.ts](../../hooks/gitHub/useGitHubUsers.ts)
+### 需檢查的自訂 Hooks
+- [ ] `useBeforeunload.ts`
+- [ ] `useCameraStream.ts`
+- [ ] `useClassifySwipeDirection.ts`
+- [ ] `useClickOutside.ts`
+- [ ] `useDayjs.ts`
+- [ ] `useDebounce.ts`
+- [x] `useEventListener.ts` ✅ useEffectEvent
+- [x] `useEventSource.ts` ✅ useEffectEvent
+- [ ] `useFacebook.ts`
+- [ ] `useFirebase.ts`
+- [ ] `useGTMTrack.ts`
+- [ ] `useIntersectionObserver.ts`
+- [x] `useInterval.ts` ✅ useEffectEvent
+- [ ] `useIsomorphicLayoutEffect.ts`
+- [ ] `useKeyPress.ts`
+- [ ] `useLazyLoad.ts`
+- [ ] `useLocalStorage.ts`
+- [ ] `useMediaQuery.ts`
+- [ ] `useMobile.ts`
+- [ ] `usePostEventSource.ts`
+- [ ] `useRequest/index.ts`
+- [ ] `useRequest/useRequestInit.ts`
+- [ ] `useSessionStorage.ts`
+- [x] `useWebSocket.ts` ✅ useEffectEvent
+- [x] `useSocketIoClient.ts` ✅ useEffectEvent
+- [ ] `useTablet.ts`
+- [ ] `useThrottle.ts`
+- [x] `useTimeout.ts` ✅ useEffectEvent
+- [x] `useWebRTC.ts` ✅ useEffectEvent
+- [ ] `useWindowSize.ts`
+- [ ] `useYoutube.ts`
+- [ ] `gitHub/useGitHubUsers.ts`
 
 ---
 
-## 🧩 Components - 高優先級 ⭐
+## 🧩 Components (高優先級)
 
-- [ ] [Drawer/index.tsx](../../components/Drawer/index.tsx) ⭐
-- [ ] [Tabs/Bar.tsx](../../components/Tabs/Bar.tsx) ⭐
-- [ ] [SwiperJs/index.tsx](../../components/SwiperJs/index.tsx)
-- [ ] [SwiperCustom/index.tsx](../../components/SwiperCustom/index.tsx)
-- [ ] [ScrollFetch/index.tsx](../../components/ScrollFetch/index.tsx)
+### ⚠️ 需重構 - 多個 useState (建議 useReducer)
+- [ ] `Drawer/index.tsx` ⭐ (9 useState)
+- [ ] `Tabs/Bar.tsx` ⭐ (12 useState)
+- [ ] `SwiperJs/index.tsx`
+- [ ] `SwiperCustom/index.tsx`
+- [ ] `ScrollFetch/index.tsx`
 
-## 🧩 Components - 核心組件
+### 需檢查的核心組件
+- [ ] `Animation/EnterLabel/index.tsx`
+- [ ] `Animation/TriangleEnter/index.tsx`
+- [ ] `AxiosInit.tsx`
+- [ ] `Banner/index.tsx`
+- [ ] `ClientProvider.tsx`
+- [ ] `CloudMessaging/DataTable.tsx`
+- [ ] `CloudMessaging/Form.tsx`
+- [ ] `Countdown/index.tsx`
+- [ ] `DatePicker/index.tsx`
+- [ ] `Dialog/index.tsx`
+- [ ] `GoTop/index.tsx`
+- [ ] `Hexagon/Container.tsx`
+- [ ] `ImageUpload/index.tsx`
+- [ ] `Krpano/index.tsx`
+- [ ] `Layout/Header.tsx`
+- [ ] `Layout/I18nList.tsx`
+- [ ] `Link/index.tsx`
+- [ ] `Link/ListItemButton.tsx`
+- [ ] `Message.tsx`
+- [ ] `MuiCacheProvider.tsx`
+- [ ] `NotificationPermission/index.tsx`
+- [ ] `PhoneInput/index.tsx`
+- [ ] `QRCode/index.tsx`
+- [ ] `Ripple/index.tsx`
+- [ ] `Selector/index.tsx`
+- [ ] `SkeletonLoader/index.tsx`
+- [ ] `SlideInPanel/index.tsx`
+- [ ] `SwitchButton/index.tsx`
+- [ ] `Tabs/Content.tsx`
+- [ ] `Triangle/index.tsx`
+- [ ] `VirtualScroller/index.tsx`
+- [ ] `WangEditor/index.tsx`
+- [ ] `WebRTCRoomEntryCard/index.tsx`
 
-- [ ] [Animation/EnterLabel/index.tsx](../../components/Animation/EnterLabel/index.tsx)
-- [ ] [Animation/TriangleEnter/index.tsx](../../components/Animation/TriangleEnter/index.tsx)
-- [ ] [Banner/index.tsx](../../components/Banner/index.tsx)
-- [ ] [CloudMessaging/DataTable.tsx](../../components/CloudMessaging/DataTable.tsx)
-- [ ] [CloudMessaging/Form.tsx](../../components/CloudMessaging/Form.tsx)
-- [ ] [Countdown/index.tsx](../../components/Countdown/index.tsx)
-- [ ] [DatePicker/index.tsx](../../components/DatePicker/index.tsx)
-- [ ] [Dialog/index.tsx](../../components/Dialog/index.tsx)
-- [ ] [GoTop/index.tsx](../../components/GoTop/index.tsx)
-- [ ] [ImageUpload/index.tsx](../../components/ImageUpload/index.tsx)
-- [ ] [Krpano/index.tsx](../../components/Krpano/index.tsx)
-- [ ] [Layout/Header.tsx](../../components/Layout/Header.tsx)
-- [ ] [Layout/I18nList.tsx](../../components/Layout/I18nList.tsx)
-- [ ] [Link/index.tsx](../../components/Link/index.tsx)
-- [ ] [Loading/index.tsx](../../components/Loading/index.tsx)
-- [ ] [Message.tsx](../../components/Message.tsx)
-- [ ] [MuiCacheProvider.tsx](../../components/MuiCacheProvider.tsx)
-- [ ] [PhoneInput/index.tsx](../../components/PhoneInput/index.tsx)
-- [ ] [Popup/index.tsx](../../components/Popup/index.tsx)
-- [ ] [QRCode/index.tsx](../../components/QRCode/index.tsx)
-- [ ] [Ripple/index.tsx](../../components/Ripple/index.tsx)
-- [ ] [Selector/index.tsx](../../components/Selector/index.tsx)
-- [ ] [SlideInPanel/index.tsx](../../components/SlideInPanel/index.tsx)
-- [ ] [SwitchButton/index.tsx](../../components/SwitchButton/index.tsx)
-- [ ] [Tabs/Content.tsx](../../components/Tabs/Content.tsx)
-- [ ] [Tabs/index.tsx](../../components/Tabs/index.tsx)
-- [ ] [Triangle/index.tsx](../../components/Triangle/index.tsx)
-- [ ] [Typography/index.tsx](../../components/Typography/index.tsx)
-- [ ] [VideoPlayer/index.tsx](../../components/VideoPlayer/index.tsx)
-- [ ] [VirtualScroller/index.tsx](../../components/VirtualScroller/index.tsx)
-- [ ] [WangEditor/index.tsx](../../components/WangEditor/index.tsx)
-- [ ] [WebRTCRoomEntryCard/index.tsx](../../components/WebRTCRoomEntryCard/index.tsx)
-- [ ] [Youtube/index.tsx](../../components/Youtube/index.tsx)
-
-## 🧩 Components - Demo
-
-- [ ] [Demo/BannerDemo.tsx](../../components/Demo/BannerDemo.tsx)
-- [ ] [Demo/CountdownTest.tsx](../../components/Demo/CountdownTest.tsx)
-- [ ] [Demo/Dialog.tsx](../../components/Demo/Dialog.tsx)
-- [ ] [Demo/Drawer.tsx](../../components/Demo/Drawer.tsx)
-- [ ] [Demo/Hooks.tsx](../../components/Demo/Hooks.tsx)
-- [ ] [Demo/IndexedDBDemo.tsx](../../components/Demo/IndexedDBDemo.tsx)
-- [ ] [Demo/KrpanoDemo.tsx](../../components/Demo/KrpanoDemo.tsx)
-- [ ] [Demo/ScrollFetch.tsx](../../components/Demo/ScrollFetch.tsx)
-- [ ] [Demo/SocketIoTest.tsx](../../components/Demo/SocketIoTest.tsx)
-- [ ] [Demo/WebAuthn.tsx](../../components/Demo/WebAuthn.tsx)
-- [ ] [Demo/WebRTCSSERoom.tsx](../../components/Demo/WebRTCSSERoom.tsx)
-- [ ] [Demo/WebRTCSocketIORoom.tsx](../../components/Demo/WebRTCSocketIORoom.tsx)
-- [ ] [Demo/WebSocketTest.tsx](../../components/Demo/WebSocketTest.tsx)
+### Demo 組件
+- [ ] `Demo/BannerDemo.tsx`
+- [ ] `Demo/CountdownTest.tsx`
+- [ ] `Demo/Dialog.tsx`
+- [ ] `Demo/Drawer.tsx`
+- [ ] `Demo/EnterLabelTest.tsx`
+- [ ] `Demo/FaceSwapBackend.tsx`
+- [ ] `Demo/FaceSwapFrontend.tsx`
+- [ ] `Demo/FaceSwapIndex.tsx`
+- [ ] `Demo/FrontendApiCacheTest.tsx`
+- [ ] `Demo/GoTop.tsx`
+- [ ] `Demo/Hooks.tsx`
+- [ ] `Demo/ImageUploadTest.tsx`
+- [ ] `Demo/IndexedDBDemo.tsx`
+- [ ] `Demo/KrpanoDemo.tsx`
+- [ ] `Demo/LazyLoadTest.tsx`
+- [ ] `Demo/OfflinePageClient.tsx`
+- [ ] `Demo/ParamsBackTest.tsx`
+- [ ] `Demo/PhoneInputTest.tsx`
+- [ ] `Demo/QRCodeTest.tsx`
+- [ ] `Demo/QueryBackTest.tsx`
+- [ ] `Demo/RippleTest.tsx`
+- [ ] `Demo/ScrollFetch.tsx`
+- [ ] `Demo/SelectorTest.tsx`
+- [ ] `Demo/SkeletonLoader.tsx`
+- [ ] `Demo/SlideInPanelTest.tsx`
+- [ ] `Demo/SocketIoTest.tsx`
+- [ ] `Demo/SocketTestIndex.tsx`
+- [ ] `Demo/SSEGlobalGet.tsx`
+- [ ] `Demo/SSEGlobalPost.tsx`
+- [ ] `Demo/SSERoomGet.tsx`
+- [ ] `Demo/SSERoomPost.tsx`
+- [ ] `Demo/SSETestIndex.tsx`
+- [ ] `Demo/SvgColorChabge.tsx`
+- [ ] `Demo/SwiperJs.tsx`
+- [ ] `Demo/SwiperTest.tsx`
+- [ ] `Demo/SwitchButtonTest.tsx`
+- [ ] `Demo/TabTest.tsx`
+- [ ] `Demo/TriangleAnimation.tsx`
+- [ ] `Demo/VirtualScrollerTest.tsx`
+- [ ] `Demo/WangEditorTest.tsx`
+- [ ] `Demo/WebAuthn.tsx`
+- [x] `Demo/WebRTCSSERoom.tsx` ✅ useEffectEvent
+- [x] `Demo/WebRTCSocketIORoom.tsx` ✅ useEffectEvent
+- [x] `Demo/WebSocketTest.tsx`
 
 ---
 
-## 📄 App Pages (部分列表)
+## 📄 App Pages (63 個)
 
-- [ ] [app/[locale]/page.tsx](../../app/[locale]/page.tsx)
-- [ ] [app/[locale]/hooks-test/page.tsx](../../app/[locale]/hooks-test/page.tsx)
-- [ ] [app/[locale]/components/scroll-fetch/page.tsx](../../app/[locale]/components/scroll-fetch/page.tsx)
-- [ ] [app/[locale]/socket-test/page.tsx](../../app/[locale]/socket-test/page.tsx)
-- [ ] [app/[locale]/web-rtc/page.tsx](../../app/[locale]/web-rtc/page.tsx)
-- [ ] [app/[locale]/web-socket-test/page.tsx](../../app/[locale]/web-socket-test/page.tsx)
+### 主要頁面
+- [ ] `[locale]/page.tsx`
+- [ ] `[locale]/about/page.tsx`
+- [ ] `[locale]/hooks-test/page.tsx`
+- [ ] `[locale]/offline/page.tsx`
+
+### Components 展示頁
+- [ ] `[locale]/components/page.tsx`
+- [ ] `[locale]/components/banner-demo/page.tsx`
+- [ ] `[locale]/components/countdown-test/page.tsx`
+- [ ] `[locale]/components/dialog/page.tsx`
+- [ ] `[locale]/components/drawer/page.tsx`
+- [ ] `[locale]/components/enter-label/page.tsx`
+- [ ] `[locale]/components/go-top/page.tsx`
+- [ ] `[locale]/components/image-upload-test/page.tsx`
+- [ ] `[locale]/components/phone-input/page.tsx`
+- [ ] `[locale]/components/qr-code-test/page.tsx`
+- [ ] `[locale]/components/scroll-fetch/page.tsx`
+- [ ] `[locale]/components/selector/page.tsx`
+- [ ] `[locale]/components/skeleton-loader/page.tsx`
+- [ ] `[locale]/components/slide-in-panel/page.tsx`
+- [ ] `[locale]/components/swiper-js/page.tsx`
+- [ ] `[locale]/components/swiper-test/page.tsx`
+- [ ] `[locale]/components/switch-button/page.tsx`
+- [ ] `[locale]/components/tab-test/page.tsx`
+- [ ] `[locale]/components/virtual-scroller/page.tsx`
+- [ ] `[locale]/components/wang-editor-test/page.tsx`
+- [ ] `[locale]/components/youtube-test/page.tsx`
+
+### CSS Drawing 頁面
+- [ ] `[locale]/css-drawing/page.tsx`
+- [ ] `[locale]/css-drawing/hexagon-test/page.tsx`
+- [ ] `[locale]/css-drawing/svg-color-change/page.tsx`
+- [ ] `[locale]/css-drawing/triangle-anime-test/page.tsx`
+- [ ] `[locale]/css-drawing/triangle-full-test/page.tsx`
+- [ ] `[locale]/css-drawing/triangle-test/page.tsx`
+
+### 其他功能頁
+- [ ] `[locale]/directive-effects/page.tsx`
+- [ ] `[locale]/directive-effects/lazyload-test/page.tsx`
+- [ ] `[locale]/directive-effects/ripple-test/page.tsx`
+- [ ] `[locale]/face-swap/page.tsx`
+- [ ] `[locale]/face-swap/backend/page.tsx`
+- [ ] `[locale]/face-swap/frontend/page.tsx`
+- [ ] `[locale]/firebase/page.tsx`
+- [ ] `[locale]/firebase/cloud-messaging/page.tsx`
+- [ ] `[locale]/frontend-api-cache-test/page.tsx`
+- [ ] `[locale]/indexeddb-demo/page.tsx`
+- [ ] `[locale]/krpano-demo/page.tsx`
+- [ ] `[locale]/route/page.tsx`
+- [ ] `[locale]/route/params-back-test/[testData]/page.tsx`
+- [ ] `[locale]/route/query-back-test/page.tsx`
+- [ ] `[locale]/server-sent-event-test/page.tsx`
+- [ ] `[locale]/server-sent-event-test/global-get/page.tsx`
+- [ ] `[locale]/server-sent-event-test/global-post/page.tsx`
+- [ ] `[locale]/socket-io-test/page.tsx`
+- [ ] `[locale]/web-authn/page.tsx`
+- [ ] `[locale]/web-rtc/page.tsx`
+- [ ] `[locale]/web-socket-test/page.tsx`
 
 ---
 
 ## 📝 檢查標準
 
-| 模式 | 建議 Hook / 修改 |
-|------|-----------------|
-| 不需觸發 re-render 的值 | `useRef` |
-| 5+ 個相關 state | `useReducer` |
-| 昂貴的計算 | `useMemo` |
-| 傳給子組件的函式 | `useCallback` |
-| 影響視覺渲染的同步操作 | `useLayoutEffect` |
-| 表單處理 | `useActionState` |
-| 非阻塞更新 | `useTransition` |
-| Effect 內部依賴優化 | `useEffectEvent` |
-| **類型導入混在一般 import** | **`import type` 或 `type` inline** |
+每個檔案檢查時，需評估：
+
+1. **useState → useRef**: 不需觸發 re-render 的值（timer ID, interval ID）
+2. **多個 useState → useReducer**: 5+ 個相關聯的 state
+3. **計算 → useMemo**: 昂貴的 filter/map/sort 操作
+4. **callback → useCallback**: 傳給子組件的函式
+5. **useEffect → useLayoutEffect**: 影響視覺渲染的同步操作
+6. **表單 → useActionState**: React 19 表單處理
+7. **非阻塞更新 → useTransition**: 大量資料過濾/搜尋
+8. **Effect 內部依賴優化 → useEffectEvent**: 替換 useRef + useCallback 模式
+9. **Import Type**: 檢查並修正類型導入
+
+---
 
 ## 狀態說明
 
 - `[ ]` 未檢查
 - `[/]` 檢查中
-- `[x]` 已完成
+- `[x]` 已完成（無需修改或已修改）
 - `⭐` 高優先級

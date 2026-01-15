@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useEffectEvent } from 'react';
 
 /**
  * Hook to execute a callback at regular intervals
@@ -13,12 +13,10 @@ export function useInterval(
   callback: () => void,
   delay: number | null
 ): void {
-  const savedCallback = useRef(callback);
-
-  // Remember the latest callback
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
+  // Use useEffectEvent for stable callback
+  const onTick = useEffectEvent(() => {
+    callback();
+  });
 
   // Set up the interval
   useEffect(() => {
@@ -27,10 +25,10 @@ export function useInterval(
       return;
     }
 
-    const id = setInterval(() => savedCallback.current(), delay);
+    const id = setInterval(() => onTick(), delay);
 
     return () => clearInterval(id);
-  }, [delay]);
+  }, [delay]); // onTick is stable
 }
 
 export default useInterval;

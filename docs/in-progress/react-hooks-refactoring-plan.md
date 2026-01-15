@@ -24,7 +24,7 @@
 
 ### 🔴 高優先級
 
-1.  **Effect 內部依賴優化 → `useEffectEvent`** (✨ NEW)
+1.  **Effect 內部依賴優化 → `useEffectEvent`** (✨ NEW) ✅ 已完成
     -   **目標**：替換 `useRef` + `useCallback` 模式
     -   **優勢**：解決閉包問題，同時保持 Effect 依賴純淨
     -   **適用**：`useEventSource`, `useWebSocket` 等 Hook
