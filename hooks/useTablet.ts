@@ -1,22 +1,37 @@
-import { useState, useEffect } from 'react';
+import { useSyncExternalStore } from 'react';
 
 import { mediaTablet } from '@/styles/mediaQuery';
 
 export function useTablet() {
-  const [isTablet, setIsTablet] = useState(false);
+  return useSyncExternalStore(
+    subscribeTabletStatus.subscribe,
+    subscribeTabletStatus.getSnapshot,
+    subscribeTabletStatus.getServerSnapshot
+  );
+}
 
-  useEffect(() => {
+let isTablet =
+  typeof window !== 'undefined'
+    ? window.matchMedia(mediaTablet.replace('@media', '')).matches
+    : false;
+
+const subscribeTabletStatus = {
+  subscribe() {
     function windowWidthListener() {
-      setIsTablet(window.matchMedia(mediaTablet.replace('@media', '')).matches);
+      isTablet = window.matchMedia(mediaTablet.replace('@media', '')).matches;
     }
-    windowWidthListener();
     window.addEventListener('resize', windowWidthListener);
     return () => {
       window.removeEventListener('resize', windowWidthListener);
     };
-  }, []);
-
-  return isTablet;
-}
+  },
+  getSnapshot() {
+    return isTablet;
+  },
+  getServerSnapshot() {
+    return isTablet;
+  }
+};
 
 export default useTablet;
+

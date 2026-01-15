@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useMemo, useEffectEvent } from 'react';
 
 /**
  * Hook to detect if a key is pressed
@@ -29,21 +29,27 @@ export function useKeyPress(
     [targetKey]
   );
 
-  const downHandler = useCallback((event: KeyboardEvent) => {
-    if (targetKeys.includes(event.key)) {
-      setKeyPressed(true);
-      handler?.(event);
-    }
-  }, [targetKeys, handler]);
-
-  const upHandler = useCallback((event: KeyboardEvent) => {
-    if (targetKeys.includes(event.key)) {
-      setKeyPressed(false);
-    }
-  }, [targetKeys]);
+  // Use useEffectEvent for handler callback - stable function that always has latest handler
+  const onKeyEvent = useEffectEvent((event: KeyboardEvent) => {
+    handler?.(event);
+  });
 
   useEffect(() => {
     if (!target) return;
+
+    // Define handlers inside useEffect so they can call onKeyEvent
+    const downHandler = (event: KeyboardEvent) => {
+      if (targetKeys.includes(event.key)) {
+        setKeyPressed(true);
+        onKeyEvent(event); // ✅ useEffectEvent called from Effect
+      }
+    };
+
+    const upHandler = (event: KeyboardEvent) => {
+      if (targetKeys.includes(event.key)) {
+        setKeyPressed(false);
+      }
+    };
 
     if (eventType === 'keydown') {
       target.addEventListener('keydown', downHandler as EventListener);
@@ -60,9 +66,12 @@ export function useKeyPress(
         target.removeEventListener('keyup', downHandler as EventListener);
       }
     };
-  }, [target, eventType, downHandler, upHandler]);
+  }, [target, eventType, targetKeys]);
 
   return keyPressed;
 }
 
 export default useKeyPress;
+
+
+

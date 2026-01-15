@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useEffectEvent } from 'react';
 
 /**
  * useBeforeunload - A React hook for handling the beforeunload event
@@ -33,12 +33,16 @@ export function useBeforeunload(
   handler: (event: BeforeUnloadEvent) => string | void,
   enabled: boolean = true
 ): () => void {
-  const handlerRef = useRef(handler);
-
-  // Keep the handler ref updated
-  useEffect(() => {
-    handlerRef.current = handler;
-  }, [handler]);
+  // Use useEffectEvent to get stable handler reference
+  const handleBeforeunload = useEffectEvent((event: BeforeUnloadEvent) => {
+    const result = handler(event);
+    if (result) {
+      event.preventDefault();
+      // Chrome requires returnValue to be set
+      event.returnValue = result;
+      return result;
+    }
+  });
 
   const removeListener = useCallback(() => {
     if (typeof window !== 'undefined') {
@@ -50,16 +54,6 @@ export function useBeforeunload(
     if (typeof window === 'undefined' || !enabled) {
       return;
     }
-
-    const handleBeforeunload = (event: BeforeUnloadEvent) => {
-      const result = handlerRef.current(event);
-      if (result) {
-        event.preventDefault();
-        // Chrome requires returnValue to be set
-        event.returnValue = result;
-        return result;
-      }
-    };
 
     window.addEventListener('beforeunload', handleBeforeunload);
     window.onbeforeunload = handleBeforeunload;
@@ -74,3 +68,4 @@ export function useBeforeunload(
 }
 
 export default useBeforeunload;
+

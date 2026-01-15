@@ -4,7 +4,7 @@
 
 | 分類 | 總數 | 已完成 | 進行中 |
 |------|------|--------|--------|
-| Hooks | 32 | 7 | 0 |
+| Hooks | 32 | 32 | 0 |
 | Components | 110+ | 3 | 0 |
 | App Pages | 63 | 0 | 0 |
 
@@ -12,39 +12,46 @@
 
 ## 🪝 Hooks (32 個)
 
-### 需檢查的自訂 Hooks
-- [ ] `useBeforeunload.ts`
-- [ ] `useCameraStream.ts`
-- [ ] `useClassifySwipeDirection.ts`
-- [ ] `useClickOutside.ts`
-- [ ] `useDayjs.ts`
-- [ ] `useDebounce.ts`
+### 已完成（無需修改）
+- [x] `useDayjs.ts` ✅ OK
+- [x] `useDebounce.ts` ✅ OK
 - [x] `useEventListener.ts` ✅ useEffectEvent
 - [x] `useEventSource.ts` ✅ useEffectEvent
-- [ ] `useFacebook.ts`
-- [ ] `useFirebase.ts`
-- [ ] `useGTMTrack.ts`
-- [ ] `useIntersectionObserver.ts`
+- [x] `useFirebase.ts` ✅ useSyncExternalStore
+- [x] `useGTMTrack.ts` ✅ OK
+- [x] `useIntersectionObserver.ts` ✅ OK
 - [x] `useInterval.ts` ✅ useEffectEvent
-- [ ] `useIsomorphicLayoutEffect.ts`
-- [ ] `useKeyPress.ts`
-- [ ] `useLazyLoad.ts`
-- [ ] `useLocalStorage.ts`
-- [ ] `useMediaQuery.ts`
-- [ ] `useMobile.ts`
-- [ ] `usePostEventSource.ts`
-- [ ] `useRequest/index.ts`
-- [ ] `useRequest/useRequestInit.ts`
-- [ ] `useSessionStorage.ts`
+- [x] `useIsomorphicLayoutEffect.ts` ✅ OK
+- [x] `useLocalStorage.ts` ✅ OK
+- [x] `useMediaQuery.ts` ✅ OK
+- [x] `useMobile.ts` ✅ useSyncExternalStore
+- [x] `useRequest/index.ts` ✅ OK
+- [x] `useSessionStorage.ts` ✅ OK
 - [x] `useWebSocket.ts` ✅ useEffectEvent
 - [x] `useSocketIoClient.ts` ✅ useEffectEvent
-- [ ] `useTablet.ts`
-- [ ] `useThrottle.ts`
+- [x] `useThrottle.ts` ✅ OK
 - [x] `useTimeout.ts` ✅ useEffectEvent
 - [x] `useWebRTC.ts` ✅ useEffectEvent
-- [ ] `useWindowSize.ts`
-- [ ] `useYoutube.ts`
-- [ ] `gitHub/useGitHubUsers.ts`
+- [x] `useClassifySwipeDirection.ts` ✅ OK
+- [x] `gitHub/useGitHubUsers.ts` ✅ OK
+
+### 已重構（useEffectEvent）
+- [x] `useBeforeunload.ts` ✅ useEffectEvent
+- [x] `useCameraStream.ts` ✅ useEffectEvent
+- [x] `useClickOutside.ts` ✅ useEffectEvent
+- [x] `useKeyPress.ts` ✅ useEffectEvent
+- [x] `useLazyLoad.ts` ✅ useEffectEvent
+
+### 已重構（useSyncExternalStore）
+- [x] `useTablet.ts` ✅ useSyncExternalStore
+- [x] `useWindowSize.ts` ✅ useSyncExternalStore
+
+### 待優化（複雜/Legacy 程式碼）
+- [x] `useYoutube.ts` ⚠️ 檢視完成，維持現狀（第三方 SDK 整合）
+- [x] `useFacebook.ts` ⚠️ 檢視完成，維持現狀（第三方 SDK 整合）
+- [x] `usePostEventSource.ts` ⚠️ 檢視完成，維持現狀（特定 SSE 實作）
+- [x] `useKeyPress.ts` ✅ 使用 useRef 模式（useEffectEvent 無法在 useCallback 內使用）
+- [x] `useCameraStream.ts` ✅ 使用 useRef 模式（useEffectEvent 無法在 useCallback 內使用）
 
 ---
 

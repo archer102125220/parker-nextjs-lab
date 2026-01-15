@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useSyncExternalStore } from 'react';
 
 export interface WindowSize {
   width: number;
@@ -14,31 +14,39 @@ export interface WindowSize {
  * console.log(`Window size: ${width}x${height}`);
  */
 export function useWindowSize(): WindowSize {
-  const [windowSize, setWindowSize] = useState<WindowSize>({
-    width: typeof window !== 'undefined' ? window.innerWidth : 0,
-    height: typeof window !== 'undefined' ? window.innerHeight : 0
-  });
-
-  useEffect(() => {
-    // Handler to call on window resize
-    function handleResize() {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight
-      });
-    }
-
-    // Add event listener
-    window.addEventListener('resize', handleResize);
-
-    // Call handler right away so state gets updated with initial window size
-    handleResize();
-
-    // Remove event listener on cleanup
-    return () => window.removeEventListener('resize', handleResize);
-  }, []); // Empty array ensures that effect is only run on mount
-
-  return windowSize;
+  return useSyncExternalStore(
+    subscribeWindowSize.subscribe,
+    subscribeWindowSize.getSnapshot,
+    subscribeWindowSize.getServerSnapshot
+  );
 }
 
+let windowSize: WindowSize =
+  typeof window !== 'undefined'
+    ? { width: window.innerWidth, height: window.innerHeight }
+    : { width: 0, height: 0 };
+
+const subscribeWindowSize = {
+  subscribe(callback: () => void) {
+    function handleResize() {
+      windowSize = {
+        width: window.innerWidth,
+        height: window.innerHeight
+      };
+      callback();
+    }
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  },
+  getSnapshot(): WindowSize {
+    return windowSize;
+  },
+  getServerSnapshot(): WindowSize {
+    return { width: 0, height: 0 };
+  }
+};
+
 export default useWindowSize;
+

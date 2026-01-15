@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, type RefObject } from 'react';
+import { useEffect, useState, useEffectEvent, type RefObject } from 'react';
 
 export interface UseLazyLoadOptions {
   /** Fallback image src when loading */
@@ -63,31 +63,14 @@ export function useLazyLoad(
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const handleLoad = useCallback(
-    (event: Event) => {
-      setIsLoading(false);
-      setIsLoaded(true);
-      setHasError(false);
-      onLoad?.(event);
-    },
-    [onLoad]
-  );
+  // Use useEffectEvent for callbacks to avoid them as dependencies
+  const handleLoadCallback = useEffectEvent((event: Event) => {
+    onLoad?.(event);
+  });
 
-  const handleError = useCallback(
-    (event: Event) => {
-      setIsLoading(false);
-      setHasError(true);
-
-      // Try to load error image if provided
-      const element = ref.current;
-      if (errorImg && element) {
-        element.src = errorImg;
-      }
-
-      onError?.(event);
-    },
-    [errorImg, onError, ref]
-  );
+  const handleErrorCallback = useEffectEvent((event: Event) => {
+    onError?.(event);
+  });
 
   useEffect(() => {
     const element = ref.current;
@@ -106,6 +89,25 @@ export function useLazyLoad(
       element.src = src;
       return;
     }
+
+    const handleLoad = (event: Event) => {
+      setIsLoading(false);
+      setIsLoaded(true);
+      setHasError(false);
+      handleLoadCallback(event);
+    };
+
+    const handleError = (event: Event) => {
+      setIsLoading(false);
+      setHasError(true);
+
+      // Try to load error image if provided
+      if (errorImg && ref.current) {
+        ref.current.src = errorImg;
+      }
+
+      handleErrorCallback(event);
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -144,7 +146,7 @@ export function useLazyLoad(
       element.removeEventListener('load', handleLoad);
       element.removeEventListener('error', handleError);
     };
-  }, [src, loadingSrc, rootMargin, threshold, handleLoad, handleError, ref]);
+  }, [src, loadingSrc, errorImg, rootMargin, threshold, ref]);
 
   return {
     isLoading,
@@ -154,3 +156,4 @@ export function useLazyLoad(
 }
 
 export default useLazyLoad;
+
