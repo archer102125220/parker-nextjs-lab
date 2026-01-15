@@ -210,7 +210,7 @@ export class firebase {
     firebaseConfig = this.firebaseConfig,
     callback?: (firebase?: firebase) => void
   ): Promise<void> {
-    if (this.initing === true) return;
+    if (this.initing === true || process.env.NODE_ENV !== 'production') return;
     this._initing = true;
 
     // console.log('initializeWithServiceWorker');

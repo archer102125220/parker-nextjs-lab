@@ -24,13 +24,20 @@ export async function register() {
       initializeSocketIOServer(port);
       console.log(`[Instrumentation] Socket.IO server running on port ${port}`);
 
+      // Initialize Native WebSocket Server (standalone)
+      const { initializeWebSocketServer, closeWebSocketServer } = await import('@/services/server/websocket');
+      const wsPort = parseInt(process.env.WEBSOCKET_PORT || '3003', 10);
+      console.log('[Instrumentation] Initializing Native WebSocket server...');
+      initializeWebSocketServer(wsPort);
+
       // 註冊關閉處理器
       const gracefulShutdown = async (signal: string) => {
         console.log(
-          `[Instrumentation] Received ${signal}, shutting down Socket.IO...`
+          `[Instrumentation] Received ${signal}, shutting down servers...`
         );
         await closeSocketIOServer();
-        console.log('[Instrumentation] Socket.IO server closed');
+        await closeWebSocketServer();
+        console.log('[Instrumentation] Servers closed');
         process.exit(0);
       };
 

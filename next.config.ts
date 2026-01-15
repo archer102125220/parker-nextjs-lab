@@ -7,6 +7,9 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 // https://serwist.pages.dev/docs/next/getting-started
 const withSerwist = withSerwistInit({
+  disable: process.env.NODE_ENV !== 'production',
+  register: process.env.NODE_ENV !== 'production',
+  cacheOnNavigation: process.env.NODE_ENV !== 'production',
   swSrc: './service-worker/service-worker.ts', // where the service worker src is
   swDest: './public/sw.js', // where the service worker code will end up
   scope: '/'

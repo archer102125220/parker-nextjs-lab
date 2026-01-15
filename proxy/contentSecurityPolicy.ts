@@ -35,17 +35,57 @@ export function contentSecurityPolicyMiddleware(
   //   upgrade-insecure-requests;
   // `;
   const cspHeader = `
-    default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.youtube.com https://connect.facebook.net https://www.googletagmanager.com;
-    font-src 'self' data: https://fonts.gstatic.com;
-    base-uri 'self';
-    form-action 'self';
-    frame-ancestors 'self';
-    img-src 'self' data: https://www.googletagmanager.com;
-    object-src 'none';
-    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://www.googletagmanager.com https://va.vercel-scripts.com https://*.youtube.com;
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://firebase.googleapis.com https://www.google-analytics.com https://firebaseinstallations.googleapis.com https://fcmregistrations.googleapis.com https://api.github.com ws://localhost:3002 wss://localhost:3002 http://localhost:3002 https://localhost:3002 https://localhost:3001 http://localhost:3001 https://localhost:3000 http://localhost:3000 ;
-    frame-src 'self' https://www.youtube.com https://www.googletagmanager.com;
+    default-src ${[
+      "'self'",
+      'https://fonts.googleapis.com',
+      'https://fonts.gstatic.com',
+      'https://www.youtube.com',
+      'https://connect.facebook.net',
+      'https://www.googletagmanager.com'
+    ].join(' ')};
+    font-src ${["'self'", "'data'", 'https://fonts.gstatic.com'].join(' ')};
+    base-uri ${["'self'"].join(' ')};
+    form-action ${["'self'"].join(' ')};
+    frame-ancestors ${["'self'"].join(' ')};
+    img-src ${["'self'", "'data'", 'https://www.googletagmanager.com'].join(' ')};
+    object-src ${["'none'"].join(' ')};
+    script-src ${[
+      "'self'",
+      "'unsafe-inline'",
+      "'unsafe-eval'",
+      'https://connect.facebook.net',
+      'https://www.googletagmanager.com',
+      'https://va.vercel-scripts.com',
+      'https://*.youtube.com'
+    ].join(' ')};
+    style-src ${[
+      "'self'",
+      "'unsafe-inline'",
+      'https://fonts.googleapis.com'
+    ].join(' ')};
+    connect-src ${[
+      "'self'",
+      'https://fonts.googleapis.com',
+      'https://fonts.gstatic.com',
+      'https://firebase.googleapis.com',
+      'https://www.google-analytics.com',
+      'https://firebaseinstallations.googleapis.com',
+      'https://fcmregistrations.googleapis.com',
+      'https://api.github.com',
+      'ws://localhost:3003',
+      'wss://localhost:3003',
+      'http://localhost:3003',
+      'https://localhost:3003',
+      'ws://localhost:3002',
+      'wss://localhost:3002',
+      'http://localhost:3002',
+      'https://localhost:3002',
+      'https://localhost:3001',
+      'http://localhost:3001',
+      'https://localhost:3000',
+      'http://localhost:3000'
+    ].join(' ')};
+    frame-src ${["'self'", 'https://www.youtube.com', 'https://www.googletagmanager.com'].join(' ')};
     upgrade-insecure-requests;
   `;
 
