@@ -37,21 +37,24 @@
 
 ### 已重構（useEffectEvent）
 - [x] `useBeforeunload.ts` ✅ useEffectEvent
-- [x] `useCameraStream.ts` ✅ useEffectEvent
 - [x] `useClickOutside.ts` ✅ useEffectEvent
-- [x] `useKeyPress.ts` ✅ useEffectEvent
+- [x] `useKeyPress.ts` ✅ useEffectEvent（重新設計，將 handlers 移入 Effect 內）
 - [x] `useLazyLoad.ts` ✅ useEffectEvent
+- [x] `useFacebook.ts` ✅ useEffectEvent（重新設計，加入 JSDoc）
+- [x] `usePostEventSource.ts` ✅ useEffectEvent（重新設計，4 個 callbacks 都使用 useEffectEvent）
 
 ### 已重構（useSyncExternalStore）
 - [x] `useTablet.ts` ✅ useSyncExternalStore
 - [x] `useWindowSize.ts` ✅ useSyncExternalStore
 
-### 待優化（複雜/Legacy 程式碼）
-- [x] `useYoutube.ts` ⚠️ 檢視完成，維持現狀（第三方 SDK 整合）
-- [x] `useFacebook.ts` ⚠️ 檢視完成，維持現狀（第三方 SDK 整合）
-- [x] `usePostEventSource.ts` ⚠️ 檢視完成，維持現狀（特定 SSE 實作）
-- [x] `useKeyPress.ts` ✅ 使用 useRef 模式（useEffectEvent 無法在 useCallback 內使用）
-- [x] `useCameraStream.ts` ✅ 使用 useRef 模式（useEffectEvent 無法在 useCallback 內使用）
+### 維持現狀（特殊情況）
+- [x] `useCameraStream.ts` ✅ useRef 模式（callback 在暴露給外部的 async 函式中調用，無法使用 useEffectEvent）
+
+### 待優化（下次 commit 後處理）
+- [ ] `useYoutube.ts` ⚠️ 複雜組件，需要大幅重構架構才能使用 useEffectEvent
+  - 問題：`createPlayer`, `playerReady` 等函式定義在組件內但不在 Effect 中
+  - 風險：高（第三方 SDK 整合）
+  - 狀態：待當前改動 commit 後再嘗試調整
 
 ---
 

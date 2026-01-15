@@ -1,5 +1,4 @@
-import type { RefObject } from 'react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useEffectEvent, type RefObject } from 'react';
 
 import { dayjs } from '@/hooks/useDayjs';
 import {
@@ -32,6 +31,12 @@ interface PostEventSourceObjType {
   timeoutTimestamp: NodeJS.Timeout | null;
 }
 
+/**
+ * usePostEventSource - Hook for managing POST-based Server-Sent Events
+ * 
+ * @param config - Configuration object with channel, callbacks, and event handlers
+ * @returns Ref object containing the PostEventSource instance and timing data
+ */
 export function usePostEventSource(
   config: PostEventSourceConfig = { channel: '/' }
 ): RefObject<PostEventSourceObjType> {
@@ -41,111 +46,127 @@ export function usePostEventSource(
     timeoutTimestamp: null
   });
 
-  function handleCheckConnect() {
-    if (PostEventSourceObj.current.timeoutTimestamp !== null) {
-      clearTimeout(PostEventSourceObj.current.timeoutTimestamp);
+  // Use useEffectEvent for all callbacks to avoid them as dependencies
+  const onOpen = useEffectEvent(async (event: Event) => {
+    if (typeof config.open === 'function') {
+      await config.open(event);
     }
+  });
 
-    const nowDayjs = dayjs();
-    const lastMessgTimeDayjs =
-      PostEventSourceObj.current.lastMessgTime || dayjs();
-    const diff = nowDayjs.diff(lastMessgTimeDayjs, 'second');
-
-    if (diff > 10) {
-      PostEventSourceObj.current.lastMessgTime = null;
-      return initPostEventSource(config);
+  const onError = useEffectEvent((event: Event) => {
+    if (typeof config.error === 'function') {
+      config.error(event);
     }
+  });
 
-    PostEventSourceObj.current.lastMessgTime = dayjs().valueOf();
-    PostEventSourceObj.current.timeoutTimestamp = setTimeout(
-      handleCheckConnect,
-      1000 * 10
-    );
-  }
-  function initPostEventSource(currentConfig: PostEventSourceConfig = {}) {
-    console.log('initPostEventSource');
-    if (typeof window === 'undefined' || typeof PostEventSource !== 'function')
+  const onMessage = useEffectEvent(async (event: MessageEvent) => {
+    if (typeof config.message === 'function') {
+      await config.message(event);
+    }
+  });
+
+  const onPing = useEffectEvent((event: Event) => {
+    if (typeof config.ping === 'function') {
+      config.ping(event);
+    }
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof PostEventSource !== 'function') {
       return;
+    }
 
+    const { channel, postData, eventList } = config;
+
+    // Build path
+    const path =
+      channel?.indexOf('/') === 0
+        ? SERVER_SENT_EVENT_BASE_PATH + channel
+        : SERVER_SENT_EVENT_BASE_PATH + '/' + channel;
+
+    // Close existing connection
     if (typeof PostEventSourceObj.current.croe?.close === 'function') {
       PostEventSourceObj.current.croe.close();
     }
 
-    const { channel: currentChannel, postData } = currentConfig;
-
-    const path =
-      currentChannel?.indexOf('/') === 0
-        ? SERVER_SENT_EVENT_BASE_PATH + currentChannel
-        : SERVER_SENT_EVENT_BASE_PATH + '/' + currentChannel;
-
-    const newPostEventSource = new PostEventSource(DOMAIN + path, {
-      postData
-    });
-
-    // if (typeof currentConfig?.open === 'function') {
-    //   newPostEventSource.addEventListener('open', currentConfig.open);
-    // }
-    newPostEventSource.addEventListener('open', async function (...arg) {
-      handleCheckConnect();
-
-      if (typeof config?.open === 'function') {
-        await config.open(...arg);
-      }
-    });
-    if (typeof currentConfig?.error === 'function') {
-      newPostEventSource.addEventListener('error', currentConfig.error);
-    }
-    // if (typeof currentConfig?.message === 'function') {
-    //   newPostEventSource.addEventListener('message', currentConfig.message);
-    // }
-    newPostEventSource.addEventListener(
-      'message',
-      async function (event: Event) {
-        handleCheckConnect();
-
-        if (typeof config?.message === 'function') {
-          await config.message(event as MessageEvent);
-        }
-      }
-    );
-    if (typeof currentConfig?.ping === 'function') {
-      newPostEventSource.addEventListener('ping', currentConfig.ping);
+    // Clear existing timeout
+    if (PostEventSourceObj.current.timeoutTimestamp !== null) {
+      clearTimeout(PostEventSourceObj.current.timeoutTimestamp);
     }
 
-    if (Array.isArray(currentConfig?.eventList) === true) {
-      currentConfig.eventList.forEach((event) => {
-        if (
-          typeof event.name === 'string' &&
-          typeof event.handler === 'function'
-        ) {
-          newPostEventSource.addEventListener(event.name, event.handler);
+    console.log('initPostEventSource');
+
+    const newPostEventSource = new PostEventSource(DOMAIN + path, { postData });
+
+    // Health check function
+    const checkConnect = () => {
+      if (PostEventSourceObj.current.timeoutTimestamp !== null) {
+        clearTimeout(PostEventSourceObj.current.timeoutTimestamp);
+      }
+
+      const nowDayjs = dayjs();
+      const lastMessgTimeDayjs =
+        PostEventSourceObj.current.lastMessgTime || dayjs();
+      const diff = nowDayjs.diff(lastMessgTimeDayjs, 'second');
+
+      if (diff > 10) {
+        // Connection stale, will reinitialize on next effect run
+        PostEventSourceObj.current.lastMessgTime = null;
+        return;
+      }
+
+      PostEventSourceObj.current.lastMessgTime = dayjs().valueOf();
+      PostEventSourceObj.current.timeoutTimestamp = setTimeout(
+        checkConnect,
+        1000 * 10
+      );
+    };
+
+    // Setup event listeners - all callbacks use useEffectEvent ✅
+    newPostEventSource.addEventListener('open', async (event) => {
+      checkConnect();
+      await onOpen(event);
+    });
+
+    newPostEventSource.addEventListener('error', (event) => {
+      onError(event);
+    });
+
+    newPostEventSource.addEventListener('message', async (event) => {
+      checkConnect();
+      await onMessage(event as MessageEvent);
+    });
+
+    newPostEventSource.addEventListener('ping', (event) => {
+      onPing(event);
+    });
+
+    // Custom event handlers
+    if (Array.isArray(eventList)) {
+      eventList.forEach((evt) => {
+        if (typeof evt.name === 'string' && typeof evt.handler === 'function') {
+          newPostEventSource.addEventListener(evt.name, evt.handler);
         }
       });
     }
 
     PostEventSourceObj.current.croe = newPostEventSource;
-  }
 
-  useEffect(() => {
-    initPostEventSource(config);
-
-    // 在 effect 開始時複製 ref 的值
-    const timeoutTimestamp = PostEventSourceObj.current.timeoutTimestamp;
-    const croe = PostEventSourceObj.current.croe;
-
+    // Cleanup
     return () => {
-      if (timeoutTimestamp !== null) {
-        clearTimeout(timeoutTimestamp);
+      if (PostEventSourceObj.current.timeoutTimestamp !== null) {
+        clearTimeout(PostEventSourceObj.current.timeoutTimestamp);
+        PostEventSourceObj.current.timeoutTimestamp = null;
       }
-      if (typeof croe?.close === 'function') {
-        croe.close();
+      if (typeof newPostEventSource.close === 'function') {
+        newPostEventSource.close();
       }
+      PostEventSourceObj.current.croe = null;
     };
-    // TODO
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config]);
+  }, [config.channel, config.postData, config.eventList]);
 
   return PostEventSourceObj;
 }
 
 export default usePostEventSource;
+
