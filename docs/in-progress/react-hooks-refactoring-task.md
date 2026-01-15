@@ -50,11 +50,8 @@
 ### 維持現狀（特殊情況）
 - [x] `useCameraStream.ts` ✅ useRef 模式（callback 在暴露給外部的 async 函式中調用，無法使用 useEffectEvent）
 
-### 待優化（下次 commit 後處理）
-- [ ] `useYoutube.ts` ⚠️ 複雜組件，需要大幅重構架構才能使用 useEffectEvent
-  - 問題：`createPlayer`, `playerReady` 等函式定義在組件內但不在 Effect 中
-  - 風險：高（第三方 SDK 整合）
-  - 狀態：待當前改動 commit 後再嘗試調整
+### 已完成（本次重構）
+- [x] `useYoutube.ts` ✅ useEffectEvent + optionsRef（將所有函式移入 Effect，經瀏覽器測試通過）
 
 ---
 
