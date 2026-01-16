@@ -60,7 +60,7 @@
 ### ⚠️ 需重構 - 多個 useState (建議 useReducer)
 - [x] `Drawer/index.tsx` ⭐ ✅ useReducer + useRef（4 個拖曳狀態合併，3 個 callback refs）
 - [x] `Tabs/Bar.tsx` ⭐ ✅ useReducer x 2（6 個導航狀態 + 2 個指示器狀態，12 → 3 useState）
-- [ ] `SwiperJs/index.tsx` (最後處理 - 用戶要求翻新)
+- [x] `SwiperJs/index.tsx` ⭐ ✅ useRef（5 個 callback refs，移出 5 個 useCallback deps）
 - [x] `SwiperCustom/index.tsx` ✅ useEffectEvent（2 個 callback，移出 Effect deps）
 - [x] `ScrollFetch/index.tsx` ⭐ ✅ useReducer x 3（16 → 1 useState）
 

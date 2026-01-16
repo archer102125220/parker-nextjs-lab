@@ -3,6 +3,7 @@ import {
   useState,
   useEffect,
   useRef,
+  useLayoutEffect,
   useCallback,
   useMemo,
   useReducer,
@@ -429,8 +430,8 @@ export function Drawer(props: DrawerProps): ReactNode {
   const onCloseRef = useRef(onClose);
   const onOpenRef = useRef(onOpen);
 
-  // Keep refs updated
-  useEffect(() => {
+  // Keep refs updated (useLayoutEffect ensures refs are updated before any interaction)
+  useLayoutEffect(() => {
     onChangeRef.current = onChange;
     onCloseRef.current = onClose;
     onOpenRef.current = onOpen;

@@ -200,6 +200,53 @@ export function SwiperJs(props: swiperJsPropsType): ReactNode {
   const paginationRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<HTMLDivElement>(null);
 
+  // Callback refs to avoid stale closures in event handlers
+  const changeRef = useRef(change);
+  const slideChangeRef = useRef(slideChange);
+  const sliderMoveRef = useRef(sliderMove);
+  const slideChangeTransitionEndRef = useRef(slideChangeTransitionEnd);
+  const touchEndRef = useRef(touchEnd);
+
+  // Swiper event callback refs (to avoid re-initializing Swiper on callback changes)
+  const beforeInitRef = useRef(beforeInit);
+  const initRef = useRef(init);
+  const afterInitRef = useRef(afterInit);
+  const beforeDestroyRef = useRef(beforeDestroy);
+  const destroyRef = useRef(destroy);
+  const beforeSlideChangeStartRef = useRef(beforeSlideChangeStart);
+  const reachBeginningRef = useRef(reachBeginning);
+  const reachEndRef = useRef(reachEnd);
+  const fromEdgeRef = useRef(fromEdge);
+  const activeIndexChangeRef = useRef(activeIndexChange);
+  const beforeTransitionStartRef = useRef(beforeTransitionStart);
+  const realIndexChangeRef = useRef(realIndexChange);
+
+  // Keep callback refs updated (useLayoutEffect ensures refs are updated before any interaction)
+  useLayoutEffect(() => {
+    changeRef.current = change;
+    slideChangeRef.current = slideChange;
+    sliderMoveRef.current = sliderMove;
+    slideChangeTransitionEndRef.current = slideChangeTransitionEnd;
+    touchEndRef.current = touchEnd;
+    // Swiper events
+    beforeInitRef.current = beforeInit;
+    initRef.current = init;
+    afterInitRef.current = afterInit;
+    beforeDestroyRef.current = beforeDestroy;
+    destroyRef.current = destroy;
+    beforeSlideChangeStartRef.current = beforeSlideChangeStart;
+    reachBeginningRef.current = reachBeginning;
+    reachEndRef.current = reachEnd;
+    fromEdgeRef.current = fromEdge;
+    activeIndexChangeRef.current = activeIndexChange;
+    beforeTransitionStartRef.current = beforeTransitionStart;
+    realIndexChangeRef.current = realIndexChange;
+  }, [
+    change, slideChange, sliderMove, slideChangeTransitionEnd, touchEnd,
+    beforeInit, init, afterInit, beforeDestroy, destroy, beforeSlideChangeStart,
+    reachBeginning, reachEnd, fromEdge, activeIndexChange, beforeTransitionStart, realIndexChange
+  ]);
+
   const [clientNonce, setClientNonce] = useState<string>('');
   const [swiperObj, setSwiperObj] = useState<Swiper | null>(null);
   const [params, setParams] = useState<SwiperOptions | null>(null);
@@ -320,14 +367,14 @@ export function SwiperJs(props: swiperJsPropsType): ReactNode {
 
   const changeDebounce = useCallback<DebouncedFunc<swiperChange>>(
     _debounce((slideValue: number | string, activeIndex: number) => {
-      if (typeof change === 'function') {
-        change(
+      if (typeof changeRef.current === 'function') {
+        changeRef.current(
           isNaN(Number(slideValue)) ? slideValue : Number(slideValue),
           activeIndex
         );
       }
     }, 200),
-    [change]
+    []
   );
   const handleSlideChange = useCallback<swiperEvent>(
     (swiper: Swiper) => {
@@ -352,38 +399,38 @@ export function SwiperJs(props: swiperJsPropsType): ReactNode {
         }
       }
 
-      if (typeof slideChange === 'function') {
-        slideChange(swiper);
+      if (typeof slideChangeRef.current === 'function') {
+        slideChangeRef.current(swiper);
       }
     },
-    [loop, changeDebounce, slideList, valueKey, value, slideChange]
+    [loop, changeDebounce, slideList, valueKey, value]
   );
   const handleSliderMove = useCallback<swiperEvent>(
     (swiper: Swiper) => {
-      if (typeof sliderMove === 'function') {
-        sliderMove(swiper);
+      if (typeof sliderMoveRef.current === 'function') {
+        sliderMoveRef.current(swiper);
       }
       setIsSliderMoveing(true);
     },
-    [sliderMove]
+    []
   );
   const handleSlideChangeTransitionEnd = useCallback<swiperEvent>(
     (swiper: Swiper) => {
-      if (typeof slideChangeTransitionEnd === 'function') {
-        slideChangeTransitionEnd(swiper);
+      if (typeof slideChangeTransitionEndRef.current === 'function') {
+        slideChangeTransitionEndRef.current(swiper);
       }
       setIsSliderMoveing(false);
     },
-    [slideChangeTransitionEnd]
+    []
   );
   const handleTouchEnd = useCallback<swiperElementEvent>(
     (swiper: Swiper, event: MouseEvent | TouchEvent | PointerEvent) => {
-      if (typeof touchEnd === 'function') {
-        touchEnd(swiper, event);
+      if (typeof touchEndRef.current === 'function') {
+        touchEndRef.current(swiper, event);
       }
       setIsSliderMoveing(false);
     },
-    [touchEnd]
+    []
   );
   const handleSwiperInit = useCallback<() => void>(() => {
     if (swiperRef.current === null) return;
@@ -395,20 +442,20 @@ export function SwiperJs(props: swiperJsPropsType): ReactNode {
       spaceBetween,
       longSwipesRatio,
       on: {
-        beforeInit,
-        init,
-        afterInit,
-        beforeDestroy,
-        destroy,
-        beforeSlideChangeStart,
+        beforeInit: (swiper) => beforeInitRef.current?.(swiper),
+        init: (swiper) => initRef.current?.(swiper),
+        afterInit: (swiper) => afterInitRef.current?.(swiper),
+        beforeDestroy: (swiper) => beforeDestroyRef.current?.(swiper),
+        destroy: (swiper) => destroyRef.current?.(swiper),
+        beforeSlideChangeStart: (swiper) => beforeSlideChangeStartRef.current?.(swiper),
         slideChange: handleSlideChange,
         sliderMove: handleSliderMove,
-        reachBeginning,
-        reachEnd,
-        fromEdge,
-        activeIndexChange,
-        beforeTransitionStart,
-        realIndexChange,
+        reachBeginning: (swiper) => reachBeginningRef.current?.(swiper),
+        reachEnd: (swiper) => reachEndRef.current?.(swiper),
+        fromEdge: (swiper) => fromEdgeRef.current?.(swiper),
+        activeIndexChange: (swiper) => activeIndexChangeRef.current?.(swiper),
+        beforeTransitionStart: (swiper) => beforeTransitionStartRef.current?.(swiper),
+        realIndexChange: (swiper) => realIndexChangeRef.current?.(swiper),
         slideChangeTransitionEnd: handleSlideChangeTransitionEnd,
         touchEnd: handleTouchEnd
       }
@@ -457,34 +504,20 @@ export function SwiperJs(props: swiperJsPropsType): ReactNode {
     const _swiperObj = new Swiper(swiperRef.current, _params);
     setSwiperObj(_swiperObj);
     setParams(_params);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    // Config props only - callbacks use refs
     centeredSlides,
     slidesPerView,
     spaceBetween,
     longSwipesRatio,
-
-    beforeInit,
-    init,
-    afterInit,
-    beforeDestroy,
-    destroy,
-    beforeSlideChangeStart,
     handleSlideChange,
     handleSliderMove,
-    reachBeginning,
-    reachEnd,
-    fromEdge,
-    activeIndexChange,
-    beforeTransitionStart,
-    realIndexChange,
     handleSlideChangeTransitionEnd,
-
     hasNavigation,
-
     hasPagination,
     paginationClickable,
     dynamicBullets,
-
     hasScrollbar,
     autoplayDelay,
     autoplayDisableOnInteraction,
