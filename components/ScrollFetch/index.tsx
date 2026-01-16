@@ -5,6 +5,7 @@ import {
   useEffect,
   useCallback,
   useMemo,
+  useReducer,
   type ReactNode,
   type WheelEvent,
   type UIEvent,
@@ -100,6 +101,167 @@ interface ScrollFetchCssVariable extends CSSProperties {
 
 const MOVE_DISTANCE_LIMIT = 50;
 
+// ============================================================================
+// Refresh State Reducer
+// ============================================================================
+interface RefreshState {
+  isPullStart: boolean;
+  isShowRefreshIcon: boolean;
+  moveDistance: number;
+  duration: number;
+  refreshing: boolean;
+  isPulling: boolean;
+  refreshIconAnimation: boolean;
+  refreshTriggerZIndex: number;
+  refreshIconRotate: number;
+}
+
+type RefreshAction =
+  | { type: 'START_PULL' }
+  | { type: 'END_PULL' }
+  | { type: 'SET_MOVE'; distance: number; rotate: number }
+  | { type: 'SET_DURATION'; duration: number }
+  | { type: 'SHOW_REFRESH_ICON'; zIndex: number }
+  | { type: 'HIDE_REFRESH_ICON' }
+  | { type: 'START_REFRESHING'; iosStyle: boolean }
+  | { type: 'END_REFRESHING'; iosStyle: boolean }
+  | { type: 'SET_PULLING'; isPulling: boolean; animation?: boolean }
+  | { type: 'RESET_AFTER_REFRESH' }
+  | { type: 'RESET_MOVE' };
+
+const initialRefreshState: RefreshState = {
+  isPullStart: false,
+  isShowRefreshIcon: false,
+  moveDistance: 0,
+  duration: 0,
+  refreshing: false,
+  isPulling: false,
+  refreshIconAnimation: false,
+  refreshTriggerZIndex: -1,
+  refreshIconRotate: 0
+};
+
+function refreshReducer(state: RefreshState, action: RefreshAction): RefreshState {
+  switch (action.type) {
+    case 'START_PULL':
+      return { ...state, isPullStart: true, duration: 0, moveDistance: 0, refreshIconRotate: 0 };
+    case 'END_PULL':
+      return { ...state, isPullStart: false, duration: 300 };
+    case 'SET_MOVE':
+      return { ...state, moveDistance: action.distance, refreshIconRotate: action.rotate };
+    case 'SET_DURATION':
+      return { ...state, duration: action.duration };
+    case 'SHOW_REFRESH_ICON':
+      return { ...state, isShowRefreshIcon: true, refreshTriggerZIndex: action.zIndex };
+    case 'HIDE_REFRESH_ICON':
+      return { ...state, isShowRefreshIcon: false, refreshTriggerZIndex: -1 };
+    case 'START_REFRESHING':
+      return {
+        ...state,
+        refreshing: true,
+        isPulling: false,
+        moveDistance: action.iosStyle ? 50 : state.moveDistance
+      };
+    case 'END_REFRESHING':
+      return {
+        ...state,
+        refreshing: false,
+        moveDistance: action.iosStyle ? 0 : state.moveDistance,
+        refreshIconRotate: action.iosStyle ? 0 : state.refreshIconRotate,
+        isPulling: action.iosStyle ? false : state.isPulling
+      };
+    case 'SET_PULLING':
+      return {
+        ...state,
+        isPulling: action.isPulling,
+        refreshIconAnimation: action.animation ?? state.refreshIconAnimation
+      };
+    case 'RESET_AFTER_REFRESH':
+      return { ...state, moveDistance: 0, refreshIconRotate: 0, isPulling: false };
+    case 'RESET_MOVE':
+      return { ...state, moveDistance: 0, refreshIconRotate: 0 };
+    default:
+      return state;
+  }
+}
+
+// ============================================================================
+// Scroll State Reducer
+// ============================================================================
+interface ScrollState {
+  parentScrollIsTop: boolean;
+  parentIsScrolling: boolean;
+  windowScrollIsTop: boolean;
+  windowIsScrolling: boolean;
+}
+
+type ScrollAction =
+  | { type: 'PARENT_SCROLL'; isTop: boolean }
+  | { type: 'PARENT_SCROLL_END' }
+  | { type: 'WINDOW_SCROLL'; isTop: boolean }
+  | { type: 'WINDOW_SCROLL_END' }
+  | { type: 'RESET_PARENT' };
+
+const initialScrollState: ScrollState = {
+  parentScrollIsTop: false,
+  parentIsScrolling: false,
+  windowScrollIsTop: false,
+  windowIsScrolling: false
+};
+
+function scrollReducer(state: ScrollState, action: ScrollAction): ScrollState {
+  switch (action.type) {
+    case 'PARENT_SCROLL':
+      return { ...state, parentIsScrolling: true, parentScrollIsTop: action.isTop };
+    case 'PARENT_SCROLL_END':
+      return { ...state, parentIsScrolling: false };
+    case 'WINDOW_SCROLL':
+      return { ...state, windowIsScrolling: true, windowScrollIsTop: action.isTop };
+    case 'WINDOW_SCROLL_END':
+      return { ...state, windowIsScrolling: false };
+    case 'RESET_PARENT':
+      return { ...state, parentScrollIsTop: false, parentIsScrolling: false };
+    default:
+      return state;
+  }
+}
+
+// ============================================================================
+// Infinity State Reducer
+// ============================================================================
+interface InfinityState {
+  isIntersecting: boolean;
+  trigger: boolean;
+  loading: boolean;
+}
+
+type InfinityAction =
+  | { type: 'SET_INTERSECTING'; value: boolean }
+  | { type: 'SET_TRIGGER'; value: boolean }
+  | { type: 'START_LOADING' }
+  | { type: 'END_LOADING' };
+
+const initialInfinityState: InfinityState = {
+  isIntersecting: false,
+  trigger: false,
+  loading: false
+};
+
+function infinityReducer(state: InfinityState, action: InfinityAction): InfinityState {
+  switch (action.type) {
+    case 'SET_INTERSECTING':
+      return { ...state, isIntersecting: action.value };
+    case 'SET_TRIGGER':
+      return { ...state, trigger: action.value };
+    case 'START_LOADING':
+      return { ...state, loading: true };
+    case 'END_LOADING':
+      return { ...state, loading: false };
+    default:
+      return state;
+  }
+}
+
 const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
   const {
     nonce,
@@ -153,28 +315,39 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
   const infinityTriggerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const infinityTimeoutTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  // State
-  const [clientNonce, setClientNonce] = useState<string>('');
-  const [infinityIsIntersecting, setInfinityIsIntersecting] =
-    useState<boolean>(false);
-  const [isPullStart, setIsPullStart] = useState<boolean>(false);
-  const [isShowRefreshIcon, setIsShowRefreshIcon] = useState<boolean>(false);
   const startYRef = useRef<number>(0);
-  const [moveDistance, setMoveDistance] = useState<number>(0);
-  const [duration, setDuration] = useState<number>(0);
-  const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [isPulling, setIsPulling] = useState<boolean>(false);
-  const [infinityTrigger, setInfinityTrigger] = useState<boolean>(false);
-  const [infinityLoading, setInfinityLoading] = useState<boolean>(false);
-  const [refreshIconAnimation, setRefreshIconAnimation] =
-    useState<boolean>(false);
-  const [refreshTriggerZIndex, setRefreshTriggerZIndex] = useState<number>(-1);
-  const [refreshIconRotate, setRefreshIconRotate] = useState<number>(0);
-  const [parentScrollIsTop, setParentScrollIsTop] = useState<boolean>(false);
-  const [parentIsScrollIng, setParentIsScrollIng] = useState<boolean>(false);
-  const [windowScrollIsTop, setWindowScrollIsTop] = useState<boolean>(false);
-  const [windowIsScrollIng, setWindowIsScrollIng] = useState<boolean>(false);
+
+  // Reducers
+  const [refreshState, dispatchRefresh] = useReducer(refreshReducer, initialRefreshState);
+  const {
+    isPullStart,
+    isShowRefreshIcon,
+    moveDistance,
+    duration,
+    refreshing,
+    isPulling,
+    refreshIconAnimation,
+    refreshTriggerZIndex,
+    refreshIconRotate
+  } = refreshState;
+
+  const [scrollState, dispatchScroll] = useReducer(scrollReducer, initialScrollState);
+  const {
+    parentScrollIsTop,
+    parentIsScrolling: parentIsScrollIng,
+    windowScrollIsTop,
+    windowIsScrolling: windowIsScrollIng
+  } = scrollState;
+
+  const [infinityState, dispatchInfinity] = useReducer(infinityReducer, initialInfinityState);
+  const {
+    isIntersecting: infinityIsIntersecting,
+    trigger: infinityTrigger,
+    loading: infinityLoading
+  } = infinityState;
+
+  // Simple state (kept as useState)
+  const [clientNonce, setClientNonce] = useState<string>('');
 
   // Cleanup functions
   const removeParentScrollEndRef = useRef<(() => void) | null>(null);
@@ -281,20 +454,16 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
 
   useEffect(() => {
     if (refreshing === false && duration === 300) {
-      setMoveDistance(0);
-      setRefreshIconRotate(0);
-      setIsPulling(false);
+      dispatchRefresh({ type: 'RESET_AFTER_REFRESH' });
     }
   }, [refreshing, duration]);
 
   useEffect(() => {
     if (loading === false) {
-      setDuration(300);
+      dispatchRefresh({ type: 'SET_DURATION', duration: 300 });
       setTimeout(() => {
-        setIsShowRefreshIcon(false);
-        setMoveDistance(0);
-        setRefreshIconRotate(0);
-        setIsPulling(false);
+        dispatchRefresh({ type: 'HIDE_REFRESH_ICON' });
+        dispatchRefresh({ type: 'RESET_AFTER_REFRESH' });
       }, 300);
     }
   }, [loading]);
@@ -315,12 +484,10 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
 
   useEffect(() => {
     if (loading === false) {
-      setDuration(300);
+      dispatchRefresh({ type: 'SET_DURATION', duration: 300 });
       requestAnimationFrame(() => {
-        setIsShowRefreshIcon(false);
-        setMoveDistance(0);
-        setRefreshIconRotate(0);
-        setIsPulling(false);
+        dispatchRefresh({ type: 'HIDE_REFRESH_ICON' });
+        dispatchRefresh({ type: 'RESET_AFTER_REFRESH' });
       });
 
       if (
@@ -365,7 +532,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
         clearTimeout(infinityTimeoutTimerRef.current);
       }
 
-      setInfinityLoading(true);
+      dispatchInfinity({ type: 'START_LOADING' });
 
       try {
         await new Promise<void>(async function (resolve, reject) {
@@ -396,7 +563,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
         clearTimeout(infinityTimeoutTimerRef.current);
         infinityTimeoutTimerRef.current = null;
       }
-      setInfinityLoading(false);
+      dispatchInfinity({ type: 'END_LOADING' });
     },
     [infinityLoading, infinityTimeout, onInfinityFetch, onInfinityFail]
   );
@@ -419,7 +586,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
 
       const infinityLimit = safeScrollHeight - bufferValue;
 
-      setInfinityTrigger(safeScrollTop >= infinityLimit);
+      dispatchInfinity({ type: 'SET_TRIGGER', value: safeScrollTop >= infinityLimit });
     },
     [infinityBuffer]
   );
@@ -446,7 +613,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
         infinityTimeoutTimerRef.current = setTimeout(async () => {
           clearTimeout(infinityTimeoutTimerRef.current!);
           infinityTimeoutTimerRef.current = null;
-          setInfinityLoading(false);
+          dispatchInfinity({ type: 'END_LOADING' });
         }, timeoutValue);
       }
 
@@ -457,7 +624,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
       if (useObserver === false) {
         handleCheckScroll(infinityBuffer);
       } else {
-        setInfinityTrigger(false);
+        dispatchInfinity({ type: 'SET_TRIGGER', value: false });
       }
     },
     [
@@ -484,10 +651,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
       const scrollTop = scrollFetchRef.current?.scrollTop;
       if (scrollTop && scrollTop > 0) return;
 
-      setIsPullStart(true);
-      setDuration(0);
-      setMoveDistance(0);
-      setRefreshIconRotate(0);
+      dispatchRefresh({ type: 'START_PULL' });
 
       const touchEvent = e as TouchEvent;
       const mouseEvent = e as MouseEvent;
@@ -514,17 +678,11 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
 
   const handleRefreshDone = useCallback(
     async function () {
-      setRefreshing(false);
-
-      if (iosStyle === true) {
-        setMoveDistance(0);
-        setRefreshIconRotate(0);
-        setIsPulling(false);
-      }
+      dispatchRefresh({ type: 'END_REFRESHING', iosStyle });
 
       if (infinityIsIntersecting === true) {
         if (infinityTrigger === false) {
-          setInfinityTrigger(true);
+          dispatchInfinity({ type: 'SET_TRIGGER', value: true });
         } else {
           handleInfinityTrigger(
             infinityTrigger,
@@ -551,15 +709,11 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
     async function () {
       if (isPullStart === false) return;
 
-      setIsPullStart(false);
+      dispatchRefresh({ type: 'END_PULL' });
       startYRef.current = 0;
-      setDuration(300);
 
       if (moveDistance <= 6) {
-        setMoveDistance(0);
-        setRefreshIconRotate(0);
-        setRefreshTriggerZIndex(-1);
-        setIsShowRefreshIcon(false);
+        dispatchRefresh({ type: 'HIDE_REFRESH_ICON' });
       }
 
       if (
@@ -569,26 +723,20 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
       ) {
         if (moveDistance > 6) {
           requestAnimationFrame(() => {
-            setMoveDistance(0);
-            setRefreshIconRotate(0);
+            dispatchRefresh({ type: 'RESET_MOVE' });
           });
         }
         return;
       }
 
       if (moveDistance > MOVE_DISTANCE_LIMIT && isPulling === true) {
-        setRefreshing(true);
-        setIsPulling(false);
-        if (iosStyle === true) {
-          setMoveDistance(50);
-        }
+        dispatchRefresh({ type: 'START_REFRESHING', iosStyle });
         if (typeof onRefresh === 'function') {
           await onRefresh();
         }
         handleRefreshDone();
       } else {
-        setMoveDistance(0);
-        setRefreshIconRotate(0);
+        dispatchRefresh({ type: 'RESET_MOVE' });
       }
     },
     [
@@ -610,7 +758,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
         (parentIsScrollIng === true && parentScrollIsTop === false) ||
         (windowIsScrollIng === true && windowScrollIsTop === false)
       ) {
-        setMoveDistance(20);
+        dispatchRefresh({ type: 'SET_MOVE', distance: 20, rotate: refreshIconRotate });
         // handlePullEnd(e);
         handlePullEnd();
       } else if (
@@ -648,18 +796,12 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
       const move = currentClientY - startYRef.current;
 
       if (startYRef.current > 0 && move > 0) {
-        setIsShowRefreshIcon(true);
-        if (iosStyle === false) {
-          setRefreshTriggerZIndex(2);
-        } else {
-          setRefreshTriggerZIndex(0);
-        }
+        dispatchRefresh({ type: 'SHOW_REFRESH_ICON', zIndex: iosStyle === false ? 2 : 0 });
 
         const _moveDistance = Math.pow(move, 0.8);
 
         if (_moveDistance < MOVE_DISTANCE_LIMIT + 5) {
-          setMoveDistance(_moveDistance);
-          setRefreshIconRotate(_moveDistance * 5.5);
+          dispatchRefresh({ type: 'SET_MOVE', distance: _moveDistance, rotate: _moveDistance * 5.5 });
         } else if (
           vibrate === true &&
           typeof window?.navigator?.vibrate === 'function' &&
@@ -668,11 +810,11 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
         ) {
           window.navigator.vibrate(100);
         }
-        setIsPulling(_moveDistance > MOVE_DISTANCE_LIMIT);
-
-        if (iosStyle === false) {
-          setRefreshIconAnimation(_moveDistance > MOVE_DISTANCE_LIMIT);
-        }
+        dispatchRefresh({
+          type: 'SET_PULLING',
+          isPulling: _moveDistance > MOVE_DISTANCE_LIMIT,
+          animation: iosStyle === false ? _moveDistance > MOVE_DISTANCE_LIMIT : undefined
+        });
       }
     },
     [
@@ -688,7 +830,8 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
       handlePullEnd,
       handlePullStart,
       iosStyle,
-      vibrate
+      vibrate,
+      refreshIconRotate
     ]
   );
 
@@ -696,8 +839,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
     function () {
       if (refreshing === false) {
         requestAnimationFrame(() => {
-          setRefreshTriggerZIndex(-1);
-          setIsShowRefreshIcon(false);
+          dispatchRefresh({ type: 'HIDE_REFRESH_ICON' });
         });
       }
     },
@@ -756,9 +898,9 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
         } else {
           observerRef.current = new IntersectionObserver(
             (entries) => {
-              setInfinityIsIntersecting(entries[0].isIntersecting);
+              dispatchInfinity({ type: 'SET_INTERSECTING', value: entries[0].isIntersecting });
               if (entries[0].isIntersecting) {
-                setInfinityTrigger(true);
+                dispatchInfinity({ type: 'SET_TRIGGER', value: true });
               }
             },
             { rootMargin: `0px 0px ${bufferValue}px 0px` }
@@ -781,16 +923,15 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
   const parentScroll = useCallback(function (e: Event) {
     if (e.target === scrollFetchRef.current || e.target === window) {
       if (e.target === scrollFetchRef.current) {
-        setParentScrollIsTop(false);
-        setParentIsScrollIng(false);
+        dispatchScroll({ type: 'RESET_PARENT' });
       }
       return;
     }
 
-    setParentIsScrollIng(true);
-    setParentScrollIsTop(
-      (scrollFetchRef.current?.parentElement?.scrollTop || 0) <= 0
-    );
+    dispatchScroll({
+      type: 'PARENT_SCROLL',
+      isTop: (scrollFetchRef.current?.parentElement?.scrollTop || 0) <= 0
+    });
   }, []);
 
   const parentScrollEnd = useCallback(function (e: Event) {
@@ -798,20 +939,14 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
       return;
     }
 
-    setParentIsScrollIng(false);
-    setParentScrollIsTop(
-      (scrollFetchRef.current?.parentElement?.scrollTop || 0) <= 0
-    );
+    dispatchScroll({ type: 'PARENT_SCROLL_END' });
   }, []);
 
   const windowScroll = useCallback(function (e: Event) {
     if (e.target === scrollFetchRef.current) {
-      setWindowScrollIsTop(false);
-      setWindowIsScrollIng(false);
+      dispatchScroll({ type: 'WINDOW_SCROLL_END' });
       return;
     }
-
-    setWindowIsScrollIng(true);
 
     const scrollTriggerElement =
       // TODO
@@ -820,12 +955,13 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
     const scrollTriggerElementBoundingClientRect =
       scrollTriggerElement?.getBoundingClientRect?.();
 
-    setWindowScrollIsTop((scrollTriggerElementBoundingClientRect?.y || 0) <= 0);
+    dispatchScroll({
+      type: 'WINDOW_SCROLL',
+      isTop: (scrollTriggerElementBoundingClientRect?.y || 0) <= 0
+    });
   }, []);
 
   const windowScrollEnd = useCallback(function (e: Event) {
-    setWindowIsScrollIng(false);
-
     const scrollElement =
       // TODO
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -833,7 +969,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
     const scrollElementBoundingClientRect =
       scrollElement?.getBoundingClientRect?.();
 
-    setWindowScrollIsTop((scrollElementBoundingClientRect?.y || 0) <= 0);
+    dispatchScroll({ type: 'WINDOW_SCROLL_END' });
   }, []);
 
   // Lifecycle effects

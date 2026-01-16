@@ -7,6 +7,7 @@ import {
   useLayoutEffect,
   useCallback,
   useMemo,
+  useEffectEvent,
   type ReactNode,
   type CSSProperties,
   type MouseEvent as ReactMouseEvent,
@@ -278,6 +279,23 @@ export function SwiperCustom({
   // Event Handlers
   // ============================================================================
 
+  // Stable callbacks using useEffectEvent to avoid effect re-runs
+  const onChangeEvent = useEffectEvent((newValue: string | number | SwiperCustomSlide) => {
+    if (onChange) {
+      onChange(newValue);
+    }
+  });
+
+  const onSliderMoveEvent = useEffectEvent((
+    event: MouseEvent | TouchEvent,
+    currentValue: string | number | SwiperCustomSlide,
+    index: number
+  ) => {
+    if (onSliderMove) {
+      onSliderMove(event, currentValue, index);
+    }
+  });
+
   const handleChangeStart = useCallback(
     (e: ReactMouseEvent | ReactTouchEvent) => {
       isDraggingRef.current = true;
@@ -291,6 +309,7 @@ export function SwiperCustom({
     },
     [calculateDeltaX]
   );
+
 
   // Handle slide movement during drag
   useEffect(() => {
@@ -330,17 +349,16 @@ export function SwiperCustom({
       const newDeltaX = calculateDeltaX();
       setCurrentDeltaX(newDeltaX);
 
-      if (onSliderMove) {
-        const currentSlide = slideList[sliderActiveIndexRef.current];
-        const currentValue = valueKey
-          ? currentSlide?.[valueKey]
-          : (currentSlide?.value ?? currentSlide);
-        onSliderMove(
-          e,
-          currentValue as string | number | SwiperCustomSlide,
-          sliderActiveIndexRef.current
-        );
-      }
+      // Call stable callback via useEffectEvent
+      const currentSlide = slideList[sliderActiveIndexRef.current];
+      const currentValue = valueKey
+        ? currentSlide?.[valueKey]
+        : (currentSlide?.value ?? currentSlide);
+      onSliderMoveEvent(
+        e,
+        currentValue as string | number | SwiperCustomSlide,
+        sliderActiveIndexRef.current
+      );
     };
 
     const handleChanging = () => {
@@ -389,9 +407,8 @@ export function SwiperCustom({
         const newValue = valueKey
           ? newSlide[valueKey]
           : (newSlide.value ?? newSlide);
-        if (onChange) {
-          onChange(newValue as string | number | SwiperCustomSlide);
-        }
+        // Call stable callback via useEffectEvent
+        onChangeEvent(newValue as string | number | SwiperCustomSlide);
         setSliderActiveIndex(newSliderActiveIndex);
         sliderActiveIndexRef.current = newSliderActiveIndex;
       }
@@ -415,8 +432,6 @@ export function SwiperCustom({
     slideList,
     valueKey,
     longSwipesRatio,
-    onChange,
-    onSliderMove,
     calculateDeltaX,
     getSlideXList,
     getContentWidth
