@@ -16,7 +16,7 @@
 - [x] `useDayjs.ts` ✅ OK
 - [x] `useDebounce.ts` ✅ OK
 - [x] `useEventListener.ts` ✅ useEffectEvent
-- [x] `useEventSource.ts` ✅ useEffectEvent
+- [x] `useEventSource.ts` ✅ useEffectEvent + useLayoutEffect (2026-01-17)
 - [x] `useFirebase.ts` ✅ useSyncExternalStore
 - [x] `useGTMTrack.ts` ✅ OK
 - [x] `useIntersectionObserver.ts` ✅ OK
@@ -27,8 +27,8 @@
 - [x] `useMobile.ts` ✅ useSyncExternalStore
 - [x] `useRequest/index.ts` ✅ OK
 - [x] `useSessionStorage.ts` ✅ OK
-- [x] `useWebSocket.ts` ✅ useEffectEvent
-- [x] `useSocketIoClient.ts` ✅ useEffectEvent
+- [x] `useWebSocket.ts` ✅ useEffectEvent + useLayoutEffect (2026-01-17)
+- [x] `useSocketIoClient.ts` ✅ useEffectEvent + useLayoutEffect (2026-01-17)
 - [x] `useThrottle.ts` ✅ OK
 - [x] `useTimeout.ts` ✅ useEffectEvent
 - [x] `useWebRTC.ts` ✅ useEffectEvent
@@ -48,19 +48,19 @@
 - [x] `useWindowSize.ts` ✅ useSyncExternalStore
 
 ### 維持現狀（特殊情況）
-- [x] `useCameraStream.ts` ✅ useRef 模式（callback 在暴露給外部的 async 函式中調用，無法使用 useEffectEvent）
+- [x] `useCameraStream.ts` ✅ useRef + useLayoutEffect (2026-01-17)
 
 ### 已完成（本次重構）
-- [x] `useYoutube.ts` ✅ useEffectEvent + optionsRef（將所有函式移入 Effect，經瀏覽器測試通過）
+- [x] `useYoutube.ts` ✅ useEffectEvent + useLayoutEffect (2026-01-17)
 
 ---
 
 ## 🧩 Components (高優先級)
 
 ### ⚠️ 需重構 - 多個 useState (建議 useReducer)
-- [x] `Drawer/index.tsx` ⭐ ✅ useReducer + useRef（4 個拖曳狀態合併，3 個 callback refs）
+- [x] `Drawer/index.tsx` ⭐ ✅ useReducer + useRef + useLayoutEffect（4 個拖曳狀態合併，3 個 callback refs）
 - [x] `Tabs/Bar.tsx` ⭐ ✅ useReducer x 2（6 個導航狀態 + 2 個指示器狀態，12 → 3 useState）
-- [x] `SwiperJs/index.tsx` ⭐ ✅ useRef（5 個 callback refs，移出 5 個 useCallback deps）
+- [x] `SwiperJs/index.tsx` ⭐ ✅ useRef + useLayoutEffect（17 個 callback refs，依賴陣列精簡）
 - [x] `SwiperCustom/index.tsx` ✅ useEffectEvent（2 個 callback，移出 Effect deps）
 - [x] `ScrollFetch/index.tsx` ⭐ ✅ useReducer x 3（16 → 1 useState）
 
@@ -224,6 +224,31 @@
 7. **非阻塞更新 → useTransition**: 大量資料過濾/搜尋
 8. **Effect 內部依賴優化 → useEffectEvent**: 替換 useRef + useCallback 模式
 9. **Import Type**: 檢查並修正類型導入
+10. **Callback Ref 同步 → useLayoutEffect**: 確保 refs 在繪製前更新
+
+---
+
+## 📋 審查記錄
+
+### 2026-01-17 全面審查
+
+**審查範圍**: 35 個已完成檔案（32 hooks + 3 Demo + 5 高優先級 Components）
+
+**發現的改進機會**: `useEffect` → `useLayoutEffect` for callback ref sync
+
+**已更新檔案** (7 個):
+
+| 檔案 | 改進 |
+|------|------|
+| `useWebSocket.ts` | listenersRef sync |
+| `useSocketIoClient.ts` | listenersRef sync |
+| `useCameraStream.ts` | onReadyRef, onErrorRef, optionsRef sync |
+| `useYoutube.ts` | optionsRef sync |
+| `useEventSource.ts` | reconnectRef sync |
+| `SwiperJs/index.tsx` | 17 個 callback refs sync |
+| `Drawer/index.tsx` | 3 個 callback refs sync |
+
+**原因**: `useLayoutEffect` 在瀏覽器繪製前同步執行，確保 refs 在任何用戶交互前都是最新值，避免 race condition。
 
 ---
 

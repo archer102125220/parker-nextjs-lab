@@ -3,6 +3,7 @@
 import {
   useRef,
   useEffect,
+  useLayoutEffect,
   useEffectEvent,
   useState,
   useCallback
@@ -139,8 +140,8 @@ export function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn {
   const [isConnected, setIsConnected] = useState(false);
   const [connectCount, setConnectCount] = useState(0);
 
-  // Keep listeners ref up to date
-  useEffect(() => {
+  // Keep listeners ref up to date (useLayoutEffect ensures immediate update)
+  useLayoutEffect(() => {
     listenersRef.current = listeners;
   }, [listeners]);
 

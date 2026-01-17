@@ -1,4 +1,4 @@
-import { useState, useEffect, useEffectEvent, useRef, useMemo, type RefObject } from 'react';
+import { useState, useEffect, useLayoutEffect, useEffectEvent, useRef, useMemo, type RefObject } from 'react';
 
 const UNSTARTED = -1;
 const ENDED = 0;
@@ -64,8 +64,8 @@ export function useYoutube(
   const playerRef = useRef<PlayerInterface | null>(null);
   const optionsRef = useRef(options);
 
-  // Keep optionsRef updated
-  useEffect(() => {
+  // Keep optionsRef updated (useLayoutEffect ensures immediate update)
+  useLayoutEffect(() => {
     optionsRef.current = options;
   }, [options]);
 

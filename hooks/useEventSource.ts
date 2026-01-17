@@ -1,6 +1,7 @@
 import {
   type RefObject,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   useCallback,
@@ -92,7 +93,8 @@ export function useEventSource(
   // But handleCheckConnect is called by useEffectEvents
   // Using a ref to hold reconnect allows us to call it without deps issues
   const reconnectRef = useRef(reconnect);
-  useEffect(() => {
+  // useLayoutEffect ensures ref is updated before any handlers can fire
+  useLayoutEffect(() => {
     reconnectRef.current = reconnect;
   }, [reconnect]);
 

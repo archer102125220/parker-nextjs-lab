@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   useCallback,
@@ -158,8 +159,8 @@ export function useSocketIoClient<
   const [connectCount, setConnectCount] = useState(0);
 
   const listenersRef = useRef(listeners);
-  // Keep listeners ref up to date
-  useEffect(() => {
+  // Keep listeners ref up to date (useLayoutEffect ensures immediate update)
+  useLayoutEffect(() => {
     listenersRef.current = listeners;
   }, [listeners]);
 

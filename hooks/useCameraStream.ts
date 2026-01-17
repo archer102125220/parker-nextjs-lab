@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect, useCallback, useState } from 'react';
+import { useRef, useEffect, useLayoutEffect, useCallback, useState } from 'react';
 
 export interface UseCameraStreamOptions {
   /** Enable audio stream */
@@ -63,8 +63,8 @@ export function useCameraStream(
   const onErrorRef = useRef(onError);
   const optionsRef = useRef({ audio, video, facingMode });
 
-  // Keep refs updated
-  useEffect(() => {
+  // Keep refs updated (useLayoutEffect ensures immediate update)
+  useLayoutEffect(() => {
     onReadyRef.current = onReady;
     onErrorRef.current = onError;
     optionsRef.current = { audio, video, facingMode };

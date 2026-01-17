@@ -46,6 +46,35 @@
 6.  **表單處理 → `useActionState` + `useFormStatus`**
 7.  **非阻塞 UI 更新 → `useTransition`**
 
+### 🟠 新增：Callback Ref 同步優化 (2026-01-17)
+
+8.  **Callback Ref 同步 → `useLayoutEffect`**
+
+    當使用 `useRef` 來同步 props/callback 到 ref 時，應使用 `useLayoutEffect` 而非 `useEffect`：
+
+    ```typescript
+    // ✅ 正確：使用 useLayoutEffect
+    useLayoutEffect(() => {
+      callbackRef.current = callback;
+    }, [callback]);
+
+    // ❌ 避免：使用 useEffect 可能有 race condition
+    useEffect(() => {
+      callbackRef.current = callback;
+    }, [callback]);
+    ```
+
+    **原因**：`useLayoutEffect` 在繪製前同步執行，確保 ref 在任何用戶交互前都是最新的。
+
+    **已更新的檔案**：
+    - `useWebSocket.ts` - listenersRef
+    - `useSocketIoClient.ts` - listenersRef
+    - `useCameraStream.ts` - onReadyRef, onErrorRef, optionsRef
+    - `useYoutube.ts` - optionsRef
+    - `useEventSource.ts` - reconnectRef
+    - `SwiperJs/index.tsx` - 17 個 callback refs
+    - `Drawer/index.tsx` - 3 個 callback refs
+
 ### 🔵 新增：Import Type 檢查
 
 8.  **混合 import → 分離 `import type`**
