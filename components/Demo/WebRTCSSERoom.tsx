@@ -83,26 +83,6 @@ export default function WebRTCSSERoom(): ReactNode {
     }
   }, []);
 
-  const sendCandidatesToServer = useEffectEvent((candidates: RTCIceCandidate[]) => {
-      // Logic for sending candidates
-       if (candidates.length === 0) return;
-       fetch('/api/web-rtc/candidate-list', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            roomId,
-            userId,
-            candidateList: candidates.map((c) => c.toJSON())
-          })
-        }).catch(() => console.error('Failed to send candidates'));
-  });
-  
-  // Debounce wrapper for candidates? 
-  // The original used debounce. useEffectEvent doesn't debounce.
-  // We can keep the debounce ref pattern for the *network request* if desired, 
-  // but simpler to just send or keep the ref.
-  // Actually, let's keep the debounce ref logic but call it from useEffectEvent.
-  
   const sendCandidatesDebounced = useRef(
     _debounce(async (candidates: RTCIceCandidate[], rId: string, uId: string) => {
       if (candidates.length === 0) return;
