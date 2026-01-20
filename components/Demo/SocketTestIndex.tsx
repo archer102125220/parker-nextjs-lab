@@ -65,15 +65,13 @@ export default function SocketTestIndex(): React.ReactNode {
 
       <Alert severity="info" sx={{ mb: 2, borderRadius: 2 }}>
         <strong>Socket.IO 伺服器狀態：</strong>
-        <br />
-        ✅ <strong>本地開發環境：</strong>專案已配置獨立的 Socket.IO 伺服器（預設
-        port 3002），在執行 <code>yarn dev</code> 或{' '}
+        <br />✅ <strong>本地開發環境：</strong>專案已配置獨立的 Socket.IO
+        伺服器（預設 port 3002），在執行 <code>yarn dev</code> 或{' '}
         <code>yarn dev-https</code> 時會自動啟動。
-        <br />
-        ❌ <strong>Vercel 部署環境：</strong>由於 Vercel 等 serverless
+        <br />❌ <strong>Vercel 部署環境：</strong>由於 Vercel 等 serverless
         平台不支援 WebSocket，Socket.IO
-        功能將無法運作。如需在生產環境使用，請部署獨立的 Socket.IO
-        伺服器（如 Railway、Render 等）。
+        功能將無法運作。如需在生產環境使用，請部署獨立的 Socket.IO 伺服器（如
+        Railway、Render 等）。
       </Alert>
 
       {/* <Image
@@ -86,7 +84,7 @@ export default function SocketTestIndex(): React.ReactNode {
       /> */}
       <Image
         className={styles['socket_test_page-banner']}
-        src="/img/icon/Next.jsLab.v.01.svg"
+        src="/img/icon/Next.jsLab.v.03.webp"
         alt="Socket Banner"
         width={1200}
         height={400}

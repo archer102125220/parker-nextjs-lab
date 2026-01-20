@@ -237,13 +237,16 @@ export default function DemoFaceSwapFrontend(): React.ReactNode {
     <>
       <Image
         className={style['face_swap_frontend_page-banner']}
-        src="/img/icon/Next.jsLab.v.01.webp"
+        src="/img/icon/Next.jsLab.v.03.webp"
         alt="Face Swap Banner"
         width={800}
         height={200}
       />
 
-      <Typography variant="h5" className={style['face_swap_frontend_page-title']}>
+      <Typography
+        variant="h5"
+        className={style['face_swap_frontend_page-title']}
+      >
         純前端人臉替換
       </Typography>
       <Typography
@@ -261,7 +264,10 @@ export default function DemoFaceSwapFrontend(): React.ReactNode {
       </Alert>
 
       <div className={style['face_swap_frontend_page-swap_section']}>
-        <Paper className={style['face_swap_frontend_page-swap_section-source']} sx={{ p: 2 }}>
+        <Paper
+          className={style['face_swap_frontend_page-swap_section-source']}
+          sx={{ p: 2 }}
+        >
           <Typography variant="h6" gutterBottom align="center">
             來源臉部
           </Typography>
@@ -308,14 +314,25 @@ export default function DemoFaceSwapFrontend(): React.ReactNode {
           )}
         </Paper>
 
-        <Paper className={style['face_swap_frontend_page-swap_section-target']} sx={{ p: 2 }}>
+        <Paper
+          className={style['face_swap_frontend_page-swap_section-target']}
+          sx={{ p: 2 }}
+        >
           <Typography variant="h6" gutterBottom align="center">
             目標畫面
           </Typography>
-          <div className={style['face_swap_frontend_page-swap_section-target-video_container']}>
+          <div
+            className={
+              style[
+                'face_swap_frontend_page-swap_section-target-video_container'
+              ]
+            }
+          >
             <video
               ref={videoRef}
-              className={style['face_swap_frontend_page-swap_section-target-video']}
+              className={
+                style['face_swap_frontend_page-swap_section-target-video']
+              }
               width={480}
               height={360}
               autoPlay
@@ -324,20 +341,27 @@ export default function DemoFaceSwapFrontend(): React.ReactNode {
             />
             <canvas
               ref={overlayCanvasRef}
-              className={style['face_swap_frontend_page-swap_section-target-overlay']}
+              className={
+                style['face_swap_frontend_page-swap_section-target-overlay']
+              }
               width={480}
               height={360}
             />
           </div>
         </Paper>
 
-        <Paper className={style['face_swap_frontend_page-swap_section-result']} sx={{ p: 2 }}>
+        <Paper
+          className={style['face_swap_frontend_page-swap_section-result']}
+          sx={{ p: 2 }}
+        >
           <Typography variant="h6" gutterBottom align="center">
             替換結果
           </Typography>
           <canvas
             ref={canvasRef}
-            className={style['face_swap_frontend_page-swap_section-result-canvas']}
+            className={
+              style['face_swap_frontend_page-swap_section-result-canvas']
+            }
             width={480}
             height={360}
           />

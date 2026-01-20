@@ -68,7 +68,7 @@ export default function WebCamTest(): React.ReactNode {
     <>
       <Image
         className={style['web_cam_page-banner']}
-        src="/img/icon/Next.jsLab.v.01.webp"
+        src="/img/icon/Next.jsLab.v.03.webp"
         alt="Web Cam Banner"
         width={1200}
         height={400}

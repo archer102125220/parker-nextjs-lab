@@ -17,8 +17,9 @@ import StorageIcon from '@mui/icons-material/Storage';
 import style from '@/app/[locale]/face-swap/page.module.scss';
 
 // 檢測是否為 Vercel serverless 環境
-const isVercelEnv = process.env.NEXT_PUBLIC_VERCEL === '1' || 
-                    process.env.NEXT_PUBLIC_VERCEL_ENV !== undefined;
+const isVercelEnv =
+  process.env.NEXT_PUBLIC_VERCEL === '1' ||
+  process.env.NEXT_PUBLIC_VERCEL_ENV !== undefined;
 
 export default function FaceSwapIndex(): React.ReactNode {
   const locale = useLocale();
@@ -28,7 +29,7 @@ export default function FaceSwapIndex(): React.ReactNode {
     <>
       <Image
         className={style['face_swap_page-banner']}
-        src="/img/icon/Next.jsLab.v.01.webp"
+        src="/img/icon/Next.jsLab.v.03.webp"
         alt="Face Swap Banner"
         width={800}
         height={300}
@@ -73,7 +74,11 @@ export default function FaceSwapIndex(): React.ReactNode {
         >
           <Chip
             className={style['face_swap_page-cards-card-chip']}
-            label={isVercelEnv ? t('backend.chipServerless') : t('backend.chipDeveloping')}
+            label={
+              isVercelEnv
+                ? t('backend.chipServerless')
+                : t('backend.chipDeveloping')
+            }
             color={isVercelEnv ? 'error' : 'warning'}
             size="small"
           />
@@ -111,4 +116,3 @@ export default function FaceSwapIndex(): React.ReactNode {
     </>
   );
 }
-

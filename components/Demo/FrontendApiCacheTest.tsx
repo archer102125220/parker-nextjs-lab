@@ -95,7 +95,7 @@ export default function FrontendApiCacheTest(): React.ReactNode {
 
       <Image
         className={style['frontend_api_cache_test_page-banner']}
-        src="/img/icon/Next.jsLab.v.01.webp"
+        src="/img/icon/Next.jsLab.v.03.webp"
         alt="Frontend API Cache Test Banner"
         width={1200}
         height={400}

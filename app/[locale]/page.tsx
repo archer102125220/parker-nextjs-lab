@@ -14,36 +14,111 @@ const LINK_SECTIONS = [
   {
     titleKey: 'sections.customComponents',
     links: [
-      { href: '/components', labelKey: 'links.components', descKey: 'links.componentsDesc', icon: '📦' },
-      { href: '/css-drawing', labelKey: 'links.cssDrawing', descKey: 'links.cssDrawingDesc', icon: '✏️' },
-      { href: '/directive-effects', labelKey: 'links.directiveEffects', descKey: 'links.directiveEffectsDesc', icon: '✨' },
-      { href: '/krpano-demo', labelKey: 'links.krpano', descKey: 'links.krpanoDesc', icon: '🌐' }
+      {
+        href: '/components',
+        labelKey: 'links.components',
+        descKey: 'links.componentsDesc',
+        icon: '📦'
+      },
+      {
+        href: '/css-drawing',
+        labelKey: 'links.cssDrawing',
+        descKey: 'links.cssDrawingDesc',
+        icon: '✏️'
+      },
+      {
+        href: '/directive-effects',
+        labelKey: 'links.directiveEffects',
+        descKey: 'links.directiveEffectsDesc',
+        icon: '✨'
+      },
+      {
+        href: '/krpano-demo',
+        labelKey: 'links.krpano',
+        descKey: 'links.krpanoDesc',
+        icon: '🌐'
+      }
     ]
   },
   {
     titleKey: 'sections.realtime',
     links: [
-      { href: '/web-rtc', labelKey: 'links.webRTC', descKey: 'links.webRTCDesc', icon: '📹' },
-      { href: '/socket-test', labelKey: 'links.socketIO', descKey: 'links.socketIODesc', icon: '🔗' },
-      { href: '/server-sent-event-test', labelKey: 'links.sse', descKey: 'links.sseDesc', icon: '📡' }
+      {
+        href: '/web-rtc',
+        labelKey: 'links.webRTC',
+        descKey: 'links.webRTCDesc',
+        icon: '📹'
+      },
+      {
+        href: '/socket-test',
+        labelKey: 'links.socketIO',
+        descKey: 'links.socketIODesc',
+        icon: '🔗'
+      },
+      {
+        href: '/server-sent-event-test',
+        labelKey: 'links.sse',
+        descKey: 'links.sseDesc',
+        icon: '📡'
+      }
     ]
   },
   {
     titleKey: 'sections.aiDevice',
     links: [
-      { href: '/face-swap', labelKey: 'links.faceSwap', descKey: 'links.faceSwapDesc', icon: '🎭' },
-      { href: '/web-cam', labelKey: 'links.webCam', descKey: 'links.webCamDesc', icon: '📷' },
-      { href: '/web-authn', labelKey: 'links.webAuthn', descKey: 'links.webAuthnDesc', icon: '🔐' }
+      {
+        href: '/face-swap',
+        labelKey: 'links.faceSwap',
+        descKey: 'links.faceSwapDesc',
+        icon: '🎭'
+      },
+      {
+        href: '/web-cam',
+        labelKey: 'links.webCam',
+        descKey: 'links.webCamDesc',
+        icon: '📷'
+      },
+      {
+        href: '/web-authn',
+        labelKey: 'links.webAuthn',
+        descKey: 'links.webAuthnDesc',
+        icon: '🔐'
+      }
     ]
   },
   {
     titleKey: 'sections.devTools',
     links: [
-      { href: '/firebase', labelKey: 'links.firebase', descKey: 'links.firebaseDesc', icon: '🔥' },
-      { href: '/indexeddb-demo', labelKey: 'links.indexedDB', descKey: 'links.indexedDBDesc', icon: '💾' },
-      { href: '/hooks-test', labelKey: 'links.hooks', descKey: 'links.hooksDesc', icon: '🪝' },
-      { href: '/route', labelKey: 'links.route', descKey: 'links.routeDesc', icon: '🛤️' },
-      { href: '/about', labelKey: 'links.about', descKey: 'links.aboutDesc', icon: 'ℹ️' }
+      {
+        href: '/firebase',
+        labelKey: 'links.firebase',
+        descKey: 'links.firebaseDesc',
+        icon: '🔥'
+      },
+      {
+        href: '/indexeddb-demo',
+        labelKey: 'links.indexedDB',
+        descKey: 'links.indexedDBDesc',
+        icon: '💾'
+      },
+      {
+        href: '/hooks-test',
+        labelKey: 'links.hooks',
+        descKey: 'links.hooksDesc',
+        icon: '🪝'
+      },
+      {
+        href: '/route',
+        labelKey: 'links.route',
+        descKey: 'links.routeDesc',
+        icon: '🛤️'
+      },
+      {
+        href: '/about',
+        labelKey: 'links.about',
+        descKey: 'links.aboutDesc',
+        icon: 'ℹ️'
+      }
     ]
   }
 ] as const;
@@ -54,7 +129,7 @@ type Props = {
 
 async function HomePage({ params }: Props): Promise<ReactNode> {
   const { locale } = await params;
-  
+
   // Enable static rendering - CRITICAL for next-intl 4.x
   setRequestLocale(locale);
 
@@ -70,7 +145,7 @@ async function HomePage({ params }: Props): Promise<ReactNode> {
         <section className={styles['home_page-hero']}>
           <div className={styles['home_page-hero-title']}>
             <Image
-              src="/img/icon/Next.jsLab.v.01.svg"
+              src="/img/icon/Next.jsLab.v.03.svg"
               alt="Next.js Lab"
               width={80}
               height={80}
@@ -98,9 +173,15 @@ async function HomePage({ params }: Props): Promise<ReactNode> {
                   href={link.href}
                   className={styles['home_page-card']}
                 >
-                  <span className={styles['home_page-card-icon']}>{link.icon}</span>
-                  <h3 className={styles['home_page-card-title']}>{t(link.labelKey)}</h3>
-                  <p className={styles['home_page-card-description']}>{t(link.descKey)}</p>
+                  <span className={styles['home_page-card-icon']}>
+                    {link.icon}
+                  </span>
+                  <h3 className={styles['home_page-card-title']}>
+                    {t(link.labelKey)}
+                  </h3>
+                  <p className={styles['home_page-card-description']}>
+                    {t(link.descKey)}
+                  </p>
                 </Link>
               ))}
             </div>

@@ -55,7 +55,7 @@ export default function WebRTCIndex(): React.ReactNode {
       /> */}
       <Image
         className={style['web_rtc_page-banner']}
-        src="/img/icon/Next.jsLab.v.01.svg"
+        src="/img/icon/Next.jsLab.v.03.webp"
         alt="WebRTC Banner"
         width={600}
         height={400}

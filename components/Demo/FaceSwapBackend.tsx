@@ -98,13 +98,16 @@ export default function DemoFaceSwapBackend(): React.ReactNode {
     <>
       <Image
         className={style['face_swap_backend_page-banner']}
-        src="/img/icon/Next.jsLab.v.01.webp"
+        src="/img/icon/Next.jsLab.v.03.webp"
         alt="Face Swap Banner"
         width={800}
         height={200}
       />
 
-      <Typography variant="h5" className={style['face_swap_backend_page-title']}>
+      <Typography
+        variant="h5"
+        className={style['face_swap_backend_page-title']}
+      >
         後端 AI 人臉替換
       </Typography>
       <Typography
@@ -121,7 +124,10 @@ export default function DemoFaceSwapBackend(): React.ReactNode {
       </Alert>
 
       <div className={style['face_swap_backend_page-upload_section']}>
-        <Paper className={style['face_swap_backend_page-upload_section-source']} sx={{ p: 2 }}>
+        <Paper
+          className={style['face_swap_backend_page-upload_section-source']}
+          sx={{ p: 2 }}
+        >
           <Typography variant="h6" gutterBottom align="center">
             來源臉部
           </Typography>
@@ -138,7 +144,9 @@ export default function DemoFaceSwapBackend(): React.ReactNode {
               <img
                 src={sourceImage}
                 alt="Source"
-                className={style['face_swap_backend_page-upload_section-preview']}
+                className={
+                  style['face_swap_backend_page-upload_section-preview']
+                }
               />
               <Button
                 variant="outlined"
@@ -162,13 +170,18 @@ export default function DemoFaceSwapBackend(): React.ReactNode {
               }}
               onClick={() => sourceInputRef.current?.click()}
             >
-              <CloudUploadIcon sx={{ fontSize: 48, color: 'text.secondary', mb: 1 }} />
+              <CloudUploadIcon
+                sx={{ fontSize: 48, color: 'text.secondary', mb: 1 }}
+              />
               <Typography color="text.secondary">點擊上傳來源照片</Typography>
             </Box>
           )}
         </Paper>
 
-        <Paper className={style['face_swap_backend_page-upload_section-target']} sx={{ p: 2 }}>
+        <Paper
+          className={style['face_swap_backend_page-upload_section-target']}
+          sx={{ p: 2 }}
+        >
           <Typography variant="h6" gutterBottom align="center">
             目標照片
           </Typography>
@@ -185,7 +198,9 @@ export default function DemoFaceSwapBackend(): React.ReactNode {
               <img
                 src={targetImage}
                 alt="Target"
-                className={style['face_swap_backend_page-upload_section-preview']}
+                className={
+                  style['face_swap_backend_page-upload_section-preview']
+                }
               />
               <Button
                 variant="outlined"
@@ -209,7 +224,9 @@ export default function DemoFaceSwapBackend(): React.ReactNode {
               }}
               onClick={() => targetInputRef.current?.click()}
             >
-              <CloudUploadIcon sx={{ fontSize: 48, color: 'text.secondary', mb: 1 }} />
+              <CloudUploadIcon
+                sx={{ fontSize: 48, color: 'text.secondary', mb: 1 }}
+              />
               <Typography color="text.secondary">點擊上傳目標照片</Typography>
             </Box>
           )}

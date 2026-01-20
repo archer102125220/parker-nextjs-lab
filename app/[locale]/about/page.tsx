@@ -42,7 +42,7 @@ export default async function AboutPage(
       <section className={styles.about_page}>
         <Image
           className={styles['about_page-banner']}
-          src="/img/icon/Next.jsLab.v.01.webp"
+          src="/img/icon/Next.jsLab.v.03.webp"
           alt="About Banner"
           width={1200}
           height={400}
@@ -67,7 +67,11 @@ export default async function AboutPage(
                       if (descItem.isDel) {
                         return <del key={descIndex}>{descItem.text}</del>;
                       }
-                      if (descItem.isLink && descItem.href && descItem.linkText) {
+                      if (
+                        descItem.isLink &&
+                        descItem.href &&
+                        descItem.linkText
+                      ) {
                         return (
                           <p key={descIndex}>
                             {descItem.text}{' '}

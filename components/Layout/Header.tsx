@@ -73,7 +73,7 @@ export function Header(props: HeaderProps): ReactNode {
           nonce={nonce}
         >
           <Image
-            src="/img/icon/Next.jsLab.v.01.svg"
+            src="/img/icon/Next.jsLab.v.03.webp"
             alt="Parker's Next.js Lab"
             width={50}
             height={50}

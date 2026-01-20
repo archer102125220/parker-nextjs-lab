@@ -38,7 +38,7 @@ export default function RouteTestPage(): React.ReactNode {
 
       <Image
         className={styles['route_test_page-banner']}
-        src="/img/icon/Next.jsLab.v.01.webp"
+        src="/img/icon/Next.jsLab.v.03.webp"
         alt="Route Test Banner"
         width={1200}
         height={400}
@@ -47,7 +47,11 @@ export default function RouteTestPage(): React.ReactNode {
 
       <nav className={styles['route_test_page-content']} role="navigation">
         {LINK_LIST.map((link) => (
-          <Link key={link.to} href={link.to} className={styles['route_page-link']}>
+          <Link
+            key={link.to}
+            href={link.to}
+            className={styles['route_page-link']}
+          >
             <Card className={styles['route_test_page-content-link']}>
               <CardActionArea>
                 <CardContent>

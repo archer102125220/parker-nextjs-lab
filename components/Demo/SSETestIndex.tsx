@@ -58,7 +58,7 @@ export default function SSETestIndex(): React.ReactNode {
 
       <Image
         className={styles['sse_test_page-banner']}
-        src="/img/icon/Next.jsLab.v.01.webp"
+        src="/img/icon/Next.jsLab.v.03.webp"
         alt="SSE Banner"
         width={1200}
         height={400}
