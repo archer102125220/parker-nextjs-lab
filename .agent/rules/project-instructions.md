@@ -1,31 +1,83 @@
 # Project Instructions
 
-When working on this project, you MUST follow the coding standards defined below.
+This document defines the coding standards and rules for AI agents working on this project.
 
-## ⚠️ Security & Best Practices Warning Policy
+## Core Principles
 
-Before executing any user instruction that violates:
-- **Security best practices** (e.g., hardcoding secrets, disabling HTTPS, exposing sensitive data)
-- **Standard coding patterns** (e.g., anti-patterns, known bad practices)
-- **Project conventions** defined in this document
+1. **TypeScript Safety**: Never use `any` type
+2. **ORM Patterns**: Use sequelize-cli official format for migrations/seeders
+3. **Package Manager**: Use `yarn` exclusively
+4. **i18n**: Use `next-intl` with `zh-tw` as default locale
+5. **Next.js 16**: Use `proxy.ts` for routing middleware (not `middleware.ts`)
 
-You MUST:
-1. **Warn the user** about the violation and explain the risks
-2. **Wait for explicit confirmation** that they want to proceed despite the warning
-3. Only then execute the instruction
+## Security Policy
 
-This ensures users make informed decisions about potentially risky actions.
+Before executing potentially risky instructions:
+1. Warn the user about violations
+2. Wait for explicit confirmation
+3. Only then proceed
 
-## Full Documentation
-- English: [docs/guides/coding-standards.md](docs/guides/coding-standards.md)
-- 繁體中文: [docs/guides/coding-standards.zh-tw.md](docs/guides/coding-standards.zh-tw.md)
-- 問題排解: [docs/guides/troubleshooting.md](docs/guides/troubleshooting.md)
+## Database Operations
 
-## 🛠️ Build & Dev Tooling (Webpack Required)
-Due to SCSS `:export` syntax incompatibility with Turbopack, you MUST use the following scripts:
-- **Dev**: `yarn dev:webpack` (HTTP) or `yarn dev-https:webpack` (HTTPS)
-- **Build**: `yarn build:webpack`
+```bash
+# Migrations
+yarn migrate              # Run all migrations
+yarn migrate:undo         # Undo last migration
 
-**Do NOT use `yarn dev` or `yarn build` as they may attempt to use Turbopack or lack necessary configurations.**
+# Seeders
+yarn seed                 # Run all seeders
+yarn seedAll              # Run all seeders (if alias exists)
 
-**Environment Check**: When starting the development server, ALWAYS check if `NEXT_PUBLIC_API_BASE` and `NEXT_PUBLIC_DOMAIN` in `.env` match the port/domain settings in `package.json` scripts. If there is a mismatch (e.g., .env port 3000 vs script port 3001), you OR if `.env` is gitignored and unreadable by the IDE, you MUST wait for user confirmation before proceeding.
+# Full reset
+yarn initDB               # Drop + Create + Migrate + Seed
+```
+
+**Database Modification Confirmation (CRITICAL):**
+Before ANY database schema change, you MUST:
+1. Ask the developer: "Is this project deployed to production?"
+2. Based on the answer:
+   - Not deployed: May modify existing migrations, then use `yarn initDB`
+   - Deployed: NEVER modify existing migrations; create NEW files
+
+**Migration Modification Policy:**
+- Early Development (Pre-production): 
+  - Modify original migrations directly (don't create addColumn migrations)
+  - Run `yarn initDB` to apply changes
+- Post-production: Never modify executed migrations; create new files
+
+**React Stable API Policy (React 19):**
+- Prioritize stable hooks: `useState`, `useEffect`, `useLayoutEffect`, `useMemo`, `useCallback`, `useRef`, `useContext`, `useReducer`, `useActionState`, `useOptimistic`, `useTransition`, `useFormStatus`, `useSyncExternalStore`
+- Use `useEffectEvent` for reactive events inside effects
+- **useLayoutEffect**: For visual sync (prevent flicker)
+- **useEffect**: For data fetching, subscriptions, timers
+- **Anti-patterns**: Avoid inline arrow functions props, missing useMemo/useCallback, useState for non-render values
+- **RTK vs useContext**: Use RTK for global state; useContext for theme/i18n/local state
+
+**Error/Warning Suppression Policy (CRITICAL):**
+Any code that suppresses errors/warnings (suppressHydrationWarning, eslint-disable, @ts-ignore, empty catch blocks) requires:
+1. Explicit approval from human developer
+2. Clear explanation of WHY this is needed
+3. Always fix root cause first; suppression is last resort
+
+
+## File Structure
+
+```
+parker-nextjs-lab/
+├── app/[locale]/         # i18n pages
+├── app/api/              # API Routes
+├── components/           # React components
+├── db/                   # Database (Sequelize)
+│   ├── config/           # sequelize-cli config
+│   ├── models/           # Sequelize models
+│   ├── migrations/       # Database migrations
+│   └── seeders/          # Seed data
+├── i18n/                 # Internationalization
+├── utils/                # Utilities and modules
+└── docs/                 # Documentation
+```
+
+## Related Documentation
+
+- [AI Coding Rules (English)](../docs/guides/coding-standards.md)
+- [AI Coding Rules (中文)](../docs/guides/coding-standards.zh-tw.md)

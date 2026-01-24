@@ -1,0 +1,50 @@
+---
+description: Project coding standards and conventions
+globs: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
+alwaysApply: true
+---
+
+# Project Coding Standards
+
+## TypeScript
+- Never use `any` type - use generics, `unknown`, or precise types
+- Use `as unknown as Type` for assertions
+- Use inline type imports: `import { useState, type ReactNode } from 'react'`
+
+## Tailwind CSS
+- Use `classNames()` from `@/utils/classNames` for conditional classes
+
+## Backend ORM
+- Use `sequelize-cli` official format for migrations and seeders
+- Run migrations: `yarn migrate`
+- Run seeders: `yarn seed`
+- **DB Modification Confirmation:** Before ANY schema change, ask "Is this project deployed to production?" → Not deployed = modify + `yarn initDB`; Deployed = create NEW migrations
+- **Migration Policy:** Early dev = modify original migrations directly (not addColumn) + `yarn initDB`; Post-prod = create new files
+
+## React/Next.js (React 19) (CRITICAL)
+- **Stable APIs ONLY**: useState, useEffect, useLayoutEffect, useMemo, useCallback, useRef, useContext, useReducer, useActionState, useOptimistic, useTransition, useFormStatus, useSyncExternalStore, useId, useDebugValue, useInsertionEffect
+- **Use `useEffectEvent`** for reactive events inside effects
+- **useLayoutEffect**: Visual sync (sliders, position)
+- **useEffect**: Data fetching, subscriptions, timers
+- ❌ **Anti-patterns**: 
+  - Inline arrow fn to memoized children → `useCallback`
+  - Recalculating every render → `useMemo`
+  - `useState` for non-render values → `useRef`
+- **RTK vs useContext**: RTK for global/async/persisted state; useContext for theme/i18n/local state
+
+## i18n (next-intl)
+- Default locale: `zh-tw`
+- Supported locales: `zh-tw`, `en`
+- Call `setRequestLocale(locale)` before `getTranslations` in Server Components
+
+## Package Manager
+- Use `yarn` for all package operations
+
+## Lint Comments
+- NEVER add `eslint-disable` or `@ts-ignore` without explicit user instruction
+
+## Error/Warning Suppression (CRITICAL)
+- Any code that suppresses errors (suppressHydrationWarning, eslint-disable, @ts-ignore, empty catch blocks, as any) requires:
+  1. Explicit approval from human developer
+  2. Clear explanation of WHY
+  3. Always fix root cause first

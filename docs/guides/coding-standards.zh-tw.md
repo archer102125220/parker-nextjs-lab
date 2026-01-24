@@ -575,3 +575,94 @@ Render → Commit → [useLayoutEffect] → Paint → [useEffect]
 
 **環境檢查**：啟動開發伺服器時，**務必**檢查 `.env` 中的 `NEXT_PUBLIC_API_BASE` 和 `NEXT_PUBLIC_DOMAIN` 設定是否與 `package.json` 中的啟動指令一致（特別是埠號）。如果不一致（例如：.env 使用 3000 但指令使用 3001），或當 `.env` 被 gitignore 且 IDE 無法讀取時，在此之前**必須**詢問使用者是否確認使用當前 `.env` 設定。
 
+
+### 5.6 Server Components vs Client Components (強制)
+
+**核心原則**：預設使用 Server Components，只在需要時才使用 Client Components。
+
+#### 何時使用 Server Components（預設）
+
+| 場景 | 原因 |
+|------|------|
+| 資料獲取 | 減少客戶端 bundle，更快載入 |
+| 後端資源 | 直接查詢資料庫、讀取檔案 |
+| 敏感資料 | API keys、tokens 不暴露 |
+| 靜態內容 | 無互動的 UI |
+
+#### 何時使用 Client Components（`'use client'`）
+
+| 場景 | 原因 |
+|------|------|
+| 互動功能 | onClick、onChange 等事件 |
+| Hooks | useState、useEffect、useContext |
+| 瀏覽器 API | localStorage、window |
+| 第三方客戶端套件 | 依賴 window 的 library |
+
+#### 最佳實踐
+
+1. **將 `'use client'` 下推到葉節點元件** - 不要將整個頁面標記為 client
+2. **Server 獲取，Client 渲染** - 在 Server Component 獲取資料，傳遞給 Client
+3. **使用 children 模式** - Server 可包裹 Client，Client 可透過 children 包裹 Server
+
+---
+
+## 6. 資料庫規範
+
+### 6.1 後端 ORM 最佳實踐 (強制)
+
+實作資料庫操作時，**務必優先採用**：
+
+1. **官方 ORM 模式** - 使用 ORM 套件的官方文件做法
+2. **社群最佳實踐** - 若官方文件不足，遵循社群公認的最佳實踐
+3. **自訂實作** - 僅在沒有官方或社群模式時才自行撰寫
+
+#### ⚠️ 資料庫修改確認 (關鍵)
+
+在進行任何資料庫結構變更（migrations、model 變更、資料表修改）之前，你必須：
+
+1. **詢問開發者**：「專案是否已部署上線？」
+2. **根據回答**：
+   - **未部署**：可修改現有 migration，然後執行 `yarn initDB` 或 `yarn migrate:undo` + `yarn migrate`
+   - **已部署**：禁止修改現有 migration，必須建立新的 migration 檔案
+
+適用於：建立資料表、新增/移除欄位、變更型別、新增索引等
+
+#### Migrations & Seeders
+- 使用 `sequelize-cli` 透過 `yarn sequelize` 或 `yarn sequelize:ts`
+- **重要**：sequelize-cli 預設生成 `.js` 檔案，你必須將其轉換為 `.ts` 檔案並加上正確型別
+- 位置：`db/migrations/`, `db/seeders/`
+- 指令：`yarn migrate`, `yarn seed`, `yarn initDB`
+- **Migration 修改策略**：
+  - **開發階段 (尚未上線)**：
+    - 直接修改原始 migration，而非建立新的 `addColumn` migration
+    - 將新欄位加入原本的 `createTable` migration
+    - 執行 `yarn initDB` 套用變更
+  - **上線後**：禁止修改已執行的 migration，必須建立新的 migration 檔案
+
+---
+
+## 7. 禁止使用腳本修改程式碼 (嚴重)
+
+**絕對禁止：使用任何自動化腳本 (sed, awk, powershell script, batch script 等) 直接修改程式碼檔案。**
+
+### 原因
+- 腳本只改變文字，不理解上下文或 import
+- 2026-01-23 事故：`sed` 改變 `React.FormEvent` → `FormEvent` 但忘記 import → 編譯錯誤
+
+### ✅ 允許的做法
+- 使用 AI 工具：`replace_file_content`, `multi_replace_file_content`
+- **每次修改都必須驗證 import 語句是否正確**
+
+### ❌ 禁止的做法
+- `sed`, `awk`, `perl`, `powershell -Command`, `find ... -exec`
+- 任何文字處理工具的批量替換功能
+
+### 例外流程
+若腳本使用是**絕對必要**：
+1. **必須先取得人類開發者明確批准**
+2. 必須提供完整的腳本內容供審核
+3. 必須說明為何手動工具無法完成
+4. 只有在開發者批准後才能執行
+
+### 謹記
+**腳本是盲目的，AI 應該是有智慧的。**

@@ -154,6 +154,100 @@ async function Page({ params }: Props) {
 - **Do NOT use**: `yarn dev` or `yarn build` (Turbopack default)
 - **Environment Check**: When starting the development server, ALWAYS check if `NEXT_PUBLIC_API_BASE` and `NEXT_PUBLIC_DOMAIN` in `.env` match the port/domain settings in `package.json` scripts. If there is a mismatch (e.g., .env port 3000 vs script port 3001), OR if `.env` is gitignored and unreadable by the IDE, you MUST wait for user confirmation before proceeding.
 
+## Server Components vs Client Components (MANDATORY)
+
+**Core Principle**: Default to Server Components, use Client Components only when needed.
+
+### When to use Server Components (default)
+
+| Scenario | Reason |
+|----------|--------|
+| Data fetching | Reduces client bundle, faster load |
+| Backend resources | Direct DB queries, file access |
+| Sensitive data | API keys, tokens not exposed |
+| Static content | Non-interactive UI |
+
+### When to use Client Components (`'use client'`)
+
+| Scenario | Reason |
+|----------|--------|
+| Interactivity | onClick, onChange events |
+| Hooks | useState, useEffect, useContext |
+| Browser APIs | localStorage, window |
+| Third-party client libs | Libraries that depend on window |
+
+### Best Practices
+
+1. **Push `'use client'` to leaf components** - Don't mark entire pages as client
+2. **Server fetches, Client renders** - Fetch data in Server Component, pass to Client
+3. **Use children pattern** - Server can wrap Client which wraps Server via children
+
+---
+
+## Backend ORM Best Practices (MANDATORY)
+
+When implementing database operations, **always prioritize**:
+1. **Official ORM patterns** - Use sequelize-cli official approach
+2. **Community best practices** - Well-established community patterns
+3. **Custom implementation** - Only if no official pattern exists
+
+### ⚠️ Database Modification Confirmation (CRITICAL)
+
+**Before ANY database schema change** (migrations, model changes, table alterations), you MUST:
+
+1. **Ask the human developer**: "專案是否已部署上線？(Is this project deployed to production?)"
+2. **Based on the answer**:
+   - **未部署 (Not deployed)**: May modify existing migrations, then use `yarn initDB` or `yarn migrate:undo` + `yarn migrate`
+   - **已部署 (Deployed)**: NEVER modify existing migrations; always create NEW migration files
+
+This applies to:
+- Creating new tables
+- Adding/removing columns
+- Changing column types or constraints
+- Adding/removing indexes
+- Any schema modifications
+
+### Migrations & Seeders
+- Use `sequelize-cli` via `yarn sequelize` or `yarn sequelize:ts`
+- **IMPORTANT**: sequelize-cli generates `.js` files by default. Convert to `.ts` with proper type annotations
+- Location: `db/migrations/`, `db/seeders/`
+- Commands: `yarn migrate`, `yarn seed`, `yarn initDB`
+- **Migration Modification Policy:**
+  - **Early Development (Pre-production)**: 
+    - Modify original migrations directly instead of creating new `addColumn` migrations
+    - Add new columns to the original `createTable` migration
+    - Run `yarn initDB` (or equivalent reset sequence) to apply changes
+  - **Post-production**: Never modify executed migrations; create new migration files
+
+---
+
+## No Scripts for Code Refactoring (⚠️ CRITICAL)
+
+**ABSOLUTELY FORBIDDEN: Using automated scripts (sed, awk, powershell, batch scripts) to modify code files.**
+
+### Why
+- Scripts only change text, they don't understand context or imports
+- 2026-01-23 incident: `sed` changed `React.FormEvent` → `FormEvent` but forgot imports → compilation errors
+
+### ✅ Allowed
+- Use AI tools: `replace_file_content`, `multi_replace_file_content`
+- MUST verify imports are correct after every change
+
+### ❌ Forbidden
+- `sed`, `awk`, `perl`, `powershell -Command`, `find ... -exec`
+- Any batch text processing
+
+### Exception
+If absolutely necessary:
+1. Get explicit human approval FIRST
+2. Show complete script for review
+3. Explain why manual tools can't do it
+
+### Remember
+**Scripts are blind. AI should be intelligent.**
+
+---
+
 ## Full Documentation
 - English: [docs/guides/coding-standards.md](docs/guides/coding-standards.md)
 - 繁體中文: [docs/guides/coding-standards.zh-tw.md](docs/guides/coding-standards.zh-tw.md)
