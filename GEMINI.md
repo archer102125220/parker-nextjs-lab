@@ -23,6 +23,14 @@ This ensures users make informed decisions about potentially risky actions.
 - Use `as unknown as Type` for assertions, NEVER `as any`
 - Use **inline type imports**: `import { useState, type ReactNode } from 'react'`
 
+### Runtime Data Validation (Strict)
+- **String**: Use `if (str !== '')` instead of `if (str)`
+- **Number**: Use `typeof num === 'number'` or `Number.isFinite(num)` instead of `if (num)`
+- **Object**: Use `typeof obj === 'object' && obj !== null` instead of `if (obj)`
+- **Class**: Use `if (obj instanceof MyClass)` for specific instances
+- **Array**: Use `Array.isArray(arr) && arr.length > 0` instead of `if (arr)`
+- **Equality**: ALWAYS use `===` and `!==`
+
 ### CSS/SCSS Naming (Modified BEM)
 - **Block**: `.countdown` (Single word)
 - **Element**: `.countdown-title` (hyphen `-` separates Block-Element)
@@ -195,10 +203,10 @@ When implementing database operations, **always prioritize**:
 
 **Before ANY database schema change** (migrations, model changes, table alterations), you MUST:
 
-1. **Ask the human developer**: "專案是否已部署上線？(Is this project deployed to production?)"
+1. **Ask the human developer**: "Is this project deployed to production?"
 2. **Based on the answer**:
-   - **未部署 (Not deployed)**: May modify existing migrations, then use `yarn initDB` or `yarn migrate:undo` + `yarn migrate`
-   - **已部署 (Deployed)**: NEVER modify existing migrations; always create NEW migration files
+   - **Not deployed**: May modify existing migrations, then use `yarn initDB` or `yarn migrate:undo` + `yarn migrate`
+   - **Deployed**: NEVER modify existing migrations; always create NEW migration files
 
 This applies to:
 - Creating new tables

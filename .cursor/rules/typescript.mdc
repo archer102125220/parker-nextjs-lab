@@ -1,5 +1,5 @@
 ---
-description: TypeScript 型別安全規範
+description: TypeScript Type Safety Rules
 globs: ["**/*.ts", "**/*.tsx"]
 alwaysApply: true
 ---

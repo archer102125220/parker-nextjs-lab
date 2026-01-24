@@ -1,5 +1,5 @@
 ---
-description: 內聯樣式使用規範
+description: Inline Styles Rules
 globs: ["**/*.tsx", "**/*.jsx"]
 alwaysApply: true
 ---

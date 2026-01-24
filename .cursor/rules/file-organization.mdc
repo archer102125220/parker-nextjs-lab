@@ -1,5 +1,5 @@
 ---
-description: 檔案組織與樣式放置規範
+description: File Organization and Style Location Rules
 globs: ["**/*.scss", "**/*.tsx", "**/*.ts"]
 alwaysApply: true
 ---

@@ -27,6 +27,20 @@ const element = document.getElementById('id') as unknown as CustomElement;
 
 ---
 
+### 1.2 執行時期資料驗證 (嚴格)
+
+為確保穩健性，請始終根據變數的初始狀態使用嚴格的型別檢查。
+
+| 型別 | 禁止使用 | 務必使用 |
+|------|----------|----------|
+| **字串** | `if (str)` | `if (str !== '')` |
+| **數字** | `if (num)` | `typeof num === 'number'`, `num !== 0`, `Number.isFinite(num)` |
+| **物件** | `if (obj)` | `typeof obj === 'object' && obj !== null`<br>`if (obj instanceof MyClass)` |
+| **陣列** | `if (arr)` | `Array.isArray(arr) && arr.length > 0` |
+| **相等性** | `==`, `!=` | `===`, `!==` |
+
+---
+
 ## 2. CSS/SCSS 規範
 
 ### 2.1 CSS 屬性順序 (強制)

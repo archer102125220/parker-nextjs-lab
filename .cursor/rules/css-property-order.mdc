@@ -1,5 +1,5 @@
 ---
-description: CSS 屬性順序規範
+description: CSS Property Order Rules
 globs: ["**/*.scss", "**/*.css", "**/*.module.scss"]
 alwaysApply: true
 ---

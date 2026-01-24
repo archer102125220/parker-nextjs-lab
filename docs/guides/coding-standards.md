@@ -25,6 +25,18 @@ function processData<T extends { value: unknown }>(data: T) { }
 const element = document.getElementById('id') as unknown as CustomElement;
 ```
 
+### 1.2 Runtime Data Validation (Strict)
+
+To ensure robustness, always use strict type checks based on the variable's initialization state.
+
+| Type | Do NOT Use | MUST Use |
+|------|------------|----------|
+| **String** | `if (str)` | `if (str !== '')` |
+| **Number** | `if (num)` | `typeof num === 'number'`, `num !== 0`, `Number.isFinite(num)` |
+| **Object** | `if (obj)` | `typeof obj === 'object' && obj !== null`<br>`if (obj instanceof MyClass)` |
+| **Array** | `if (arr)` | `Array.isArray(arr) && arr.length > 0` |
+| **Equality** | `==`, `!=` | `===`, `!==` |
+
 ---
 
 ## 2. CSS/SCSS Standards

@@ -1,5 +1,5 @@
 ---
-description: CSS/SCSS 命名規範 (Modified BEM)
+description: CSS/SCSS Naming Convention (Modified BEM)
 globs: ["**/*.scss", "**/*.css", "**/*.module.scss"]
 alwaysApply: true
 ---
@@ -152,6 +152,7 @@ Only when the class name has **clear semantic meaning** (not just describing app
 // ❌ WRONG - Orphaned classes
 .hooks_test_page { }
 .description { }
+```
 
 ## Style Reuse Strategy (Strict)
 
@@ -163,4 +164,3 @@ Only when the class name has **clear semantic meaning** (not just describing app
 
 - Class names MUST generally reflect the DOM containment hierarchy if it aids context.
 - Example: If `group` is inside `scroll_area`, it should be named `scroll_area-group`, not just `group` (unless `group` is a top-level independent abstraction).
-```
