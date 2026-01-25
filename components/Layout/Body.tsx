@@ -15,6 +15,7 @@ import { FirebaseInit } from '@/components/FirebaseInit';
 
 import { NotificationPermission } from '@/components/NotificationPermission';
 import { GoTop } from '@/components/GoTop';
+import { NonceProvider } from '@/components/Providers/NonceProvider';
 
 export type BodyProps = {
   children: ReactNode;
@@ -30,38 +31,40 @@ export function Body(props: BodyProps): ReactNode {
   return (
     <body>
       <NextIntlClientProvider locale={locale} messages={messages}>
-        <ReduxInit params={params} nonce={nonce}>
-          <MuiCacheProvider nonce={nonce}>
-            <MuiThemeProvider>
-              <AxiosInit apiBase={process.env.NEXT_PUBLIC_API_BASE} />
-              <GAInit
-                gaId={process.env.NEXT_PUBLIC_GA_ID || ''}
-                nonce={nonce}
-              />
-              <GTMInit
-                gtmId={process.env.NEXT_PUBLIC_GTM_ID || ''}
-                nonce={nonce}
-              />
-              <FirebaseInit
-                apiKey={process.env.NEXT_PUBLIC_FIREBASE_API_KEY || ''}
-                authDomain="parker-nextjs-lab.firebaseapp.com"
-                projectId="parker-nextjs-lab"
-                storageBucket="parker-nextjs-lab.firebasestorage.app"
-                messagingSenderId={
-                  process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID || ''
-                }
-                appId={process.env.NEXT_PUBLIC_APP_ID || ''}
-                measurementId={process.env.NEXT_PUBLIC_GA_ID || ''}
-              />
-              <Analytics />
-              <SpeedInsights />
-              <NotificationPermission />
-              {children}
+        <NonceProvider nonce={nonce}>
+          <ReduxInit params={params} nonce={nonce}>
+            <MuiCacheProvider nonce={nonce}>
+              <MuiThemeProvider>
+                <AxiosInit apiBase={process.env.NEXT_PUBLIC_API_BASE} />
+                <GAInit
+                  gaId={process.env.NEXT_PUBLIC_GA_ID || ''}
+                  nonce={nonce}
+                />
+                <GTMInit
+                  gtmId={process.env.NEXT_PUBLIC_GTM_ID || ''}
+                  nonce={nonce}
+                />
+                <FirebaseInit
+                  apiKey={process.env.NEXT_PUBLIC_FIREBASE_API_KEY || ''}
+                  authDomain="parker-nextjs-lab.firebaseapp.com"
+                  projectId="parker-nextjs-lab"
+                  storageBucket="parker-nextjs-lab.firebasestorage.app"
+                  messagingSenderId={
+                    process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID || ''
+                  }
+                  appId={process.env.NEXT_PUBLIC_APP_ID || ''}
+                  measurementId={process.env.NEXT_PUBLIC_GA_ID || ''}
+                />
+                <Analytics />
+                <SpeedInsights />
+                <NotificationPermission />
+                {children}
 
-              <GoTop />
-            </MuiThemeProvider>
-          </MuiCacheProvider>
-        </ReduxInit>
+                <GoTop />
+              </MuiThemeProvider>
+            </MuiCacheProvider>
+          </ReduxInit>
+        </NonceProvider>
       </NextIntlClientProvider>
     </body>
   );

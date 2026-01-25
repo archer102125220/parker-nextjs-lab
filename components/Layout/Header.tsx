@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, type ReactNode } from 'react';
+import { useMemo, useCallback, type ReactNode } from 'react';
 import Image from 'next/image';
 import type { SxProps } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,6 +16,8 @@ import { GoBack } from '@/components/Layout/GoBack';
 import { PageLoading } from '@/components/PageLoading';
 import { Message } from '@/components/Message';
 
+import { useNonce } from '@/components/Providers/NonceProvider';
+
 import './header.scss';
 
 interface HeaderProps {
@@ -27,6 +29,7 @@ interface HeaderProps {
 export function Header(props: HeaderProps): ReactNode {
   // const { className, nonce } = props;
   const { className, nonce: _nonce, sx } = props;
+  const contextNonce = useNonce();
 
   const dispatch = useAppDispatch();
 
@@ -35,6 +38,11 @@ export function Header(props: HeaderProps): ReactNode {
   const loading = useAppSelector<boolean>((state) => state.system.loading);
   const messageState = useAppSelector<messageType>(
     (state) => state.system.message
+  );
+
+  const finalNonce = useMemo(
+    () => _nonce || contextNonce || nonce,
+    [nonce, contextNonce, _nonce]
   );
 
   const resetMessageState = useCallback(
@@ -51,15 +59,21 @@ export function Header(props: HeaderProps): ReactNode {
       aria-label="Main navigation"
       className={`header-toolbar ${className || ''}`}
       sx={sx}
+      nonce={finalNonce}
     >
-      <PageLoading nonce={nonce} loading={loading} />
-      <GoBack nonce={nonce} />
+      <PageLoading nonce={finalNonce} loading={loading} />
+      <GoBack nonce={finalNonce} />
       <Message
-        nonce={nonce}
+        nonce={finalNonce}
         messageState={messageState}
         resetMessageState={resetMessageState}
       />
-      <Typography variant="h6" component="div" sx={{ flex: 1 }}>
+      <Typography
+        variant="h6"
+        component="div"
+        sx={{ flex: 1 }}
+        nonce={finalNonce}
+      >
         <LinkBox
           href="/"
           className="header-title"
@@ -70,7 +84,7 @@ export function Header(props: HeaderProps): ReactNode {
             flexDirection: 'row',
             alignItems: 'center'
           }}
-          nonce={nonce}
+          nonce={finalNonce}
         >
           <Image
             src="/img/icon/Next.jsLab.v.03.webp"

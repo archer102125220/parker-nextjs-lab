@@ -1,7 +1,9 @@
 'use client';
-import { useState, useEffect, type ReactNode } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
+
+import { useNonce } from '@/components/Providers/NonceProvider';
 
 interface PageLoadingProps {
   loading: boolean;
@@ -10,15 +12,12 @@ interface PageLoadingProps {
 
 export function PageLoading(props: Readonly<PageLoadingProps>): ReactNode {
   const { loading = false, nonce } = props;
+  const contextNonce = useNonce();
 
-  const [clientNonce, setClientNonce] = useState<string>('');
-
-  useEffect(() => {
-    if (typeof nonce === 'string' && nonce !== '') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setClientNonce(nonce);
-    }
-  }, [nonce]);
+  const finalNonce = useMemo(
+    () => nonce || contextNonce,
+    [nonce, contextNonce]
+  );
 
   return loading === true ? (
     <Box
@@ -30,9 +29,9 @@ export function PageLoading(props: Readonly<PageLoadingProps>): ReactNode {
         right: '0',
         zIndex: 100
       }}
-      nonce={clientNonce}
+      nonce={finalNonce}
     >
-      <LinearProgress color="primary" nonce={clientNonce} />
+      <LinearProgress color="primary" nonce={finalNonce} />
     </Box>
   ) : (
     <></>

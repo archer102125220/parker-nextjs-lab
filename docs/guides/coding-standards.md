@@ -597,6 +597,38 @@ Due to SCSS `:export` syntax incompatibility with Turbopack, you MUST use the fo
 2. **Server fetches, Client renders** - Fetch data in Server Component, pass to Client
 3. **Use children pattern** - Server can wrap Client which wraps Server via children
 
+
+### 5.7 Hydration Strategy and State Management (CRITICAL)
+
+For critical data that affects **Initial Render** (such as `nonce`, theme settings, locale), you **MUST** use **Props** or **Context** for passing data, instead of relying solely on Redux.
+
+#### Why not just Redux?
+
+Redux state initialization on the Client often happens slightly later than React's Hydration, or starts with an "empty" initial state. This leads to:
+
+1. **Server Side**: HTML contains correct data (e.g., `nonce="xyz"`).
+2. **Client Side (Hydration)**: Redux is not yet synced, using initial value (e.g., `nonce=""`).
+3. **Result**: React detects attribute mismatch and throws **Hydration Mismatch Error**.
+
+#### Correct Approach
+
+| Data Type | Recommended Method | Reason |
+|-----------|--------------------|--------|
+| **Critical Data** (Nonce, Locale) | **Props / Context** | Ensures Server HTML and Client Initial Render match perfectly |
+| **Interactive Data** (User, Cart) | **Redux / React Query** | Can be loaded or updated after Hydration |
+
+**Example (Correct - Using Context for synchronization):**
+
+```tsx
+// Server Component (Layout)
+<NonceProvider nonce={nonce}>
+  {children}
+</NonceProvider>
+
+// Client Component
+const nonce = useNonce(); // Gets the correct value during the very first render
+```
+
 ---
 
 ## 6. Database Standards

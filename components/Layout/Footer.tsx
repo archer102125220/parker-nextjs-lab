@@ -1,10 +1,10 @@
 'use client';
-import type { ReactNode } from 'react';
-import { useState, useEffect } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import { Link } from '@/i18n/navigation';
 
 import { Box, Typography, BoxProps } from '@mui/material';
 import { useAppSelector } from '@/store';
+import { useNonce } from '@/components/Providers/NonceProvider';
 
 import './footer.scss';
 
@@ -14,19 +14,17 @@ interface FooterProps extends BoxProps {
 
 export function Footer(props: FooterProps): ReactNode {
   const { nonce: _nonce, ...boxProps } = props;
+  const contextNonce = useNonce();
 
   const nonce = useAppSelector<string>((state) => state.system.nonce);
+
+  const finalNonce = useMemo(
+    () => _nonce || contextNonce || nonce,
+    [nonce, contextNonce, _nonce]
+  );
   const systemName = useAppSelector<string>((state) => state.system.systemName);
 
   // console.log(JSON.stringify({ FooterNonce: nonce, _nonce }));
-  const [clientNonce, setClientNonce] = useState<string>('');
-
-  useEffect(() => {
-    if (typeof nonce === 'string' && nonce !== '') {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      setClientNonce(nonce);
-    }
-  }, [nonce]);
 
   return (
     <Box
@@ -41,7 +39,7 @@ export function Footer(props: FooterProps): ReactNode {
             ? theme.palette.grey[200]
             : theme.palette.grey[800]
       }}
-      nonce={clientNonce}
+      nonce={finalNonce}
       {...boxProps}
     >
       <div className="footer-content">
@@ -50,7 +48,7 @@ export function Footer(props: FooterProps): ReactNode {
           color="text.secondary"
           align="center"
           className="footer-content-text"
-          nonce={clientNonce}
+          nonce={finalNonce}
           sx={{ mb: 1 }}
         >
           © {new Date().getFullYear()} {systemName}
@@ -60,7 +58,7 @@ export function Footer(props: FooterProps): ReactNode {
           color="text.secondary"
           align="center"
           className="footer-content-link_list"
-          nonce={clientNonce}
+          nonce={finalNonce}
         >
           <Link href="/about" className="footer-content-link_list-link">
             關於本站

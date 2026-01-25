@@ -618,6 +618,38 @@ Render → Commit → [useLayoutEffect] → Paint → [useEffect]
 2. **Server 獲取，Client 渲染** - 在 Server Component 獲取資料，傳遞給 Client
 3. **使用 children 模式** - Server 可包裹 Client，Client 可透過 children 包裹 Server
 
+
+### 5.7 Hydration 策略與狀態管理 (關鍵)
+
+對於影響**初次渲染 (Initial Render)** 結果的關鍵資料（如 `nonce`、主題設定、語系），**必須**使用 **Props** 或 **Context** 傳遞，而不能只依賴 Redux。
+
+#### 為什麼不能只用 Redux？
+
+Redux 狀態在 Client 端初始化的時機點，往往比 React 的 Hydration 稍晚，或初始狀態為「空」。這會導致：
+
+1. **Server 端**：HTML 包含正確資料（如 `nonce="xyz"`）。
+2. **Client 端 (Hydration)**：Redux 尚未同步，使用初始值（如 `nonce=""`）。
+3. **結果**：React 偵測到屬性不匹配，拋出 **Hydration Mismatch Error**。
+
+#### 正確做法
+
+| 資料類型 | 推薦方式 | 原因 |
+|----------|----------|------|
+| **關鍵資料** (Nonce, Locale) | **Props / Context** | 確保 Server HTML 與 Client Initial Render 完全一致 |
+| **互動資料** (User, Cart) | **Redux / React Query** | 可在 Hydration 後再載入或更新 |
+
+**範例 (正確 - 使用 Context 確保同步)：**
+
+```tsx
+// Server Component (Layout)
+<NonceProvider nonce={nonce}>
+  {children}
+</NonceProvider>
+
+// Client Component
+const nonce = useNonce(); // 在第一次 render 時就能拿到正確值
+```
+
 ---
 
 ## 6. 資料庫規範
