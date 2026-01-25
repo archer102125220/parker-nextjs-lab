@@ -47,7 +47,12 @@ export function contentSecurityPolicyMiddleware(
     base-uri ${["'self'"].join(' ')};
     form-action ${["'self'"].join(' ')};
     frame-ancestors ${["'self'"].join(' ')};
-    img-src ${["'self'", 'data:', 'https://www.googletagmanager.com'].join(' ')};
+    img-src ${[
+      "'self'",
+      'data:',
+      'https://www.googletagmanager.com',
+      'https://i.ytimg.com'
+    ].join(' ')};
     object-src ${["'none'"].join(' ')};
     script-src ${[
       "'self'",
