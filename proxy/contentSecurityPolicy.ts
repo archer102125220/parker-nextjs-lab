@@ -43,11 +43,11 @@ export function contentSecurityPolicyMiddleware(
       'https://connect.facebook.net',
       'https://www.googletagmanager.com'
     ].join(' ')};
-    font-src ${["'self'", "'data'", 'https://fonts.gstatic.com'].join(' ')};
+    font-src ${["'self'", 'data:', 'https://fonts.gstatic.com'].join(' ')};
     base-uri ${["'self'"].join(' ')};
     form-action ${["'self'"].join(' ')};
     frame-ancestors ${["'self'"].join(' ')};
-    img-src ${["'self'", "'data'", 'https://www.googletagmanager.com'].join(' ')};
+    img-src ${["'self'", 'data:', 'https://www.googletagmanager.com'].join(' ')};
     object-src ${["'none'"].join(' ')};
     script-src ${[
       "'self'",
