@@ -109,6 +109,18 @@ import type { ReactNode, CSSProperties } from 'react';
 
 9.  **樂觀更新 → `useOptimistic`**
 
+
+### 🟣 新增：Nonce Hydration 策略 (2026-01-25)
+
+10. **Nonce Context & Hydration Stability**
+    -   **問題**：Redux 狀態初始化延遲導致 Hydration Mismatch；Async loading.tsx 導致 Instrumentation Error。
+    -   **解法**：建立 `NonceProvider`，使用 `useContext` 在 hydrate 階段同步 nonce。
+    -   **相關檔案** (需二次檢查)：
+        -   `components/Providers/NonceProvider.tsx`
+        -   `components/Layout/Header.tsx`
+        -   `components/Layout/Footer.tsx`
+        -   `components/PageLoading.tsx`
+
 ## 執行步驟
 
 詳細進度請參考：[react-hooks-refactoring-task.md](./react-hooks-refactoring-task.md)

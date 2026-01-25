@@ -252,6 +252,32 @@
 
 ---
 
+### 2026-01-25 Nonce/Hydration Refactor (Need Double Check)
+
+**審查範圍**: 解決 CSP Nonce 在 SSR/Hydration 中的傳遞問題，以及防毒軟體干擾導致的 Hydration Mismatch。
+
+**關鍵變更**:
+1. 引入 `NonceContext` (`NonceProvider`) 以避免 Prop Drilling 並支援深層元件存取。
+2. `DefaultLayout` 保持 Server Component，但 `Header`/`Footer` 改為從 Context 獲取 Nonce 作為 fallback。
+3. `loading.tsx` 移除 `async` 改為同步，避免 React Instrumentation Error。
+4. 使用 `useMemo` 優化 Nonce 的合併邏輯 (`props.nonce || contextNonce || reduxNonce`)。
+
+**需二次檢查檔案** (7 個):
+
+| 檔案 | 改進 / 變更 |
+|------|-------------|
+| `components/Providers/NonceProvider.tsx` | 新增 Context Provider |
+| `components/Layout/Body.tsx` | 注入 NonceProvider |
+| `components/Layout/Header.tsx` | 新增 useNonce fallback, useMemo 優化 |
+| `components/Layout/Footer.tsx` | 新增 useNonce fallback, useMemo 優化 |
+| `components/PageLoading.tsx` | 新增 useNonce fallback, useMemo 優化 |
+| `layout/default/index.tsx` | 恢復為 Server Component，傳遞 Props |
+| `app/[locale]/css-drawing/loading.tsx` | 改為同步元件，移除 async/headers |
+| `app/[locale]/about/page.tsx` | Layout 結構調整 (User Edit) |
+| `app/[locale]/about/layout.tsx` | Layout 結構調整 (User Edit) |
+
+---
+
 ## 狀態說明
 
 - `[ ]` 未檢查
