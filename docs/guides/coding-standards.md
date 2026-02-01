@@ -5,6 +5,22 @@
 
 ---
 
+## 0. AI Agent Rules & Configuration
+
+This project provides dedicated rule configuration files for different AI assistant tools to ensure consistency in code style and standards.
+
+| AI Model/Tool | Rule File Location | Description |
+|---|---|---|
+| **Antigravity (Agent)** | `.agent/rules/*.md` | Rules for automated Agent (Antigravity) |
+| **Gemini Code Assist** | `GEMINI.md` | Context for IDE Extension (Gemini Code Assist) |
+| **Claude** | `CLAUDE.md` | Project instructions for Claude |
+| **Cursor AI** | `.cursor/rules/*.mdc` | Granular rule files for Cursor (using `.mdc` format) |
+| **GitHub Copilot** | `.github/copilot-instructions.md`<br>`.github/instructions/*.instructions.md` | Repository-wide and file-specific instructions |
+
+> **Developer Note**: When updating this document, you MUST synchronize updates to all the above rule files to ensure consistent AI behavior.
+
+---
+
 ## 1. TypeScript Standards
 
 ### 1.1 Type Safety (MANDATORY)
