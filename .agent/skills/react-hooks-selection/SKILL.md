@@ -653,3 +653,143 @@ function Component() {
 - `.cursor/rules/react-stable-api.mdc`
 - `GEMINI.md` - React Stable API Policy section
 - `CLAUDE.md` - React Stable API Policy section
+
+---
+
+## 🔍 Deep Check Checklist
+
+### Quick Reference for Component Review
+
+When reviewing React components, use this checklist to ensure you perform **deep checks**, not just basic checks.
+
+#### 1. Props → State Synchronization
+```typescript
+// 🔍 Search Pattern
+useEffect(() => {
+  setState(props.xxx);
+}, [props.xxx]);
+
+// ✅ Should be
+const value = useMemo(() => props.xxx, [props.xxx]);
+// or use props.xxx directly
+```
+
+#### 2. External State Subscription
+```typescript
+// 🔍 Search Pattern
+useEffect(() => {
+  window.addEventListener('event', handler);
+  return () => window.removeEventListener('event', handler);
+}, []);
+
+// ✅ Should be
+useSyncExternalStore(subscribe, getSnapshot);
+// or use existing hooks like useWindowSize
+```
+
+#### 3. Multiple Related States
+```typescript
+// 🔍 Search Pattern: 5+ useState in same component
+const [state1, setState1] = useState(...);
+const [state2, setState2] = useState(...);
+const [state3, setState3] = useState(...);
+const [state4, setState4] = useState(...);
+const [state5, setState5] = useState(...);
+
+// ✅ Should be
+const [state, dispatch] = useReducer(reducer, initialState);
+```
+
+#### 4. Uncached Calculations
+```typescript
+// 🔍 Search Pattern: calculations in render
+const result = array.filter(...).map(...);
+const isActive = pathname.startsWith('/xxx');
+
+// ✅ Should be
+const result = useMemo(() => array.filter(...).map(...), [array]);
+const isActive = useMemo(() => pathname.startsWith('/xxx'), [pathname]);
+```
+
+#### 5. Effect with Callback Dependencies
+```typescript
+// 🔍 Search Pattern
+const callbackRef = useRef(callback);
+useEffect(() => {
+  callbackRef.current = callback;
+}, [callback]);
+
+// ✅ Should be (React 19)
+const onEvent = useEffectEvent(() => {
+  callback();
+});
+```
+
+#### 6. Visual Synchronization
+```typescript
+// 🔍 Search Pattern: syncing visual state
+useEffect(() => {
+  setInternalValue(externalValue);
+}, [externalValue]);
+
+// ✅ Should be
+useLayoutEffect(() => {
+  setInternalValue(externalValue);
+}, [externalValue]);
+```
+
+#### 7. Callback to Memoized Children
+```typescript
+// 🔍 Search Pattern: inline functions to memo components
+const MemoChild = memo(Child);
+<MemoChild onClick={() => doSomething()} />
+
+// ✅ Should be
+const handleClick = useCallback(() => doSomething(), []);
+<MemoChild onClick={handleClick} />
+```
+
+#### 8. Non-Render Values
+```typescript
+// 🔍 Search Pattern: state that doesn't trigger re-render
+const [timerId, setTimerId] = useState<number | null>(null);
+
+// ✅ Should be
+const timerIdRef = useRef<number | null>(null);
+```
+
+### Automated Search Commands
+
+Use these grep patterns to find potential issues:
+
+```bash
+# Find useEffect syncing props to state
+grep -n "useEffect.*setState" components/**/*.tsx
+
+# Find addEventListener in useEffect
+grep -n "addEventListener" components/**/*.tsx
+
+# Find components with many useState
+grep -c "useState" components/**/*.tsx | grep ":[5-9]"
+
+# Find uncached startsWith/includes
+grep -n "\.startsWith\|\.includes" components/**/*.tsx
+```
+
+### Deep Check Workflow
+
+1. **Read the component** - Understand overall structure
+2. **Count useState calls** - 5+ → consider useReducer
+3. **Check useEffect** - Look for props → state sync
+4. **Check calculations** - Look for uncached operations
+5. **Check callbacks** - Verify useCallback for memoized children
+6. **Document findings** - List all optimization opportunities
+
+### When to Skip Deep Checks
+
+- Simple presentational components (< 50 lines)
+- Components with only 1-2 useState
+- Components with no useEffect
+- Demo/test components
+
+For all other components, **deep checks are mandatory**.

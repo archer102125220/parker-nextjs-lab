@@ -133,6 +133,42 @@ const element = document.getElementById('id') as unknown as CustomElement;
 - Callbacks to memoized children → `useCallback`
 - Form actions → `useActionState` (React 19)
 
+**React Hooks 深度檢查政策 (⚠️ CRITICAL)**:
+
+When reviewing or refactoring React components, you MUST perform TWO rounds of checks:
+
+**Round 1: Basic Check**
+
+- ✅ Import type syntax correct
+- ✅ useCallback used for callbacks passed to children
+- ✅ useMemo used for expensive calculations
+
+**Round 2: Deep Check (MANDATORY)**
+
+You MUST check for these common mistakes:
+
+| Anti-Pattern                        | Correct Pattern                 | Priority  |
+| ----------------------------------- | ------------------------------- | --------- |
+| `useEffect` syncing props → state   | `useMemo` or direct props usage | 🔴 High   |
+| `useEffect` + `addEventListener`    | `useSyncExternalStore`          | 🔴 High   |
+| 5+ related `useState`               | `useReducer`                    | 🟡 Medium |
+| Uncached calculations               | `useMemo`                       | 🟡 Medium |
+| `useRef` + `useCallback` in effects | `useEffectEvent`                | 🟡 Medium |
+| `useEffect` for visual sync         | `useLayoutEffect`               | 🟡 Medium |
+
+**CRITICAL**: If you only perform Round 1 checks, you MUST explicitly state:
+
+> "⚠️ I have only performed basic checks. Deep checks are still required."
+
+**When to use Deep Check**:
+
+- When asked to "check" or "review" React components
+- When refactoring React hooks
+- When optimizing component performance
+- When the task explicitly mentions "React Hooks refactoring"
+
+**For detailed procedures**, see `.agent/skills/react-hooks-deep-check/SKILL.md`
+
 ---
 
 ### Internationalization (next-intl 4.x)

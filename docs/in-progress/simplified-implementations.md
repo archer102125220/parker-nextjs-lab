@@ -1,61 +1,9 @@
 # 簡化實作清單 (Simplified Implementation Notes)
 
 > 本文件記錄哪些頁面/組件是以簡化方式實作，需要後續完善。
-> 更新日期: 2026-02-16 (React Hooks 重構更新)
+> 更新日期: 2025-12-26 (最終更新)
 
 ---
-
-## React Hooks 重構 - 簡化處理記錄 (2026-02-16)
-
-### Import Type 檢查
-
-#### 已完成檢查的範圍
-| 範圍 | 檔案數 | 狀態 | 說明 |
-|------|--------|------|------|
-| Hooks 目錄 | 32 | ✅ 完成 | 全部符合 inline type import 規範 |
-| 核心組件（階段一） | 9 | ✅ 完成 | 8 個已正確，1 個已修正（DialogModal） |
-| 核心組件（階段二） | 30+ | ⏳ 待檢查 | 需逐一檢查並修正 |
-
-#### 簡化處理項目
-| 項目 | 簡化說明 | 後續需要 |
-|------|----------|----------|
-| Demo 組件 | 暫未全面檢查 import type | 需批次檢查 40+ 個 Demo 組件 |
-| App Pages | 暫未檢查 import type | 需檢查 63 個頁面組件 |
-| Utils 目錄 | 暫未檢查是否有使用 React 類型 | 需掃描 `utils/**/*.ts` 和 `utils/**/*.tsx` |
-| Layout 目錄 | 暫未檢查 | 需檢查 `layout/**/*.tsx` |
-| Models/Store | 暫未檢查 | 需檢查是否有使用 React 類型 |
-
-#### 批次檢查方法
-**使用 AI 工具進行檢查**:
-- `grep_search` 工具搜尋 React import
-- `find_by_name` 工具列出檔案
-- AI 工具逐一修正（禁止使用腳本）
-
-### 組件重構
-
-#### 已完成重構
-| 組件 | 重構內容 | 狀態 |
-|------|----------|------|
-| `Drawer/index.tsx` | useReducer + useRef + useLayoutEffect | ✅ 完成 |
-| `Tabs/Bar.tsx` | useReducer x 2 | ✅ 完成 |
-| `SwiperJs/index.tsx` | useRef + useLayoutEffect | ✅ 完成 |
-| `SwiperCustom/index.tsx` | useEffectEvent | ✅ 完成 |
-| `ScrollFetch/index.tsx` | useReducer x 3 | ✅ 完成 |
-
-#### 待檢查組件（中優先級）
-- [ ] `Animation/TriangleEnter/index.tsx`
-- [ ] `CloudMessaging/DataTable.tsx`
-- [ ] `CloudMessaging/Form.tsx`
-- [ ] `DatePicker/index.tsx`
-- [ ] `Dialog/index.tsx` - 高優先級
-- [ ] `GoTop/index.tsx`
-- [ ] `Krpano/index.tsx`
-- [ ] `Layout/I18nList.tsx`
-- [ ] `Ripple/index.tsx`
-- [ ] `Triangle/index.tsx`
-
----
-
 
 ## Phase 6: 進階功能
 

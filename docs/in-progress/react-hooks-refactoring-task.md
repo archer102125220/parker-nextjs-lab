@@ -65,43 +65,20 @@
 - [x] `ScrollFetch/index.tsx` ⭐ ✅ useReducer x 3（16 → 1 useState）
 
 ### 需檢查的核心組件
-
-#### ✅ Phase 3 已檢查（2026-02-16）
-- [x] `Animation/EnterLabel/index.tsx` ✅ 已優化（useCallback, useRef）
-- [x] `Banner/index.tsx` ✅ 已優化（useCallback, useRef, 拖曳邏輯）
-- [x] `Countdown/index.tsx` ✅ 已優化（useMemo, useRef, 動畫管理）
-- [x] `DatePicker/index.tsx` ✅ 已優化（handleChange 使用 useCallback）
-- [x] `Dialog/index.tsx` ✅ 已優化（useMemo, useCallback）
-- [x] `GoTop/index.tsx` ✅ 已優化（useMemo, useCallback, 滾動事件）
-- [x] `ImageUpload/index.tsx` ✅ 已優化（6 個事件處理器使用 useCallback）
-- [x] `Krpano/index.tsx` ✅ 已優化（useCallback, useImperativeHandle, useId）
-- [x] `PhoneInput/index.tsx` ✅ 已優化（useMemo, 國家列表）
-- [x] `QRCode/index.tsx` ✅ 已優化（useCallback, 異步生成）
-
-**Phase 3 結果**：10 個組件全部已優化（100%）✅
-
-#### 待檢查的核心組件
+- [ ] `Animation/EnterLabel/index.tsx`
 - [ ] `Animation/TriangleEnter/index.tsx`
 - [ ] `AxiosInit.tsx`
+- [ ] `Banner/index.tsx`
 - [ ] `ClientProvider.tsx`
 - [ ] `CloudMessaging/DataTable.tsx`
 - [ ] `CloudMessaging/Form.tsx`
+- [ ] `Countdown/index.tsx`
+- [ ] `DatePicker/index.tsx`
+- [ ] `Dialog/index.tsx`
+- [ ] `GoTop/index.tsx`
 - [ ] `Hexagon/Container.tsx`
-### 🔵 新增：Import Type 檢查 ✅ 完成
-
-8.  **混合 import → 分離 `import type`**
-
-以下檔案需要將類型導入（ReactNode, CSSProperties 等）改為 `import type`：
-
--   [x] `components/Banner/index.tsx` ✅ 已正確
--   [x] `components/DialogModal/index.tsx` ✅ 已修正 (2026-02-16)
--   [x] `components/SlideInPanel/index.tsx` ✅ 已正確
--   [x] `components/Tabs/Bar.tsx` ✅ 已正確
--   [x] `components/Selector/index.tsx` ✅ 已正確
--   [x] `components/Countdown/index.tsx` ✅ 已正確
--   [x] `components/SwitchButton/index.tsx` ✅ 已正確
--   [x] `components/VirtualScroller/index.tsx` ✅ 已正確
--   [x] `components/Animation/EnterLabel/index.tsx` ✅ 已正確
+- [ ] `ImageUpload/index.tsx`
+- [ ] `Krpano/index.tsx`
 - [ ] `Layout/Header.tsx`
 - [ ] `Layout/I18nList.tsx`
 - [ ] `Link/index.tsx`
@@ -231,38 +208,6 @@
 - [ ] `[locale]/web-authn/page.tsx`
 - [ ] `[locale]/web-rtc/page.tsx`
 - [ ] `[locale]/web-socket-test/page.tsx`
-
----
-
-## 🔍 階段三：全面 Import Type 檢查 (2026-02-16)
-
-### Utils 目錄
-- [ ] 掃描 `utils/**/*.ts` 和 `utils/**/*.tsx`
-- [ ] 檢查是否有使用 React 類型
-- [ ] 修正不符合規範的 import type
-
-### Layout 目錄
-- [ ] `layout/**/*.tsx`
-- [ ] 檢查所有 layout 組件的 import type
-
-### Models 目錄
-- [ ] `models/**/*.ts`
-- [ ] 檢查是否有使用 React 類型（如 ReactNode, FC 等）
-
-### Store 目錄
-- [ ] `store/**/*.ts`
-- [ ] 檢查 Redux store 相關檔案是否有使用 React 類型
-
-### 批次檢查方法
-**使用 AI 工具**:
-- `grep_search` - 搜尋所有 React import 語句
-- `find_by_name` - 列出所有 .tsx/.ts 檔案
-- `replace_file_content` / `multi_replace_file_content` - 修正檔案
-- **禁止**: sed, awk, find...exec 等腳本
-
-### 簡化處理記錄
-任何在檢查過程中發現的簡化處理或需要後續完善的部分，記錄在：
-- [simplified-implementations.md](file:///Users/parkerchen/Desktop/code/parker-nextjs-lab/docs/in-progress/simplified-implementations.md)
 
 ---
 

@@ -147,6 +147,41 @@ async function Page({ params }: Props) {
   - **Use RTK**: Global app state, cross-page data, persisted state, RTK Query, state needing DevTools
   - **Use useContext**: Theme/i18n Provider, local component tree state, third-party Provider (React Query, SWR)
 
+### React Hooks 深度檢查政策 (⚠️ CRITICAL)
+
+When reviewing or refactoring React components, you MUST perform TWO rounds of checks:
+
+#### Round 1: Basic Check (表面檢查)
+- ✅ Import type syntax correct
+- ✅ useCallback used for callbacks passed to children
+- ✅ useMemo used for expensive calculations
+
+#### Round 2: Deep Check (深度檢查) - ⚠️ MANDATORY
+You MUST check for these common mistakes:
+
+| Anti-Pattern | Correct Pattern | Priority |
+|--------------|----------------|----------|
+| `useEffect` syncing props → state | `useMemo` or direct props usage | 🔴 High |
+| `useEffect` + `addEventListener` | `useSyncExternalStore` | 🔴 High |
+| 5+ related `useState` | `useReducer` | 🟡 Medium |
+| Uncached calculations | `useMemo` | 🟡 Medium |
+| `useRef` + `useCallback` in effects | `useEffectEvent` | 🟡 Medium |
+| `useEffect` for visual sync | `useLayoutEffect` | 🟡 Medium |
+
+**CRITICAL**: If you only perform Round 1 checks, you MUST explicitly state:
+> "⚠️ I have only performed basic checks. Deep checks are still required."
+
+**When to use the Deep Check Skill**:
+- When asked to "check" or "review" React components
+- When refactoring React hooks
+- When optimizing component performance
+- When the task explicitly mentions "React Hooks refactoring"
+
+**Related Skills**:
+- `.agent/skills/react-hooks-selection/SKILL.md` - Hook selection decision tree
+- `.agent/skills/react-hooks-deep-check/SKILL.md` - Deep check procedures
+
+
 ### Lint Disable Comments (⚠️ CRITICAL)
 - **NEVER** add `eslint-disable`, `@ts-ignore`, `@ts-expect-error`, or similar comments without **explicit user instruction**
 - When encountering lint warnings/errors:
