@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useRef, useCallback, type DragEvent, type ChangeEvent } from 'react';
+import { useState, useRef, useCallback, useEffect, type DragEvent, type ChangeEvent } from 'react';
 import ButtonBase from '@mui/material/ButtonBase';
 import './index.scss';
 
 export interface ImageUploadProps {
+  value?: File;
   onChange?: (file: File) => void;
   onError?: (error: string) => void;
   btnLabel?: string;
@@ -18,6 +19,7 @@ export interface ImageUploadProps {
 }
 
 export function ImageUpload({
+  value,
   onChange,
   onError,
   btnLabel = '上傳圖片',
@@ -29,9 +31,38 @@ export function ImageUpload({
   className = '',
   accept = 'image/*'
 }: ImageUploadProps) {
-  const [previewUrl, setPreviewUrl] = useState<string>('');
+  // Internal state for uncontrolled mode
+  const [internalPreviewUrl, setInternalPreviewUrl] = useState<string>('');
   const [showMask, setShowMask] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // For controlled mode: track value prop changes and generate preview URL
+  const [controlledPreviewUrl, setControlledPreviewUrl] = useState<string>('');
+  const previousValueRef = useRef<File | undefined>(value);
+
+  // Update controlled preview URL when value prop changes
+  useEffect(() => {
+    // Only process if value actually changed (reference equality check)
+    if (previousValueRef.current === value) return;
+    previousValueRef.current = value;
+
+    if (value) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setControlledPreviewUrl(result);
+      };
+      reader.readAsDataURL(value);
+    } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setControlledPreviewUrl('');
+      // Reason: Syncing props to state for controlled component pattern - FileReader is async
+    }
+  }, [value]);
+
+  // Use controlled preview if value prop exists, otherwise use internal state
+  const isControlled = value !== undefined;
+  const previewUrl = isControlled ? controlledPreviewUrl : internalPreviewUrl;
 
   const handleFileRead = useCallback(
     (file: File) => {
@@ -45,16 +76,19 @@ export function ImageUpload({
         return;
       }
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        setPreviewUrl(result);
-      };
-      reader.readAsDataURL(file);
+      // For uncontrolled mode, update internal preview
+      if (!isControlled) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const result = e.target?.result as string;
+          setInternalPreviewUrl(result);
+        };
+        reader.readAsDataURL(file);
+      }
 
       onChange?.(file);
     },
-    [maxSize, onChange, onError]
+    [maxSize, onChange, onError, isControlled]
   );
 
   const handleClick = useCallback(() => {
