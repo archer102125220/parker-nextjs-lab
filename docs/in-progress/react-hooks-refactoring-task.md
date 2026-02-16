@@ -226,6 +226,38 @@
 
 ---
 
+## 🔍 階段三：全面 Import Type 檢查 (2026-02-16)
+
+### Utils 目錄
+- [ ] 掃描 `utils/**/*.ts` 和 `utils/**/*.tsx`
+- [ ] 檢查是否有使用 React 類型
+- [ ] 修正不符合規範的 import type
+
+### Layout 目錄
+- [ ] `layout/**/*.tsx`
+- [ ] 檢查所有 layout 組件的 import type
+
+### Models 目錄
+- [ ] `models/**/*.ts`
+- [ ] 檢查是否有使用 React 類型（如 ReactNode, FC 等）
+
+### Store 目錄
+- [ ] `store/**/*.ts`
+- [ ] 檢查 Redux store 相關檔案是否有使用 React 類型
+
+### 批次檢查方法
+**使用 AI 工具**:
+- `grep_search` - 搜尋所有 React import 語句
+- `find_by_name` - 列出所有 .tsx/.ts 檔案
+- `replace_file_content` / `multi_replace_file_content` - 修正檔案
+- **禁止**: sed, awk, find...exec 等腳本
+
+### 簡化處理記錄
+任何在檢查過程中發現的簡化處理或需要後續完善的部分，記錄在：
+- [simplified-implementations.md](file:///Users/parkerchen/Desktop/code/parker-nextjs-lab/docs/in-progress/simplified-implementations.md)
+
+---
+
 ## 📝 檢查標準
 
 每個檔案檢查時，需評估：

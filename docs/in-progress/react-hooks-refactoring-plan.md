@@ -109,6 +109,55 @@ import type { ReactNode, CSSProperties } from 'react';
 
 9.  **樂觀更新 → `useOptimistic`**
 
+---
+
+## 階段三：全面 Import Type 檢查（2026-02-16）
+
+### 📋 檢查範圍
+
+在完成核心組件的 Import Type 檢查後，需要全面檢查專案中所有使用 React 的檔案：
+
+#### 1. Components 目錄（109 個 .tsx 檔案）
+- ✅ 核心組件（30+ 個）- 已在階段一、二完成
+- [ ] Demo 組件（40+ 個）
+- [ ] 其他工具組件（30+ 個）
+
+#### 2. App Pages（63 個頁面）
+- [ ] `app/[locale]/**/*.tsx` - 所有頁面組件
+- 重點檢查 import type 是否符合規範
+
+#### 3. Hooks 目錄（32 個檔案）
+- ✅ 已在 Phase 1 完成檢查
+- ✅ Import type 全部符合規範
+
+#### 4. Utils 目錄
+- [ ] `utils/**/*.ts`
+- [ ] `utils/**/*.tsx`
+- 檢查是否有使用 React 類型
+
+#### 5. 其他目錄
+- [ ] `layout/**/*.tsx`
+- [ ] `models/**/*.ts`（如有使用 React 類型）
+- [ ] `store/**/*.ts`（如有使用 React 類型）
+
+### 🎯 執行策略
+
+**使用 AI 工具批次檢查**:
+- 使用 `grep_search` 工具搜尋所有 React import 語句
+- 使用 `find_by_name` 工具列出所有 .tsx 和 .ts 檔案
+- 逐一檢查並使用 `replace_file_content` 或 `multi_replace_file_content` 修正
+- **禁止使用 sed, awk, find...exec 等腳本工具**
+
+**修正優先順序**:
+1. 高頻使用的組件（Demo 組件）
+2. 頁面組件（App Pages）
+3. 工具函式（Utils）
+
+### 📝 簡化處理記錄
+
+任何在檢查過程中發現的簡化處理或需要後續完善的部分，將記錄在：
+- `docs/in-progress/simplified-implementations.md`
+
 
 ### 🟣 新增：Nonce Hydration 策略 (2026-01-25)
 
