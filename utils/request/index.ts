@@ -109,7 +109,7 @@ export class cancelRequest implements cancelRequestInterface {
   };
 }
 
-// eslint-disable-next-line new-cap
+ 
 export const CancelRequest: cancelRequestInterface = new cancelRequest();
 
 export function getCache(requestKey: requestKey = '') {
@@ -127,7 +127,7 @@ export function removeCache() {
   return cacheCfg.clear();
 }
 
-// eslint-disable-next-line import/no-mutable-exports
+ 
 export let ax: AxiosInstance | null = null;
 
 export function axiosInit(

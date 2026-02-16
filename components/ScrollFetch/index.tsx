@@ -503,7 +503,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleSyncScroll = useCallback(
     // TODO
-    // eslint-disable-next-line react-hooks/use-memo
+     
     _debounce((newScrollTop: number) => {
       if (typeof newScrollTop === 'number' && newScrollTop > -1) {
         scrollFetchRef.current?.scrollTo({
@@ -867,7 +867,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleScrollTop = useCallback(
     // TODO
-    // eslint-disable-next-line react-hooks/use-memo
+     
     _debounce(function (e: UIEvent<HTMLDivElement>) {
       if (typeof onScrollTopChange === 'function') {
         onScrollTopChange((e.target as HTMLDivElement)?.scrollTop || 0);
@@ -975,7 +975,7 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
   // Lifecycle effects
   useEffect(() => {
     if (typeof nonce === 'string' && nonce !== '') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+       
       setClientNonce(nonce);
     }
   }, [nonce]);

@@ -164,7 +164,7 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
 
   useEffect(() => {
     if (typeof nonce === 'string' && nonce !== '') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+       
       setClientNonce(nonce);
     }
   }, [nonce]);

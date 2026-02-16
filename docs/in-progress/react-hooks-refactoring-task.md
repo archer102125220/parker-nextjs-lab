@@ -79,6 +79,21 @@
 - [ ] `Hexagon/Container.tsx`
 - [ ] `ImageUpload/index.tsx`
 - [ ] `Krpano/index.tsx`
+### 🔵 新增：Import Type 檢查 ✅ 完成
+
+8.  **混合 import → 分離 `import type`**
+
+以下檔案需要將類型導入（ReactNode, CSSProperties 等）改為 `import type`：
+
+-   [x] `components/Banner/index.tsx` ✅ 已正確
+-   [x] `components/DialogModal/index.tsx` ✅ 已修正 (2026-02-16)
+-   [x] `components/SlideInPanel/index.tsx` ✅ 已正確
+-   [x] `components/Tabs/Bar.tsx` ✅ 已正確
+-   [x] `components/Selector/index.tsx` ✅ 已正確
+-   [x] `components/Countdown/index.tsx` ✅ 已正確
+-   [x] `components/SwitchButton/index.tsx` ✅ 已正確
+-   [x] `components/VirtualScroller/index.tsx` ✅ 已正確
+-   [x] `components/Animation/EnterLabel/index.tsx` ✅ 已正確
 - [ ] `Layout/Header.tsx`
 - [ ] `Layout/I18nList.tsx`
 - [ ] `Link/index.tsx`
