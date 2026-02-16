@@ -251,6 +251,10 @@ If absolutely necessary:
 2. Show complete script for review
 3. Explain why manual tools can't do it
 
+### 📚 Related Skill
+For detailed guidelines and examples, see:
+- [Code Refactoring Safety Skill](.agent/skills/code-refactoring-safety/SKILL.md)
+
 ### Remember
 **Scripts are blind. AI should be intelligent.**
 

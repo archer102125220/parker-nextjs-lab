@@ -19,6 +19,31 @@ This project provides dedicated rule configuration files for different AI assist
 
 > **Developer Note**: When updating this document, you MUST synchronize updates to all the above rule files to ensure consistent AI behavior.
 
+> **📖 For detailed AI configuration guide**, see [AI Agents Configuration Guide](./ai-agents-config.md) which explains the complete architecture, file structure, synchronization strategy, and usage guidelines for all AI assistants.
+
+
+### Skills System
+
+In addition to **Rules** (concise core standards), this project provides **Skills** (detailed task-specific guides) for complex scenarios:
+
+| Resource | Purpose | Location |
+|----------|---------|----------|
+| **Skills** | Detailed guides with decision trees, examples, and checklists | `.agent/skills/*/SKILL.md` |
+| **Skills Guide** | Complete skills documentation | [docs/guides/skills-guide.md](./skills-guide.md) |
+
+**Available Skills**:
+- [CSS/SCSS Naming Convention](.agent/skills/css-naming-convention/SKILL.md) - Hyphen vs underscore decision tree
+- [Database Migration Workflow](.agent/skills/database-migration-workflow/SKILL.md) - Production vs development workflows
+- [Code Refactoring Safety](.agent/skills/code-refactoring-safety/SKILL.md) - AI tools vs scripts
+- [React Hooks Selection](.agent/skills/react-hooks-selection/SKILL.md) - Hook selection decision tree
+- [Server vs Client Components](.agent/skills/server-client-components/SKILL.md) - Component type decisions
+- [File Organization](.agent/skills/file-organization/SKILL.md) - Placeholder vs component strategies
+- [Lint Policy](.agent/skills/lint-policy/SKILL.md) - Error handling guidelines
+- [i18n Implementation](.agent/skills/i18n-implementation/SKILL.md) - next-intl patterns
+- [Build Tools](.agent/skills/build-tools/SKILL.md) - Webpack configuration
+
+See [Skills Guide](./skills-guide.md) for complete documentation.
+
 ---
 
 ## 1. TypeScript Standards
