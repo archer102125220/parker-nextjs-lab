@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useRef, type DragEvent, type ChangeEvent } from 'react';
+import { useState, useRef, useCallback, type DragEvent, type ChangeEvent } from 'react';
 import ButtonBase from '@mui/material/ButtonBase';
 import './index.scss';
 
 export interface ImageUploadProps {
-  value?: File | string;
   onChange?: (file: File) => void;
   onError?: (error: string) => void;
   btnLabel?: string;
@@ -19,7 +18,6 @@ export interface ImageUploadProps {
 }
 
 export function ImageUpload({
-  value,
   onChange,
   onError,
   btnLabel = '上傳圖片',
@@ -33,76 +31,84 @@ export function ImageUpload({
 }: ImageUploadProps) {
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [showMask, setShowMask] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileRead = (file: File) => {
-    if (!file || !file.type.startsWith('image/')) {
-      onError?.('請選擇圖片檔案');
-      return;
-    }
+  const handleFileRead = useCallback(
+    (file: File) => {
+      if (!file || !file.type.startsWith('image/')) {
+        onError?.('請選擇圖片檔案');
+        return;
+      }
 
-    if (maxSize && file.size > maxSize) {
-      onError?.(`檔案大小超過限制 (${(maxSize / 1024 / 1024).toFixed(2)}MB)`);
-      return;
-    }
+      if (maxSize && file.size > maxSize) {
+        onError?.(`檔案大小超過限制 (${(maxSize / 1024 / 1024).toFixed(2)}MB)`);
+        return;
+      }
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const result = e.target?.result as string;
-      setPreviewUrl(result);
-    };
-    reader.readAsDataURL(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setPreviewUrl(result);
+      };
+      reader.readAsDataURL(file);
 
-    onChange?.(file);
-  };
+      onChange?.(file);
+    },
+    [maxSize, onChange, onError]
+  );
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (disabled) return;
     fileInputRef.current?.click();
-  };
+  }, [disabled]);
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      handleFileRead(file);
-    }
-  };
+  const handleFileChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        handleFileRead(file);
+      }
+    },
+    [handleFileRead]
+  );
 
-  const handleDragEnter = (e: DragEvent) => {
+  const handleDragEnter = useCallback(
+    (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!disabled) {
+        setShowMask(true);
+      }
+    },
+    [disabled]
+  );
+
+  const handleDragOver = useCallback((e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!disabled) {
-      setShowMask(true);
-      setIsDragging(true);
-    }
-  };
+  }, []);
 
-  const handleDragOver = (e: DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleDragLeave = (e: DragEvent) => {
+  const handleDragLeave = useCallback((e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setShowMask(false);
-    setIsDragging(false);
-  };
+  }, []);
 
-  const handleDrop = (e: DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setShowMask(false);
-    setIsDragging(false);
+  const handleDrop = useCallback(
+    (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setShowMask(false);
 
-    if (disabled) return;
+      if (disabled) return;
 
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      handleFileRead(file);
-    }
-  };
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        handleFileRead(file);
+      }
+    },
+    [disabled, handleFileRead]
+  );
 
   const cssVariables = {
     '--image_upload-preview-bg': previewBgColor,

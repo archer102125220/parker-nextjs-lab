@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker as MuiDatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -37,10 +37,13 @@ export function DatePicker({
   const dayjsLocale = locale.toLowerCase().replace('_', '-');
   dayjs.locale(dayjsLocale);
 
-  const handleChange = (newValue: Dayjs | null) => {
-    setSelectedDate(newValue);
-    onChange?.(newValue ? newValue.toDate() : null);
-  };
+  const handleChange = useCallback(
+    (newValue: Dayjs | null) => {
+      setSelectedDate(newValue);
+      onChange?.(newValue ? newValue.toDate() : null);
+    },
+    [onChange]
+  );
 
   return (
     <div className={`date-picker-wrapper ${className}`}>

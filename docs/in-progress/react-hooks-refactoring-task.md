@@ -70,15 +70,15 @@
 - [x] `Animation/EnterLabel/index.tsx` ✅ 已優化（useCallback, useRef）
 - [x] `Banner/index.tsx` ✅ 已優化（useCallback, useRef, 拖曳邏輯）
 - [x] `Countdown/index.tsx` ✅ 已優化（useMemo, useRef, 動畫管理）
-- [x] `DatePicker/index.tsx` ⚠️ 可選優化（handleChange 可用 useCallback）
+- [x] `DatePicker/index.tsx` ✅ 已優化（handleChange 使用 useCallback）
 - [x] `Dialog/index.tsx` ✅ 已優化（useMemo, useCallback）
 - [x] `GoTop/index.tsx` ✅ 已優化（useMemo, useCallback, 滾動事件）
-- [x] `ImageUpload/index.tsx` ⚠️ 可選優化（事件處理可用 useCallback）
+- [x] `ImageUpload/index.tsx` ✅ 已優化（6 個事件處理器使用 useCallback）
 - [x] `Krpano/index.tsx` ✅ 已優化（useCallback, useImperativeHandle, useId）
 - [x] `PhoneInput/index.tsx` ✅ 已優化（useMemo, 國家列表）
 - [x] `QRCode/index.tsx` ✅ 已優化（useCallback, 異步生成）
 
-**Phase 3 結果**：10 個組件中 8 個已優化（80%），2 個可選優化
+**Phase 3 結果**：10 個組件全部已優化（100%）✅
 
 #### 待檢查的核心組件
 - [ ] `Animation/TriangleEnter/index.tsx`
