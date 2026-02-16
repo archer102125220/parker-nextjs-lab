@@ -1,10 +1,11 @@
 'use client';
 
 import {
-  useState,
+  useReducer,
   useEffect,
   useRef,
   useCallback,
+  useMemo,
   type ReactNode
 } from 'react';
 import './index.scss';
@@ -49,32 +50,71 @@ export function Banner({
   className = '',
   children
 }: BannerProps) {
-  const [currentIndex, setCurrentIndex] = useState(value);
-  const [isDragging, setIsDragging] = useState(false);
-  const startXRef = useRef(0);
-  const [moveX, setMoveX] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
+  // ✅ FIXED: Use useReducer for 5 related banner states
+  type BannerState = {
+    currentIndex: number;
+    isDragging: boolean;
+    moveX: number;
+    isHovered: boolean;
+    isFocused: boolean;
+  };
 
+  type BannerAction =
+    | { type: 'SET_INDEX'; payload: number }
+    | { type: 'START_DRAG'; payload: number }
+    | { type: 'UPDATE_DRAG'; payload: number }
+    | { type: 'END_DRAG' }
+    | { type: 'SET_HOVERED'; payload: boolean }
+    | { type: 'SET_FOCUSED'; payload: boolean };
+
+  const bannerReducer = (state: BannerState, action: BannerAction): BannerState => {
+    switch (action.type) {
+      case 'SET_INDEX':
+        return { ...state, currentIndex: action.payload };
+      case 'START_DRAG':
+        return { ...state, isDragging: true, moveX: 0 };
+      case 'UPDATE_DRAG':
+        return { ...state, moveX: action.payload };
+      case 'END_DRAG':
+        return { ...state, isDragging: false, moveX: 0 };
+      case 'SET_HOVERED':
+        return { ...state, isHovered: action.payload };
+      case 'SET_FOCUSED':
+        return { ...state, isFocused: action.payload };
+      default:
+        return state;
+    }
+  };
+
+  const [state, dispatch] = useReducer(bannerReducer, {
+    currentIndex: value,
+    isDragging: false,
+    moveX: 0,
+    isHovered: false,
+    isFocused: false
+  });
+
+  const startXRef = useRef(0);
   const bannerRef = useRef<HTMLDivElement>(null);
   const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const has3DEffect = banners.length >= 3;
+  // ✅ FIXED: Use useMemo for expensive calculation
+  const has3DEffect = useMemo(() => banners.length >= 3, [banners.length]);
 
   // Calculate indices
   const getPrevIndex = useCallback(() => {
-    return currentIndex === 0 ? banners.length - 1 : currentIndex - 1;
-  }, [currentIndex, banners.length]);
+    return state.currentIndex === 0 ? banners.length - 1 : state.currentIndex - 1;
+  }, [state.currentIndex, banners.length]);
 
   const getNextIndex = useCallback(() => {
-    return currentIndex === banners.length - 1 ? 0 : currentIndex + 1;
-  }, [currentIndex, banners.length]);
+    return state.currentIndex === banners.length - 1 ? 0 : state.currentIndex + 1;
+  }, [state.currentIndex, banners.length]);
 
   // Navigation
   const goToSlide = useCallback(
     (index: number) => {
       if (index < 0 || index >= banners.length) return;
-      setCurrentIndex(index);
+      dispatch({ type: 'SET_INDEX', payload: index });
       onChange?.(index);
     },
     [banners.length, onChange]
@@ -90,7 +130,7 @@ export function Banner({
 
   // Autoplay
   useEffect(() => {
-    if (!autoplay || banners.length < 2 || isHovered || isFocused) {
+    if (!autoplay || banners.length < 2 || state.isHovered || state.isFocused) {
       if (autoplayTimerRef.current) {
         clearInterval(autoplayTimerRef.current);
         autoplayTimerRef.current = null;
@@ -107,47 +147,44 @@ export function Banner({
         clearInterval(autoplayTimerRef.current);
       }
     };
-  }, [autoplay, banners.length, interval, isHovered, isFocused, handleNext]);
+  }, [autoplay, banners.length, interval, state.isHovered, state.isFocused, handleNext]);
 
   // Drag handling
   const handleDragStart = useCallback(
     (e: React.MouseEvent | React.TouchEvent) => {
-      setIsDragging(true);
+      dispatch({ type: 'START_DRAG', payload: 0 });
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
       startXRef.current = clientX;
-      setMoveX(0);
     },
     []
   );
 
   const handleDragMove = useCallback(
     (e: MouseEvent | TouchEvent) => {
-      if (!isDragging) return;
+      if (!state.isDragging) return;
 
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      setMoveX(clientX - startXRef.current);
+      dispatch({ type: 'UPDATE_DRAG', payload: clientX - startXRef.current });
     },
-    [isDragging]
+    [state.isDragging]
   );
 
   const handleDragEnd = useCallback(() => {
-    if (!isDragging) return;
-
-    setIsDragging(false);
+    if (!state.isDragging) return;
 
     const threshold = 50;
-    if (moveX > threshold) {
+    if (state.moveX > threshold) {
       handlePrev();
-    } else if (moveX < -threshold) {
+    } else if (state.moveX < -threshold) {
       handleNext();
     }
 
-    setMoveX(0);
-  }, [isDragging, moveX, handlePrev, handleNext]);
+    dispatch({ type: 'END_DRAG' });
+  }, [state.isDragging, state.moveX, handlePrev, handleNext]);
 
   // Event listeners
   useEffect(() => {
-    if (isDragging) {
+    if (state.isDragging) {
       window.addEventListener('mousemove', handleDragMove);
       window.addEventListener('mouseup', handleDragEnd);
       window.addEventListener('touchmove', handleDragMove);
@@ -160,7 +197,7 @@ export function Banner({
         window.removeEventListener('touchend', handleDragEnd);
       };
     }
-  }, [isDragging, handleDragMove, handleDragEnd]);
+  }, [state.isDragging, handleDragMove, handleDragEnd]);
 
   // Keyboard navigation
   const handleKeyDown = useCallback(
@@ -178,7 +215,7 @@ export function Banner({
 
   // Get slide state
   const getSlideState = (index: number): string => {
-    if (index === currentIndex) return 'active';
+    if (index === state.currentIndex) return 'active';
     if (has3DEffect) {
       if (index === getPrevIndex()) return 'prev';
       if (index === getNextIndex()) return 'next';
@@ -196,17 +233,17 @@ export function Banner({
       style={
         {
           '--banner-height': heightValue,
-          '--banner-transition-duration': isDragging
+          '--banner-transition-duration': state.isDragging
             ? '0ms'
             : `${transitionDuration}ms`,
-          '--banner-drag-offset': `${moveX}px`
+          '--banner-drag-offset': `${state.moveX}px`
         } as React.CSSProperties
       }
       tabIndex={0}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onFocus={() => setIsFocused(true)}
-      onBlur={() => setIsFocused(false)}
+      onMouseEnter={() => dispatch({ type: 'SET_HOVERED', payload: true })}
+      onMouseLeave={() => dispatch({ type: 'SET_HOVERED', payload: false })}
+      onFocus={() => dispatch({ type: 'SET_FOCUSED', payload: true })}
+      onBlur={() => dispatch({ type: 'SET_FOCUSED', payload: false })}
       onKeyDown={handleKeyDown}
     >
       {/* Navigation Buttons */}
@@ -235,7 +272,7 @@ export function Banner({
               css-state={getSlideState(index)}
             >
               {children ? (
-                children(banner, index, index === currentIndex)
+                children(banner, index, index === state.currentIndex)
               ) : (
                 <div className="banner-slide-content">
                   {banner.image && (
@@ -274,7 +311,7 @@ export function Banner({
             <div
               key={`indicator-${banner.id || index}`}
               className="banner-indicators-item"
-              css-is-active={index === currentIndex ? 'true' : 'false'}
+              css-is-active={index === state.currentIndex ? 'true' : 'false'}
               onClick={() => goToSlide(index)}
             />
           ))}

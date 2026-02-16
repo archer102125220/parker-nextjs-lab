@@ -3,6 +3,7 @@ import {
   useMemo,
   useCallback,
   useEffect,
+  useLayoutEffect,
   type MouseEvent,
   type MouseEventHandler,
   type ReactNode,
@@ -84,8 +85,13 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
     Confirm
   } = props;
 
-  const [clientNonce, setClientNonce] = useState<string>('');
   const [opacityTrigger, setOpacityTrigger] = useState<boolean>(false);
+
+  // ✅ FIXED: Use useMemo instead of useEffect for props→state sync
+  const clientNonce = useMemo(
+    () => (typeof nonce === 'string' && nonce !== '' ? nonce : ''),
+    [nonce]
+  );
 
   const cssVariable = useMemo<DialogCssVariableType>(() => {
     const _cssVariable: DialogCssVariableType = {};
@@ -162,17 +168,15 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
     [cancel]
   );
 
-  useEffect(() => {
-    if (typeof nonce === 'string' && nonce !== '') {
-       
-      setClientNonce(nonce);
-    }
-  }, [nonce]);
-  useEffect(() => {
+  // ✅ FIXED: Use useLayoutEffect for visual sync (runs before paint)
+  useLayoutEffect(() => {
     if (typeof open === 'boolean' && open !== opacityTrigger) {
       setOpacityTrigger(open);
     }
+  }, [open, opacityTrigger]);
 
+  // Separate effect for DOM manipulation
+  useEffect(() => {
     if (typeof document?.querySelector === 'function') {
       const htmlElement = document.querySelector('html');
       if (htmlElement !== null) {
@@ -183,8 +187,8 @@ function Dialog(props: Readonly<DialogProps>): ReactNode {
         }
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
+
   useEffect(() => {
     return () => {
       if (typeof change === 'function') {

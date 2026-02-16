@@ -222,6 +222,10 @@
             "enterLabel": {
                 "title": "EnterLabel Typewriter Test",
                 "description": "Demonstrating typewriter animation effect"
+            },
+            "message": {
+                "title": "Message Component Test",
+                "description": "Demonstrating different types of message notifications"
             }
         },
         "cssDrawing": {

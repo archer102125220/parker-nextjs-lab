@@ -5,7 +5,7 @@
 | 分類 | 總數 | 已完成 | 進行中 |
 |------|------|--------|--------|
 | Hooks | 32 | 32 | 0 |
-| Components | 110+ | 3 | 0 |
+| Components | 110+ | 10 | 0 |
 | App Pages | 63 | 0 | 0 |
 
 ---
@@ -64,18 +64,22 @@
 - [x] `SwiperCustom/index.tsx` ✅ useEffectEvent（2 個 callback，移出 Effect deps）
 - [x] `ScrollFetch/index.tsx` ⭐ ✅ useReducer x 3（16 → 1 useState）
 
+### 已完成檢查與測試（2026-02-16）
+- [x] `Banner/index.tsx` ✅ useReducer + useMemo（已測試）
+- [x] `Dialog/index.tsx` ✅ useMemo + useLayoutEffect（已測試）
+- [x] `GoTop/index.tsx` ✅ useMemo 衍生狀態（已測試）
+- [x] `Message.tsx` ✅ useReducer + useMemo（已測試，新建測試頁面）
+- [x] `Selector/index.tsx` ✅ useMemo 衍生狀態（已測試）
+
 ### 需檢查的核心組件
 - [ ] `Animation/EnterLabel/index.tsx`
 - [ ] `Animation/TriangleEnter/index.tsx`
 - [ ] `AxiosInit.tsx`
-- [ ] `Banner/index.tsx`
 - [ ] `ClientProvider.tsx`
 - [ ] `CloudMessaging/DataTable.tsx`
 - [ ] `CloudMessaging/Form.tsx`
 - [ ] `Countdown/index.tsx`
 - [ ] `DatePicker/index.tsx`
-- [ ] `Dialog/index.tsx`
-- [ ] `GoTop/index.tsx`
 - [ ] `Hexagon/Container.tsx`
 - [ ] `ImageUpload/index.tsx`
 - [ ] `Krpano/index.tsx`
@@ -83,13 +87,11 @@
 - [ ] `Layout/I18nList.tsx`
 - [ ] `Link/index.tsx`
 - [ ] `Link/ListItemButton.tsx`
-- [ ] `Message.tsx`
 - [ ] `MuiCacheProvider.tsx`
 - [ ] `NotificationPermission/index.tsx`
 - [ ] `PhoneInput/index.tsx`
 - [ ] `QRCode/index.tsx`
 - [ ] `Ripple/index.tsx`
-- [ ] `Selector/index.tsx`
 - [ ] `SkeletonLoader/index.tsx`
 - [ ] `SlideInPanel/index.tsx`
 - [ ] `SwitchButton/index.tsx`
@@ -275,6 +277,40 @@
 | `app/[locale]/css-drawing/loading.tsx` | 改為同步元件，移除 async/headers |
 | `app/[locale]/about/page.tsx` | Layout 結構調整 (User Edit) |
 | `app/[locale]/about/layout.tsx` | Layout 結構調整 (User Edit) |
+
+---
+
+### 2026-02-16 組件測試與修復
+
+**審查範圍**: 5 個核心組件的深度檢查與瀏覽器測試
+
+**已完成組件** (5 個):
+
+| 組件 | 重構內容 | 測試狀態 | 備註 |
+|------|---------|---------|------|
+| `Banner/index.tsx` | useReducer + useMemo | ✅ 通過 | 導航、拖曳功能正常 |
+| `GoTop/index.tsx` | useMemo 衍生狀態 | ✅ 通過 | 修復 useScroll hook 無限迴圈 |
+| `Dialog/index.tsx` | useMemo + useLayoutEffect | ✅ 通過 | 修復測試頁面關閉邏輯 |
+| `Selector/index.tsx` | useMemo 衍生狀態 | ✅ 通過 | 修復 useWindowSize hook |
+| `Message.tsx` | useReducer + useMemo | ✅ 通過 | 新建測試頁面 |
+
+**修復的 Hooks** (2 個):
+
+| Hook | 問題 | 修復方式 |
+|------|------|----------|
+| `useScroll.ts` | getScrollSnapshot 無限迴圈 | 實作快取機制 |
+| `useWindowSize.ts` | getServerSnapshot 無限迴圈 | 使用常數快取 |
+
+**新建檔案** (4 個):
+- `components/Demo/Message.tsx` - Message 測試組件
+- `app/[locale]/components/message/page.tsx` - 頁面路由
+- `app/[locale]/components/message/loading.tsx` - 載入骨架
+- i18n 翻譯（中英文）
+
+**關鍵學習**:
+1. `useSyncExternalStore` 的 snapshot 函數必須返回穩定引用
+2. 相同值時應返回相同物件，避免無限重渲染
+3. Server snapshot 應使用常數快取
 
 ---
 

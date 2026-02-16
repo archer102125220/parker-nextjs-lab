@@ -12,12 +12,14 @@
 | 統計項目 | 數量 |
 |----------|------|
 | 組件檔案 | 110 個 |
-| 自訂 Hooks | 32 個 |
+| 自訂 Hooks | 32 個（✅ 全部完成） |
+| 已檢查組件 | 10 個（Banner, Dialog, GoTop, Message, Selector 等） |
 | `useState` 使用次數 | 331+ |
 | `useEffect` 使用次數 | 152+ |
-| `useMemo` 使用次數 | 19 個檔案 ✅ |
-| `useCallback` 使用次數 | 37 個檔案 ✅ |
-| `useReducer` 使用次數 | 0 ❌ |
+| `useMemo` 使用次數 | 19+ 個檔案 ✅ |
+| `useCallback` 使用次數 | 37+ 個檔案 ✅ |
+| `useReducer` 使用次數 | 5+ 個檔案 ✅ |
+| `useSyncExternalStore` 使用次數 | 4 個 Hooks ✅ |
 | `useTransition` 使用次數 | 0 ❌ |
 
 ## 重構優先順序
@@ -81,11 +83,11 @@
 
 以下檔案需要將類型導入（ReactNode, CSSProperties 等）改為 `import type`：
 
--   [ ] `components/Banner/index.tsx`
+-   [x] `components/Banner/index.tsx` ✅
 -   [ ] `components/DialogModal/index.tsx`
 -   [ ] `components/SlideInPanel/index.tsx`
 -   [ ] `components/Tabs/Bar.tsx`
--   [ ] `components/Selector/index.tsx`
+-   [x] `components/Selector/index.tsx` ✅
 -   [ ] `components/Countdown/index.tsx`
 -   [ ] `components/SwitchButton/index.tsx`
 -   [ ] `components/VirtualScroller/index.tsx`
@@ -132,3 +134,29 @@ yarn lint
 yarn test
 yarn dev:webpack  # 手動功能測試
 ```
+
+## 最新進度（2026-02-16）
+
+### ✅ 已完成組件測試
+
+5 個核心組件已完成深度檢查、重構和瀏覽器測試：
+
+1. **Banner** - useReducer 管理狀態，導航和拖曳功能正常
+2. **GoTop** - useMemo 衍生狀態，修復 useScroll hook 無限迴圈
+3. **Dialog** - useMemo + useLayoutEffect，修復測試頁面
+4. **Selector** - useMemo 衍生狀態，修復 useWindowSize hook
+5. **Message** - useReducer + useMemo，新建測試頁面
+
+### 🔧 修復的 Hooks
+
+- `useScroll.ts` - 實作 snapshot 快取機制
+- `useWindowSize.ts` - 使用常數快取 server snapshot
+
+### 📝 關鍵發現
+
+**useSyncExternalStore 最佳實踐**:
+- getSnapshot 和 getServerSnapshot 必須返回穩定引用
+- 相同值時應返回相同物件實例
+- Server snapshot 應使用常數快取避免無限迴圈
+
+詳細測試報告：`brain/f5d7e8a7-68a4-4e1e-a8eb-b12717526c87/components_test_report.md`

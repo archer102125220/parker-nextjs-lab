@@ -20,12 +20,12 @@ export function DialogDemo(): ReactNode {
 
   const handleCloseDialog = useCallback(() => {
     console.log('Dialog Canceled/Closed');
-    // setIsDialogOpen(false);
+    setIsDialogOpen(false);
   }, []);
 
   const handleConfirmDialog = useCallback(() => {
     console.log('Dialog Confirmed');
-    // setIsDialogOpen(false);
+    setIsDialogOpen(false);
     // 在這裡執行確認後的操作
   }, []);
 

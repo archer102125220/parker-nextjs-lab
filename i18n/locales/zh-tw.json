@@ -222,6 +222,10 @@
             "enterLabel": {
                 "title": "EnterLabel 打字機動畫測試",
                 "description": "展示打字機動畫效果"
+            },
+            "message": {
+                "title": "Message 訊息組件測試",
+                "description": "展示不同類型的訊息提示功能"
             }
         },
         "cssDrawing": {
