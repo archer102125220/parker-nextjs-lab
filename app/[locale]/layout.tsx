@@ -35,7 +35,7 @@ export async function generateMetadata(props: LocaleLayout): Promise<Metadata> {
 
   return {
     verification: {
-      google: '95cyZ_y_761JE0X06C0sEC9Q0p0KVXkKd8FuQO2ZdVM',
+      google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION,
     },
     applicationName: t('systemName'),
     title: {
