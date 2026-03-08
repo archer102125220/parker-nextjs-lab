@@ -596,7 +596,7 @@ export function SwiperJs(props: swiperJsPropsType): ReactNode {
 
   useEffect(() => {
     if (typeof nonce === 'string' && nonce !== '') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+       
       setClientNonce(nonce);
     }
   }, [nonce]);

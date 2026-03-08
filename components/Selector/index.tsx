@@ -8,6 +8,7 @@ import {
   type CSSProperties,
   type ReactNode
 } from 'react';
+import useWindowSize from '@/hooks/useWindowSize';
 import './index.scss';
 
 export interface SelectorOption {
@@ -63,22 +64,15 @@ export function Selector({
   const [listHeight, setListHeight] = useState<number | null>(null);
   const optionListRef = useRef<HTMLDivElement>(null);
 
+  // ✅ FIXED: Use useSyncExternalStore via useWindowSize hook
+  const { width: windowWidth } = useWindowSize();
+
+  // Recalculate height when window resizes or optionList changes
   useEffect(() => {
-    const calculateHeight = () => {
-      if (optionListRef.current) {
-        setListHeight(optionListRef.current.scrollHeight);
-      }
-    };
-
-    calculateHeight();
-    window.addEventListener('resize', calculateHeight);
-    window.addEventListener('orientationchange', calculateHeight);
-
-    return () => {
-      window.removeEventListener('resize', calculateHeight);
-      window.removeEventListener('orientationchange', calculateHeight);
-    };
-  }, [optionList]);
+    if (optionListRef.current) {
+      setListHeight(optionListRef.current.scrollHeight);
+    }
+  }, [windowWidth, optionList]);
 
   useEffect(() => {
     const handleClickOutside = () => setIsOpen(false);
@@ -88,15 +82,9 @@ export function Selector({
     }
   }, [isOpen]);
 
-  // 當 loading 狀態改變時,需要關閉下拉選單以避免 UI 不一致
-  // 這是必要的副作用,用於保持 UI 狀態一致性
-  // Note: ESLint 警告 "setState in useEffect" 是預期的,這是合理的狀態同步
-  useEffect(() => {
-    if (loading) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsOpen(false);
-    }
-  }, [loading]);
+  // ✅ FIXED: Use derived state pattern instead of useLayoutEffect
+  // When loading changes, close the dropdown
+  const effectiveIsOpen = loading ? false : isOpen;
 
   const cssVariables = useMemo((): CSSProperties => {
     const vars: CSSProperties & Record<string, string> = {};
@@ -110,10 +98,10 @@ export function Selector({
         vars['--select_option_list_top'] = '100%';
       }
 
-      vars['--select_option_list_heigth'] = isOpen ? `${listHeight}px` : '0px';
+      vars['--select_option_list_heigth'] = effectiveIsOpen ? `${listHeight}px` : '0px';
     }
 
-    if (isOpen) {
+    if (effectiveIsOpen) {
       vars['--selector_arrow_icon'] = 'rotate(180deg)';
       if (!hasShadow) {
         vars['--select_option_list_border_radius'] = '4px';
@@ -156,7 +144,7 @@ export function Selector({
     return vars;
   }, [
     listHeight,
-    isOpen,
+    effectiveIsOpen,
     hasShadow,
     hasTransition,
     optionListTop,
@@ -193,7 +181,7 @@ export function Selector({
   const handleToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!loading) {
-      setIsOpen(!isOpen);
+      setIsOpen(!effectiveIsOpen);
     }
   };
 
@@ -213,7 +201,7 @@ export function Selector({
       style={cssVariables as CSSProperties}
       onClick={handleToggle}
     >
-      <div className="selector-prefix">{prefixSlot?.(isOpen)}</div>
+      <div className="selector-prefix">{prefixSlot?.(effectiveIsOpen)}</div>
 
       <div className="selector-current_value">
         <p className="selector-current_value-label">{displayValue}</p>
@@ -247,7 +235,7 @@ export function Selector({
 
       <div className="selector-suffix">
         {suffixSlot ? (
-          suffixSlot(isOpen)
+          suffixSlot(effectiveIsOpen)
         ) : (
           <img
             className="selector-suffix-arrow_icon"

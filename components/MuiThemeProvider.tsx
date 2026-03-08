@@ -13,9 +13,9 @@ import {
 interface MuiThemeProviderProps {
   children: ReactNode;
 }
-export async function MuiThemeProvider(
+export function MuiThemeProvider(
   props: MuiThemeProviderProps
-): Promise<ReactNode> {
+): ReactNode {
   const { children } = props;
 
   // const messages: Messages =

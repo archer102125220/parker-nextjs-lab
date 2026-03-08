@@ -26,6 +26,9 @@ let windowSize: WindowSize =
     ? { width: window.innerWidth, height: window.innerHeight }
     : { width: 0, height: 0 };
 
+// Cache for server snapshot to avoid creating new objects
+const SERVER_SNAPSHOT: WindowSize = { width: 0, height: 0 };
+
 const subscribeWindowSize = {
   subscribe(callback: () => void) {
     function handleResize() {
@@ -44,7 +47,8 @@ const subscribeWindowSize = {
     return windowSize;
   },
   getServerSnapshot(): WindowSize {
-    return { width: 0, height: 0 };
+    // ✅ FIXED: Return cached constant to avoid infinite loop
+    return SERVER_SNAPSHOT;
   }
 };
 

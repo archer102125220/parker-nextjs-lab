@@ -5,7 +5,7 @@
 | 分類 | 總數 | 已完成 | 進行中 |
 |------|------|--------|--------|
 | Hooks | 32 | 32 | 0 |
-| Components | 110+ | 3 | 0 |
+| Components | 110+ | 10 | 0 |
 | App Pages | 63 | 0 | 0 |
 
 ---
@@ -64,18 +64,22 @@
 - [x] `SwiperCustom/index.tsx` ✅ useEffectEvent（2 個 callback，移出 Effect deps）
 - [x] `ScrollFetch/index.tsx` ⭐ ✅ useReducer x 3（16 → 1 useState）
 
+### 已完成檢查與測試（2026-02-16）
+- [x] `Banner/index.tsx` ✅ useReducer + useMemo（已測試）
+- [x] `Dialog/index.tsx` ✅ useMemo + useLayoutEffect（已測試）
+- [x] `GoTop/index.tsx` ✅ useMemo 衍生狀態（已測試）
+- [x] `Message.tsx` ✅ useReducer + useMemo（已測試，新建測試頁面）
+- [x] `Selector/index.tsx` ✅ useMemo 衍生狀態（已測試）
+
 ### 需檢查的核心組件
 - [ ] `Animation/EnterLabel/index.tsx`
 - [ ] `Animation/TriangleEnter/index.tsx`
 - [ ] `AxiosInit.tsx`
-- [ ] `Banner/index.tsx`
 - [ ] `ClientProvider.tsx`
 - [ ] `CloudMessaging/DataTable.tsx`
 - [ ] `CloudMessaging/Form.tsx`
 - [ ] `Countdown/index.tsx`
 - [ ] `DatePicker/index.tsx`
-- [ ] `Dialog/index.tsx`
-- [ ] `GoTop/index.tsx`
 - [ ] `Hexagon/Container.tsx`
 - [ ] `ImageUpload/index.tsx`
 - [ ] `Krpano/index.tsx`
@@ -83,13 +87,11 @@
 - [ ] `Layout/I18nList.tsx`
 - [ ] `Link/index.tsx`
 - [ ] `Link/ListItemButton.tsx`
-- [ ] `Message.tsx`
 - [ ] `MuiCacheProvider.tsx`
 - [ ] `NotificationPermission/index.tsx`
 - [ ] `PhoneInput/index.tsx`
 - [ ] `QRCode/index.tsx`
 - [ ] `Ripple/index.tsx`
-- [ ] `Selector/index.tsx`
 - [ ] `SkeletonLoader/index.tsx`
 - [ ] `SlideInPanel/index.tsx`
 - [ ] `SwitchButton/index.tsx`
@@ -249,6 +251,66 @@
 | `Drawer/index.tsx` | 3 個 callback refs sync |
 
 **原因**: `useLayoutEffect` 在瀏覽器繪製前同步執行，確保 refs 在任何用戶交互前都是最新值，避免 race condition。
+
+---
+
+### 2026-01-25 Nonce/Hydration Refactor (Need Double Check)
+
+**審查範圍**: 解決 CSP Nonce 在 SSR/Hydration 中的傳遞問題，以及防毒軟體干擾導致的 Hydration Mismatch。
+
+**關鍵變更**:
+1. 引入 `NonceContext` (`NonceProvider`) 以避免 Prop Drilling 並支援深層元件存取。
+2. `DefaultLayout` 保持 Server Component，但 `Header`/`Footer` 改為從 Context 獲取 Nonce 作為 fallback。
+3. `loading.tsx` 移除 `async` 改為同步，避免 React Instrumentation Error。
+4. 使用 `useMemo` 優化 Nonce 的合併邏輯 (`props.nonce || contextNonce || reduxNonce`)。
+
+**需二次檢查檔案** (7 個):
+
+| 檔案 | 改進 / 變更 |
+|------|-------------|
+| `components/Providers/NonceProvider.tsx` | 新增 Context Provider |
+| `components/Layout/Body.tsx` | 注入 NonceProvider |
+| `components/Layout/Header.tsx` | 新增 useNonce fallback, useMemo 優化 |
+| `components/Layout/Footer.tsx` | 新增 useNonce fallback, useMemo 優化 |
+| `components/PageLoading.tsx` | 新增 useNonce fallback, useMemo 優化 |
+| `layout/default/index.tsx` | 恢復為 Server Component，傳遞 Props |
+| `app/[locale]/css-drawing/loading.tsx` | 改為同步元件，移除 async/headers |
+| `app/[locale]/about/page.tsx` | Layout 結構調整 (User Edit) |
+| `app/[locale]/about/layout.tsx` | Layout 結構調整 (User Edit) |
+
+---
+
+### 2026-02-16 組件測試與修復
+
+**審查範圍**: 5 個核心組件的深度檢查與瀏覽器測試
+
+**已完成組件** (5 個):
+
+| 組件 | 重構內容 | 測試狀態 | 備註 |
+|------|---------|---------|------|
+| `Banner/index.tsx` | useReducer + useMemo | ✅ 通過 | 導航、拖曳功能正常 |
+| `GoTop/index.tsx` | useMemo 衍生狀態 | ✅ 通過 | 修復 useScroll hook 無限迴圈 |
+| `Dialog/index.tsx` | useMemo + useLayoutEffect | ✅ 通過 | 修復測試頁面關閉邏輯 |
+| `Selector/index.tsx` | useMemo 衍生狀態 | ✅ 通過 | 修復 useWindowSize hook |
+| `Message.tsx` | useReducer + useMemo | ✅ 通過 | 新建測試頁面 |
+
+**修復的 Hooks** (2 個):
+
+| Hook | 問題 | 修復方式 |
+|------|------|----------|
+| `useScroll.ts` | getScrollSnapshot 無限迴圈 | 實作快取機制 |
+| `useWindowSize.ts` | getServerSnapshot 無限迴圈 | 使用常數快取 |
+
+**新建檔案** (4 個):
+- `components/Demo/Message.tsx` - Message 測試組件
+- `app/[locale]/components/message/page.tsx` - 頁面路由
+- `app/[locale]/components/message/loading.tsx` - 載入骨架
+- i18n 翻譯（中英文）
+
+**關鍵學習**:
+1. `useSyncExternalStore` 的 snapshot 函數必須返回穩定引用
+2. 相同值時應返回相同物件，避免無限重渲染
+3. Server snapshot 應使用常數快取
 
 ---
 

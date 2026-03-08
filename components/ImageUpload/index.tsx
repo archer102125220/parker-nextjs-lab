@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useRef, type DragEvent, type ChangeEvent } from 'react';
+import { useState, useRef, useCallback, useEffect, type DragEvent, type ChangeEvent } from 'react';
 import ButtonBase from '@mui/material/ButtonBase';
 import './index.scss';
 
 export interface ImageUploadProps {
-  value?: File | string;
+  value?: File;
   onChange?: (file: File) => void;
   onError?: (error: string) => void;
   btnLabel?: string;
@@ -31,78 +31,118 @@ export function ImageUpload({
   className = '',
   accept = 'image/*'
 }: ImageUploadProps) {
-  const [previewUrl, setPreviewUrl] = useState<string>('');
+  // Internal state for uncontrolled mode
+  const [internalPreviewUrl, setInternalPreviewUrl] = useState<string>('');
   const [showMask, setShowMask] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileRead = (file: File) => {
-    if (!file || !file.type.startsWith('image/')) {
-      onError?.('請選擇圖片檔案');
-      return;
+  // For controlled mode: track value prop changes and generate preview URL
+  const [controlledPreviewUrl, setControlledPreviewUrl] = useState<string>('');
+  const previousValueRef = useRef<File | undefined>(value);
+
+  // Update controlled preview URL when value prop changes
+  useEffect(() => {
+    // Only process if value actually changed (reference equality check)
+    if (previousValueRef.current === value) return;
+    previousValueRef.current = value;
+
+    if (value) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setControlledPreviewUrl(result);
+      };
+      reader.readAsDataURL(value);
+    } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setControlledPreviewUrl('');
+      // Reason: Syncing props to state for controlled component pattern - FileReader is async
     }
+  }, [value]);
 
-    if (maxSize && file.size > maxSize) {
-      onError?.(`檔案大小超過限制 (${(maxSize / 1024 / 1024).toFixed(2)}MB)`);
-      return;
-    }
+  // Use controlled preview if value prop exists, otherwise use internal state
+  const isControlled = value !== undefined;
+  const previewUrl = isControlled ? controlledPreviewUrl : internalPreviewUrl;
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const result = e.target?.result as string;
-      setPreviewUrl(result);
-    };
-    reader.readAsDataURL(file);
+  const handleFileRead = useCallback(
+    (file: File) => {
+      if (!file || !file.type.startsWith('image/')) {
+        onError?.('請選擇圖片檔案');
+        return;
+      }
 
-    onChange?.(file);
-  };
+      if (maxSize && file.size > maxSize) {
+        onError?.(`檔案大小超過限制 (${(maxSize / 1024 / 1024).toFixed(2)}MB)`);
+        return;
+      }
 
-  const handleClick = () => {
+      // For uncontrolled mode, update internal preview
+      if (!isControlled) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const result = e.target?.result as string;
+          setInternalPreviewUrl(result);
+        };
+        reader.readAsDataURL(file);
+      }
+
+      onChange?.(file);
+    },
+    [maxSize, onChange, onError, isControlled]
+  );
+
+  const handleClick = useCallback(() => {
     if (disabled) return;
     fileInputRef.current?.click();
-  };
+  }, [disabled]);
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      handleFileRead(file);
-    }
-  };
+  const handleFileChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        handleFileRead(file);
+      }
+    },
+    [handleFileRead]
+  );
 
-  const handleDragEnter = (e: DragEvent) => {
+  const handleDragEnter = useCallback(
+    (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!disabled) {
+        setShowMask(true);
+      }
+    },
+    [disabled]
+  );
+
+  const handleDragOver = useCallback((e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!disabled) {
-      setShowMask(true);
-      setIsDragging(true);
-    }
-  };
+  }, []);
 
-  const handleDragOver = (e: DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleDragLeave = (e: DragEvent) => {
+  const handleDragLeave = useCallback((e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setShowMask(false);
-    setIsDragging(false);
-  };
+  }, []);
 
-  const handleDrop = (e: DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setShowMask(false);
-    setIsDragging(false);
+  const handleDrop = useCallback(
+    (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setShowMask(false);
 
-    if (disabled) return;
+      if (disabled) return;
 
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      handleFileRead(file);
-    }
-  };
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        handleFileRead(file);
+      }
+    },
+    [disabled, handleFileRead]
+  );
 
   const cssVariables = {
     '--image_upload-preview-bg': previewBgColor,

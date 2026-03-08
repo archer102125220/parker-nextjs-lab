@@ -4,7 +4,7 @@
 
 // import { QueryInterface } from 'sequelize';
 
-// eslint-disable-next-line import/no-anonymous-default-export
+ 
 module.exports = {
   // up(queryInterface: QueryInterface) {
   up(queryInterface) {

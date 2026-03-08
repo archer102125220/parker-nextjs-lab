@@ -1,10 +1,8 @@
 'use client';
 import {
   useRef,
-  useState,
   useMemo,
   useCallback,
-  useEffect,
   type ReactNode,
   type CSSProperties,
   type RefObject
@@ -12,6 +10,7 @@ import {
 import IconButton from '@mui/material/IconButton';
 import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
 
+import useScroll from '@/hooks/useScroll';
 import '@/components/GoTop/go_top.scss';
 
 interface GoTopProps {
@@ -53,9 +52,20 @@ export function GoTop(props: GoTopProps): ReactNode {
   } = props;
   const defaultRef = useRef<HTMLDivElement>(null);
 
-  const [isShow, setIsShow] = useState(false);
-
   const safeRef = useMemo(() => ref || defaultRef, [ref, defaultRef]);
+
+  // ✅ FIXED: Use useSyncExternalStore via useScroll hook
+  const { windowScrollTop, elementScrollTop } = useScroll(safeRef);
+
+  // ✅ FIXED: Derive isShow directly from scroll position using useMemo
+  // No need for useState + useEffect - this is pure derived state
+  const isShow = useMemo(() => {
+    if (parentElementTrigger !== true) {
+      return windowScrollTop > limit;
+    }
+    // For parent element trigger, check if we have element scroll
+    return elementScrollTop > limit;
+  }, [parentElementTrigger, windowScrollTop, elementScrollTop, limit]);
   const cssVariable: GoTopCssVariableType = useMemo<GoTopCssVariableType>(
     function () {
       const _cssVariable: GoTopCssVariableType = {};
@@ -137,47 +147,6 @@ export function GoTop(props: GoTopProps): ReactNode {
     [isShow, safeRef, limit, parentElementTrigger]
   );
 
-  const handleScroll = useCallback(
-    function () {
-      if (
-        (parentElementTrigger !== true &&
-          (document.body.scrollTop > limit ||
-            document.documentElement.scrollTop > limit)) ||
-        (safeRef?.current instanceof HTMLElement &&
-          safeRef.current.parentElement instanceof HTMLElement &&
-          safeRef.current.parentElement.scrollTop > limit)
-      ) {
-        setIsShow(true);
-      } else {
-        setIsShow(false);
-      }
-    },
-    [parentElementTrigger, limit, safeRef]
-  );
-
-  useEffect(() => {
-    window.onscroll = handleScroll;
-    window.addEventListener('scroll', handleScroll);
-    if (
-      typeof safeRef?.current?.parentElement?.addEventListener === 'function'
-    ) {
-      safeRef?.current.parentElement.addEventListener('scroll', handleScroll);
-    }
-
-    return function () {
-      window.onscroll = null;
-      window.removeEventListener('scroll', handleScroll);
-      if (
-        typeof safeRef?.current?.parentElement?.removeEventListener ===
-        'function'
-      ) {
-        safeRef?.current.parentElement.removeEventListener(
-          'scroll',
-          handleScroll
-        );
-      }
-    };
-  }, [handleScroll, safeRef]);
 
   // useEffect(() => {
   //   console.log(JSON.stringify({ GoTopNonce: nonce }));

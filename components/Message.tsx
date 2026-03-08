@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback, type ReactNode } from 'react';
+import { useReducer, useMemo, useEffect, useCallback, type ReactNode } from 'react';
 import type { SnackbarOrigin } from '@mui/material/Snackbar';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
@@ -31,62 +31,91 @@ export function Message(props: MessageProps): ReactNode {
     anchorOrigin = { vertical: 'top', horizontal: 'center' },
     autoHideDuration = 6000,
     width = '100%',
-    resetMessageState = () => {}
+    resetMessageState = () => { }
   } = props;
 
-  const [clientNonce, setClientNonce] = useState<string>('');
-  const [open, setOpen] = useState<boolean>(false);
-  const [messageText, setMessageText] = useState<messageTypText>('');
-  const [messageType, setMessageType] = useState<messageTypeType>('success');
+  // ✅ FIXED: Use useMemo instead of useEffect for nonce sync
+  const clientNonce = useMemo(
+    () => (typeof nonce === 'string' && nonce !== '' ? nonce : ''),
+    [nonce]
+  );
+
+  // ✅ FIXED: Use useReducer for 4 related message states
+  type MessageReducerState = {
+    open: boolean;
+    text: messageTypText;
+    type: messageTypeType;
+  };
+
+  type MessageReducerAction =
+    | { type: 'SHOW_MESSAGE'; payload: { text: messageTypText; messageType: messageTypeType } }
+    | { type: 'HIDE_MESSAGE' };
+
+  const messageReducer = (
+    state: MessageReducerState,
+    action: MessageReducerAction
+  ): MessageReducerState => {
+    switch (action.type) {
+      case 'SHOW_MESSAGE':
+        return {
+          ...state,
+          open: true,
+          text: action.payload.text,
+          type: action.payload.messageType
+        };
+      case 'HIDE_MESSAGE':
+        return { ...state, open: false };
+      default:
+        return state;
+    }
+  };
+
+  const [state, dispatch] = useReducer(messageReducer, {
+    open: false,
+    text: '',
+    type: 'success'
+  });
 
   // const messageContext = useAppSelector(systemSelectors.messageContext);
   // console.log({ messageContext });
 
   useEffect(() => {
-    if (typeof nonce === 'string' && nonce !== '') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setClientNonce(nonce);
-    }
-  }, [nonce]);
-
-  useEffect(() => {
     const { text: _text = '', type: _type = 'success' } = messageState || {};
-    // TODO
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMessageText(_text);
-    setMessageType(_type || 'success');
     if (_text !== '' && MESSAGE_TYPE.includes(_type)) {
-      setOpen(true);
+      dispatch({
+        type: 'SHOW_MESSAGE',
+        payload: { text: _text, messageType: _type || 'success' }
+      });
     }
   }, [messageState]);
 
   useEffect(() => {
-    if (open === false && typeof resetMessageState === 'function') {
+    if (state.open === false && typeof resetMessageState === 'function') {
       setTimeout(() => resetMessageState(), 100);
     }
-  }, [open, resetMessageState]);
+  }, [state.open, resetMessageState]);
 
   const handleClose = useCallback(function _close() {
-    setOpen(false);
+    dispatch({ type: 'HIDE_MESSAGE' });
   }, []);
 
   return (
     <Snackbar
       nonce={nonce}
-      open={open}
+      open={state.open}
       anchorOrigin={anchorOrigin}
       autoHideDuration={autoHideDuration}
       onClose={handleClose}
     >
       <MuiAlert
         nonce={clientNonce}
-        severity={messageType}
+        severity={state.type}
         sx={{ width, alignItems: 'center' }}
         elevation={6}
         variant="filled"
         onClose={handleClose}
       >
-        {messageText}
+        {state.text}
       </MuiAlert>
     </Snackbar>
   );

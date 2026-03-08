@@ -1,0 +1,161 @@
+
+# CSS Naming Convention (Modified BEM)
+
+## Naming Structure
+
+| Type | Format | Example |
+|------|--------|---------|
+| Block | single name | `.countdown` |
+| Element | hyphen `-` | `.countdown-title` |
+| Sub-Element | hyphen `-` | `.countdown-title-icon` |
+| Multi-word | underscore `_` | `.image_upload`, `.content_box` |
+| State | HTML attribute | `[css-is-active='true']` |
+
+## Key Rules
+
+- **Use `-` (hyphen)** to connect Block and Element
+- **Use `_` (underscore)** for multi-word names
+
+## Forbidden Practices
+
+- ❌ **NEVER use `__` (double underscore)**
+- ❌ **NEVER use `--` (double hyphen)** - use HTML attributes instead
+- ❌ **NEVER use multiple classNames on a single element**
+
+```tsx
+// ❌ WRONG
+<div className={`${style.box} ${style['box--red']}`}>
+
+// ✅ CORRECT
+<div className={style.box} css-color="red">
+```
+
+## HTML Attribute Usage
+
+### When to use HTML attributes
+
+1. **States**: `[css-is-active='true']`, `[css-is-disabled='true']`
+2. **Color variants**: `[css-color='red']`, `[css-color='blue']`
+3. **Size variants**: `[css-size='small']`, `[css-size='large']`
+
+### When to use separate classes
+
+Only when the class name has **clear semantic meaning** (not just describing appearance):
+
+```scss
+// ✅ Semantic class names
+.alert {
+  &-success { }  // Success message (semantic)
+  &-error { }    // Error message (semantic)
+}
+```
+
+### SCSS Example
+
+```scss
+.demo_box {
+  background: #f5f5f5;
+  
+  &[css-color='red'] {
+    background: #ffcdd2;
+  }
+  
+  &[css-is-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+```
+
+### TSX Example
+
+```tsx
+// ✅ CORRECT: Single className + HTML attributes
+<Box 
+  className={style.demo_box} 
+  css-color="red"
+  css-is-disabled={isDisabled ? 'true' : undefined}
+>
+  Demo content
+</Box>
+```
+- **State attributes MUST start with `css-`**: `css-is-active`, `css-is-dragging`
+- **CSS variables MUST use `_`**: `--editor_height`, `--offset_y`
+
+## Examples
+
+```scss
+// ✅ CORRECT
+.image_upload {
+  &-preview {        // .image_upload-preview
+    &-img { }        // .image_upload-preview-img
+  }
+  &[css-is-dragging='true'] { }
+}
+
+// ❌ WRONG
+.image__upload { }
+.image-upload__preview { }
+```
+
+## Page Root Class
+
+- **Page**: `[name]_page` (e.g., `.hooks_test_page`)
+- **Component**: `[name]` (e.g., `.image_upload`)
+- **Each page MUST have unique root class**
+
+### Unique Class Name Rule
+
+**Each element MUST have its own unique class** for two critical reasons:
+1. **CSS relies primarily on class names** for styling
+2. **Quick DOM debugging** - Instantly identify which element has issues in browser DevTools
+
+```scss
+// ✅ CORRECT - Each element has unique class
+.footer {
+  &-content { }
+  &-text { }
+  &-link {          // Unique class for link
+    color: inherit;
+    text-decoration: underline;
+  }
+}
+
+// ❌ WRONG - Using tag selectors
+.footer {
+  &-links {
+    a {              // Tag selector - hard to debug
+      color: inherit;
+    }
+  }
+}
+```
+
+**Exceptions** (when tag selectors are acceptable):
+- ✅ **Dynamic content areas**: `.content p { }` (for user-generated content)
+- ✅ **Third-party content**: `:global a { }` (e.g., WangEditor internal HTML)
+
+```scss
+// ✅ CORRECT - All nested under page root
+.hooks_test_page {
+  &-description { }
+  &-section {
+    &-title { }
+  }
+}
+
+// ❌ WRONG - Orphaned classes
+.hooks_test_page { }
+.description { }
+```
+
+## Style Reuse Strategy (Strict)
+
+- **Single Page Reuse**: Define `%placeholder_name` at the top of the SCSS file and use `@extend` in the specific element classes.
+- **Multi-Page Reuse**: Define in `styles/placeholders/` and use `@use`.
+- **Primary Goal**: Maintain unique unique class names for every structural element to ensure instant file/element location in DevTools.
+
+## Strict Nesting (Hierarchy Reflection)
+
+- Class names MUST generally reflect the DOM containment hierarchy if it aids context.
+- Example: If `group` is inside `scroll_area`, it should be named `scroll_area-group`, not just `group` (unless `group` is a top-level independent abstraction).

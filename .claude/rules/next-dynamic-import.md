@@ -1,0 +1,30 @@
+
+# Next.js Dynamic Import (⚠️ CRITICAL)
+
+## Default Behavior (Recommended)
+✅ `dynamic(() => import(...))` - Default, SSR enabled
+
+## Avoid Unless Absolutely Necessary
+❌ `dynamic(() => import(...), { ssr: false })` - AVOID unless absolutely necessary
+
+## When to Use `{ ssr: false }`
+Only use when third-party library cannot run in Node.js environment.
+
+## Consequences of Misuse
+- Build failure
+- SEO damage
+- Performance issues
+- Hydration mismatches
+
+## Example
+
+```tsx
+// ✅ Good: SSR enabled (default)
+const ClientComponent = dynamic(() => import('@/components/ClientComponent'));
+
+// ❌ Bad: Disabling SSR without valid reason
+const ClientComponent = dynamic(() => import('@/components/ClientComponent'), { ssr: false });
+
+// ✅ Acceptable: Third-party lib requires browser environment
+const BrowserOnlyLib = dynamic(() => import('browser-only-library'), { ssr: false });
+```

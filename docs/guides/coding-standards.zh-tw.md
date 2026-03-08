@@ -5,6 +5,46 @@
 
 ---
 
+## 0. AI Agent 規則與設定 (AI Agent Rules & Configuration)
+
+本專案為不同的 AI 輔助工具提供了專屬的規則設定檔，以確保程式碼風格與規範的一致性。
+
+| AI 模型/工具 | 規則檔案位置 | 說明 |
+|---|---|---|
+| **Antigravity (Agent)** | `.agent/rules/*.md` | 自動化 Agent (Antigravity) 專用規則 |
+| **Gemini Code Assist** | `GEMINI.md` | IDE 擴充功能 (Gemini Code Assist) 專用上下文 |
+| **Claude** | `CLAUDE.md` | 適用於 Claude 的專案指令 |
+| **Cursor AI** | `.cursor/rules/*.mdc` | 針對 Cursor 的細部規則檔 (使用 `.mdc` 格式) |
+| **GitHub Copilot** | `.github/copilot-instructions.md`<br>`.github/instructions/*.instructions.md` | Repository-wide 與特定檔案類型的指令 |
+
+> **開發者注意**：當更新本文件時，請務必同步更新上述所有規則檔案，以確保 AI 行為的一致性。
+
+> **📖 詳細的 AI 配置指南**，請參閱 [AI Agents 配置指南](./ai-agents-config.zh-tw.md)，其中說明了所有 AI 助手的完整架構、檔案結構、同步策略和使用指南。
+
+### Skills 系統
+
+除了 **Rules**（簡潔的核心標準）之外，本專案還提供 **Skills**（詳細的任務特定指南）用於處理複雜場景：
+
+| 資源 | 用途 | 位置 |
+|------|------|------|
+| **Skills** | 包含決策樹、範例和檢查清單的詳細指南 | `.agent/skills/*/SKILL.md` |
+| **Skills 指南** | 完整的 skills 文檔 | [docs/guides/skills-guide.zh-tw.md](./skills-guide.zh-tw.md) |
+
+**可用的 Skills**：
+- [CSS/SCSS 命名規範](.agent/skills/css-naming-convention/SKILL.md) - 連字符 vs 底線決策樹
+- [資料庫遷移工作流程](.agent/skills/database-migration-workflow/SKILL.md) - 生產環境 vs 開發環境工作流程
+- [程式碼重構安全](.agent/skills/code-refactoring-safety/SKILL.md) - AI 工具 vs 腳本
+- [React Hooks 選擇](.agent/skills/react-hooks-selection/SKILL.md) - Hook 選擇決策樹
+- [Server vs Client 組件](.agent/skills/server-client-components/SKILL.md) - 組件類型決策
+- [檔案組織](.agent/skills/file-organization/SKILL.md) - Placeholder vs component 策略
+- [Lint 政策](.agent/skills/lint-policy/SKILL.md) - 錯誤處理指南
+- [i18n 實作](.agent/skills/i18n-implementation/SKILL.md) - next-intl 模式
+- [建置工具](.agent/skills/build-tools/SKILL.md) - Webpack 配置
+
+詳見 [Skills 指南](./skills-guide.zh-tw.md) 完整文檔。
+
+---
+
 ## 1. TypeScript 規範
 
 ### 1.1 型別安全 (強制)

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import './index.scss';
 
 export interface DialogModalProps {

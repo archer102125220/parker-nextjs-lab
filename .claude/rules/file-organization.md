@@ -1,0 +1,111 @@
+
+# File Organization Rules
+
+## Style File Locations
+
+| Type | Location | Format |
+|------|----------|--------|
+| Global tools | `styles/` | `.scss` |
+| Placeholders | `styles/placeholders/` | `_*.scss` |
+| Component styles | Component directory | `.scss` or `.module.scss` |
+| Page styles | `app/` directory | `.module.scss` |
+
+## Forbidden Practices
+
+- ❌ **NEVER create `_shared` SCSS directories within `app/`**
+- ❌ **NEVER share CSS class names between pages**
+- ❌ **NEVER share a single CSS file between multiple pages**
+
+## Required Practices
+
+- ✅ Cross-page shared styles MUST be in `styles/placeholders/`
+- ✅ Import via `@use '@/styles/placeholders' as *;`
+- ✅ For similar DOM across pages: create **component** with `pageClassName` prop
+
+## Component Pattern
+
+When component encapsulates entire page:
+
+```tsx
+// components/MyCard/index.tsx
+import './index.scss';  // Component's own styles
+
+interface Props {
+  title: string;
+  pageClassName?: string;  // For page identification
+}
+
+export default function MyCard({ title, pageClassName }: Props) {
+  const rootClassName = pageClassName 
+    ? `${pageClassName} my_card` 
+    : 'my_card';
+
+  return (
+    <div className={rootClassName}>
+      <h2 className="my_card-title">{title}</h2>
+    </div>
+  );
+}
+```
+
+```tsx
+// app/[locale]/page-a/page.tsx
+import MyCard from '@/components/MyCard';
+import style from './page.module.scss';
+
+export default function PageA() {
+  return <MyCard title="Title" pageClassName={style.page_a} />;
+}
+```
+
+## SCSS Import Order
+
+```scss
+// 1. Global tools
+@use '@/styles/placeholders' as *;
+@use '@/styles/mixin' as *;
+
+// 2. Component styles
+.my_component { }
+```
+
+---
+
+## Demo Components Organization
+
+### Location: `components/Demo/`
+
+Full-page Client Components for feature demonstrations.
+
+### Naming Convention
+- **PascalCase** for file names
+- Examples: `BannerDemo.tsx`, `LazyLoadTest.tsx`, `RippleTest.tsx`
+
+### Rules
+1. **Full-page content** → `components/Demo/[PageName].tsx`
+2. **Multiple sub-components** → `components/[PageName]/` folder
+
+### Pattern
+```tsx
+// app/[locale]/some-page/page.tsx (Server Component)
+import dynamic from 'next/dynamic';
+const DemoClient = dynamic(() => import('@/components/Demo/SomePage'));
+
+export default function Page() {
+  return <DemoClient />;
+}
+```
+
+```tsx
+// components/Demo/SomePage.tsx (Client Component)
+'use client';
+export default function SomePage() {
+  // Interactive logic here
+}
+```
+
+### Benefits
+- ✅ Clear separation of Server/Client components
+- ✅ Enables `generateMetadata` in page.tsx
+- ✅ Centralized demo components location
+- ✅ Consistent naming pattern
