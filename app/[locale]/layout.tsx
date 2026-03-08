@@ -34,6 +34,9 @@ export async function generateMetadata(props: LocaleLayout): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'metadata' });
 
   return {
+    verification: {
+      google: '95cyZ_y_761JE0X06C0sEC9Q0p0KVXkKd8FuQO2ZdVM',
+    },
     applicationName: t('systemName'),
     title: {
       default: t('defaultTitle'),
