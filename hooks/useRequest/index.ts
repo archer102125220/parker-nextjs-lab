@@ -130,7 +130,9 @@ export function useRequest(
         hasErrorAdapter
       );
 
-      handleInfinity(newResponse);
+      if (typeof handleInfinity === 'function') {
+        handleInfinity(newResponse);
+      }
 
       setResponse(newResponse);
 
