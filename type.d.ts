@@ -10,15 +10,9 @@ export declare global {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     FB?: any;
 
-    // TODO
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-    gtag: Function;
-    // TODO
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-    gtm: Function;
-    // TODO
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    dataLayer: Array<Record<string, any>>;
+    gtag: (...args: unknown[]) => void;
+    gtm: (trackData?: Record<string, unknown>) => void;
+    dataLayer: Array<unknown>;
 
     YT: {
       // TODO

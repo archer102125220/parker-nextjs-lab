@@ -1,13 +1,11 @@
-import { googleGtagInit } from '@/utils/third-party/gtag';
+import { googleGtagInit, type GtagFn, type GtmFn ,type GtagCallback} from '@/utils/third-party/gtag';
 
 export function googleGAInit(
   googleGAID = '',
   nonce: string | null = null,
   debug = process.env.NODE_ENV === 'development',
   log = false,
-  // TODO
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  callback?: Function
+  callback?: GtagCallback
 ) {
   if (typeof googleGAID !== 'string' || googleGAID === '') {
     console.error('缺少google ga id');
@@ -16,12 +14,8 @@ export function googleGAInit(
     console.error('document API遺失');
     return;
   }
-  const src = `https://www.googletagmanager.com/gtag/js?id=${googleGAID}`;
 
-  const gaScript = document.createElement('script');
-  // TODO
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  function init(gtag: Function, gtm: Function) {
+  function init(gtag: GtagFn, gtm: GtmFn) {
     if (typeof gtag === 'function') {
       gtag('js', new Date());
       gtag('config', googleGAID, {
@@ -32,7 +26,12 @@ export function googleGAInit(
       callback(gtag, gtm);
     }
   }
-  gaScript.onload = () => googleGtagInit(log, init);
+  googleGtagInit(log, init)
+
+  const src = `https://www.googletagmanager.com/gtag/js?id=${googleGAID}`;
+
+  const gaScript = document.createElement('script');
+  // gaScript.onload = () => googleGtagInit(log, init);
   // gaScript.addEventListener('load', () =>  googleGtagInit(googleGAID, log, init));
 
   gaScript.id = 'gaScript';

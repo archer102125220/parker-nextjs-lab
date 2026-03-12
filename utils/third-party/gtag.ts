@@ -1,27 +1,27 @@
-// TODO
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type trackDataType = { [key: string]: any };
-// TODO
-// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-export function googleGtagInit(log = false, callback?: Function) {
+export type trackDataType = Record<string, unknown>;
+export type GtagFn = (...args: unknown[]) => void;
+export type GtmFn = (trackData?: trackDataType) => void;
+export type GtagCallback = ((gtag: GtagFn, gtm: GtmFn) => void) | ((...args: unknown[]) => void);
+
+export function googleGtagInit(log = false, callback?: GtagCallback) {
   window.dataLayer = window.dataLayer || [];
+
   window.gtag =
     window.gtag ||
-    // TODO
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    function (...arg: any[]) {
+    function (...arg: unknown[]) {
       if (log === true) {
         console.log('gtag 參數：', arg);
       }
       window.dataLayer.push(arg);
     };
+
   window.gtm =
     window.gtm ||
     function (trackData: trackDataType = {}) {
       if (log === true) {
         console.log('gtm 參數：', trackData);
       }
-      window.dataLayer.push(trackData);
+      window.dataLayer.push(trackData as unknown);
     };
 
   if (typeof callback === 'function') {
