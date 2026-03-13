@@ -1,5 +1,5 @@
 'use server';
-import type { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { getTranslations } from 'next-intl/server';
 
 import { storeInit } from '@/store';

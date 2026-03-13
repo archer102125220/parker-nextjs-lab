@@ -1,5 +1,5 @@
 'use client';
-import type { ReactNode } from 'react';
+import  {memo,type ReactNode } from 'react';
 import { useState, useLayoutEffect, useEffect } from 'react';
 
 import { googleGTMInit } from '@/utils/third-party/gtm';
@@ -13,12 +13,12 @@ interface GTMInitProps {
 
 const isDev = process.env.NODE_ENV === 'development';
 
-export function GTMInit({
+export const GTMInit = memo(({
   children,
   nonce,
   gtmId,
   log
-}: GTMInitProps): ReactNode {
+}: GTMInitProps): ReactNode => {
   const [clientNonce, setClientNonce] = useState<string>('');
 
   useLayoutEffect(() => {
@@ -48,6 +48,7 @@ export function GTMInit({
       {children}
     </>
   );
-}
+})
+GTMInit.displayName = 'GTMInit';
 
 export default GTMInit;

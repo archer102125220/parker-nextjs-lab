@@ -1,5 +1,5 @@
 'use client';
-import { useLayoutEffect, type ReactNode } from 'react';
+import {memo, useLayoutEffect, type ReactNode } from 'react';
 
 import { googleGAInit } from '@/utils/third-party/ga';
 
@@ -13,13 +13,13 @@ interface GAInitProps {
 
 const isDev = process.env.NODE_ENV === 'development';
 
-export function GAInit({
+export const GAInit = memo(({
   children,
   gaId,
   nonce,
   debug,
   log
-}: GAInitProps): ReactNode {
+}: GAInitProps): ReactNode  =>{
   useLayoutEffect(() => {
     const _debug = typeof debug === 'boolean' ? debug : isDev;
     const _log = typeof log === 'boolean' ? log : isDev;
@@ -28,6 +28,7 @@ export function GAInit({
   }, [gaId, nonce, debug, log]);
 
   return children;
-}
+})
+GAInit.displayName = 'GAInit';
 
 export default GAInit;

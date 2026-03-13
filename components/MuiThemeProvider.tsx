@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
 // import { getMessages } from 'next-intl/server';
 // import type { Messages } from 'next-intl';

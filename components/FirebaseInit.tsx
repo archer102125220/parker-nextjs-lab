@@ -1,5 +1,5 @@
 'use client';
-import type { ReactNode } from 'react';
+import  {memo,type ReactNode } from 'react';
 
 import type { firebaseConfig } from '@/utils/third-party/firebase';
 import { firebase } from '@/utils/third-party/firebase';
@@ -11,7 +11,7 @@ export interface FirebaseInitProps extends firebaseConfig {
   children?: ReactNode;
 }
 
-export function FirebaseInit(props: FirebaseInitProps): ReactNode {
+export const FirebaseInit = memo((props: FirebaseInitProps): ReactNode => {
   const { children, ...firebaseConfig } = props;
 
   const dispatch = useAppDispatch();
@@ -29,6 +29,7 @@ export function FirebaseInit(props: FirebaseInitProps): ReactNode {
   });
 
   return children;
-}
+})
+FirebaseInit.displayName = 'FirebaseInit';
 
 export default FirebaseInit;

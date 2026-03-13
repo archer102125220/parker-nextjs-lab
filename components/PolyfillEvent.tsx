@@ -1,5 +1,5 @@
 'use client';
-import type { ReactNode } from 'react';
+import  { memo,type ReactNode } from 'react';
 
 import { handlePolyfillScrollEnd } from '@/utils/polyfill/scroll-end';
 import { handleFindLastIndexPolyfill } from '@/utils/polyfill/array-find-last-index-polyfill';
@@ -11,16 +11,17 @@ type PolyfillEventProps = {
   dvhIsThrottle?: boolean;
 };
 
-export function PolyfillEvent({
+export const PolyfillEvent = memo(({
   scrollEndWait = 100,
   dvhIsThrottle = true,
   children
-}: PolyfillEventProps): ReactNode {
+}: PolyfillEventProps): ReactNode => {
   handlePolyfillScrollEnd(scrollEndWait);
   handleFindLastIndexPolyfill();
   handleLargeSmallDynamicViewportUnitsPolyfill(dvhIsThrottle);
 
   return children;
-}
+})
+PolyfillEvent.displayName = 'PolyfillEvent';
 
 export default PolyfillEvent;
