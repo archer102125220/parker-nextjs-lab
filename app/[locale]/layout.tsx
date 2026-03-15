@@ -37,6 +37,14 @@ export async function generateMetadata(props: LocaleLayout): Promise<Metadata> {
     verification: {
       google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION,
     },
+    alternates: {
+      canonical: (process.env.NEXT_PUBLIC_DOMAIN || 'https://parker-nextjs-lab.vercel.app') + `/${locale}`,
+      languages: {
+        'zh-TW': (process.env.NEXT_PUBLIC_DOMAIN || 'https://parker-nextjs-lab.vercel.app') + '/zh-tw',
+        'en-US': (process.env.NEXT_PUBLIC_DOMAIN || 'https://parker-nextjs-lab.vercel.app') + '/en', // 如果你有英文版
+        'x-default': (process.env.NEXT_PUBLIC_DOMAIN || 'https://parker-nextjs-lab.vercel.app') + '/', // 預設路由
+      },
+    },
     applicationName: t('systemName'),
     title: {
       default: t('defaultTitle'),
