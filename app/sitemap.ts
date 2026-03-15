@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_DOMAIN || 'https://parker-nextjs-lab.vercel.app';
-  const locales = ['', 'zh-tw', 'en'];
+  const locales = ['/', '/zh-tw', '/en'];
   const routes: MetadataRoute.Sitemap = [
     {
       url: '',
@@ -106,7 +106,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   locales.forEach((locale) => {
     routes.forEach((route) => {
       sitemapArray.push({
-        url: `${baseUrl}/${locale}${route.url}`,
+        url: `${baseUrl}${locale}${route.url}`,
         lastModified: route.lastModified,
         changeFrequency: route.changeFrequency,
         priority: route.priority,
