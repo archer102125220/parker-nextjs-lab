@@ -2,26 +2,118 @@ import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_DOMAIN || 'https://parker-nextjs-lab.vercel.app';
-  return [
+  const locales = ['', 'zh-tw', 'en'];
+  const routes: MetadataRoute.Sitemap = [
     {
-      url: baseUrl,
+      url: '',
       lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 1,
     },
     {
-      url: `${baseUrl}/zh-tw`,
+      url: '/about',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.8,
+    },
+    {
+      url: '/components',
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/en`,
+      url: '/css-drawing',
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
     },
+    {
+      url: '/directive-effects',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: '/face-swap',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: '/firebase',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: '/frontend-api-cache-test',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: '/hooks-test',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: '/indexeddb-demo',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: '/krpano-demo',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: '/server-sent-event-test',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: '/socket-test',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: '/web-authn',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: '/web-cam',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: '/web-rtc',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    }
   ]
+
+  const sitemapArray: MetadataRoute.Sitemap = []
+  locales.forEach((locale) => {
+    routes.forEach((route) => {
+      sitemapArray.push({
+        url: `${baseUrl}/${locale}${route.url}`,
+        lastModified: route.lastModified,
+        changeFrequency: route.changeFrequency,
+        priority: route.priority,
+      })
+    })
+  })
+  return sitemapArray
 }
 
 // export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
