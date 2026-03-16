@@ -106,7 +106,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   locales.forEach((locale) => {
     routes.forEach((route) => {
       sitemapArray.push({
-        url: `${baseUrl}${locale}${route.url}`,
+        url: `${baseUrl}${locale === '/' ? '' : locale}${route.url}`,
         lastModified: route.lastModified,
         changeFrequency: route.changeFrequency,
         priority: route.priority,
