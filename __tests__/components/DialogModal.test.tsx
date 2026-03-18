@@ -10,17 +10,23 @@ describe('DialogModal Component', () => {
     document.body.style.overflow = '';
   });
 
-  it('does not render when closed', () => {
+  it('renders hidden state when closed', () => {
     render(<DialogModal open={false}>Content</DialogModal>);
 
     const modal = document.querySelector('.dialog-modal');
-    expect(modal).not.toBeInTheDocument();
+    expect(modal).toBeInTheDocument();
+    expect(modal).toHaveAttribute('data-css-is-open', 'false');
+    expect(modal).toHaveAttribute('aria-hidden', 'true');
   });
 
   it('renders when open', () => {
     render(<DialogModal open={true}>Content</DialogModal>);
 
     expect(screen.getByText('Content')).toBeInTheDocument();
+    expect(document.querySelector('.dialog-modal')).toHaveAttribute(
+      'data-css-is-open',
+      'true'
+    );
   });
 
   it('renders title when provided', () => {
@@ -127,5 +133,16 @@ describe('DialogModal Component', () => {
     rerender(<DialogModal open={false}>Content</DialogModal>);
 
     expect(document.body.style.overflow).toBe('');
+  });
+
+  it('keeps modal mounted in closing state so exit animation can run', () => {
+    const { rerender } = render(<DialogModal open={true}>Content</DialogModal>);
+
+    rerender(<DialogModal open={false}>Content</DialogModal>);
+
+    const modal = document.querySelector('.dialog-modal');
+    expect(modal).toHaveAttribute('data-css-is-open', 'false');
+    expect(modal).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getByText('Content')).toBeInTheDocument();
   });
 });
