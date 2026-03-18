@@ -120,6 +120,17 @@ const LINK_SECTIONS = [
         icon: 'ℹ️'
       }
     ]
+  },
+  {
+    titleKey: 'sections.knowledgeBase',
+    links: [
+      {
+        href: '/notes',
+        labelKey: 'links.notes',
+        descKey: 'links.notesDesc',
+        icon: '📝'
+      }
+    ]
   }
 ] as const;
 

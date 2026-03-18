@@ -69,7 +69,8 @@
                 "customComponents": "🎨 Custom Components",
                 "realtime": "🔌 Real-time",
                 "aiDevice": "🤖 AI & Devices",
-                "devTools": "🔧 Dev Tools"
+                "devTools": "🔧 Dev Tools",
+                "knowledgeBase": "📚 Knowledge Base"
             },
             "links": {
                 "components": "Component Library",
@@ -101,7 +102,18 @@
                 "about": "About",
                 "aboutDesc": "Project info",
                 "krpano": "360 Panorama",
-                "krpanoDesc": "Krpano viewer integration"
+                "krpanoDesc": "Krpano viewer integration",
+                "notes": "Notion Notes",
+                "notesDesc": "Work and research records"
+            }
+        },
+        "notes": {
+            "title": "Notion Notes",
+            "subtitle": "Collection of working and private research Notion notes",
+            "articles": {
+                "seoGSC": "[SEO Record] GSC Sitemap 'Couldn't fetch' Debug Report & New Site Promotion Strategy",
+                "seoRobots": "[SEO Practical Notes] Sitemap, Robots.txt & GSC Common Debugging Guide",
+                "webAuthn": "Web Authn - Passwordless Login"
             }
         },
         "components": {

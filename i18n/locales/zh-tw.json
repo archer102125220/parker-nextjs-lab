@@ -69,7 +69,8 @@
                 "customComponents": "🎨 自訂組件",
                 "realtime": "🔌 即時通訊",
                 "aiDevice": "🤖 AI & 裝置",
-                "devTools": "🔧 開發工具"
+                "devTools": "🔧 開發工具",
+                "knowledgeBase": "📚 知識庫"
             },
             "links": {
                 "components": "組件庫",
@@ -101,7 +102,18 @@
                 "about": "關於本站",
                 "aboutDesc": "專案資訊",
                 "krpano": "360 全景展示",
-                "krpanoDesc": "Krpano 全景查看器整合"
+                "krpanoDesc": "Krpano 全景查看器整合",
+                "notes": "Notion 筆記",
+                "notesDesc": "工作與研究紀錄"
+            }
+        },
+        "notes": {
+            "title": "Notion 筆記",
+            "subtitle": "主要存放工作或者私下研究時的 Notion 筆記總整理",
+            "articles": {
+                "seoGSC": "[SEO 紀錄] GSC Sitemap 「無法擷取」除錯報告與新站推廣策略",
+                "seoRobots": "[SEO 實戰筆記] Sitemap, Robots.txt 與 GSC 常見除錯指南",
+                "webAuthn": "Web Authn-無密碼登入"
             }
         },
         "components": {
