@@ -1,0 +1,178 @@
+.notes_page {
+    /* Display & Box Model */
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+
+    &-hero {
+        /* Display & Box Model */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 3rem 1rem;
+        border-radius: 20px;
+
+        /* Typography */
+        text-align: center;
+        color: #fff;
+
+        /* Visual */
+        background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+
+        &-title {
+            /* Display & Box Model */
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        &-title-text {
+            /* Display & Box Model */
+            margin: 0;
+
+            /* Typography */
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        &-subtitle {
+            /* Display & Box Model */
+            max-width: 600px;
+            margin: 0;
+
+            /* Typography */
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+    }
+
+    &-list {
+        /* Display & Box Model */
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    &-card {
+        /* Positioning */
+        position: relative;
+
+        /* Display & Box Model */
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 1.5rem 2rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        overflow: hidden;
+
+        /* Typography */
+        text-decoration: none;
+        color: inherit;
+
+        /* Visual */
+        background: #fff;
+
+        /* Animation */
+        transition: all 0.3s ease;
+
+        &::before {
+            /* Positioning */
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            /* Display & Box Model */
+            width: 4px;
+            height: 100%;
+
+            /* Visual */
+            background: linear-gradient(180deg, #2b5876, #4e4376);
+            transform: scaleY(0);
+            transform-origin: top;
+
+            /* Animation */
+            transition: transform 0.3s ease;
+
+            /* Misc */
+            content: '';
+        }
+
+        &:hover {
+            border-color: #4e4376;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            transform: translateX(4px);
+
+            &::before {
+                transform: scaleY(1);
+            }
+        }
+
+        &-icon {
+            /* Typography */
+            font-size: 2.5rem;
+        }
+
+        &-content {
+            /* Display & Box Model */
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        &-title {
+            /* Display & Box Model */
+            margin: 0;
+
+            /* Typography */
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        &-description {
+            /* Display & Box Model */
+            margin: 0;
+
+            /* Typography */
+            font-size: 0.875rem;
+            color: #666;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .notes_page {
+        padding: 1rem;
+        gap: 2rem;
+
+        &-hero {
+            padding: 2rem 1rem;
+
+            &-title-text {
+                font-size: 1.75rem;
+            }
+
+            &-subtitle {
+                font-size: 1rem;
+            }
+        }
+
+        &-card {
+            padding: 1.25rem;
+            gap: 1rem;
+
+            &-icon {
+                font-size: 2rem;
+            }
+
+            &-title {
+                font-size: 1.1rem;
+            }
+        }
+    }
+}
