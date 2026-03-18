@@ -3,8 +3,8 @@
 import {
   useState,
   useEffect,
+  useEffectEvent,
   useRef,
-  useCallback,
   type ElementType,
   type CSSProperties
 } from 'react';
@@ -42,8 +42,9 @@ export function EnterLabel({
   const [enterLabel, setEnterLabel] = useState('');
   const [isAnimating, setIsAnimating] = useState(value);
   const [isAnimationEnd, setIsAnimationEnd] = useState(animationEnd);
-  const animationFrameRef = useRef<number | undefined>(undefined);
-  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(
+    undefined
+  );
 
   // Generate random uppercase letter (A-Z)
   const getRandomUppercaseLetter = (): string => {
@@ -62,29 +63,15 @@ export function EnterLabel({
   const iterationCountRef = useRef(0); // Track iterations for current character
   const maxIterationsPerChar = 5; // Number of random chars to show before revealing real char
 
-  // Calculate delay per frame: speed is the total time per character
-  // Divide by iterations to get time per frame
-  const getFrameDelay = () => {
-    return Math.floor(speedRef.current / maxIterationsPerChar);
+  const clearScheduledAnimation = () => {
+    if (intervalRef.current !== undefined) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = undefined;
+    }
   };
 
-  // Use refs to avoid callback recreation
-  const labelRef = useRef(label);
-  const randomLenRef = useRef(randomLen);
-  const speedRef = useRef(speed);
-  const onAnimationEndChangeRef = useRef(onAnimationEndChange);
-  const handleEnterLabelRef = useRef<(() => void) | undefined>(undefined);
-
-  // Update refs when props change
-  useEffect(() => {
-    labelRef.current = label;
-    randomLenRef.current = randomLen;
-    speedRef.current = speed;
-    onAnimationEndChangeRef.current = onAnimationEndChange;
-  }, [label, randomLen, speed, onAnimationEndChange]);
-
-  const handleEnterLabel = useCallback(() => {
-    const targetLabel = labelRef.current;
+  const handleEnterLabel = useEffectEvent(() => {
+    const targetLabel = label;
     const targetLength = targetLabel.length;
     const currentRevealed = revealedCharsRef.current;
 
@@ -92,13 +79,14 @@ export function EnterLabel({
     if (currentRevealed >= targetLength) {
       setEnterLabel(targetLabel);
       setIsAnimationEnd(true);
-      onAnimationEndChangeRef.current?.(true);
+      onAnimationEndChange?.(true);
+      clearScheduledAnimation();
       return;
     }
 
     // Build the display string
     let displayString = '';
-    const randomLenLower = randomLenRef.current.toLowerCase();
+    const randomLenLower = randomLen.toLowerCase();
 
     // Add already revealed characters (from label)
     for (let i = 0; i < currentRevealed; i++) {
@@ -125,49 +113,26 @@ export function EnterLabel({
       revealedCharsRef.current++;
       iterationCountRef.current = 0;
     }
-
-    // Schedule next frame AFTER state update
-    timeoutRef.current = setTimeout(() => {
-      animationFrameRef.current = window.requestAnimationFrame(() => {
-        handleEnterLabelRef.current?.();
-      });
-    }, getFrameDelay());
-  }, []); // Empty dependency array - callback never recreated
-
-  // Update ref to point to latest callback
-  useEffect(() => {
-    handleEnterLabelRef.current = handleEnterLabel;
-  }, [handleEnterLabel]);
-
-  // Reset animation state when label changes
-  useEffect(() => {
-    if (isAnimating) {
-      revealedCharsRef.current = 0;
-      iterationCountRef.current = 0;
-      setEnterLabel('');
-    }
-  }, [label, isAnimating]);
+  });
 
   // Watch value changes
   useEffect(() => {
     if (isAnimating) {
+      clearScheduledAnimation();
+      revealedCharsRef.current = 0;
+      iterationCountRef.current = 0;
       setEnterLabel('');
       setIsAnimationEnd(false);
       onAnimationEndChange?.(false);
-      revealedCharsRef.current = 0;
-      iterationCountRef.current = 0;
-      handleEnterLabel();
+      intervalRef.current = setInterval(() => {
+        handleEnterLabel();
+      }, Math.max(1, Math.floor(speed / maxIterationsPerChar)));
     }
 
     return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
+      clearScheduledAnimation();
     };
-  }, [isAnimating, handleEnterLabel, onAnimationEndChange]);
+  }, [isAnimating, label, randomLen, speed, onAnimationEndChange]);
 
   // Watch animationEnd changes
   useEffect(() => {
@@ -186,16 +151,16 @@ export function EnterLabel({
   // Auto start on mount
   useEffect(() => {
     if (animationEnd) {
+      clearScheduledAnimation();
       setEnterLabel(label);
+      setIsAnimationEnd(true);
     } else if (autoStart || value) {
-      if (value) {
-        handleEnterLabel();
-      } else {
+      if (value !== true) {
         setIsAnimating(true);
         onValueChange?.(true);
       }
     }
-  }, [animationEnd, autoStart, value, label, handleEnterLabel, onValueChange]);
+  }, [animationEnd, autoStart, value, label, onValueChange]);
 
   const cssVariables: EnterLabelCSSProperties = {
     '--animation_enter_label_anime':

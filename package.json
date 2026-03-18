@@ -133,6 +133,7 @@
         "postcss": "^8.5.3",
         "prettier": "^3.5.3",
         "sass": "^1.86.0",
+        "schema-dts": "^1.1.5",
         "sequelize-cli": "^6.6.3",
         "serwist": "^9.2.1",
         "spreadsheet-to-json": "^2.0.0",

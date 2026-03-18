@@ -1,6 +1,11 @@
 'use client';
 
-import { useEffect, type ReactNode } from 'react';
+import {
+  useEffect,
+  useEffectEvent,
+  useLayoutEffect,
+  type ReactNode
+} from 'react';
 import './index.scss';
 
 export interface DialogModalProps {
@@ -26,7 +31,7 @@ export function DialogModal({
   closeOnBackdrop = true,
   className = ''
 }: DialogModalProps) {
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -38,20 +43,30 @@ export function DialogModal({
     };
   }, [open]);
 
+  const handleEscape = useEffectEvent((event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      onClose?.();
+    }
+  });
+
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && open) {
-        onClose?.();
-      }
+    if (!open) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      handleEscape(event);
     };
 
-    window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
-  }, [open, onClose]);
-
-  if (!open) return null;
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [open]);
 
   const handleBackdropClick = () => {
+    if (!open) {
+      return;
+    }
+
     if (closeOnBackdrop) {
       onClose?.();
     }
@@ -61,7 +76,12 @@ export function DialogModal({
   const fullWidthClass = fullWidth ? 'dialog-modal-content--full_width' : '';
 
   return (
-    <div className="dialog-modal" onClick={handleBackdropClick}>
+    <div
+      className="dialog-modal"
+      css-is-open={open ? 'true' : 'false'}
+      aria-hidden={open ? 'false' : 'true'}
+      onClick={handleBackdropClick}
+    >
       <div className="dialog-modal-backdrop" />
       <div
         className={`dialog-modal-content ${maxWidthClass} ${fullWidthClass} ${className}`}

@@ -2,10 +2,11 @@
 
 import {
   useState,
-  useEffect,
-  useRef,
+  useCallback,
   useMemo,
-  type CSSProperties
+  type ChangeEvent,
+  type CSSProperties,
+  type ReactNode
 } from 'react';
 import './index.scss';
 
@@ -14,8 +15,8 @@ export interface SwitchButtonProps {
   onChange?: (value: boolean) => void;
   label?: string;
   checkedLabel?: string;
-  icon?: string | React.ReactNode;
-  checkedIcon?: string | React.ReactNode;
+  icon?: string | ReactNode;
+  checkedIcon?: string | ReactNode;
   disabled?: boolean;
   color?: string;
   bgColor?: string;
@@ -23,7 +24,7 @@ export interface SwitchButtonProps {
   checkedBgColor?: string;
   radius?: string;
   className?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
   /** Accessibility: label for unchecked state (used for aria-label) */
   offLabel?: string;
   /** Accessibility: label for checked state (used for aria-label) */
@@ -33,7 +34,7 @@ export interface SwitchButtonProps {
 }
 
 export function SwitchButton({
-  value = false,
+  value,
   onChange,
   label = '',
   checkedLabel = '',
@@ -51,18 +52,29 @@ export function SwitchButton({
   onLabel,
   ariaLabel
 }: SwitchButtonProps) {
-  const [checked, setChecked] = useState(value);
+  const [internalChecked, setInternalChecked] = useState(value ?? false);
   const [iconWidth, setIconWidth] = useState(0);
-  const iconRef = useRef<HTMLDivElement>(null);
+  const checked = typeof value === 'boolean' ? value : internalChecked;
 
-  useEffect(() => {
-    setChecked(value);
-  }, [value]);
-
-  useEffect(() => {
-    if (iconRef.current) {
-      setIconWidth(iconRef.current.clientWidth);
+  const displayLabel = useMemo(() => {
+    if (checked && checkedLabel) {
+      return checkedLabel;
     }
+    return label;
+  }, [checked, label, checkedLabel]);
+
+  const displayIcon = useMemo(() => {
+    if (checked && checkedIcon) {
+      return checkedIcon;
+    }
+    return icon;
+  }, [checked, icon, checkedIcon]);
+
+  const handleIconRef = useCallback((node: HTMLDivElement | null) => {
+    const nextIconWidth = node?.clientWidth ?? 0;
+    setIconWidth((currentWidth) =>
+      currentWidth === nextIconWidth ? currentWidth : nextIconWidth
+    );
   }, []);
 
   const cssVariables = useMemo((): CSSProperties => {
@@ -108,25 +120,13 @@ export function SwitchButton({
     iconWidth
   ]);
 
-  const displayLabel = useMemo(() => {
-    if (checked && checkedLabel) {
-      return checkedLabel;
-    }
-    return label;
-  }, [checked, label, checkedLabel]);
-
-  const displayIcon = useMemo(() => {
-    if (checked && checkedIcon) {
-      return checkedIcon;
-    }
-    return icon;
-  }, [checked, icon, checkedIcon]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (disabled) return;
 
     const newValue = e.target.checked;
-    setChecked(newValue);
+    if (typeof value !== 'boolean') {
+      setInternalChecked(newValue);
+    }
     onChange?.(newValue);
   };
 
@@ -159,7 +159,7 @@ export function SwitchButton({
         }
       />
 
-      <div ref={iconRef} className="switch_button-icon">
+      <div ref={handleIconRef} className="switch_button-icon">
         {children || renderIcon()}
       </div>
 

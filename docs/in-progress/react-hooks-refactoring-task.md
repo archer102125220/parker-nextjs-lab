@@ -5,7 +5,7 @@
 | 分類 | 總數 | 已完成 | 進行中 |
 |------|------|--------|--------|
 | Hooks | 32 | 32 | 0 |
-| Components | 110+ | 10 | 0 |
+| Components | 110+ | 13 | 0 |
 | App Pages | 63 | 0 | 0 |
 
 ---
@@ -72,7 +72,7 @@
 - [x] `Selector/index.tsx` ✅ useMemo 衍生狀態（已測試）
 
 ### 需檢查的核心組件
-- [ ] `Animation/EnterLabel/index.tsx`
+- [x] `Animation/EnterLabel/index.tsx` ✅ useEffectEvent（2026-03-18）
 - [ ] `Animation/TriangleEnter/index.tsx`
 - [ ] `AxiosInit.tsx`
 - [ ] `ClientProvider.tsx`
@@ -80,6 +80,8 @@
 - [ ] `CloudMessaging/Form.tsx`
 - [ ] `Countdown/index.tsx`
 - [ ] `DatePicker/index.tsx`
+- [x] `DialogModal/index.tsx` ✅ useEffectEvent + useLayoutEffect（2026-03-18）
+  - ⚠️ 關閉動畫仍需由人類開發者手動調整
 - [ ] `Hexagon/Container.tsx`
 - [ ] `ImageUpload/index.tsx`
 - [ ] `Krpano/index.tsx`
@@ -94,7 +96,7 @@
 - [ ] `Ripple/index.tsx`
 - [ ] `SkeletonLoader/index.tsx`
 - [ ] `SlideInPanel/index.tsx`
-- [ ] `SwitchButton/index.tsx`
+- [x] `SwitchButton/index.tsx` ✅ inline type imports + controllable pattern（2026-03-18）
 - [ ] `Tabs/Content.tsx`
 - [ ] `Triangle/index.tsx`
 - [ ] `VirtualScroller/index.tsx`
@@ -258,11 +260,25 @@
 
 **審查範圍**: 解決 CSP Nonce 在 SSR/Hydration 中的傳遞問題，以及防毒軟體干擾導致的 Hydration Mismatch。
 
+---
+
+### 2026-03-18 Components Batch
+
+**審查範圍**: `EnterLabel`, `SwitchButton`, `DialogModal`
+
+**已完成改進**:
+
+| 檔案 | 改進 |
+|------|------|
+| `Animation/EnterLabel/index.tsx` | `useEffectEvent` 取代 ref + callback 動畫遞迴 |
+| `SwitchButton/index.tsx` | inline type imports、controllable pattern、callback ref 量測 icon 寬度 |
+| `DialogModal/index.tsx` | `useEffectEvent` 穩定 keydown handler、`useLayoutEffect` 同步 body overflow；關閉動畫仍需人類開發者手動調整 |
+
 **關鍵變更**:
-1. 引入 `NonceContext` (`NonceProvider`) 以避免 Prop Drilling 並支援深層元件存取。
-2. `DefaultLayout` 保持 Server Component，但 `Header`/`Footer` 改為從 Context 獲取 Nonce 作為 fallback。
-3. `loading.tsx` 移除 `async` 改為同步，避免 React Instrumentation Error。
-4. 使用 `useMemo` 優化 Nonce 的合併邏輯 (`props.nonce || contextNonce || reduxNonce`)。
+1. `EnterLabel` 用 `useEffectEvent` 收斂動畫步進邏輯，移除舊的 ref + callback 間接呼叫。
+2. `SwitchButton` 改成 controllable / uncontrolled 兼容模式，避免 effect 內同步 state。
+3. `SwitchButton` 以 callback ref 取代 effect 量測 icon 寬度，保留視覺定位行為。
+4. `DialogModal` 以 `useEffectEvent` 穩定 Escape 關閉邏輯，並用 `useLayoutEffect` 同步 body overflow。
 
 **需二次檢查檔案** (7 個):
 

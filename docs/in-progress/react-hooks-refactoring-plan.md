@@ -13,7 +13,7 @@
 |----------|------|
 | 組件檔案 | 110 個 |
 | 自訂 Hooks | 32 個（✅ 全部完成） |
-| 已檢查組件 | 10 個（Banner, Dialog, GoTop, Message, Selector 等） |
+| 已檢查組件 | 13 個（Banner, Dialog, GoTop, Message, Selector, EnterLabel 等） |
 | `useState` 使用次數 | 331+ |
 | `useEffect` 使用次數 | 152+ |
 | `useMemo` 使用次數 | 19+ 個檔案 ✅ |
@@ -84,14 +84,14 @@
 以下檔案需要將類型導入（ReactNode, CSSProperties 等）改為 `import type`：
 
 -   [x] `components/Banner/index.tsx` ✅
--   [ ] `components/DialogModal/index.tsx`
+-   [x] `components/DialogModal/index.tsx` ✅
 -   [ ] `components/SlideInPanel/index.tsx`
 -   [ ] `components/Tabs/Bar.tsx`
 -   [x] `components/Selector/index.tsx` ✅
 -   [ ] `components/Countdown/index.tsx`
--   [ ] `components/SwitchButton/index.tsx`
+-   [x] `components/SwitchButton/index.tsx` ✅
 -   [ ] `components/VirtualScroller/index.tsx`
--   [ ] `components/Animation/EnterLabel/index.tsx`
+-   [x] `components/Animation/EnterLabel/index.tsx` ✅
 
 **修改範例：**
 
@@ -160,3 +160,18 @@ yarn dev:webpack  # 手動功能測試
 - Server snapshot 應使用常數快取避免無限迴圈
 
 詳細測試報告：`brain/f5d7e8a7-68a4-4e1e-a8eb-b12717526c87/components_test_report.md`
+
+## 最新進度（2026-03-18）
+
+### ✅ 本次完成
+
+1. **EnterLabel** - 改用 `useEffectEvent` 取代 `useRef` + `useCallback` 遞迴動畫模式，補上元件測試
+2. **SwitchButton** - 補齊 inline type imports，改成 controllable pattern，並以 callback ref 量測 icon 寬度
+3. **DialogModal** - 使用 `useEffectEvent` 穩定 Escape listener，並將 body overflow 同步改為 `useLayoutEffect`
+   - ⚠️ 關閉動畫表現仍需由人類開發者手動調整與最終確認
+
+### 🧪 本次驗證
+
+- `__tests__/components/EnterLabel.test.tsx`
+- `__tests__/components/SwitchButton.test.tsx`
+- `__tests__/components/DialogModal.test.tsx`
