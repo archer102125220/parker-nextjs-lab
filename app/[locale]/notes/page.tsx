@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { headers } from 'next/headers';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { DefaultLayout } from '@/layout/default';
 
 import styles from './page.module.scss';
 
@@ -47,7 +46,6 @@ async function NotesPage({ params }: Props): Promise<ReactNode> {
   const nonce = (await headers()).get('x-nonce') || '';
 
   return (
-    <DefaultLayout nonce={nonce}>
       <main className={styles.notes_page}>
         {/* Hero Section */}
         <section className={styles['notes_page-hero']}>
@@ -87,7 +85,6 @@ async function NotesPage({ params }: Props): Promise<ReactNode> {
           ))}
         </section>
       </main>
-    </DefaultLayout>
   );
 }
 
