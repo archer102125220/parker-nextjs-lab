@@ -2,12 +2,27 @@ import type { ReactNode } from 'react';
 import { headers } from 'next/headers';
 import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+
 import { Link } from '@/i18n/navigation';
+import { locales } from '@/i18n';
 
 import GTMScnOpen from '@/components/Google/GTMScnOpen';
 import { DefaultLayout } from '@/layout/default';
 
 import styles from './page.module.scss';
+
+export const revalidate = 86400;
+// 將未列在 generateStaticParams 內的語系 (例如 /fr) 直接回傳 404 Not Found。
+// 這樣可防止 Next.js 進入 SSR 浪費伺服器資源去渲染不受支援的語系，作為白名單防呆機制。
+export const dynamicParams = false;
+// 雖然頁面內呼叫了 headers() 會導致 Next.js 將此頁強制轉為 SSR（無法在 build 時產出純靜態 HTML），
+// 但強烈建議保留此函式，以便提供 Next.js 路由系統和 next-intl 合法的語系參數列表，
+// 確保 i18n 底層運作正常，同時替未來的 Partial Prerendering (PPR) 架構鋪路。
+export function generateStaticParams() {
+  return locales.map((locale) => ({
+    locale: locale,
+  }));
+}
 
 // 連結配置 (使用 translation keys)
 const LINK_SECTIONS = [
@@ -137,6 +152,7 @@ const LINK_SECTIONS = [
 type Props = {
   params: Promise<{ locale: string }>;
 };
+
 
 async function HomePage({ params }: Props): Promise<ReactNode> {
   const { locale } = await params;

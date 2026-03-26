@@ -6,6 +6,8 @@ const DemoFaceSwapFrontend = dynamic(
   () => import('@/components/Demo/FaceSwapFrontend')
 );
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: '純前端人臉替換',

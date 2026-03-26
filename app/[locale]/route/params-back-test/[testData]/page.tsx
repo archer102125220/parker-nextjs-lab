@@ -6,6 +6,8 @@ import '@/app/[locale]/route/params-back-test/params-back-test.scss';
 const ParamsBackTestClient = dynamic(() => import('@/components/Demo/ParamsBackTest'));
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: '路由參數與上一頁測試',

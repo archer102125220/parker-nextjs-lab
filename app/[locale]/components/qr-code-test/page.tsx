@@ -3,6 +3,8 @@ import dynamic from 'next/dynamic';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import style from './page.module.scss';
 
+export const revalidate = 86400;
+
 const QRCodeTestClient = dynamic(() => import('@/components/Demo/QRCodeTest'));
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
 

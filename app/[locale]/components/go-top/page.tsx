@@ -7,6 +7,8 @@ import '../page.scss';
 const GoTopClient = dynamic(() => import('@/components/Demo/GoTop'));
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('pages.componentPages.goTop');
   return {

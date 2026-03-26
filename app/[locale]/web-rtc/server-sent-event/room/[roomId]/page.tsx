@@ -4,6 +4,8 @@ import style from './page.module.scss';
 
 const WebRTCSSERoom = dynamic(() => import('@/components/Demo/WebRTCSSERoom'));
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'WebRTC 視訊聊天室 (SSE)',

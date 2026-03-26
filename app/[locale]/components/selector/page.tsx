@@ -6,6 +6,8 @@ import style from './page.module.scss';
 const SelectorTestClient = dynamic(() => import('@/components/Demo/SelectorTest'));
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('pages.componentPages.selector');
   return {

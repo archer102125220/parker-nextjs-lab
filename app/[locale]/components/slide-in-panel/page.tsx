@@ -7,6 +7,8 @@ const SlideInPanelTest = dynamic(
   () => import('@/components/Demo/SlideInPanelTest')
 );
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('pages.componentPages.slideInPanel');
   return {

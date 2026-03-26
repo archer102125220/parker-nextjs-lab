@@ -6,6 +6,8 @@ const WebRTCSocketIORoom = dynamic(
   () => import('@/components/Demo/WebRTCSocketIORoom')
 );
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'WebRTC 視訊聊天室 (Socket.IO)',

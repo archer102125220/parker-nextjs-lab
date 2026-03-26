@@ -76,6 +76,8 @@ const TOTAL_COMPONENTS = COMPONENT_CATEGORIES.reduce(
   0
 );
 
+export const revalidate = 86400;
+
 type Props = {
   params: Promise<{ locale: string }>;
 };

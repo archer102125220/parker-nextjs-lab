@@ -6,6 +6,8 @@ const FrontendApiCacheTest = dynamic(
   () => import('@/components/Demo/FrontendApiCacheTest')
 );
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'Frontend API Cache Test',

@@ -4,6 +4,8 @@ import style from './page.module.scss';
 
 const FaceSwapIndex = dynamic(() => import('@/components/Demo/FaceSwapIndex'));
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'AI 人臉替換',

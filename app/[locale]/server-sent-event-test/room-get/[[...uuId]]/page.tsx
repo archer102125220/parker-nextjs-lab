@@ -4,6 +4,8 @@ import styles from './page.module.scss';
 
 const SSERoomGet = dynamic(() => import('@/components/Demo/SSERoomGet'));
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'SSE 房間測試 (GET)',

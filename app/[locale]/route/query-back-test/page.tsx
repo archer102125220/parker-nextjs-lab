@@ -6,6 +6,8 @@ import '@/app/[locale]/route/query-back-test/query-back-test.scss';
 const QueryBackTestClient = dynamic(() => import('@/components/Demo/QueryBackTest'));
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: '路由 Query 與上一頁測試',

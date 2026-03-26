@@ -5,6 +5,8 @@ const WebRTCSocketIOEntry = dynamic(
   () => import('@/components/Demo/WebRTCSocketIOEntry')
 );
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'WebRTC - Socket.IO 實作',

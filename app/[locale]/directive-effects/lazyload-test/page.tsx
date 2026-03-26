@@ -5,6 +5,8 @@ import style from './page.module.scss';
 const LazyLoadTestClient = dynamic(() => import('@/components/Demo/LazyLoadTest'));
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'useLazyLoad Hook 測試',

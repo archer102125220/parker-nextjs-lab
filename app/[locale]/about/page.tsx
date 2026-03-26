@@ -10,6 +10,8 @@ import {
   type Section
 } from './data';
 
+export const revalidate = 604800;
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('pages.about');
   return {

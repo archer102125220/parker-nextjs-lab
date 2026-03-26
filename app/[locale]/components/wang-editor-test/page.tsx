@@ -7,6 +7,8 @@ const WangEditorTest = dynamic(
   () => import('@/components/Demo/WangEditorTest')
 );
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('pages.componentPages.wangEditor');
   return {

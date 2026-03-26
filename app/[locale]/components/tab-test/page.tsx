@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography';
 
 const TabTest = dynamic(() => import('@/components/Demo/TabTest'));
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('pages.componentPages.tabs');
   return {

@@ -8,6 +8,8 @@ import styles from './page.module.scss';
 
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
 
+export const revalidate = 86400;
+
 const LINK_LIST = [
   {
     to: '/route/query-back-test',

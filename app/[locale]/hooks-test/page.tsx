@@ -4,6 +4,8 @@ import styles from './page.module.scss';
 
 const DemoHooks = dynamic(() => import('@/components/Demo/Hooks'));
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'Hooks 測試頁面',

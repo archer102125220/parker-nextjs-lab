@@ -5,6 +5,8 @@ import styles from './page.module.scss';
 
 const SwiperTest = dynamic(() => import('@/components/Demo/SwiperTest'));
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('pages.componentPages.swiper');
   return {

@@ -7,6 +7,8 @@ import style from '@/app/[locale]/css-drawing/triangle-anime-test/page.module.sc
 
 import TriangleAnimation from '@/components/Demo/TriangleAnimation';
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'css三角形滿版動畫測試',

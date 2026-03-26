@@ -5,6 +5,8 @@ import styles from './page.module.scss';
 
 const SSETestIndex = dynamic(() => import('@/components/Demo/SSETestIndex'));
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('pages.sseTest');
   return {

@@ -15,6 +15,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+export const revalidate = 86400;
+
 // Feature keys
 const FIREBASE_FEATURE_KEYS = ['fcm', 'auth', 'pwa', 'sw'] as const;
 

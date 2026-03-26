@@ -8,6 +8,8 @@ import Triangle from '@/components/Triangle';
 
 import style from '@/app/[locale]/css-drawing/triangle-test/page.module.scss';
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'css三角形測試',

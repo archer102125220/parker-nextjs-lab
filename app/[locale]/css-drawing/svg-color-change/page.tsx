@@ -9,6 +9,8 @@ import { SvgColorChabge as DemoSvgColorChabge } from '@/components/Demo/SvgColor
 
 import style from '@/app/[locale]/css-drawing/svg-color-change/page.module.scss';
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'svg替換顏色測試',

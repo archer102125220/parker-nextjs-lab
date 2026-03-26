@@ -4,6 +4,8 @@ import styles from './page.module.scss';
 
 const SSERoomPost = dynamic(() => import('@/components/Demo/SSERoomPost'));
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'SSE 房間測試 (POST)',

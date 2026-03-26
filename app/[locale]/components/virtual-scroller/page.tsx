@@ -7,6 +7,8 @@ const VirtualScrollerTest = dynamic(
   () => import('@/components/Demo/VirtualScrollerTest')
 );
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('pages.componentPages.virtualScroller');
   return {

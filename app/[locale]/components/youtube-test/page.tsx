@@ -6,6 +6,8 @@ import styles from './page.module.scss';
 const YoutubeTestClient = dynamic(() => import('@/components/Demo/YoutubeTest'));
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('pages.componentPages.youtube');
   return {

@@ -4,6 +4,8 @@ import style from './page.module.scss';
 
 const WebRTCIndex = dynamic(() => import('@/components/Demo/WebRTCIndex'));
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'WebRTC 測試列表',

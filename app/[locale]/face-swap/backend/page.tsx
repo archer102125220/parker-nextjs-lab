@@ -6,6 +6,8 @@ const DemoFaceSwapBackend = dynamic(
   () => import('@/components/Demo/FaceSwapBackend')
 );
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: '後端 AI 人臉替換',

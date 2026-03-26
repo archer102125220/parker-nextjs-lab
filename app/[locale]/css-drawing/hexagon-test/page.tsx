@@ -7,6 +7,8 @@ import HexagonContainer from '@/components/Hexagon/Container';
 
 import style from '@/app/[locale]/css-drawing/hexagon-test/page.module.scss';
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'css六邊形測試',

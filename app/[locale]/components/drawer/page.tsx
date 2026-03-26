@@ -9,6 +9,8 @@ import style from '@/app/[locale]/components/drawer/page.module.scss';
 
 const GTMScnOpen = dynamic(() => import('@/components/Google/GTMScnOpen'));
 
+export const revalidate = 86400;
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('pages.componentPages.drawer');
   return {
