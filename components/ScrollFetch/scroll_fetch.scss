@@ -2,6 +2,14 @@ html {
   overscroll-behavior: var(--root_overscroll_behavior);
 }
 
+.scroll_fetching {
+  overflow: hidden;
+
+  *:not(.scroll_fetch):not(.scroll_fetch *) {
+    overflow: hidden;
+  }
+}
+
 .scroll_fetch {
   &-body {
     overflow: hidden;
