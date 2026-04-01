@@ -504,7 +504,13 @@ export class firebase {
   }
   public async defaultSaveToken(token: string | null) {
     // console.log({ token });
-    return await POST_registerMessageToken({ token, os: 'web' });
+    return await POST_registerMessageToken({ token, os: 'web' }).catch(
+      (error) => {
+        if (process.env.NODE_ENV === 'development') {
+          throw error;
+        }
+      }
+    );
   }
   public async messagingInit(
     currentFirebaseCroe = this.croe,
