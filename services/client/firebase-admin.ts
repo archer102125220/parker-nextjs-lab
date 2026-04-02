@@ -1,23 +1,16 @@
-import { unstable_cache } from 'next/cache';
 import { request } from '@/utils/request';
 
 const prefix = '/nextjs-server/firebase-admin';
 
-export const GET_getMessageTokens = unstable_cache(
-  async function (
-    useServiceWorkerCache: boolean = false,
-    useCache: boolean = false
-  ) {
-    return request.get(`${prefix}/get-push-notification-tokens`, {
-      useServiceWorkerCache,
-      useCache
-    });
-  },
-  ['GET_getMessageTokens'],
-  {
-    revalidate: 60 * 60 * 24
-  }
-);
+export async function GET_getMessageTokens(
+  useServiceWorkerCache: boolean = false,
+  useCache: boolean = false
+) {
+  return request.get(`${prefix}/get-push-notification-tokens`, {
+    useServiceWorkerCache,
+    useCache
+  });
+}
 
 // TODO
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
