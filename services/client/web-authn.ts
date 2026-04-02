@@ -15,26 +15,14 @@ export const GET_webAuthnGenerateChallenge = unstable_cache(
   }
 );
 
-export const POST_webAuthnRegistration = unstable_cache(
-  // TODO
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async function (payload: any) {
-    return request.post(`${prefix}/registration`, payload);
-  },
-  ['POST_webAuthnRegistration'],
-  {
-    revalidate: 60 * 60 * 24
-  }
-);
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function POST_webAuthnRegistration(payload: any) {
+  return request.post(`${prefix}/registration`, payload);
+}
 
-export const POST_webAuthnVerify = unstable_cache(
-  // TODO
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async function (payload: any) {
-    return request.post(`${prefix}/verify`, payload);
-  },
-  ['POST_webAuthnVerify'],
-  {
-    revalidate: 60 * 60 * 24
-  }
-);
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function POST_webAuthnVerify(payload: any) {
+  return request.post(`${prefix}/verify`, payload);
+}
