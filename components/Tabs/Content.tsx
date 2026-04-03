@@ -4,6 +4,7 @@ import {
   useState,
   useCallback,
   useEffect,
+  useMemo,
   type ReactNode,
   type CSSProperties
 } from 'react';
@@ -110,21 +111,27 @@ export function TabsContent({
 }: TabsContentProps) {
   const [isTabMoving, setIsTabMoving] = useState(false);
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
+  const getTabValue = useCallback(
+    (tab: Tab) => tab[valueKey as keyof Tab] ?? tab.value,
+    [valueKey]
+  );
 
   // Height calculations
-  const contentHeight = tabsContentHeight ?? height;
-  const contentHeightStyle =
-    typeof contentHeight === 'number' ? `${contentHeight}px` : contentHeight;
-  const swiperHeightStyle = swiperHeight
-    ? typeof swiperHeight === 'number'
-      ? `${swiperHeight}px`
-      : swiperHeight
-    : contentHeightStyle;
+  const cssVariables = useMemo(() => {
+    const contentHeight = tabsContentHeight ?? height;
+    const contentHeightStyle =
+      typeof contentHeight === 'number' ? `${contentHeight}px` : contentHeight;
+    const swiperHeightStyle = swiperHeight
+      ? typeof swiperHeight === 'number'
+        ? `${swiperHeight}px`
+        : swiperHeight
+      : contentHeightStyle;
 
-  const cssVariables = {
-    '--tabs_content-height': contentHeightStyle,
-    '--tabs_content-swiper-height': swiperHeightStyle
-  } as CSSProperties;
+    return {
+      '--tabs_content-height': contentHeightStyle,
+      '--tabs_content-swiper-height': swiperHeightStyle
+    } as CSSProperties;
+  }, [height, swiperHeight, tabsContentHeight]);
 
   // Helper functions
   const isNotScrollFetch = useCallback(
@@ -138,8 +145,11 @@ export function TabsContent({
   );
 
   const getRefreshDisable = useCallback(
-    (tab: Tab) => tab.refreshDisable ?? refreshDisable,
-    [refreshDisable]
+    (tab: Tab) =>
+      (typeof tab.refreshDisable === 'boolean' && tab.refreshDisable) ||
+      refreshDisable ||
+      isTabMoving,
+    [isTabMoving, refreshDisable]
   );
 
   const getInfinityEndLabel = useCallback(
@@ -148,11 +158,10 @@ export function TabsContent({
   );
 
   // Find active index from value
-  const activeIndex = tabs.findIndex((tab) => {
-    const tabValue = tab[valueKey as keyof Tab] ?? tab.value;
-    return tabValue === value;
-  });
-
+  const activeIndex = useMemo(
+    () => tabs.findIndex((tab) => getTabValue(tab) === value),
+    [getTabValue, tabs, value]
+  );
   const initialSlide = activeIndex >= 0 ? activeIndex : 0;
 
   // Event handlers
@@ -162,11 +171,11 @@ export function TabsContent({
       const newTab = tabs[newIndex];
 
       if (newTab && onChange) {
-        const tabValue = newTab[valueKey as keyof Tab] ?? newTab.value;
+        const tabValue = getTabValue(newTab);
         onChange(tabValue as string | number, newIndex);
       }
     },
-    [tabs, onChange, valueKey]
+    [getTabValue, onChange, tabs]
   );
 
   const handleSliderMove = useCallback(() => {
@@ -186,15 +195,12 @@ export function TabsContent({
   useEffect(() => {
     if (!swiperInstance || value === undefined) return;
 
-    const targetIndex = tabs.findIndex((tab) => {
-      const tabValue = tab[valueKey as keyof Tab] ?? tab.value;
-      return tabValue === value;
-    });
+    const targetIndex = tabs.findIndex((tab) => getTabValue(tab) === value);
 
     if (targetIndex >= 0 && targetIndex !== swiperInstance.realIndex) {
       swiperInstance.slideTo(targetIndex, 300);
     }
-  }, [value, swiperInstance, tabs, valueKey]);
+  }, [getTabValue, swiperInstance, tabs, value]);
 
   // Render slide content
   const renderSlideContent = useCallback(
@@ -299,7 +305,7 @@ export function TabsContent({
       >
         {tabs.map((tab, index) => (
           <SwiperSlide
-            key={String(tab[valueKey as keyof Tab] ?? tab.value ?? index)}
+            key={String(getTabValue(tab) ?? index)}
           >
             {renderSlideContent(tab, index)}
           </SwiperSlide>

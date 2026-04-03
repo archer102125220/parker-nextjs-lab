@@ -92,4 +92,18 @@ describe('Countdown Component', () => {
     const countdown = document.querySelector('.countdown');
     expect(countdown).toBeInTheDocument();
   });
+
+  it('syncs controlled modelValue changes from parent props', () => {
+    const { rerender } = render(
+      <Countdown modelValue={15} initialSeconds={20} isCountdownStart={false} />
+    );
+
+    expect(document.body.textContent).toContain('15');
+
+    rerender(
+      <Countdown modelValue={8} initialSeconds={20} isCountdownStart={false} />
+    );
+
+    expect(document.body.textContent).toContain('8');
+  });
 });

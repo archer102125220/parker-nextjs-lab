@@ -78,7 +78,7 @@
 - [ ] `ClientProvider.tsx`
 - [ ] `CloudMessaging/DataTable.tsx`
 - [ ] `CloudMessaging/Form.tsx`
-- [ ] `Countdown/index.tsx`
+- [x] `Countdown/index.tsx` ✅ 初始化流程與 callback refs（2026-04-03）
 - [ ] `DatePicker/index.tsx`
 - [x] `DialogModal/index.tsx` ✅ useEffectEvent + useLayoutEffect（2026-03-18）
   - ⚠️ 關閉動畫仍需由人類開發者手動調整
@@ -96,8 +96,7 @@
 - [ ] `Ripple/index.tsx`
 - [ ] `SkeletonLoader/index.tsx`
 - [ ] `SlideInPanel/index.tsx`
-- [x] `SwitchButton/index.tsx` ✅ inline type imports + controllable pattern（2026-03-18）
-- [ ] `Tabs/Content.tsx`
+- [x] `Tabs/Content.tsx` ✅ refreshDisable 同步與 memo 整理（2026-04-03）
 - [ ] `Triangle/index.tsx`
 - [ ] `VirtualScroller/index.tsx`
 - [ ] `WangEditor/index.tsx`

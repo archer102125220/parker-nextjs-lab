@@ -88,7 +88,7 @@
 -   [ ] `components/SlideInPanel/index.tsx`
 -   [ ] `components/Tabs/Bar.tsx`
 -   [x] `components/Selector/index.tsx` ✅
--   [ ] `components/Countdown/index.tsx`
+-   [x] `components/Countdown/index.tsx` ✅ (2026-04-03)
 -   [x] `components/SwitchButton/index.tsx` ✅
 -   [ ] `components/VirtualScroller/index.tsx`
 -   [x] `components/Animation/EnterLabel/index.tsx` ✅
@@ -175,3 +175,15 @@ yarn dev:webpack  # 手動功能測試
 - `__tests__/components/EnterLabel.test.tsx`
 - `__tests__/components/SwitchButton.test.tsx`
 - `__tests__/components/DialogModal.test.tsx`
+
+## 近期進度（2026-04-03）
+
+### 本次完成
+
+1. **Countdown** - 合併 mount 與 prop 變更的初始化流程，避免首輪重複啟動；callback 改以 ref 同步，但保留原本動畫流程
+2. **Tabs/Content** - 補回 `isTabMoving` 對 `refreshDisable` 的影響，並收斂重複的 tab value / CSS variable 推導
+
+### 驗證
+
+- `__tests__/components/Countdown.test.tsx`
+- `components/Tabs/Content.tsx` 目前沒有專屬測試，先以 ESLint 驗證

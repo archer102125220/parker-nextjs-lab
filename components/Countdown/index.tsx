@@ -3,6 +3,7 @@
 import {
   useState,
   useEffect,
+  useLayoutEffect,
   useRef,
   useMemo,
   type CSSProperties
@@ -51,11 +52,28 @@ export function Countdown({
   onCountdownStep,
   onCountdownEnd
 }: CountdownProps) {
-  // Initialize with initialSeconds, fallback to modelValue for compatibility
   const [currentNumber, setCurrentNumber] = useState<number | null>(null);
   const isInProgressRef = useRef(false);
-  const hasStartedRef = useRef(false);
   const isAnimatingRef = useRef(false); // Track if countdown is in progress
+  const startConfigRef = useRef('');
+  const onUpdateIsCountdownStartRef = useRef(onUpdateIsCountdownStart);
+  const onCountdownStartRef = useRef(onCountdownStart);
+  const onCountdownStepRef = useRef(onCountdownStep);
+  const onCountdownEndRef = useRef(onCountdownEnd);
+  const safeModelValue =
+    typeof modelValue === 'number' && Number.isFinite(modelValue)
+      ? modelValue
+      : null;
+  const isModelValueControlled = safeModelValue !== null;
+  const safeInitialSeconds =
+    typeof initialSeconds === 'number' && Number.isFinite(initialSeconds)
+      ? initialSeconds
+      : 0;
+  const safeEndSecond =
+    typeof endSecond === 'number' && Number.isFinite(endSecond) ? endSecond : 0;
+  const startNumber =
+    isModelValueControlled === true ? safeModelValue : safeInitialSeconds;
+  const hasCountdownRange = Math.abs(safeInitialSeconds - safeEndSecond) > 0;
 
   // CSS Variables
   const cssVariable = useMemo(() => {
@@ -63,19 +81,19 @@ export function Countdown({
 
     if (typeof width === 'string' && width !== '') {
       safeCssVariable['--countdown_width'] = width;
-    } else if (typeof width === 'number' || !isNaN(Number(width))) {
+    } else if (typeof width === 'number' && Number.isFinite(width)) {
       safeCssVariable['--countdown_width'] = `${width}px`;
     }
 
     if (typeof height === 'string' && height !== '') {
       safeCssVariable['--countdown_height'] = height;
-    } else if (typeof height === 'number' || !isNaN(Number(height))) {
+    } else if (typeof height === 'number' && Number.isFinite(height)) {
       safeCssVariable['--countdown_height'] = `${height}px`;
     }
 
     if (typeof padding === 'string' && padding !== '') {
       safeCssVariable['--countdown_padding'] = padding;
-    } else if (typeof padding === 'number' || !isNaN(Number(padding))) {
+    } else if (typeof padding === 'number' && Number.isFinite(padding)) {
       safeCssVariable['--countdown_padding'] = `${padding}px`;
     }
 
@@ -91,88 +109,87 @@ export function Countdown({
   }, [width, height, padding, bgColor, color]);
 
   // Safe countdown type
-  const safeCountDownType = useMemo(() => {
-    if (
-      typeof countdownType !== 'string' ||
-      !COUNTDOWN_TYPE_LIST.includes(countdownType)
-    ) {
-      return COUNTDOWN_TYPE_LIST[0];
-    }
-    return countdownType;
-  }, [countdownType]);
+  const safeCountDownType =
+    typeof countdownType === 'string' &&
+    COUNTDOWN_TYPE_LIST.includes(countdownType)
+      ? countdownType
+      : COUNTDOWN_TYPE_LIST[0];
 
   // Countdown card array
   const contdownCard = useMemo(() => {
-    const safeInitialSeconds =
-      typeof initialSeconds !== 'number' ? 0 : initialSeconds;
-    const safeEndSecond = typeof endSecond !== 'number' ? 0 : endSecond;
-
     const contdownCardList: number[] = [];
+    const safeCardUpperBound = Math.max(startNumber, safeInitialSeconds);
 
     // Generate cards from 0 to initialSeconds (Nuxt logic)
     // Both modes count down from initialSeconds to endSecond
-    if (safeInitialSeconds > safeEndSecond) {
-      for (let start = 0; start <= safeInitialSeconds; start++) {
+    if (safeCardUpperBound > safeEndSecond) {
+      for (let start = 0; start <= safeCardUpperBound; start++) {
         contdownCardList.push(start);
       }
     }
 
     return contdownCardList;
-  }, [initialSeconds, endSecond]);
+  }, [safeEndSecond, safeInitialSeconds, startNumber]);
 
-  // Watch for prop changes (Nuxt logic)
-  useEffect(() => {
-    if (
-      isCountdownStart === true &&
-      typeof initialSeconds === 'number' &&
-      Math.abs(initialSeconds - endSecond) > 0
-    ) {
-      setCurrentNumber(initialSeconds);
-      isInProgressRef.current = true;
-
-      // Wait for next frame to ensure DOM is ready before starting animation
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          onUpdateIsCountdownStart?.(true);
-          onCountdownStart?.();
-        });
-      });
-    } else if (isCountdownStart === false) {
-      // Reset the in-progress flag when countdown is stopped
-      isInProgressRef.current = false;
-    }
+  useLayoutEffect(() => {
+    onUpdateIsCountdownStartRef.current = onUpdateIsCountdownStart;
+    onCountdownStartRef.current = onCountdownStart;
+    onCountdownStepRef.current = onCountdownStep;
+    onCountdownEndRef.current = onCountdownEnd;
   }, [
-    isCountdownStart,
-    initialSeconds,
-    endSecond,
-    countdownType,
-    onUpdateIsCountdownStart,
-    onCountdownStart
+    onCountdownEnd,
+    onCountdownStart,
+    onCountdownStep,
+    onUpdateIsCountdownStart
   ]);
 
-  // Initial mount - set ready state after component is mounted
   useEffect(() => {
-    if (hasStartedRef.current) return;
+    if (isModelValueControlled === false || currentNumber === safeModelValue) {
+      return;
+    }
+
+    setCurrentNumber(safeModelValue);
+  }, [currentNumber, isModelValueControlled, safeModelValue]);
+
+  useEffect(() => {
+    if (isCountdownStart !== true || hasCountdownRange === false) {
+      isInProgressRef.current = false;
+      startConfigRef.current = '';
+
+      return;
+    }
+
+    const nextStartConfig = [
+      safeCountDownType,
+      startNumber,
+      safeEndSecond
+    ].join(':');
 
     if (
-      isCountdownStart === true &&
-      typeof initialSeconds === 'number' &&
-      Math.abs(initialSeconds - endSecond) > 0
+      startConfigRef.current === nextStartConfig &&
+      isInProgressRef.current === true
     ) {
-      setCurrentNumber(initialSeconds);
-      hasStartedRef.current = true;
-      isInProgressRef.current = true;
-
-      // Wait for next frame to ensure DOM is ready before starting animation
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          onUpdateIsCountdownStart?.(true);
-          onCountdownStart?.();
-        });
-      });
+      return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+    startConfigRef.current = nextStartConfig;
+    setCurrentNumber(startNumber);
+    isInProgressRef.current = true;
+    isAnimatingRef.current = false;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        onUpdateIsCountdownStartRef.current?.(true);
+        onCountdownStartRef.current?.();
+      });
+    });
+  }, [
+    hasCountdownRange,
+    isCountdownStart,
+    safeCountDownType,
+    safeEndSecond,
+    startNumber
+  ]);
 
   // Notify parent of currentNumber changes
   useEffect(() => {
@@ -182,6 +199,10 @@ export function Countdown({
   }, [currentNumber, onUpdateModelValue]);
 
   const handleNumberAnimationEnd = () => {
+    if (isInProgressRef.current === false || currentNumber === null) {
+      return;
+    }
+
     // Prevent multiple simultaneous animation end calls
     if (isAnimatingRef.current) {
       return;
@@ -190,31 +211,29 @@ export function Countdown({
 
     requestAnimationFrame(() => {
       // Check if we've already reached the end (Nuxt logic)
-      if (currentNumber === endSecond) {
-        onCountdownEnd?.();
-        onUpdateIsCountdownStart?.(false);
+      if (currentNumber === safeEndSecond) {
+        onCountdownEndRef.current?.();
+        onUpdateIsCountdownStartRef.current?.(false);
         isAnimatingRef.current = false;
         isInProgressRef.current = false;
+        startConfigRef.current = '';
         return;
       }
 
       // Calculate the next number
-      let newCurrentNumber: number;
-
       // Both modes count down (large to small)
       // The difference is only the animation direction (countdownType)
-      if (initialSeconds > endSecond || initialSeconds < endSecond) {
-        newCurrentNumber = (currentNumber ?? initialSeconds) - 1;
-      } else {
+      if (hasCountdownRange === false) {
         // No counting needed if initialSeconds === endSecond
         isAnimatingRef.current = false;
         return;
       }
+      const newCurrentNumber = currentNumber - 1;
 
       // Update the number - this will cause React to re-render
       // and the new cardNumber will match the animation condition
       setCurrentNumber(newCurrentNumber);
-      onCountdownStep?.(newCurrentNumber);
+      onCountdownStepRef.current?.(newCurrentNumber);
 
       // Release the animation lock
       isAnimatingRef.current = false;
@@ -244,7 +263,7 @@ export function Countdown({
                       : 'false'
                   }
                   data-css-is-end-second={
-                    cardNumber === endSecond ? 'true' : 'false'
+                    cardNumber === safeEndSecond ? 'true' : 'false'
                   }
                   style={{
                     // Down mode: up part uses cardNumber (Nuxt line 19)
@@ -257,7 +276,7 @@ export function Countdown({
                 <p
                   className="countdown-down_enter-down_enter_down"
                   data-css-is-initial-seconds={
-                    cardNumber === initialSeconds ? 'true' : 'false'
+                    cardNumber === safeInitialSeconds ? 'true' : 'false'
                   }
                   data-css-is-anime-start={
                     isCountdownStart === true && cardNumber >= currentNumber - 1
@@ -294,7 +313,7 @@ export function Countdown({
                 <p
                   className="countdown-up_leave-up_leave_up"
                   data-css-is-initial-seconds={
-                    cardNumber === initialSeconds ? 'true' : 'false'
+                    cardNumber === safeInitialSeconds ? 'true' : 'false'
                   }
                   data-css-is-anime-start={
                     isCountdownStart === true && cardNumber >= currentNumber - 1
@@ -302,7 +321,7 @@ export function Countdown({
                       : 'false'
                   }
                   data-css-is-end-second={
-                    cardNumber === endSecond ? 'true' : 'false'
+                    cardNumber === safeEndSecond ? 'true' : 'false'
                   }
                   data-css-card-up_leave_up={cardNumber.toString()}
                   style={{
@@ -316,7 +335,7 @@ export function Countdown({
                 <p
                   className="countdown-up_leave-up_leave_down"
                   data-css-is-initial-seconds={
-                    cardNumber === initialSeconds ? 'true' : 'false'
+                    cardNumber === safeInitialSeconds ? 'true' : 'false'
                   }
                   data-css-is-anime-start={
                     isCountdownStart === true && cardNumber >= currentNumber
@@ -324,7 +343,7 @@ export function Countdown({
                       : 'false'
                   }
                   data-css-is-end-second={
-                    cardNumber === endSecond ? 'true' : 'false'
+                    cardNumber === safeEndSecond ? 'true' : 'false'
                   }
                   data-css-card-up_leave_down={cardNumber.toString()}
                   style={{
