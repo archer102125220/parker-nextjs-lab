@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react';
 
-import { mediaMobile } from '@/styles/mediaQuery';
+import scssVariable from '@/styles/scss_variable_export.module.scss';
 
 export function useMobile() {
   return useSyncExternalStore(
@@ -12,13 +12,13 @@ export function useMobile() {
 
 let isMobile =
   typeof window !== 'undefined'
-    ? window.matchMedia(mediaMobile.replace('@media', '')).matches
+    ? window.matchMedia(`(max-width: ${scssVariable.mobileMaxWidth})`).matches
     : false;
 
 const subscribeMobileStatus = {
   subscribe() {
     function windowWidthListener() {
-      isMobile = window.matchMedia(mediaMobile.replace('@media', '')).matches;
+      isMobile = window.matchMedia(`(max-width: ${scssVariable.mobileMaxWidth})`).matches;
     }
     window.addEventListener('resize', windowWidthListener);
     return () => {

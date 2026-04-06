@@ -1,7 +1,6 @@
 'use client';
 import {
   useCallback,
-  useEffect,
   useMemo,
   useState,
   type ReactNode
@@ -39,8 +38,6 @@ export function CloudMessagingDataTable(
 
   // console.log(JSON.stringify({ CloudMessagingDataTableNonce: nonce }));
 
-  const [clientNonce, setClientNonce] = useState<string>('');
-
   const dispatch = useAppDispatch();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -48,9 +45,14 @@ export function CloudMessagingDataTable(
     null
   );
 
-  const OS_TD_TITLE = useMemo<string>(() => '作業系統', []);
-  const TOKEN_TD_TITLE = useMemo<string>(() => 'token', []);
-  const ACRION_TITLE = useMemo<string>(() => '操作', []);
+  const clientNonce = useMemo(
+    () => (typeof nonce === 'string' && nonce !== '' ? nonce : ''),
+    [nonce]
+  );
+
+  const OS_TD_TITLE = '作業系統';
+  const TOKEN_TD_TITLE = 'token';
+  const ACRION_TITLE = '操作';
 
   const systemLoading = useAppSelector<boolean>(
     (state) => state?.system?.loading
@@ -104,6 +106,7 @@ export function CloudMessagingDataTable(
     [dispatch]
   );
 
+  // handleRefresh / handleDeleteToken 以 loading/systemLoading 為 deps，確保讀到最新狀態
   const handleRefresh = useCallback(
     async function refresh() {
       if (loading === true || systemLoading === true) return;
@@ -120,14 +123,12 @@ export function CloudMessagingDataTable(
         setSystemLoading(false);
       }
     },
-    [loading, systemLoading]
+    [loading, systemLoading, setSystemLoading]
   );
 
   const handleDeleteToken = useCallback(
     async function deleteToken(token: string) {
-      if (loading === true || systemLoading === true) {
-        return;
-      }
+      if (loading === true || systemLoading === true) return;
 
       // console.log({ token });
 
@@ -145,15 +146,8 @@ export function CloudMessagingDataTable(
         setSystemLoading(false);
       }
     },
-    [loading, systemLoading]
+    [loading, systemLoading, handleRefresh, setSystemLoading, setMessageSuccess, setMessageError]
   );
-
-  useEffect(() => {
-    if (typeof nonce === 'string' && nonce !== '') {
-       
-      setClientNonce(nonce);
-    }
-  }, [nonce]);
 
   return (
     <Box sx={{ marginTop: '8px' }} nonce={clientNonce}>

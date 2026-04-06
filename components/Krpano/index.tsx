@@ -2,6 +2,7 @@
 
 import {
   useEffect,
+  useEffectEvent,
   useRef,
   useCallback,
   useImperativeHandle,
@@ -46,6 +47,10 @@ export const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
   // 將 React ID 中的冒號替換掉（krpano 不接受冒號）
   const panoId = `krpano${reactId.replace(/:/g, '_')}`;
   const containerId = `${panoId}_container`;
+
+  // useEffectEvent 讓 callbacks 不進入初始化 useEffect 的 deps
+  const _onReady = useEffectEvent((krpano: KrpanoInstance) => onReady?.(krpano));
+  const _onLoadComplete = useEffectEvent((krpano: KrpanoInstance) => onLoadComplete?.(krpano));
 
   // 註冊全域熱點點擊處理函數
   useEffect(() => {
@@ -115,9 +120,9 @@ export const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
             prevHotspotsRef.current = hotspots;
 
             // 定義統一的 onloadcomplete 回調，整合內部邏輯與外部 callback
-            window.onKrpanoLoadComplete = () => {
+            (window as unknown as Record<string, unknown>).onKrpanoLoadComplete = () => {
               initOrUpdateTextLayer(krpano, textLayerContent);
-              onLoadComplete?.(krpano);
+              _onLoadComplete(krpano);
             };
 
             // 使用 events.onloadcomplete 事件，在場景完全載入後觸發
@@ -127,7 +132,7 @@ export const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
               'jscall(onKrpanoLoadComplete())'
             );
 
-            onReady?.(krpano);
+            _onReady(krpano);
           }
         });
       } catch (error) {
@@ -154,8 +159,10 @@ export const Krpano = forwardRef<KrpanoRef, KrpanoProps>(function Krpano(
       initializedRef.current = false;
     };
     // 依賴項只包含初始化需要的參數，避免重複初始化
+    // onReady/onLoadComplete 已經透過 useEffectEvent 處理，不需要加入 deps
+    // hotspots 在初始化時被讀取一次，後續由独立的 useEffect 處理 diff，刻意不加入 deps
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [xml, startScene, bgcolor, onReady, containerId, panoId]);
+  }, [xml, startScene, bgcolor, textLayerContent, containerId, panoId]);
 
   // 監聽當前場景更新
   useEffect(() => {

@@ -1,8 +1,8 @@
 'use client';
 import {
   useCallback,
+  useMemo,
   useState,
-  useEffect,
   type ReactNode,
   type MouseEvent
 } from 'react';
@@ -47,7 +47,10 @@ export function I18nList(props: I18nListProps): ReactNode {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const [clientNonce, setClientNonce] = useState<string>('');
+  const clientNonce = useMemo(
+    () => (typeof nonce === 'string' && nonce !== '' ? nonce : ''),
+    [nonce]
+  );
 
   const handleOpen = useCallback((event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -56,15 +59,8 @@ export function I18nList(props: I18nListProps): ReactNode {
     setAnchorEl(null);
   }, []);
 
-  useEffect(() => {
-    if (typeof nonce === 'string' && nonce !== '') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setClientNonce(nonce);
-    }
-  }, [nonce]);
-
-  const isZhTw = pathname.startsWith('/zh-tw');
-  const isEn = pathname.startsWith('/en');
+  const isZhTw = useMemo(() => pathname.startsWith('/zh-tw'), [pathname]);
+  const isEn = useMemo(() => pathname.startsWith('/en'), [pathname]);
 
   return (
     <div className="i18n_list">

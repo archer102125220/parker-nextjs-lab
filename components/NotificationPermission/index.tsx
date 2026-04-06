@@ -1,6 +1,6 @@
 'use client';
 import type { ReactNode } from 'react';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 
 import Snackbar from '@mui/material/Snackbar';
 import Button from '@mui/material/Button';
@@ -21,7 +21,10 @@ export function NotificationPermission({
 }: NotificationPermissionProps): ReactNode {
   const Firebase = useFirebase();
 
-  const [clientNonce, setClientNonce] = useState<string>('');
+  const clientNonce = useMemo(
+    () => (typeof nonce === 'string' && nonce !== '' ? nonce : ''),
+    [nonce]
+  );
   const [isShow, setIsShow] = useState<boolean>(false);
   const [processing, setProcessing] = useState<boolean>(false);
 
@@ -55,16 +58,12 @@ export function NotificationPermission({
   const handleCancel = useCallback(function cancel() {
     setIsShow(false);
   }, []);
-  // TODO
-  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const handleCofirm = useCallback(function cofirm() {
     setProcessing(true);
     setAgreeNotification(true);
-  }, []);
+  }, [setAgreeNotification]);
 
   const handleFirebase = useCallback(
-    // TODO
-    // eslint-disable-next-line react-hooks/preserve-manual-memoization
     async function _firebase() {
       setLoading(true);
 
@@ -90,15 +89,9 @@ export function NotificationPermission({
 
       setLoading(false);
     },
-    [Firebase]
+    [Firebase, setLoading, setFirebaseMessagingInited]
   );
 
-  useEffect(() => {
-    if (typeof nonce === 'string' && nonce !== '') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setClientNonce(nonce);
-    }
-  }, [nonce]);
 
   useEffect(() => {
     if (firebaseCroeInited === true && Firebase instanceof firebase === true) {
@@ -110,7 +103,7 @@ export function NotificationPermission({
         handleFirebase();
       }
     }
-  }, [firebaseCroeInited, agreeNotification, Firebase]);
+  }, [firebaseCroeInited, agreeNotification, Firebase, handleFirebase]);
 
   return (
     <Snackbar

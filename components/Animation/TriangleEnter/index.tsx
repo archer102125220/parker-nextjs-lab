@@ -1,6 +1,6 @@
 'use client';
 import {
-  useCallback,
+  useEffectEvent,
   useEffect,
   useMemo,
   useRef,
@@ -80,6 +80,11 @@ export function TriangleEnter(props: TriangleEnterPropsType): ReactNode {
 
   const [isInited, setIsInited] = useState<boolean>(false);
   const [isOpened, setIsOpened] = useState<boolean>(false);
+  // 用 ref 讓 handleAnime 讀取最新的 isInited，避免 stale closure
+  const isInitedRef = useRef(isInited);
+  useEffect(() => {
+    isInitedRef.current = isInited;
+  }, [isInited]);
 
   const memoLeftLabel = useMemo<string>(
     function () {
@@ -104,41 +109,46 @@ export function TriangleEnter(props: TriangleEnterPropsType): ReactNode {
     [rightLabel, label]
   );
 
-  const handleAnimeInit = useCallback(
-    async function (currentIsMobile: boolean = false) {
-      // console.log('handleAnimeInit');
+  // useEffectEvent 讓 animationInited 不進入 useEffect deps，避免 props 變更重觸發初始化
+  const _onAnimationInited = useEffectEvent(() => animationInited?.());
+  // animationFinish 是 onClick 事件觸發的，不能用 useEffectEvent，改用 useLayoutEffect 同步 ref
+  const animationFinishRef = useRef(animationFinish);
+  useEffect(() => {
+    animationFinishRef.current = animationFinish;
+  }, [animationFinish]);
+
+  useEffect(() => {
+    if (isInited === false && isOpened === false) {
+      const currentIsMobile = isMobile === true;
 
       if (triangleLeft.current !== null && triangleRight.current !== null) {
-        await Promise.all([
+        Promise.all([
           promiseAnimeJs({
             targets: triangleLeft.current,
             left: currentIsMobile ? '-2px' : '-10px',
-            // top: isMobile ? '-2px' : '-10px',
-            // left: '-10px',
             top: '-10px',
             duration: 200
           }),
           promiseAnimeJs({
             targets: triangleRight.current,
             right: currentIsMobile ? '-2px' : '-10px',
-            // bottom: isMobile ? '-2px' : '-10px',
-            // right: '-10px',
             bottom: '-10px',
             duration: 200
           })
-        ]);
+        ]).then(() => {
+          _onAnimationInited();
+          setIsInited(true);
+        });
+      } else {
+        _onAnimationInited();
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setIsInited(true);
       }
-
-      if (typeof animationInited === 'function') {
-        animationInited();
-      }
-      setIsInited(true);
-    },
-    [animationInited]
-  );
+    }
+  }, [isInited, isOpened, isMobile]);
 
   async function handleAnime() {
-    if (isInited === false) {
+    if (isInitedRef.current === false) {
       return;
     }
     await Promise.all([
@@ -169,17 +179,8 @@ export function TriangleEnter(props: TriangleEnterPropsType): ReactNode {
     ]);
 
     setIsOpened(true);
-    if (typeof animationFinish === 'function') {
-      animationFinish();
-    }
+    animationFinishRef.current?.();
   }
-
-  useEffect(() => {
-    if (isInited === false && isOpened === false) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      handleAnimeInit(isMobile);
-    }
-  }, [isInited, isOpened, handleAnimeInit, isMobile]);
 
   return (
     <div

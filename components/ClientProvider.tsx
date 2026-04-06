@@ -6,7 +6,9 @@ import { Provider } from 'react-redux';
 import type { RootState } from '@/store';
 import { storeInit } from '@/store';
 
-import scssVariable from '@/styles/scss_variable_export.module.scss';
+import { useWindowSize } from '@/hooks/useWindowSize';
+import { useMobile } from '@/hooks/useMobile';
+import { useTablet } from '@/hooks/useTablet';
 
 type ProvidersProps = {
   children: React.ReactNode;
@@ -21,35 +23,30 @@ export function ClientProvider({
 
   // console.log(JSON.stringify({ ClientProviderInitialState: initialState }));
 
+  return (
+    <Provider store={store}>
+      <WindowSizeSync store={store} />
+      {children}
+    </Provider>
+  );
+}
+
+// 獨立的同步組件，使用 useSyncExternalStore-based hooks 追蹤視窗大小並 dispatch 到 Redux store
+function WindowSizeSync({ store }: { store: ReturnType<typeof storeInit> }) {
+  const { width, height } = useWindowSize();
+  const isMobile = useMobile();
+  const isTablet = useTablet();
+  // isTabletOnly = 平板尺寸但非手機尺寸（與 styles/mixin.scss @mixin tabletOnly 對應）
+  const isTabletOnly = isTablet && !isMobile;
+
   useEffect(() => {
-    function _handleResize_() {
-      store.dispatch({
-        type: 'system/setWindowInnerSize',
-        payload: {
-          width: window.innerWidth,
-          height: window.innerHeight,
-          // 最好與 style\mixin.scss 的 @mixin mobile 設定一樣
-          isMobile: window.matchMedia(
-            `(max-width: ${scssVariable.mobileMaxWidth})`
-          ).matches,
-          // 最好與 style\mixin.scss 的 @mixin tabletOnly 設定一樣
-          isTabletOnly: window.matchMedia(
-            `(min-width: calc(${scssVariable.mobileMaxWidth} + 1px)) and (max-width: ${scssVariable.tabletMaxWidth})`
-          ).matches,
-          // 最好與 style\mixin.scss 的 @mixin tablet 設定一樣
-          isTablet: window.matchMedia(
-            `(max-width: ${scssVariable.tabletMaxWidth})`
-          ).matches
-        }
-      });
-    }
-    window.addEventListener('resize', _handleResize_);
-    _handleResize_();
+    store.dispatch({
+      type: 'system/setWindowInnerSize',
+      payload: { width, height, isMobile, isTabletOnly, isTablet }
+    });
+  }, [width, height, isMobile, isTabletOnly, isTablet, store]);
 
-    return () => window.removeEventListener('resize', _handleResize_);
-  }, []);
-
-  return <Provider store={store}>{children}</Provider>;
+  return null;
 }
 
 export default ClientProvider;

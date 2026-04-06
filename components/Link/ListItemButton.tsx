@@ -1,8 +1,8 @@
 'use client';
 import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import ListItemButton, {
-  ListItemButtonProps
+  type ListItemButtonProps
 } from '@mui/material/ListItemButton';
 
 import { Link } from '@/i18n/navigation';
@@ -19,14 +19,10 @@ export interface LinkListItemButtonProps extends _LinkListItemButtonProps {
 export function LinkListItemButton(props: LinkListItemButtonProps): ReactNode {
   const { nonce, ...listItemButtonProps } = props;
 
-  const [clientNonce, setClientNonce] = useState<string>('');
-
-  useEffect(() => {
-    if (typeof nonce === 'string' && nonce !== '') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setClientNonce(nonce);
-    }
-  }, [nonce]);
+  const clientNonce = useMemo(
+    () => (typeof nonce === 'string' && nonce !== '' ? nonce : ''),
+    [nonce]
+  );
 
   return (
     <ListItemButton

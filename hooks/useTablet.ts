@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react';
 
-import { mediaTablet } from '@/styles/mediaQuery';
+import scssVariable from '@/styles/scss_variable_export.module.scss';
 
 export function useTablet() {
   return useSyncExternalStore(
@@ -12,13 +12,13 @@ export function useTablet() {
 
 let isTablet =
   typeof window !== 'undefined'
-    ? window.matchMedia(mediaTablet.replace('@media', '')).matches
+    ? window.matchMedia(`(max-width: ${scssVariable.tabletMaxWidth})`).matches
     : false;
 
 const subscribeTabletStatus = {
   subscribe() {
     function windowWidthListener() {
-      isTablet = window.matchMedia(mediaTablet.replace('@media', '')).matches;
+      isTablet = window.matchMedia(`(max-width: ${scssVariable.tabletMaxWidth})`).matches;
     }
     window.addEventListener('resize', windowWidthListener);
     return () => {
@@ -34,4 +34,3 @@ const subscribeTabletStatus = {
 };
 
 export default useTablet;
-

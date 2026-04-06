@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useEffectEvent } from 'react';
 import QRCode from 'qrcode';
 
 export interface QRCodeProps {
@@ -30,37 +30,39 @@ export function QRCodeComponent({
 }: QRCodeProps) {
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
 
-  const handleQRCode = useCallback(
-    async (_qrCodeValue: string | number) => {
-      if (
-        _qrCodeValue === undefined ||
-        _qrCodeValue === null ||
-        _qrCodeValue === ''
-      ) {
-        return;
-      }
-
-      onBeforeCreate?.();
-      onLoading?.(true);
-
-      try {
-        const url = await QRCode.toDataURL(String(_qrCodeValue));
-        setQrCodeDataUrl(url);
-        onCreated?.();
-        onSuccess?.({ qrCodeValue: _qrCodeValue, dataUrl: url });
-      } catch (error) {
-        console.error('QRCode generation error:', error);
-        onError?.(error as Error);
-      } finally {
-        onLoading?.(false);
-      }
-    },
-    [onBeforeCreate, onLoading, onSuccess, onError, onCreated]
-  );
+  // useEffectEvent 讓 callbacks 不加入 useEffect deps，避免每次 callback 變更就重新生成 QR Code
+  const _onBeforeCreate = useEffectEvent(() => onBeforeCreate?.());
+  const _onLoading = useEffectEvent((loading: boolean) => onLoading?.(loading));
+  const _onSuccess = useEffectEvent((data: { qrCodeValue: string | number; dataUrl: string }) => onSuccess?.(data));
+  const _onError = useEffectEvent((error: Error) => onError?.(error));
+  const _onCreated = useEffectEvent(() => onCreated?.());
 
   useEffect(() => {
-    handleQRCode(qrCodeValue);
-  }, [qrCodeValue, handleQRCode]);
+    if (
+      qrCodeValue === undefined ||
+      qrCodeValue === null ||
+      qrCodeValue === ''
+    ) {
+      return;
+    }
+
+    _onBeforeCreate();
+    _onLoading(true);
+
+    QRCode.toDataURL(String(qrCodeValue))
+      .then((url) => {
+        setQrCodeDataUrl(url);
+        _onCreated();
+        _onSuccess({ qrCodeValue, dataUrl: url });
+      })
+      .catch((error: Error) => {
+        console.error('QRCode generation error:', error);
+        _onError(error);
+      })
+      .finally(() => {
+        _onLoading(false);
+      });
+  }, [qrCodeValue]);
 
   if (!qrCodeDataUrl) {
     return null;

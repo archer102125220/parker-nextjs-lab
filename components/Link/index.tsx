@@ -1,6 +1,6 @@
 'use client';
-import { useEffect, useState, type ReactNode } from 'react';
-import MuiLink, { LinkProps as MuiLinkProps } from '@mui/material/Link';
+import { useMemo, type ReactNode } from 'react';
+import MuiLink, { type LinkProps as MuiLinkProps } from '@mui/material/Link';
 
 import { Link as I18nLink } from '@/i18n/navigation';
 
@@ -14,14 +14,10 @@ export function Link(props: LinkProps): ReactNode {
   const { nonce, ...boxProps } = props;
 
   // console.log(JSON.stringify({ LinkNonce: nonce }));
-  const [clientNonce, setClientNonce] = useState<string>('');
-
-  useEffect(() => {
-    if (typeof nonce === 'string' && nonce !== '') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setClientNonce(nonce);
-    }
-  }, [nonce]);
+  const clientNonce = useMemo(
+    () => (typeof nonce === 'string' && nonce !== '' ? nonce : ''),
+    [nonce]
+  );
 
   return <MuiLink {...boxProps} component={I18nLink} nonce={clientNonce} />;
 }

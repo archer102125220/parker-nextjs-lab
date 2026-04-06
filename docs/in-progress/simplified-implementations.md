@@ -256,3 +256,42 @@
 - [WebRTC APIs](file:///c:/Users/User/Desktop/code/parker-nextjs-lab/app/api/web-rtc/)
 - [SSE APIs](file:///c:/Users/User/Desktop/code/parker-nextjs-lab/app/api/server-sent-event/)
 
+---
+
+## React Hooks 重構批次 (b69772b9 對話)
+
+### 因 useEffectEvent 規則限制而使用的替代模式
+
+#### `TriangleEnter/index.tsx` - `animationFinish` callback
+| 項目 | 說明 |
+|------|------|
+| **理想做法** | 使用 `useEffectEvent` 讓 `animationFinish` 在 `handleAnime`（onClick）中脫離閉包 |
+| **實際做法** | 使用 `useRef` + `useEffect` 同步 `animationFinishRef`，在 onClick 事件中調用 `animationFinishRef.current?.()` |
+| **限制原因** | ESLint 規則：`useEffectEvent` 創建的函數只能在 Effects 和 Effect Events 中調用，不能在 onClick 事件處理器中調用 |
+| **風險** | 低。ref 同步使用 `useEffect`，`animationFinish` 是非視覺的回調，不影響渲染，可接受 |
+
+#### `Krpano/index.tsx` - `hotspots` 不在初始化 deps 中
+| 項目 | 說明 |
+|------|------|
+| **理想做法** | `hotspots` 應該在初始化 `useEffect` 的 deps 中 |
+| **實際做法** | `hotspots` 刻意排除於 deps 之外，加了 `eslint-disable-next-line react-hooks/exhaustive-deps` |
+| **限制原因** | Krpano 的 `embedpano` 初始化是一次性操作，加入 `hotspots` 到 deps 會導致每次 `hotspots` prop 更新時重新初始化整個 Krpano 實例 |
+| **風險** | 低。初始 `hotspots` 由初始化時的代碼讀取，後續由獨立的 `useEffect` 處理 diff |
+
+### 此次重構完整清單 (2026-04-06)
+
+| 文件 | 改動 | 結果 |
+|------|------|------|
+| `Link/index.tsx` | `useEffect+setState` → `useMemo` (nonce) | ✅ 完整 |
+| `Link/ListItemButton.tsx` | `useEffect+setState` → `useMemo` (nonce) | ✅ 完整 |
+| `MuiCacheProvider.tsx` | `useEffect+setState` → `useMemo` (nonce) | ✅ 完整 |
+| `Layout/I18nList.tsx` | `useMemo` (nonce + pathname.startsWith) | ✅ 完整 |
+| `CloudMessaging/DataTable.tsx` | `useMemo` (nonce); 補完整 `useCallback` deps | ✅ 完整 |
+| `CloudMessaging/Form.tsx` | `useMemo` (nonce); 補完整 deps | ✅ 完整 |
+| `NotificationPermission/index.tsx` | `useMemo` (nonce); 補完整 deps | ✅ 完整 |
+| `QRCode/index.tsx` | `useEffectEvent` 讓 callbacks 脫離 `useEffect` deps | ✅ 完整 |
+| `Animation/TriangleEnter/index.tsx` | `useEffectEvent` (animationInited); `ref` (animationFinish) | ⚠️ 部分 |
+| `ClientProvider.tsx` | `useEffect+addEventListener` → `useWindowSize/useMobile/useTablet` | ✅ 完整 |
+| `PhoneInput/index.tsx` | 5 個 `useState` → `useReducer`; handlers → `useCallback` | ✅ 完整 |
+| `Krpano/index.tsx` | `useEffectEvent` (onReady, onLoadComplete); hotspots eslint-disable | ⚠️ 部分 |
+

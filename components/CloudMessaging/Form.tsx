@@ -2,6 +2,7 @@
 import {
   useCallback,
   useEffect,
+  useMemo,
   useState,
   type ReactNode,
   type FormEvent
@@ -33,7 +34,10 @@ export function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
 
   // console.log(JSON.stringify({ CloudMessagingFormNonce: nonce }));
 
-  const [clientNonce, setClientNonce] = useState<string>('');
+  const clientNonce = useMemo(
+    () => (typeof nonce === 'string' && nonce !== '' ? nonce : ''),
+    [nonce]
+  );
 
   const dispatch = useAppDispatch();
 
@@ -95,26 +99,14 @@ export function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
     async function pushNotification(e: FormEvent) {
       e.preventDefault();
 
-      // console.log({
-      //   // isValidSubmit: isValidSubmit.value,
-      //   systemLoading
-      // });
-
-      if (
-        // isValidSubmit.value === false ||
-        systemLoading === true
-      ) {
+      if (systemLoading === true) {
         return false;
       }
-
-      // console.log('push notification');
 
       setSystemLoading(true);
 
       try {
         const response = await POST_PushNotification();
-
-        // console.log({ response });
 
         const { failureCount = 0, successCount = 0 } = response;
         setMessageInformation(
@@ -129,7 +121,7 @@ export function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
 
       return false;
     },
-    [systemLoading]
+    [systemLoading, setSystemLoading, POST_PushNotification, setMessageInformation, setMessageError]
   );
 
   const handleResetForm = useCallback(function resetForm() {
@@ -139,19 +131,12 @@ export function CloudMessagingForm(props: CloudMessagingFormProps): ReactNode {
   }, []);
 
   useEffect(() => {
-    if (typeof nonce === 'string' && nonce !== '') {
-       
-      setClientNonce(nonce);
-    }
-  }, [nonce]);
-
-  useEffect(() => {
     setWebTokenList(serverTokenList?.webTokenList as unknown[] as string[]);
     setAndroidTokenList(
       serverTokenList?.androidTokenList as unknown[] as string[]
     );
     setIosTokenList(serverTokenList?.iosTokenList as unknown[] as string[]);
-  }, [serverTokenList]);
+  }, [serverTokenList, setWebTokenList, setAndroidTokenList, setIosTokenList]);
 
   return (
     <Grid
