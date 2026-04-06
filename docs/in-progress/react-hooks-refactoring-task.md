@@ -5,7 +5,7 @@
 | 分類 | 總數 | 已完成 | 進行中 |
 |------|------|--------|--------|
 | Hooks | 32 | 32 | 0 |
-| Components | 110+ | 13 | 0 |
+| Components | 110+ | 25 | 0 |
 | App Pages | 63 | 0 | 0 |
 
 ---
@@ -73,26 +73,26 @@
 
 ### 需檢查的核心組件
 - [x] `Animation/EnterLabel/index.tsx` ✅ useEffectEvent（2026-03-18）
-- [ ] `Animation/TriangleEnter/index.tsx`
+- [x] `Animation/TriangleEnter/index.tsx` ✅ useEffectEvent (animationInited) + ref pattern (animationFinish)（2026-04-06）
 - [ ] `AxiosInit.tsx`
-- [ ] `ClientProvider.tsx`
-- [ ] `CloudMessaging/DataTable.tsx`
-- [ ] `CloudMessaging/Form.tsx`
+- [x] `ClientProvider.tsx` ✅ useWindowSize/useMobile/useTablet hooks → WindowSizeSync（2026-04-06）
+- [x] `CloudMessaging/DataTable.tsx` ✅ useMemo (nonce) + 補完整 useCallback deps（2026-04-06）
+- [x] `CloudMessaging/Form.tsx` ✅ useMemo (nonce) + 補完整 useCallback/useEffect deps（2026-04-06）
 - [x] `Countdown/index.tsx` ✅ 初始化流程與 callback refs（2026-04-03）
 - [ ] `DatePicker/index.tsx`
 - [x] `DialogModal/index.tsx` ✅ useEffectEvent + useLayoutEffect（2026-03-18）
   - ⚠️ 關閉動畫仍需由人類開發者手動調整
 - [ ] `Hexagon/Container.tsx`
 - [ ] `ImageUpload/index.tsx`
-- [ ] `Krpano/index.tsx`
+- [x] `Krpano/index.tsx` ✅ useEffectEvent (onReady, onLoadComplete)（2026-04-06）
 - [ ] `Layout/Header.tsx`
-- [ ] `Layout/I18nList.tsx`
-- [ ] `Link/index.tsx`
-- [ ] `Link/ListItemButton.tsx`
-- [ ] `MuiCacheProvider.tsx`
-- [ ] `NotificationPermission/index.tsx`
-- [ ] `PhoneInput/index.tsx`
-- [ ] `QRCode/index.tsx`
+- [x] `Layout/I18nList.tsx` ✅ useMemo (nonce + pathname.startsWith)（2026-04-06）
+- [x] `Link/index.tsx` ✅ useMemo (nonce)（2026-04-06）
+- [x] `Link/ListItemButton.tsx` ✅ useMemo (nonce)（2026-04-06）
+- [x] `MuiCacheProvider.tsx` ✅ useMemo (nonce)（2026-04-06）
+- [x] `NotificationPermission/index.tsx` ✅ useMemo (nonce) + 補完整 deps（2026-04-06）
+- [x] `PhoneInput/index.tsx` ✅ 5 個 useState → useReducer + handlers → useCallback（2026-04-06）
+- [x] `QRCode/index.tsx` ✅ useEffectEvent 讓 callbacks 脫離 useEffect deps（2026-04-06）
 - [ ] `Ripple/index.tsx`
 - [ ] `SkeletonLoader/index.tsx`
 - [ ] `SlideInPanel/index.tsx`
@@ -335,3 +335,37 @@
 - `[/]` 檢查中
 - `[x]` 已完成（無需修改或已修改）
 - `⭐` 高優先級
+
+---
+
+### 2026-04-06 Nonce/Hooks Pattern Batch
+
+**審查範圍**: 12 個核心組件，主要處理 nonce 同步模式、event callbacks 脫離 deps、useState → useReducer
+
+**已完成組件** (12 個):
+
+| 組件 | 重構內容 |
+|------|----------|
+| `Animation/TriangleEnter/index.tsx` | `useEffectEvent` (animationInited)；`ref` pattern (animationFinish，因規則限制) |
+| `ClientProvider.tsx` | 改用 `useWindowSize`/`useMobile`/`useTablet` hooks，拆出 `WindowSizeSync` 子組件 |
+| `CloudMessaging/DataTable.tsx` | `useMemo` (nonce)；移除靜態字串 `useMemo`；補完整 `useCallback` deps |
+| `CloudMessaging/Form.tsx` | `useMemo` (nonce)；補完整 `handlePushNotification` / `serverTokenList` deps |
+| `Krpano/index.tsx` | `useEffectEvent` (onReady, onLoadComplete)；hotspots 刻意排除 deps（見 simplified-implementations.md）|
+| `Layout/I18nList.tsx` | `useMemo` (nonce + pathname.startsWith 路徑判斷)；移除多餘 useEffect |
+| `Link/index.tsx` | `useMemo` (nonce)，取代 `useEffect + useState` |
+| `Link/ListItemButton.tsx` | `useMemo` (nonce)，取代 `useEffect + useState` |
+| `MuiCacheProvider.tsx` | `useMemo` (nonce)，取代 `useEffect + useState` |
+| `NotificationPermission/index.tsx` | `useMemo` (nonce)；補完整 deps；移除無效 `eslint-disable` 注釋 |
+| `PhoneInput/index.tsx` | 5 個 `useState` → `useReducer`；所有 handlers → `useCallback`；衍生值 → `useMemo` |
+| `QRCode/index.tsx` | `useEffectEvent` 讓 `onBeforeCreate`/`onSuccess` 脫離 `useEffect` deps |
+
+**同步完成** (Hooks):
+
+| Hook | 改動 |
+|------|------|
+| `useMobile.ts` | import 來源從 `mediaQuery.ts` 改為 `scss_variable_export.module.scss` |
+| `useTablet.ts` | import 來源從 `mediaQuery.ts` 改為 `scss_variable_export.module.scss` |
+
+**需關注的特殊實作** (詳見 `simplified-implementations.md`):
+1. `TriangleEnter/animationFinish` — 使用 ref 取代 `useEffectEvent`（規則：後者不能在 onClick 中呼叫）
+2. `Krpano/hotspots` — 刻意從初始化 deps 排除，避免 Krpano 實例重新初始化
