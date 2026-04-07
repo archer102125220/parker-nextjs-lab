@@ -20,11 +20,7 @@ export const ABOUT_CONTENT_DATA_ZH: Section[] = [
     description: [
       {
         isDel: false,
-        text: '本專案為「Parker Chen 的Next.js實驗室」，聚焦於 Next.js 生態的整合與實驗'
-      },
-      {
-        isDel: false,
-        text: '，並透過實際頁面與 API 演示多語系、PWA、ISR、安全性、即時互動等主題。'
+        text: '本專案為「Parker Chen 的Next.js實驗室」，聚焦於 Next.js 生態的整合與實驗，並透過實際頁面與 API 演示多語系、PWA、ISR、安全性、即時互動等主題。'
       },
       {
         isDel: false,
