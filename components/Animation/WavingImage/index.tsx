@@ -5,13 +5,19 @@ import {
   type CSSProperties,
   useState,
   useMemo,
-  useCallback,
+  useEffectEvent,
   useRef,
   useLayoutEffect,
   useEffect
 } from 'react';
 
 import styles from './waving_image.module.scss';
+
+export type WavingImageOnLoad = (
+  img?: HTMLImageElement,
+  canvas?: HTMLCanvasElement,
+  ctx?: CanvasRenderingContext2D
+) => void;
 
 export interface WavingImageProps {
   src: string;
@@ -23,6 +29,8 @@ export interface WavingImageProps {
   frequency?: number;
   fps?: number;
   stop?: boolean;
+  direction?: 'horizontal' | 'vertical';
+  onLoad?: WavingImageOnLoad;
 }
 
 interface WavingImageCSSProperties extends CSSProperties {
@@ -39,20 +47,14 @@ export default function WavingImage({
   period = 2, // 周期数
   frequency = 1, // 频率
   fps = 70, // 每秒帧数
-  stop = false
-}: {
-  src: string;
-  alt?: string;
-  amplitude?: number;
-  period?: number;
-  frequency?: number;
-  fps?: number;
-  stop?: boolean;
-}): ReactNode {
+  stop = false,
+  onLoad
+}: WavingImageProps): ReactNode {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const animationFrameIdRef = useRef<number | null>(null);
 
+  const [imgLoading, setImgLoading] = useState<boolean>(true);
   const [showImg, setShowImg] = useState<boolean>(true);
   const [canvasWidth, setCanvasWidth] = useState<number | null>(null);
   const [canvasHeight, setCanvasHeight] = useState<number | null>(null);
@@ -70,7 +72,7 @@ export default function WavingImage({
     return _cssVariables;
   }, [showImg, canvasWidth, canvasHeight]);
 
-  const initWavingImageDOM = useCallback(() => {
+  const initWavingImageDOM = useEffectEvent(() => {
     console.log('initWavingImageDOM');
 
     if (animationFrameIdRef.current !== null) {
@@ -86,7 +88,7 @@ export default function WavingImage({
     const ctx = canvas.getContext('2d');
     if (ctx instanceof CanvasRenderingContext2D === false) return;
 
-    console.dir({ img });
+    if (typeof onLoad === 'function') onLoad(img, canvas, ctx);
 
     const imgWidth = Math.floor(img.width);
     const imgHeight = Math.floor(img.height);
@@ -100,7 +102,7 @@ export default function WavingImage({
     }
 
     const canvasWidth = imgWidth;
-    const canvasHeight = imgHeight + amplitude * 2; //
+    const canvasHeight = imgHeight + amplitude * 2;
 
     setCanvasWidth(canvasWidth);
     setCanvasHeight(canvasHeight);
@@ -161,18 +163,19 @@ export default function WavingImage({
     requestAnimationFrame(function () {
       setShowImg(false);
     });
-  }, [amplitude, frequency, fps, period, stop]);
+  });
 
   useLayoutEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setShowImg(true);
+    setImgLoading(true);
   }, [src]);
 
   useEffect(() => {
     if (imgRef.current?.complete) {
       initWavingImageDOM();
     }
-  }, []);
+  }, [imgLoading]);
 
   return (
     <div className={styles.waving_image} style={cssVariables}>
@@ -182,7 +185,7 @@ export default function WavingImage({
         className={styles['waving_image-img']}
         src={src}
         alt={alt}
-        onLoad={initWavingImageDOM}
+        onLoad={() => setImgLoading(false)}
       />
       <div className={styles['waving_image-wrapper']}>
         <canvas
