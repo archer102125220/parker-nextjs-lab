@@ -238,6 +238,10 @@
             "message": {
                 "title": "Message 訊息組件測試",
                 "description": "展示不同類型的訊息提示功能"
+            },
+            "wavingImage": {
+                "title": "WavingImage 擺動圖片組件測試",
+                "description": "展示擺動圖片特效"
             }
         },
         "cssDrawing": {

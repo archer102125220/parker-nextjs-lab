@@ -238,6 +238,10 @@
             "message": {
                 "title": "Message Component Test",
                 "description": "Demonstrating different types of message notifications"
+            },
+            "wavingImage": {
+                "title": "WavingImage Component Test",
+                "description": "Demonstrating waving image effect"
             }
         },
         "cssDrawing": {
