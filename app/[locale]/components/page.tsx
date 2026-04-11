@@ -67,6 +67,13 @@ const COMPONENT_CATEGORIES = [
       { href: '/components/wang-editor-test', label: 'WangEditor', descKey: 'items.wangEditor' },
       { href: '/components/enter-label', label: 'EnterLabel', descKey: 'items.enterLabel' }
     ]
+  },
+  {
+    categoryKey: 'categories.animation',
+    icon: '✨',
+    components: [
+      { href: '/components/waving-image', label: 'WavingImage', descKey: 'items.wavingImage' }
+    ]
   }
 ] as const;
 

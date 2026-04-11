@@ -124,7 +124,8 @@
                 "display": "展示元件",
                 "navigation": "導航元件",
                 "scroll": "滾動元件",
-                "richMedia": "富媒體元件"
+                "richMedia": "富媒體元件",
+                "animation": "動畫元件"
             },
             "items": {
                 "selector": "自訂下拉選單組件",
@@ -146,7 +147,8 @@
                 "swiperJS": "Swiper.js 整合",
                 "youtube": "YouTube 播放器嵌入",
                 "wangEditor": "富文本編輯器",
-                "enterLabel": "打字機動畫效果"
+                "enterLabel": "打字機動畫效果",
+                "wavingImage": "擺動圖片特效"
             },
             "stats": {
                 "uiComponents": "UI 組件",

@@ -256,18 +256,6 @@ export default function WavingImage({
     setImgLoading(true);
   }, [src]);
 
-  useEffect(() => {
-    if (imgRef.current?.complete) {
-      initWavingImageDOM();
-    }
-
-    return () => {
-      if (animationFrameIdRef.current !== null) {
-        cancelAnimationFrame(animationFrameIdRef.current);
-        animationFrameIdRef.current = null;
-      }
-    };
-  }, [imgLoading]);
   useLayoutEffect(() => {
     if (imgRef.current?.complete) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -285,7 +273,7 @@ export default function WavingImage({
         animationFrameIdRef.current = null;
       }
     };
-  }, [windowWidth, windowHeight]);
+  }, [imgLoading, windowWidth, windowHeight]);
 
   return (
     <div
