@@ -11,6 +11,8 @@ import {
   useEffect
 } from 'react';
 
+import { useWindowSize } from '@/hooks/useWindowSize';
+
 import styles from './waving_image.module.scss';
 
 export type WavingImageOnLoad = (
@@ -54,6 +56,8 @@ export default function WavingImage({
   direction = DIRECTION_HORIZONTAL,
   onLoad
 }: WavingImageProps): ReactNode {
+  const { width: windowWidth, height: windowHeight } = useWindowSize();
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const animationFrameIdRef = useRef<number | null>(null);
@@ -104,7 +108,6 @@ export default function WavingImage({
     }
 
     const safeWavePadding = wavePadding ?? amplitude * 2;
-    console.log({ safeWavePadding, wavePadding, amplitude });
     const canvasWidth =
       direction === DIRECTION_HORIZONTAL
         ? imgWidth
@@ -126,8 +129,10 @@ export default function WavingImage({
     let timeNow = Date.now(); // 当前时间
     let timeLast = timeNow; // 上一帧时间
     let delta = 0; // 连续帧之间间隔（实际）
-
     let distance = 0;
+
+    console.log({ imgWidth, imgHeight });
+
     function animateFrame() {
       if (stop) return;
       if (
@@ -142,6 +147,7 @@ export default function WavingImage({
         });
         return;
       }
+
       timeNow = Date.now();
       delta = timeNow - timeLast;
       if (delta > interval) {
@@ -193,6 +199,12 @@ export default function WavingImage({
     requestAnimationFrame(function () {
       setShowImg(false);
     });
+
+    return () => {
+      if (animationFrameIdRef.current !== null) {
+        cancelAnimationFrame(animationFrameIdRef.current);
+      }
+    };
   });
 
   useLayoutEffect(() => {
@@ -203,9 +215,26 @@ export default function WavingImage({
 
   useEffect(() => {
     if (imgRef.current?.complete) {
-      initWavingImageDOM();
+      return initWavingImageDOM();
     }
   }, [imgLoading]);
+  useLayoutEffect(() => {
+    if (imgRef.current?.complete) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setShowImg(true);
+    }
+  }, [windowWidth, windowHeight]);
+  useEffect(() => {
+    let cancelAnimationFrame: (() => void) | null | undefined = null;
+    if (imgRef.current?.complete) {
+      requestAnimationFrame(
+        () => (cancelAnimationFrame = initWavingImageDOM())
+      );
+    }
+    return () => {
+      if (cancelAnimationFrame) cancelAnimationFrame();
+    };
+  }, [windowWidth, windowHeight]);
 
   return (
     <div className={styles.waving_image} style={cssVariables}>
