@@ -25,10 +25,15 @@ type Props = {
 export default async function WavingImagePage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations('pages.componentPages.wavingImage');
 
   return (
     <div className={style.waving_image_test_page}>
       <GTMScnOpen />
+      <h1>{t('title')}</h1>
+      <p className={style['waving_image_test_page-description']}>
+        {t('description')}
+      </p>
       <WavingImageTestClient />
     </div>
   );

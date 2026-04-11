@@ -1,8 +1,9 @@
-// SwitchButton Demo Page Styles
+// Waving Image Demo Page Styles
 @use '@/styles/placeholders' as *;
 
 .waving_image_test_page {
   @extend %demo_page;
+  @extend %demo_page--extra_wide;
 
   &-description {
     @extend %demo_page-description;
@@ -10,50 +11,27 @@
 
   &-section {
     @extend %demo_page-section;
-  }
 
-  &-row {
-    /* Display & Box Model */
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
+    &-note {
+      @extend %demo_page-section-note;
+    }
 
-  &-row_group {
-    /* Display & Box Model */
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
+    &-image_container {
+      /* Display & Box Model */
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      border-radius: 8px;
+      overflow: hidden;
 
-  &-item_label {
-    /* Display & Box Model */
-    margin-top: 5px;
+      /* Visual */
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
-    /* Typography */
-    font-size: 12px;
-    color: #666;
-  }
-
-  &-settings_box {
-    /* Display & Box Model */
-    padding: 20px;
-    border-radius: 8px;
-
-    /* Visual */
-    background-color: #f5f5f5;
-  }
-
-  &-settings_row {
-    /* Display & Box Model */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-
-    &:last-child {
-      margin-bottom: 0;
+      &-img {
+        /* Display & Box Model */
+        width: 100%;
+        height: auto;
+      }
     }
   }
 }

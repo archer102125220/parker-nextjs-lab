@@ -2,7 +2,7 @@
   &-wrapper {
     width: var(--waving_image_wrapper_width);
     height: var(--waving_image_wrapper_height);
-    overflow: hidden;
+    // overflow: hidden;
 
     &-canvas {
       display: var(--waving_image_canvas_display);
@@ -14,5 +14,8 @@
     display: var(--waving_image_img_display);
     max-width: 100%;
     max-height: 100%;
+    padding: var(--waving_image_wave_padding);
+
+    box-sizing: border-box;
   }
 }

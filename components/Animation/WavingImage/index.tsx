@@ -27,6 +27,7 @@ export const DIRECTION_VERTICAL = 'vertical';
 export interface WavingImageProps {
   src: string;
   alt?: string;
+  className?: string;
   amplitude?: number;
   period?: number;
   frequency?: number;
@@ -38,6 +39,7 @@ export interface WavingImageProps {
 }
 
 interface WavingImageCSSProperties extends CSSProperties {
+  '--waving_image_wave_padding'?: string;
   '--waving_image_img_display'?: string;
   '--waving_image_canvas_display'?: string;
   '--waving_image_wrapper_width'?: string;
@@ -47,6 +49,7 @@ interface WavingImageCSSProperties extends CSSProperties {
 export default function WavingImage({
   src,
   alt = '',
+  className = '',
   amplitude = 30, // 振幅
   period = 2, // 周期数
   frequency = 1, // 频率
@@ -67,8 +70,16 @@ export default function WavingImage({
   const [canvasWidth, setCanvasWidth] = useState<number | null>(null);
   const [canvasHeight, setCanvasHeight] = useState<number | null>(null);
 
+  const safeWavePadding = useMemo(() => {
+    return wavePadding ?? amplitude * 2;
+  }, [wavePadding, amplitude]);
+
   const cssVariables = useMemo<WavingImageCSSProperties>(() => {
     const _cssVariables: WavingImageCSSProperties = {
+      '--waving_image_wave_padding':
+        direction === DIRECTION_HORIZONTAL
+          ? `${safeWavePadding / 2}px 0 ${safeWavePadding / 2}px 0`
+          : `0 ${safeWavePadding / 2}px 0 ${safeWavePadding / 2}px`,
       '--waving_image_img_display': showImg ? 'block' : 'none',
       '--waving_image_canvas_display': showImg ? 'none' : 'block',
       '--waving_image_wrapper_width': canvasWidth ? `${canvasWidth}px` : 'auto',
@@ -78,7 +89,7 @@ export default function WavingImage({
     };
 
     return _cssVariables;
-  }, [showImg, canvasWidth, canvasHeight]);
+  }, [direction, safeWavePadding, showImg, canvasWidth, canvasHeight]);
 
   const initWavingImageDOM = useEffectEvent(() => {
     if (animationFrameIdRef.current !== null) {
@@ -107,7 +118,6 @@ export default function WavingImage({
       scaledImageCtx.drawImage(img, 0, 0, imgWidth, imgHeight);
     }
 
-    const safeWavePadding = wavePadding ?? amplitude * 2;
     const canvasWidth =
       direction === DIRECTION_HORIZONTAL
         ? imgWidth
@@ -237,7 +247,10 @@ export default function WavingImage({
   }, [windowWidth, windowHeight]);
 
   return (
-    <div className={styles.waving_image} style={cssVariables}>
+    <div
+      className={[styles.waving_image, className].join(' ')}
+      style={cssVariables}
+    >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         ref={imgRef}
