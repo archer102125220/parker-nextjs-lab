@@ -19,15 +19,17 @@ export type WavingImageOnLoad = (
   ctx?: CanvasRenderingContext2D
 ) => void;
 
+export const DIRECTION_HORIZONTAL = 'horizontal';
+export const DIRECTION_VERTICAL = 'vertical';
+
 export interface WavingImageProps {
   src: string;
   alt?: string;
-  maxWidth?: number | string;
-  maxHeight?: number | string;
   amplitude?: number;
   period?: number;
   frequency?: number;
   fps?: number;
+  wavePadding?: number | null;
   stop?: boolean;
   direction?: 'horizontal' | 'vertical';
   onLoad?: WavingImageOnLoad;
@@ -47,7 +49,9 @@ export default function WavingImage({
   period = 2, // 周期数
   frequency = 1, // 频率
   fps = 70, // 每秒帧数
+  wavePadding = null, // 波动区域
   stop = false,
+  direction = DIRECTION_HORIZONTAL,
   onLoad
 }: WavingImageProps): ReactNode {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -73,8 +77,6 @@ export default function WavingImage({
   }, [showImg, canvasWidth, canvasHeight]);
 
   const initWavingImageDOM = useEffectEvent(() => {
-    console.log('initWavingImageDOM');
-
     if (animationFrameIdRef.current !== null) {
       cancelAnimationFrame(animationFrameIdRef.current);
     }
@@ -101,8 +103,16 @@ export default function WavingImage({
       scaledImageCtx.drawImage(img, 0, 0, imgWidth, imgHeight);
     }
 
-    const canvasWidth = imgWidth;
-    const canvasHeight = imgHeight + amplitude * 2;
+    const safeWavePadding = wavePadding ?? amplitude * 2;
+    console.log({ safeWavePadding, wavePadding, amplitude });
+    const canvasWidth =
+      direction === DIRECTION_HORIZONTAL
+        ? imgWidth
+        : imgWidth + safeWavePadding;
+    const canvasHeight =
+      direction === DIRECTION_HORIZONTAL
+        ? imgHeight + safeWavePadding
+        : imgHeight;
 
     setCanvasWidth(canvasWidth);
     setCanvasHeight(canvasHeight);
@@ -138,21 +148,41 @@ export default function WavingImage({
         timeLast = timeNow;
         distance += (delta / 1000) * waveSpeed;
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-        for (let x = 0; x < imgWidth; x++) {
-          const y =
-            amplitudeRatio * x * Math.sin(spatialFrequency * (x - distance)) +
-            amplitude;
-          ctx.drawImage(
-            scaledImageCanvas,
-            x,
-            0,
-            1,
-            imgHeight,
-            x,
-            y,
-            1,
-            imgHeight
-          );
+
+        if (direction === DIRECTION_HORIZONTAL) {
+          for (let x = 0; x < imgWidth; x++) {
+            const y =
+              amplitudeRatio * x * Math.sin(spatialFrequency * (x - distance)) +
+              safeWavePadding / 2;
+            ctx.drawImage(
+              scaledImageCanvas,
+              x,
+              0,
+              1,
+              imgHeight,
+              x,
+              y,
+              1,
+              imgHeight
+            );
+          }
+        } else if (direction === DIRECTION_VERTICAL) {
+          for (let y = 0; y < imgHeight; y++) {
+            const x =
+              amplitudeRatio * y * Math.sin(spatialFrequency * (y - distance)) +
+              safeWavePadding / 2;
+            ctx.drawImage(
+              scaledImageCanvas,
+              0,
+              y,
+              imgWidth,
+              1,
+              x,
+              y,
+              imgWidth,
+              1
+            );
+          }
         }
       }
 
