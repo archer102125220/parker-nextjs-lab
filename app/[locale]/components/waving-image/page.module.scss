@@ -1,0 +1,65 @@
+// Waving Image Demo Page Styles
+@use '@/styles/placeholders' as *;
+
+.waving_image_test_page {
+  @extend %demo_page;
+  @extend %demo_page--extra_wide;
+
+  &-description {
+    @extend %demo_page-description;
+  }
+
+  &-section {
+    @extend %demo_page-section;
+
+    &-note {
+      @extend %demo_page-section-note;
+    }
+
+    &-controls {
+      /* Display & Box Model */
+      margin-bottom: 16px;
+      text-align: center;
+
+      &-toggle_btn {
+        /* Display & Box Model */
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+
+        /* Typography */
+        color: white;
+        font-weight: bold;
+
+        /* Visual */
+        background-color: #f44336;
+
+        /* Animation */
+        transition: background-color 0.3s;
+
+        &[css-is-stopped='true'] {
+          background-color: #4caf50;
+        }
+      }
+    }
+
+    &-image_container {
+      /* Display & Box Model */
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      border-radius: 8px;
+      overflow: hidden;
+
+      /* Visual */
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+      &-img {
+        /* Display & Box Model */
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+}

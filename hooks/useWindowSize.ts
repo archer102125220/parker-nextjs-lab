@@ -21,13 +21,15 @@ export function useWindowSize(): WindowSize {
   );
 }
 
-let windowSize: WindowSize =
-  typeof window !== 'undefined'
-    ? { width: window.innerWidth, height: window.innerHeight }
-    : { width: 0, height: 0 };
 
 // Cache for server snapshot to avoid creating new objects
 const SERVER_SNAPSHOT: WindowSize = { width: 0, height: 0 };
+
+let windowSize: WindowSize =
+  typeof window !== 'undefined'
+    ? { width: window.innerWidth, height: window.innerHeight }
+    : SERVER_SNAPSHOT;
+
 
 const subscribeWindowSize = {
   subscribe(callback: () => void) {

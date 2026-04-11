@@ -51,7 +51,7 @@ export function useRequestInit(
 
         try {
           const baseURL = apiBase || process.env.NEXT_PUBLIC_API_BASE || '';
-          console.log({ baseURL });
+          // console.log({ baseURL });
           if (typeof baseURL !== 'string' || baseURL === '') {
             console.warn('NEXT_PUBLIC_API_BASE 環境變數未設定');
           }

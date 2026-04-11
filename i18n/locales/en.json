@@ -124,7 +124,8 @@
                 "display": "Display Components",
                 "navigation": "Navigation Components",
                 "scroll": "Scroll Components",
-                "richMedia": "Rich Media Components"
+                "richMedia": "Rich Media Components",
+                "animation": "Animation Components"
             },
             "items": {
                 "selector": "Custom dropdown selector",
@@ -146,7 +147,8 @@
                 "swiperJS": "Swiper.js integration",
                 "youtube": "YouTube player embed",
                 "wangEditor": "Rich text editor",
-                "enterLabel": "Typewriter animation"
+                "enterLabel": "Typewriter animation",
+                "wavingImage": "Waving image effect"
             },
             "stats": {
                 "uiComponents": "UI Components",
@@ -238,6 +240,10 @@
             "message": {
                 "title": "Message Component Test",
                 "description": "Demonstrating different types of message notifications"
+            },
+            "wavingImage": {
+                "title": "WavingImage Component Test",
+                "description": "Demonstrating waving image effect"
             }
         },
         "cssDrawing": {
