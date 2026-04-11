@@ -16,6 +16,34 @@
       @extend %demo_page-section-note;
     }
 
+    &-controls {
+      /* Display & Box Model */
+      margin-bottom: 16px;
+      text-align: center;
+
+      &-toggle_btn {
+        /* Display & Box Model */
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+
+        /* Typography */
+        color: white;
+        font-weight: bold;
+
+        /* Visual */
+        background-color: #f44336;
+
+        /* Animation */
+        transition: background-color 0.3s;
+
+        &[css-is-stopped='true'] {
+          background-color: #4caf50;
+        }
+      }
+    }
+
     &-image_container {
       /* Display & Box Model */
       width: 100%;

@@ -56,7 +56,7 @@ export default function WavingImage({
   fps = 70, // 每秒帧数
   wavePadding = null, // 波动区域
   stop = false,
-  direction = DIRECTION_HORIZONTAL,
+  direction = DIRECTION_VERTICAL,
   onLoad
 }: WavingImageProps): ReactNode {
   const { width: windowWidth, height: windowHeight } = useWindowSize();
@@ -95,6 +95,7 @@ export default function WavingImage({
     if (animationFrameIdRef.current !== null) {
       cancelAnimationFrame(animationFrameIdRef.current);
     }
+    animationFrameIdRef.current = null;
 
     const img = imgRef.current;
     if (img instanceof HTMLImageElement === false) return;
@@ -140,8 +141,6 @@ export default function WavingImage({
     let timeLast = timeNow; // 上一帧时间
     let delta = 0; // 连续帧之间间隔（实际）
     let distance = 0;
-
-    console.log({ imgWidth, imgHeight });
 
     function animateFrame() {
       if (stop) return;
@@ -216,6 +215,10 @@ export default function WavingImage({
       }
     };
   });
+
+  useEffect(() => {
+    console.log({ stop });
+  }, [stop]);
 
   useLayoutEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
