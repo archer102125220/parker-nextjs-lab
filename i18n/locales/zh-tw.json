@@ -79,6 +79,8 @@
                 "cssDrawingDesc": "純 CSS 圖形與動畫",
                 "directiveEffects": "指令效果",
                 "directiveEffectsDesc": "懶載入、波紋效果",
+                "ripplesBackground": "水波紋背景",
+                "ripplesBackgroundDesc": "WebGL 水波紋動畫效果",
                 "webRTC": "WebRTC 視訊",
                 "webRTCDesc": "P2P 視訊通話",
                 "socketIO": "Socket.IO",
@@ -148,7 +150,8 @@
                 "youtube": "YouTube 播放器嵌入",
                 "wangEditor": "富文本編輯器",
                 "enterLabel": "打字機動畫效果",
-                "wavingImage": "擺動圖片特效"
+                "wavingImage": "擺動圖片特效",
+                "ripplesBackground": "WebGL 水波紋組件特效"
             },
             "stats": {
                 "uiComponents": "UI 組件",
@@ -244,6 +247,10 @@
             "wavingImage": {
                 "title": "WavingImage 擺動圖片組件測試",
                 "description": "展示擺動圖片特效"
+            },
+            "ripplesBackground": {
+                "title": "RipplesBackground 水波紋組件測試",
+                "description": "展示 WebGL 水波紋動畫背景效果"
             }
         },
         "cssDrawing": {

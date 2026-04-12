@@ -1,5 +1,3 @@
-import type { CSSProperties } from 'react';
-
 export declare global {
   interface Window {
     // TODO
@@ -24,6 +22,19 @@ export declare global {
     };
     onYouTubeIframeAPIReady: () => void;
     youTubeIsCreated?: boolean;
+  }
+
+  export declare module '*.glsl' {
+    const value: string;
+    export default value;
+  }
+  export declare module '*.vert' {
+    const value: string;
+    export default value;
+  }
+  export declare module '*.frag' {
+    const value: string;
+    export default value;
   }
 }
 

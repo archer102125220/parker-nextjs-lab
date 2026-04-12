@@ -72,7 +72,8 @@ const COMPONENT_CATEGORIES = [
     categoryKey: 'categories.animation',
     icon: '✨',
     components: [
-      { href: '/components/waving-image', label: 'WavingImage', descKey: 'items.wavingImage' }
+      { href: '/components/waving-image', label: 'WavingImage', descKey: 'items.wavingImage' },
+      { href: '/components/ripples-background', label: 'RipplesBackground', descKey: 'items.ripplesBackground' }
     ]
   }
 ] as const;
