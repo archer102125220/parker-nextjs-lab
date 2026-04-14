@@ -308,7 +308,6 @@ export class Ripples {
    * @param {RipplesOptions} options - 配置選項
    */
   constructor(el: HTMLElement, options: RipplesOptions) {
-    console.log('Ripples constructor', { el, options });
     this.transparentPixels = this.createImageData(32, 32);
 
     this.$el = el as RipplesElement;
@@ -630,23 +629,29 @@ export class Ripples {
       );
     }
   }
-  private handleMouseEvent(e: MouseEvent) {
-    this.handleUserDrop(e);
+  private handleMouseMove(e: MouseEvent) {
+    this.handleUserDrop(e, false);
   }
-  private handleTouchEvent(e: TouchEvent) {
-    const touches = e.touches;
+  private handleMouseDown(e: MouseEvent) {
+    this.handleUserDrop(e, true);
+  }
+  private handleTouchStart(e: TouchEvent) {
+    this.handleUserDrop(e.changedTouches[0], true);
+  }
+  private handleTouchMove(e: TouchEvent) {
+    const touches = e.changedTouches || e.touches;
     for (let i = 0; i < touches.length; i++) {
-      this.handleUserDrop(touches[i]);
+      this.handleUserDrop(touches[i], false);
     }
   }
   private setupPointerEvents() {
     const el = this.getElement?.();
     const safeEl = el ?? this.$el;
 
-    this.onMouseMove = this.handleMouseEvent.bind(this);
-    this.onTouchMove = this.handleTouchEvent.bind(this);
-    this.onTouchStart = this.handleTouchEvent.bind(this);
-    this.onMouseDown = this.handleMouseEvent.bind(this);
+    this.onMouseMove = this.handleMouseMove.bind(this);
+    this.onTouchMove = this.handleTouchMove.bind(this);
+    this.onTouchStart = this.handleTouchStart.bind(this);
+    this.onMouseDown = this.handleMouseDown.bind(this);
     safeEl.addEventListener('mousemove', this.onMouseMove);
     safeEl.addEventListener('touchmove', this.onTouchMove);
     safeEl.addEventListener('touchstart', this.onTouchStart);
