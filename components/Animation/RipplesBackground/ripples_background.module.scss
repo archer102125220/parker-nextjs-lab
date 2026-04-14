@@ -7,7 +7,7 @@
   background-size: cover;
   background-position: center;
 
-  > [css-ripples-animation="true"] {
+  > [css-ripples-canvas="true"] {
     position: absolute;
     top: 0;
     left: 0;
@@ -15,7 +15,7 @@
     height: 100%;
     z-index: 0;
   }
-  > *:not([css-ripples-animation="true"]) {
+  > *:not([css-ripples-canvas="true"]) {
     position: relative;
     z-index: 1;
   }

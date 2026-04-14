@@ -307,7 +307,6 @@ export class Ripples {
     this.transparentPixels = this.createImageData(32, 32);
 
     this.$el = el as RipplesElement;
-    this.$el.setAttribute('css-ripples-animation', 'true');
 
     // Init properties from options
     this.interactive = options.interactive ?? Ripples.DEFAULTS.interactive;
@@ -335,6 +334,7 @@ export class Ripples {
 
     // Init WebGL canvas
     const canvas = document.createElement('canvas');
+    canvas.setAttribute('css-ripples-canvas', 'true');
     canvas.width = this.$el.clientWidth;
     canvas.height = this.$el.clientHeight;
     this.canvas = canvas;
