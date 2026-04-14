@@ -36,6 +36,8 @@ export declare global {
     const value: string;
     export default value;
   }
+
+  export declare module 'mdn-polyfills/*';
 }
 
 export declare module 'fido2-lib' {
@@ -61,3 +63,4 @@ export declare module 'fido2-lib' {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): Promise<Map<any, any>>;
 }
+
