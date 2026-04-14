@@ -473,10 +473,16 @@ export class Ripples {
     requestAnimationFrame(step);
 
     // Extend the css
-    this.style = document.createElement('style');
-    this.style.innerText =
-      '.javascript-ripples { position: relative; z-index: 0; }';
-    document.querySelector('head')?.prepend(this.style);
+    const style = document.getElementById('ripples-style');
+    if (style instanceof HTMLStyleElement) {
+      this.style = style;
+    } else {
+      this.style = document.createElement('style');
+      this.style.id = 'ripples-style';
+      this.style.innerText =
+        '.javascript-ripples { position: relative; z-index: 0; }';
+      document.querySelector('head')?.prepend(this.style);
+    }
   }
 
   /**
