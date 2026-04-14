@@ -64,16 +64,7 @@ const COMPONENT_CATEGORIES = [
     icon: '🎬',
     components: [
       { href: '/components/youtube-test', label: 'YouTube', descKey: 'items.youtube' },
-      { href: '/components/wang-editor-test', label: 'WangEditor', descKey: 'items.wangEditor' },
-      { href: '/components/enter-label', label: 'EnterLabel', descKey: 'items.enterLabel' }
-    ]
-  },
-  {
-    categoryKey: 'categories.animation',
-    icon: '✨',
-    components: [
-      { href: '/components/waving-image', label: 'WavingImage', descKey: 'items.wavingImage' },
-      { href: '/components/ripples-background', label: 'RipplesBackground', descKey: 'items.ripplesBackground' }
+      { href: '/components/wang-editor-test', label: 'WangEditor', descKey: 'items.wangEditor' }
     ]
   }
 ] as const;
@@ -92,7 +83,7 @@ type Props = {
 
 async function ComponentsPage({ params }: Props): Promise<ReactNode> {
   const { locale } = await params;
-  
+
   // Enable static rendering - CRITICAL for next-intl 4.x
   setRequestLocale(locale);
 

@@ -48,7 +48,13 @@ const LINK_SECTIONS = [
         icon: '✨'
       },
       {
-        href: '/components/ripples-background',
+        href: '/animation',
+        labelKey: 'links.animation',
+        descKey: 'links.animationDesc',
+        icon: '🎬'
+      },
+      {
+        href: '/animation/ripples-background',
         labelKey: 'links.ripplesBackground',
         descKey: 'links.ripplesBackgroundDesc',
         icon: '🌊'

@@ -23,7 +23,6 @@ export async function generateMetadata(): Promise<Metadata> {
 const CSS_DEMOS = [
   { href: '/css-drawing/triangle-test', demoKey: 'triangle' },
   { href: '/css-drawing/triangle-full-test', demoKey: 'triangleFull' },
-  { href: '/css-drawing/triangle-anime-test', demoKey: 'triangleAnime' },
   { href: '/css-drawing/hexagon-test', demoKey: 'hexagon' },
   { href: '/css-drawing/svg-color-change', demoKey: 'svgColor' }
 ] as const;

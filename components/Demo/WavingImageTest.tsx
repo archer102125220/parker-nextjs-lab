@@ -5,7 +5,7 @@ import WavingImage, {
   DIRECTION_HORIZONTAL,
   DIRECTION_VERTICAL
 } from '@/components/Animation/WavingImage';
-import style from '@/app/[locale]/components/waving-image/page.module.scss';
+import style from '@/app/[locale]/animation/waving-image/page.module.scss';
 
 export default function WavingImageTest() {
   const [isStopped, setIsStopped] = useState(false);

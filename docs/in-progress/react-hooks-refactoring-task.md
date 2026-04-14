@@ -185,7 +185,7 @@
 - [ ] `[locale]/css-drawing/page.tsx`
 - [ ] `[locale]/css-drawing/hexagon-test/page.tsx`
 - [ ] `[locale]/css-drawing/svg-color-change/page.tsx`
-- [ ] `[locale]/css-drawing/triangle-anime-test/page.tsx`
+- [ ] `[locale]/animation/triangle-anime-test/page.tsx`
 - [ ] `[locale]/css-drawing/triangle-full-test/page.tsx`
 - [ ] `[locale]/css-drawing/triangle-test/page.tsx`
 

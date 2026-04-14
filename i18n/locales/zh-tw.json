@@ -79,6 +79,8 @@
                 "cssDrawingDesc": "純 CSS 圖形與動畫",
                 "directiveEffects": "指令效果",
                 "directiveEffectsDesc": "懶載入、波紋效果",
+                "animation": "動畫效果實驗室",
+                "animationDesc": "CSS、WebGL 與動畫庫整合",
                 "ripplesBackground": "水波紋背景",
                 "ripplesBackgroundDesc": "WebGL 水波紋動畫效果",
                 "webRTC": "WebRTC 視訊",
@@ -417,6 +419,36 @@
                 "expandMenu": "展開選單"
             },
             "dynamicText": "歡迎來到 360 全景世界"
+        },
+        "animation": {
+            "badge": "Animation Lab",
+            "hero": {
+                "title": "動畫效果展示",
+                "subtitle": "CSS、WebGL 與動畫庫整合",
+                "description": "集中展示各種動畫效果組件，包含文字特效、水波紋背景、CSS 動畫等視覺互動技術"
+            },
+            "intro": {
+                "text": "本區塊匯集各類動畫相關組件與效果展示，涵蓋純 CSS 動畫、WebGL 水波紋特效，以及自製文字動畫組件等，作為動畫技術的整合實驗室。"
+            },
+            "demos": {
+                "title": "動畫效果選單",
+                "enter_label": {
+                    "label": "文字逐字進入特效",
+                    "description": "自製文字逐字動態顯示組件，支援自訂進入動畫效果"
+                },
+                "ripples": {
+                    "label": "水波紋背景元件",
+                    "description": "基於 WebGL 的互動式水波紋背景，支援滑鼠觸控互動與自動水滴效果"
+                },
+                "triangle_anime": {
+                    "label": "CSS 三角形動畫",
+                    "description": "使用 CSS 搭配 anime.js 的三角形進場動畫效果展示"
+                },
+                "waving_image": {
+                    "label": "波浪影像效果",
+                    "description": "基於 WebGL 的影像波浪東曲效果，透過 Canvas Shader 控制動畫"
+                }
+            }
         }
     }
 }

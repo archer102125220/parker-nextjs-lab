@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import RipplesBackground from '@/components/Animation/RipplesBackground';
-import style from '@/app/[locale]/components/ripples-background/page.module.scss';
+import style from '@/app/[locale]/animation/ripples-background/page.module.scss';
 
 export default function RipplesBackgroundTest() {
   const [autoDrops, setAutoDrops] = useState(true);
