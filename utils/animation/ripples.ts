@@ -21,7 +21,6 @@ export interface RipplesOptions {
   perturbance?: number;
   interactive?: boolean;
   crossOrigin?: string;
-  getElement?: (() => HTMLElement | null) | null | undefined;
 }
 
 /**
@@ -247,7 +246,6 @@ export class Ripples {
    * @property {number} perturbance - 擾動強度 (預設: 0.03)
    * @property {boolean} interactive - 是否啟用滑鼠/觸控互動 (預設: true)
    * @property {string} crossOrigin - 圖片跨域設定
-   * @property {(() => HTMLElement | null) | undefined} getElement - 獲取目標元素的函式
    */
   static DEFAULTS: Required<RipplesOptions> = {
     imageUrl: null,
@@ -255,8 +253,7 @@ export class Ripples {
     dropRadius: 20,
     perturbance: 0.03,
     interactive: true,
-    crossOrigin: '',
-    getElement: null
+    crossOrigin: ''
   };
 
   transparentPixels: ImageData;
@@ -299,7 +296,6 @@ export class Ripples {
   private onTouchStart: ((e: TouchEvent) => void) | null = null;
   private onMouseDown: ((e: MouseEvent) => void) | null = null;
   private onWindowResize: (() => void) | null = null;
-  private getElement: () => RipplesElement | null = () => null;
 
   /**
    * 建立 Ripples 實例
@@ -311,9 +307,6 @@ export class Ripples {
     this.transparentPixels = this.createImageData(32, 32);
 
     this.$el = el as RipplesElement;
-    if (typeof options.getElement === 'function') {
-      this.setGetElement(options.getElement);
-    }
 
     // Init properties from options
     this.interactive = options.interactive ?? Ripples.DEFAULTS.interactive;
@@ -392,12 +385,16 @@ export class Ripples {
       this.context.texParameteri(
         this.context.TEXTURE_2D,
         this.context.TEXTURE_MIN_FILTER,
-        Ripples.config?.linearSupport ? this.context.LINEAR : this.context.NEAREST
+        Ripples.config?.linearSupport
+          ? this.context.LINEAR
+          : this.context.NEAREST
       );
       this.context.texParameteri(
         this.context.TEXTURE_2D,
         this.context.TEXTURE_MAG_FILTER,
-        Ripples.config?.linearSupport ? this.context.LINEAR : this.context.NEAREST
+        Ripples.config?.linearSupport
+          ? this.context.LINEAR
+          : this.context.NEAREST
       );
       this.context.texParameteri(
         this.context.TEXTURE_2D,
@@ -451,7 +448,10 @@ export class Ripples {
 
     // Set correct clear color and blend mode (regular alpha blending)
     this.context.clearColor(0, 0, 0, 0);
-    this.context.blendFunc(this.context.SRC_ALPHA, this.context.ONE_MINUS_SRC_ALPHA);
+    this.context.blendFunc(
+      this.context.SRC_ALPHA,
+      this.context.ONE_MINUS_SRC_ALPHA
+    );
 
     // Plugin is successfully initialized!
     this.visible = true;
@@ -546,7 +546,7 @@ export class Ripples {
     fragmentSource: string
   ): WebGLProgramObj {
     const gl = this.context;
-    
+
     function compileSource(type: number, source: string) {
       if (gl instanceof WebGLRenderingContext === false) {
         throw new Error('WebGL not supported');
@@ -575,7 +575,7 @@ export class Ripples {
     const programId = gl.createProgram();
     if (!programId) throw new Error('Could not create program');
     program.id = programId;
-    
+
     gl.attachShader(program.id, compileSource(gl.VERTEX_SHADER, vertexSource));
     gl.attachShader(
       program.id,
@@ -620,7 +620,10 @@ export class Ripples {
     return url.match(/^data:/) != null;
   }
 
-  private handleUserDrop(pointer: MouseEvent | TouchEvent | Touch, big: boolean = false) {
+  private handleUserDrop(
+    pointer: MouseEvent | TouchEvent | Touch,
+    big: boolean = false
+  ) {
     if (this.visible && this.running && this.interactive) {
       this.dropAtPointer(
         pointer,
@@ -645,30 +648,26 @@ export class Ripples {
     }
   }
   private setupPointerEvents() {
-    const el = this.getElement?.();
-    const safeEl = el ?? this.$el;
-
     this.onMouseMove = this.handleMouseMove.bind(this);
     this.onTouchMove = this.handleTouchMove.bind(this);
     this.onTouchStart = this.handleTouchStart.bind(this);
     this.onMouseDown = this.handleMouseDown.bind(this);
-    safeEl.addEventListener('mousemove', this.onMouseMove);
-    safeEl.addEventListener('touchmove', this.onTouchMove);
-    safeEl.addEventListener('touchstart', this.onTouchStart);
-    safeEl.addEventListener('mousedown', this.onMouseDown);
+    this.$el.addEventListener('mousemove', this.onMouseMove);
+    this.$el.addEventListener('touchmove', this.onTouchMove);
+    this.$el.addEventListener('touchstart', this.onTouchStart);
+    this.$el.addEventListener('mousedown', this.onMouseDown);
   }
 
   private loadImage() {
     let $elStyle: CSSStyleDeclaration;
-    const el = this.getElement?.();
-    const safeEl = el ?? this.$el;
+
     try {
-      $elStyle = window.getComputedStyle(safeEl);
+      $elStyle = window.getComputedStyle(this.$el);
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error(error);
       }
-      $elStyle = safeEl.style;
+      $elStyle = this.$el.style;
     }
     const newImageSource =
       this.imageUrl ||
@@ -770,10 +769,7 @@ export class Ripples {
     if (this.textures[0]) this.bindTexture(this.textures[0], 1);
 
     if (this.renderProgram.locations.perturbance) {
-      gl.uniform1f(
-        this.renderProgram.locations.perturbance,
-        this.perturbance
-      );
+      gl.uniform1f(this.renderProgram.locations.perturbance, this.perturbance);
     }
     if (this.renderProgram.locations.topLeft) {
       gl.uniform2fv(
@@ -829,15 +825,14 @@ export class Ripples {
 
   private computeTextureBoundaries() {
     let $elStyle: CSSStyleDeclaration;
-    const el = this.getElement?.();
-    const safeEl = el ?? this.$el;
+
     try {
-      $elStyle = window.getComputedStyle(safeEl);
+      $elStyle = window.getComputedStyle(this.$el);
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error(error);
       }
-      $elStyle = safeEl.style;
+      $elStyle = this.$el.style;
     }
 
     let backgroundSize: string | string[] = $elStyle.backgroundSize;
@@ -856,10 +851,10 @@ export class Ripples {
       };
     } else {
       container = {
-        left: safeEl.offsetLeft,
-        top: safeEl.offsetTop,
-        width: safeEl.clientWidth,
-        height: safeEl.clientHeight
+        left: this.$el.offsetLeft,
+        top: this.$el.offsetTop,
+        width: this.$el.clientWidth,
+        height: this.$el.clientHeight
       };
     }
 
@@ -942,8 +937,8 @@ export class Ripples {
     }
 
     const elementOffset = {
-      top: safeEl.offsetTop,
-      left: safeEl.offsetLeft
+      top: this.$el.offsetTop,
+      left: this.$el.offsetLeft
     };
 
     if (this.renderProgram) {
@@ -956,9 +951,9 @@ export class Ripples {
       ]);
       this.renderProgram.uniforms.bottomRight = new Float32Array([
         this.renderProgram.uniforms.topLeft[0] +
-          safeEl.clientWidth / (backgroundWidth as number),
+          this.$el.clientWidth / (backgroundWidth as number),
         this.renderProgram.uniforms.topLeft[1] +
-          safeEl.clientHeight / (backgroundHeight as number)
+          this.$el.clientHeight / (backgroundHeight as number)
       ]);
 
       const maxSide = Math.max(this.canvas.width, this.canvas.height);
@@ -975,16 +970,10 @@ export class Ripples {
     this.dropProgram = this.createProgram(basicVert, dropFrag);
 
     this.updateProgram = this.createProgram(basicVert, updateFrag);
-    gl.uniform2fv(
-      this.updateProgram.locations.delta,
-      this.textureDelta
-    );
+    gl.uniform2fv(this.updateProgram.locations.delta, this.textureDelta);
 
     this.renderProgram = this.createProgram(renderVert, renderFrag);
-    gl.uniform2fv(
-      this.renderProgram.locations.delta,
-      this.textureDelta
-    );
+    gl.uniform2fv(this.renderProgram.locations.delta, this.textureDelta);
   }
 
   private initTexture() {
@@ -992,16 +981,8 @@ export class Ripples {
     this.backgroundTexture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, this.backgroundTexture);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
-    gl.texParameteri(
-      gl.TEXTURE_2D,
-      gl.TEXTURE_MAG_FILTER,
-      gl.LINEAR
-    );
-    gl.texParameteri(
-      gl.TEXTURE_2D,
-      gl.TEXTURE_MIN_FILTER,
-      gl.LINEAR
-    );
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
   }
 
   private setTransparentTexture() {
@@ -1020,15 +1001,14 @@ export class Ripples {
 
   private hideCssBackground() {
     let $elStyle: CSSStyleDeclaration;
-    const el = this.getElement?.();
-    const safeEl = el ?? this.$el;
+
     try {
-      $elStyle = window.getComputedStyle(safeEl);
+      $elStyle = window.getComputedStyle(this.$el);
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error(error);
       }
-      $elStyle = safeEl.style;
+      $elStyle = this.$el.style;
     }
     const inlineCss = $elStyle.backgroundImage;
 
@@ -1037,16 +1017,15 @@ export class Ripples {
     }
 
     this.originalInlineCss = inlineCss;
-    this.originalCssBackgroundImage = safeEl.style.backgroundImage;
-    safeEl.style.backgroundImage = 'none';
+    this.originalCssBackgroundImage = this.$el.style.backgroundImage;
+    this.$el.style.backgroundImage = 'none';
   }
 
   private restoreCssBackground() {
     // Restore background by either changing the inline CSS rule to what it was, or
     // simply remove the inline CSS rule if it never was inlined.
-    const el = this.getElement?.();
-    const safeEl = el ?? this.$el;
-    safeEl.style.backgroundImage = this.originalInlineCss || '';
+
+    this.$el.style.backgroundImage = this.originalInlineCss || '';
   }
 
   private dropAtPointer(
@@ -1055,22 +1034,27 @@ export class Ripples {
     strength: number
   ) {
     let $elStyle: CSSStyleDeclaration;
-    const el = this.getElement?.();
-    const safeEl = el ?? this.$el;
+
     try {
-      $elStyle = window.getComputedStyle(safeEl);
+      $elStyle = window.getComputedStyle(this.$el);
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error(error);
       }
-      $elStyle = safeEl.style;
+      $elStyle = this.$el.style;
     }
     const borderLeft = parseInt($elStyle.borderLeftWidth) || 0;
     const borderTop = parseInt($elStyle.borderTopWidth) || 0;
 
-    const clientX = 'clientX' in pointer ? pointer.clientX : (pointer as TouchEvent).touches[0].clientX;
-    const clientY = 'clientY' in pointer ? pointer.clientY : (pointer as TouchEvent).touches[0].clientY;
-    const rect = safeEl.getBoundingClientRect();
+    const clientX =
+      'clientX' in pointer
+        ? pointer.clientX
+        : (pointer as TouchEvent).touches[0].clientX;
+    const clientY =
+      'clientY' in pointer
+        ? pointer.clientY
+        : (pointer as TouchEvent).touches[0].clientY;
+    const rect = this.$el.getBoundingClientRect();
 
     this.drop(
       clientX - rect.left - borderLeft,
@@ -1078,18 +1062,6 @@ export class Ripples {
       radius,
       strength
     );
-  }
-
-  public setGetElement(getElement: () => HTMLElement | null) {
-    if (typeof getElement !== 'function') {
-      throw new Error('getElement must be a function');
-    }
-    const el = getElement();
-    if (el instanceof HTMLElement === false) {
-      throw new Error('getElement must return an HTMLElement');
-    }
-    this.$el = el as RipplesElement;
-    this.getElement = getElement;
   }
 
   /**
@@ -1107,10 +1079,8 @@ export class Ripples {
   public drop(x: number, y: number, radius: number, strength: number) {
     if (!this.dropProgram) return;
 
-    const el = this.getElement?.();
-    const safeEl = el ?? this.$el;
-    const elWidth = safeEl.getBoundingClientRect().width;
-    const elHeight = safeEl.getBoundingClientRect().height;
+    const elWidth = this.$el.getBoundingClientRect().width;
+    const elHeight = this.$el.getBoundingClientRect().height;
     const longestSide = Math.max(elWidth, elHeight);
 
     radius = radius / longestSide;
@@ -1148,10 +1118,8 @@ export class Ripples {
    * @returns {void}
    */
   public updateSize() {
-    const el = this.getElement?.();
-    const safeEl = el ?? this.$el;
-    const newWidth = safeEl.getBoundingClientRect().width;
-    const newHeight = safeEl.getBoundingClientRect().height;
+    const newWidth = this.$el.getBoundingClientRect().width;
+    const newHeight = this.$el.getBoundingClientRect().height;
 
     if (newWidth != this.canvas.width || newHeight != this.canvas.height) {
       this.canvas.width = newWidth;
@@ -1164,23 +1132,20 @@ export class Ripples {
    * @returns {void}
    */
   public destroy() {
-    const el = this.getElement?.();
-    const safeEl = el ?? this.$el;
-
     if (typeof this.onMouseMove === 'function') {
-      safeEl.removeEventListener('mousemove', this.onMouseMove);
+      this.$el.removeEventListener('mousemove', this.onMouseMove);
     }
     if (typeof this.onTouchMove === 'function') {
-      safeEl.removeEventListener('touchmove', this.onTouchMove);
+      this.$el.removeEventListener('touchmove', this.onTouchMove);
     }
     if (typeof this.onTouchStart === 'function') {
-      safeEl.removeEventListener('touchstart', this.onTouchStart);
+      this.$el.removeEventListener('touchstart', this.onTouchStart);
     }
     if (typeof this.onMouseDown === 'function') {
-      safeEl.removeEventListener('mousedown', this.onMouseDown);
+      this.$el.removeEventListener('mousedown', this.onMouseDown);
     }
-    safeEl.classList.remove('javascript-ripples');
-    safeEl.ripples = undefined;
+    this.$el.classList.remove('javascript-ripples');
+    this.$el.ripples = undefined;
 
     if (typeof this.onWindowResize === 'function') {
       window.removeEventListener('resize', this.onWindowResize);
