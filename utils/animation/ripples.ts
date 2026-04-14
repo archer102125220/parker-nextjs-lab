@@ -362,11 +362,10 @@ export class Ripples {
     }
 
     this.context = gl;
-    Ripples.gl = gl;
 
     // Load extensions
-    Ripples.config?.extensions.forEach(function (name) {
-      Ripples.gl?.getExtension(name);
+    Ripples.config?.extensions.forEach((name) => {
+      this.context?.getExtension(name);
     });
 
     // Auto-resize when window size changes.
@@ -385,48 +384,48 @@ export class Ripples {
       : null;
 
     for (let i = 0; i < 2; i++) {
-      const texture = Ripples.gl.createTexture();
-      const framebuffer = Ripples.gl.createFramebuffer();
+      const texture = this.context.createTexture() as WebGLTexture;
+      const framebuffer = this.context.createFramebuffer() as WebGLFramebuffer;
 
-      Ripples.gl.bindFramebuffer(Ripples.gl.FRAMEBUFFER, framebuffer);
+      this.context.bindFramebuffer(this.context.FRAMEBUFFER, framebuffer);
 
-      Ripples.gl.bindTexture(Ripples.gl.TEXTURE_2D, texture);
-      Ripples.gl.texParameteri(
-        Ripples.gl.TEXTURE_2D,
-        Ripples.gl.TEXTURE_MIN_FILTER,
-        Ripples.config?.linearSupport ? Ripples.gl.LINEAR : Ripples.gl.NEAREST
+      this.context.bindTexture(this.context.TEXTURE_2D, texture);
+      this.context.texParameteri(
+        this.context.TEXTURE_2D,
+        this.context.TEXTURE_MIN_FILTER,
+        Ripples.config?.linearSupport ? this.context.LINEAR : this.context.NEAREST
       );
-      Ripples.gl.texParameteri(
-        Ripples.gl.TEXTURE_2D,
-        Ripples.gl.TEXTURE_MAG_FILTER,
-        Ripples.config?.linearSupport ? Ripples.gl.LINEAR : Ripples.gl.NEAREST
+      this.context.texParameteri(
+        this.context.TEXTURE_2D,
+        this.context.TEXTURE_MAG_FILTER,
+        Ripples.config?.linearSupport ? this.context.LINEAR : this.context.NEAREST
       );
-      Ripples.gl.texParameteri(
-        Ripples.gl.TEXTURE_2D,
-        Ripples.gl.TEXTURE_WRAP_S,
-        Ripples.gl.CLAMP_TO_EDGE
+      this.context.texParameteri(
+        this.context.TEXTURE_2D,
+        this.context.TEXTURE_WRAP_S,
+        this.context.CLAMP_TO_EDGE
       );
-      Ripples.gl.texParameteri(
-        Ripples.gl.TEXTURE_2D,
-        Ripples.gl.TEXTURE_WRAP_T,
-        Ripples.gl.CLAMP_TO_EDGE
+      this.context.texParameteri(
+        this.context.TEXTURE_2D,
+        this.context.TEXTURE_WRAP_T,
+        this.context.CLAMP_TO_EDGE
       );
-      Ripples.gl.texImage2D(
-        Ripples.gl.TEXTURE_2D,
+      this.context.texImage2D(
+        this.context.TEXTURE_2D,
         0,
-        Ripples.gl.RGBA,
+        this.context.RGBA,
         this.resolution,
         this.resolution,
         0,
-        Ripples.gl.RGBA,
-        Ripples.config?.type || Ripples.gl.FLOAT,
+        this.context.RGBA,
+        Ripples.config?.type || this.context.FLOAT,
         textureData
       );
 
-      Ripples.gl.framebufferTexture2D(
-        Ripples.gl.FRAMEBUFFER,
-        Ripples.gl.COLOR_ATTACHMENT0,
-        Ripples.gl.TEXTURE_2D,
+      this.context.framebufferTexture2D(
+        this.context.FRAMEBUFFER,
+        this.context.COLOR_ATTACHMENT0,
+        this.context.TEXTURE_2D,
         texture,
         0
       );
@@ -436,12 +435,12 @@ export class Ripples {
     }
 
     // Init GL stuff
-    this.quad = Ripples.gl.createBuffer();
-    Ripples.gl.bindBuffer(Ripples.gl.ARRAY_BUFFER, this.quad);
-    Ripples.gl.bufferData(
-      Ripples.gl.ARRAY_BUFFER,
+    this.quad = this.context.createBuffer() as WebGLBuffer;
+    this.context.bindBuffer(this.context.ARRAY_BUFFER, this.quad);
+    this.context.bufferData(
+      this.context.ARRAY_BUFFER,
       new Float32Array([-1, -1, +1, -1, +1, +1, -1, +1]),
-      Ripples.gl.STATIC_DRAW
+      this.context.STATIC_DRAW
     );
 
     this.initShaders();
@@ -452,8 +451,8 @@ export class Ripples {
     this.loadImage();
 
     // Set correct clear color and blend mode (regular alpha blending)
-    Ripples.gl.clearColor(0, 0, 0, 0);
-    Ripples.gl.blendFunc(Ripples.gl.SRC_ALPHA, Ripples.gl.ONE_MINUS_SRC_ALPHA);
+    this.context.clearColor(0, 0, 0, 0);
+    this.context.blendFunc(this.context.SRC_ALPHA, this.context.ONE_MINUS_SRC_ALPHA);
 
     // Plugin is successfully initialized!
     this.visible = true;
@@ -547,8 +546,9 @@ export class Ripples {
     vertexSource: string,
     fragmentSource: string
   ): WebGLProgramObj {
+    const gl = this.context;
+    
     function compileSource(type: number, source: string) {
-      const gl = Ripples.gl;
       if (gl instanceof WebGLRenderingContext === false) {
         throw new Error('WebGL not supported');
       }
@@ -565,16 +565,18 @@ export class Ripples {
     }
 
     const program: WebGLProgramObj = {
-      id: {},
+      id: {} as WebGLProgram,
       uniforms: {},
       locations: {}
     };
 
-    const gl = Ripples.gl;
     if (!gl) {
       throw new Error('WebGL not initialized');
     }
-    program.id = gl.createProgram();
+    const programId = gl.createProgram();
+    if (!programId) throw new Error('Could not create program');
+    program.id = programId;
+    
     gl.attachShader(program.id, compileSource(gl.VERTEX_SHADER, vertexSource));
     gl.attachShader(
       program.id,
@@ -602,9 +604,8 @@ export class Ripples {
   }
 
   private bindTexture(texture: WebGLTexture, unit?: number) {
-    if (Ripples.gl instanceof WebGLRenderingContext === false) return;
-    Ripples.gl.activeTexture(Ripples.gl.TEXTURE0 + (unit || 0));
-    Ripples.gl.bindTexture(Ripples.gl.TEXTURE_2D, texture);
+    this.context.activeTexture(this.context.TEXTURE0 + (unit || 0));
+    this.context.bindTexture(this.context.TEXTURE_2D, texture);
   }
 
   private extractUrl(value: string): string | null {
@@ -653,7 +654,6 @@ export class Ripples {
   }
 
   private loadImage() {
-    Ripples.gl = this.context;
     let $elStyle: CSSStyleDeclaration;
     const el = this.getElement?.();
     const safeEl = el ?? this.$el;
@@ -683,8 +683,8 @@ export class Ripples {
 
     const image = new Image();
     image.onload = () => {
-      Ripples.gl = this.context;
-      if (Ripples.gl instanceof WebGLRenderingContext === false) return;
+      const gl = this.context;
+      if (gl instanceof WebGLRenderingContext === false) return;
 
       const isPowerOfTwo = (x: number) => {
         return (x & (x - 1)) == 0;
@@ -692,30 +692,22 @@ export class Ripples {
 
       const wrapping =
         isPowerOfTwo(image.width) && isPowerOfTwo(image.height)
-          ? Ripples.gl.REPEAT
-          : Ripples.gl.CLAMP_TO_EDGE;
+          ? gl.REPEAT
+          : gl.CLAMP_TO_EDGE;
 
       if (this.backgroundTexture instanceof WebGLTexture === false) {
         throw new Error('backgroundTexture is not a WebGLTexture');
       }
 
-      Ripples.gl.bindTexture(Ripples.gl.TEXTURE_2D, this.backgroundTexture);
-      Ripples.gl.texParameteri(
-        Ripples.gl.TEXTURE_2D,
-        Ripples.gl.TEXTURE_WRAP_S,
-        wrapping
-      );
-      Ripples.gl.texParameteri(
-        Ripples.gl.TEXTURE_2D,
-        Ripples.gl.TEXTURE_WRAP_T,
-        wrapping
-      );
-      Ripples.gl.texImage2D(
-        Ripples.gl.TEXTURE_2D,
+      gl.bindTexture(gl.TEXTURE_2D, this.backgroundTexture);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrapping);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrapping);
+      gl.texImage2D(
+        gl.TEXTURE_2D,
         0,
-        Ripples.gl.RGBA,
-        Ripples.gl.RGBA,
-        Ripples.gl.UNSIGNED_BYTE,
+        gl.RGBA,
+        gl.RGBA,
+        gl.UNSIGNED_BYTE,
         image
       );
 
@@ -726,7 +718,6 @@ export class Ripples {
     };
 
     image.onerror = () => {
-      Ripples.gl = this.context;
       this.setTransparentTexture();
     };
 
@@ -737,8 +728,6 @@ export class Ripples {
   }
 
   private step() {
-    Ripples.gl = this.context;
-
     if (!this.visible) {
       return;
     }
@@ -753,78 +742,76 @@ export class Ripples {
   }
 
   private drawQuad() {
-    if (Ripples.gl instanceof WebGLRenderingContext === false) return;
-    Ripples.gl.bindBuffer(Ripples.gl.ARRAY_BUFFER, this.quad);
-    Ripples.gl.vertexAttribPointer(0, 2, Ripples.gl.FLOAT, false, 0, 0);
-    Ripples.gl.drawArrays(Ripples.gl.TRIANGLE_FAN, 0, 4);
+    this.context.bindBuffer(this.context.ARRAY_BUFFER, this.quad);
+    this.context.vertexAttribPointer(0, 2, this.context.FLOAT, false, 0, 0);
+    this.context.drawArrays(this.context.TRIANGLE_FAN, 0, 4);
   }
 
   private render() {
-    if (
-      Ripples.gl instanceof WebGLRenderingContext === false ||
-      !this.renderProgram
-    ) {
+    const gl = this.context;
+    if (!this.renderProgram) {
       return;
     }
 
-    Ripples.gl.bindFramebuffer(Ripples.gl.FRAMEBUFFER, null);
-    Ripples.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.viewport(0, 0, this.canvas.width, this.canvas.height);
 
-    Ripples.gl.enable(Ripples.gl.BLEND);
-    Ripples.gl.clear(Ripples.gl.COLOR_BUFFER_BIT | Ripples.gl.DEPTH_BUFFER_BIT);
+    gl.enable(gl.BLEND);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    Ripples.gl.useProgram(this.renderProgram.id);
+    gl.useProgram(this.renderProgram.id);
 
     if (this.backgroundTexture) this.bindTexture(this.backgroundTexture, 0);
     if (this.textures[0]) this.bindTexture(this.textures[0], 1);
 
     if (this.renderProgram.locations.perturbance) {
-      Ripples.gl.uniform1f(
+      gl.uniform1f(
         this.renderProgram.locations.perturbance,
         this.perturbance
       );
     }
     if (this.renderProgram.locations.topLeft) {
-      Ripples.gl.uniform2fv(
+      gl.uniform2fv(
         this.renderProgram.locations.topLeft,
         this.renderProgram.uniforms.topLeft
       );
     }
     if (this.renderProgram.locations.bottomRight) {
-      Ripples.gl.uniform2fv(
+      gl.uniform2fv(
         this.renderProgram.locations.bottomRight,
         this.renderProgram.uniforms.bottomRight
       );
     }
     if (this.renderProgram.locations.containerRatio) {
-      Ripples.gl.uniform2fv(
+      gl.uniform2fv(
         this.renderProgram.locations.containerRatio,
         this.renderProgram.uniforms.containerRatio
       );
     }
     if (this.renderProgram.locations.samplerBackground) {
-      Ripples.gl.uniform1i(this.renderProgram.locations.samplerBackground, 0);
+      gl.uniform1i(this.renderProgram.locations.samplerBackground, 0);
     }
     if (this.renderProgram.locations.samplerRipples) {
-      Ripples.gl.uniform1i(this.renderProgram.locations.samplerRipples, 1);
+      gl.uniform1i(this.renderProgram.locations.samplerRipples, 1);
     }
 
     this.drawQuad();
-    Ripples.gl.disable(Ripples.gl.BLEND);
+    gl.disable(gl.BLEND);
   }
 
   private update() {
-    if (Ripples.gl instanceof WebGLRenderingContext === false || !this.updateProgram) {
+    const gl = this.context;
+    if (!this.updateProgram) {
       return;
     }
 
-    Ripples.gl.viewport(0, 0, this.resolution, this.resolution);
-    Ripples.gl.bindFramebuffer(
-      Ripples.gl.FRAMEBUFFER,
+    gl.viewport(0, 0, this.resolution, this.resolution);
+    gl.bindFramebuffer(
+      gl.FRAMEBUFFER,
       this.framebuffers[this.bufferWriteIndex]
     );
     this.bindTexture(this.textures[this.bufferReadIndex]);
-    Ripples.gl.useProgram(this.updateProgram.id);
+    gl.useProgram(this.updateProgram.id);
 
     this.drawQuad();
     this.swapBufferIndices();
@@ -979,50 +966,49 @@ export class Ripples {
   }
 
   private initShaders() {
-    if (Ripples.gl instanceof WebGLRenderingContext === false) return;
-
+    const gl = this.context;
     this.dropProgram = this.createProgram(basicVert, dropFrag);
 
     this.updateProgram = this.createProgram(basicVert, updateFrag);
-    Ripples.gl.uniform2fv(
+    gl.uniform2fv(
       this.updateProgram.locations.delta,
       this.textureDelta
     );
 
     this.renderProgram = this.createProgram(renderVert, renderFrag);
-    Ripples.gl.uniform2fv(
+    gl.uniform2fv(
       this.renderProgram.locations.delta,
       this.textureDelta
     );
   }
 
   private initTexture() {
-    if (Ripples.gl instanceof WebGLRenderingContext === false) return;
-
-    this.backgroundTexture = Ripples.gl.createTexture();
-    Ripples.gl.bindTexture(Ripples.gl.TEXTURE_2D, this.backgroundTexture);
-    Ripples.gl.pixelStorei(Ripples.gl.UNPACK_FLIP_Y_WEBGL, 1);
-    Ripples.gl.texParameteri(
-      Ripples.gl.TEXTURE_2D,
-      Ripples.gl.TEXTURE_MAG_FILTER,
-      Ripples.gl.LINEAR
+    const gl = this.context;
+    this.backgroundTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, this.backgroundTexture);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+    gl.texParameteri(
+      gl.TEXTURE_2D,
+      gl.TEXTURE_MAG_FILTER,
+      gl.LINEAR
     );
-    Ripples.gl.texParameteri(
-      Ripples.gl.TEXTURE_2D,
-      Ripples.gl.TEXTURE_MIN_FILTER,
-      Ripples.gl.LINEAR
+    gl.texParameteri(
+      gl.TEXTURE_2D,
+      gl.TEXTURE_MIN_FILTER,
+      gl.LINEAR
     );
   }
 
   private setTransparentTexture() {
-    if (!Ripples.gl || !this.backgroundTexture) return;
-    Ripples.gl.bindTexture(Ripples.gl.TEXTURE_2D, this.backgroundTexture);
-    Ripples.gl.texImage2D(
-      Ripples.gl.TEXTURE_2D,
+    if (!this.backgroundTexture) return;
+    const gl = this.context;
+    gl.bindTexture(gl.TEXTURE_2D, this.backgroundTexture);
+    gl.texImage2D(
+      gl.TEXTURE_2D,
       0,
-      Ripples.gl.RGBA,
-      Ripples.gl.RGBA,
-      Ripples.gl.UNSIGNED_BYTE,
+      gl.RGBA,
+      gl.RGBA,
+      gl.UNSIGNED_BYTE,
       this.transparentPixels
     );
   }
@@ -1114,9 +1100,7 @@ export class Ripples {
    * ripples.drop(100, 200, 20, 0.04);
    */
   public drop(x: number, y: number, radius: number, strength: number) {
-    Ripples.gl = this.context;
-    if (!Ripples.gl || !this.dropProgram) return;
-    // console.log({ x, y, radius, strength });
+    if (!this.dropProgram) return;
 
     const el = this.getElement?.();
     const safeEl = el ?? this.$el;
@@ -1131,26 +1115,23 @@ export class Ripples {
       (elHeight - 2 * y) / longestSide
     ]);
 
-    Ripples.gl.viewport(0, 0, this.resolution, this.resolution);
-    Ripples.gl.bindFramebuffer(
-      Ripples.gl.FRAMEBUFFER,
+    const gl = this.context;
+    gl.viewport(0, 0, this.resolution, this.resolution);
+    gl.bindFramebuffer(
+      gl.FRAMEBUFFER,
       this.framebuffers[this.bufferWriteIndex]
     );
     this.bindTexture(this.textures[this.bufferReadIndex]);
 
-    Ripples.gl.useProgram(this.dropProgram.id);
-    console.log({
-      locations: this.dropProgram.locations,
-      id: this.dropProgram.id
-    });
+    gl.useProgram(this.dropProgram.id);
     if (this.dropProgram.locations.center) {
-      Ripples.gl.uniform2fv(this.dropProgram.locations.center, dropPosition);
+      gl.uniform2fv(this.dropProgram.locations.center, dropPosition);
     }
     if (this.dropProgram.locations.radius) {
-      Ripples.gl.uniform1f(this.dropProgram.locations.radius, radius);
+      gl.uniform1f(this.dropProgram.locations.radius, radius);
     }
     if (this.dropProgram.locations.strength) {
-      Ripples.gl.uniform1f(this.dropProgram.locations.strength, strength);
+      gl.uniform1f(this.dropProgram.locations.strength, strength);
     }
 
     this.drawQuad();
@@ -1196,7 +1177,6 @@ export class Ripples {
     safeEl.classList.remove('javascript-ripples');
     safeEl.ripples = undefined;
 
-    Ripples.gl = null;
     if (typeof this.onWindowResize === 'function') {
       window.removeEventListener('resize', this.onWindowResize);
     }
