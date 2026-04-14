@@ -245,7 +245,9 @@ export default function RipplesBackground({
         .filter(Boolean)
         .join(' ')}
     >
-      {children}
+      <div className={styles['ripples_background-content']}>
+        {children}
+      </div>
     </div>
   );
 }

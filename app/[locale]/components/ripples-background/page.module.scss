@@ -66,6 +66,15 @@
         height: 100%;
       }
       &-test_label {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-content: center;
+        justify-content: center;
+
+        height: 100%;
+        width: 100%;
+
         color: #fff;
       }
     }
