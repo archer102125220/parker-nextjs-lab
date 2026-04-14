@@ -308,6 +308,7 @@ export class Ripples {
    * @param {RipplesOptions} options - 配置選項
    */
   constructor(el: HTMLElement, options: RipplesOptions) {
+    console.log('Ripples constructor', { el, options });
     this.transparentPixels = this.createImageData(32, 32);
 
     this.$el = el as RipplesElement;
@@ -619,36 +620,32 @@ export class Ripples {
     return url.match(/^data:/) != null;
   }
 
+  private handleUserDrop(pointer: MouseEvent | TouchEvent | Touch, big: boolean = false) {
+    if (this.visible && this.running && this.interactive) {
+      this.dropAtPointer(
+        pointer,
+        this.dropRadius * (big ? 1.5 : 1),
+        big ? 0.14 : 0.01
+      );
+    }
+  }
+  private handleMouseEvent(e: MouseEvent) {
+    this.handleUserDrop(e);
+  }
+  private handleTouchEvent(e: TouchEvent) {
+    const touches = e.touches;
+    for (let i = 0; i < touches.length; i++) {
+      this.handleUserDrop(touches[i]);
+    }
+  }
   private setupPointerEvents() {
-    const dropAtPointer = (
-      pointer: MouseEvent | TouchEvent | Touch,
-      big: boolean = false
-    ) => {
-      if (this.visible && this.running && this.interactive) {
-        this.dropAtPointer(
-          pointer,
-          this.dropRadius * (big ? 1.5 : 1),
-          big ? 0.14 : 0.01
-        );
-      }
-    };
-    const mouseEvent = (e: MouseEvent) => {
-      dropAtPointer(e);
-    };
-    const touchEvent = (e: TouchEvent) => {
-      const touches = e.touches;
-      for (let i = 0; i < touches.length; i++) {
-        dropAtPointer(touches[i]);
-      }
-    };
-
-    this.onMouseDown = mouseEvent;
-    this.onTouchStart = touchEvent;
-    this.onMouseMove = mouseEvent;
-    this.onTouchMove = touchEvent;
-
     const el = this.getElement?.();
     const safeEl = el ?? this.$el;
+
+    this.onMouseMove = this.handleMouseEvent.bind(this);
+    this.onTouchMove = this.handleTouchEvent.bind(this);
+    this.onTouchStart = this.handleTouchEvent.bind(this);
+    this.onMouseDown = this.handleMouseEvent.bind(this);
     safeEl.addEventListener('mousemove', this.onMouseMove);
     safeEl.addEventListener('touchmove', this.onTouchMove);
     safeEl.addEventListener('touchstart', this.onTouchStart);
@@ -756,11 +753,10 @@ export class Ripples {
   }
 
   private drawQuad() {
-    const gl = Ripples.gl || this.context;
-    if (gl instanceof WebGLRenderingContext === false) return;
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.quad);
-    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+    if (Ripples.gl instanceof WebGLRenderingContext === false) return;
+    Ripples.gl.bindBuffer(Ripples.gl.ARRAY_BUFFER, this.quad);
+    Ripples.gl.vertexAttribPointer(0, 2, Ripples.gl.FLOAT, false, 0, 0);
+    Ripples.gl.drawArrays(Ripples.gl.TRIANGLE_FAN, 0, 4);
   }
 
   private render() {
@@ -818,18 +814,17 @@ export class Ripples {
   }
 
   private update() {
-    const gl = Ripples.gl || this.context;
-    if (gl instanceof WebGLRenderingContext === false || !this.updateProgram) {
+    if (Ripples.gl instanceof WebGLRenderingContext === false || !this.updateProgram) {
       return;
     }
 
-    gl.viewport(0, 0, this.resolution, this.resolution);
-    gl.bindFramebuffer(
-      gl.FRAMEBUFFER,
+    Ripples.gl.viewport(0, 0, this.resolution, this.resolution);
+    Ripples.gl.bindFramebuffer(
+      Ripples.gl.FRAMEBUFFER,
       this.framebuffers[this.bufferWriteIndex]
     );
     this.bindTexture(this.textures[this.bufferReadIndex]);
-    gl.useProgram(this.updateProgram.id);
+    Ripples.gl.useProgram(this.updateProgram.id);
 
     this.drawQuad();
     this.swapBufferIndices();
@@ -1082,18 +1077,13 @@ export class Ripples {
     const borderLeft = parseInt($elStyle.borderLeftWidth) || 0;
     const borderTop = parseInt($elStyle.borderTopWidth) || 0;
 
-    const offsetX =
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      'offsetX' in pointer ? pointer.offsetX : pointer.touches[0].offsetX;
-    const offsetY =
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      'offsetY' in pointer ? pointer.offsetY : pointer.touches[0].offsetY;
+    const clientX = 'clientX' in pointer ? pointer.clientX : (pointer as TouchEvent).touches[0].clientX;
+    const clientY = 'clientY' in pointer ? pointer.clientY : (pointer as TouchEvent).touches[0].clientY;
+    const rect = safeEl.getBoundingClientRect();
 
     this.drop(
-      offsetX - safeEl.offsetLeft - borderLeft,
-      offsetY - safeEl.offsetTop - borderTop,
+      clientX - rect.left - borderLeft,
+      clientY - rect.top - borderTop,
       radius,
       strength
     );
@@ -1124,9 +1114,9 @@ export class Ripples {
    * ripples.drop(100, 200, 20, 0.04);
    */
   public drop(x: number, y: number, radius: number, strength: number) {
-    const gl = Ripples.gl || this.context;
-    if (!gl || !this.dropProgram) return;
-    console.log({ x, y, radius, strength });
+    Ripples.gl = this.context;
+    if (!Ripples.gl || !this.dropProgram) return;
+    // console.log({ x, y, radius, strength });
 
     const el = this.getElement?.();
     const safeEl = el ?? this.$el;
@@ -1141,26 +1131,26 @@ export class Ripples {
       (elHeight - 2 * y) / longestSide
     ]);
 
-    gl.viewport(0, 0, this.resolution, this.resolution);
-    gl.bindFramebuffer(
-      gl.FRAMEBUFFER,
+    Ripples.gl.viewport(0, 0, this.resolution, this.resolution);
+    Ripples.gl.bindFramebuffer(
+      Ripples.gl.FRAMEBUFFER,
       this.framebuffers[this.bufferWriteIndex]
     );
     this.bindTexture(this.textures[this.bufferReadIndex]);
 
-    gl.useProgram(this.dropProgram.id);
+    Ripples.gl.useProgram(this.dropProgram.id);
     console.log({
       locations: this.dropProgram.locations,
       id: this.dropProgram.id
     });
     if (this.dropProgram.locations.center) {
-      gl.uniform2fv(this.dropProgram.locations.center, dropPosition);
+      Ripples.gl.uniform2fv(this.dropProgram.locations.center, dropPosition);
     }
     if (this.dropProgram.locations.radius) {
-      gl.uniform1f(this.dropProgram.locations.radius, radius);
+      Ripples.gl.uniform1f(this.dropProgram.locations.radius, radius);
     }
     if (this.dropProgram.locations.strength) {
-      gl.uniform1f(this.dropProgram.locations.strength, strength);
+      Ripples.gl.uniform1f(this.dropProgram.locations.strength, strength);
     }
 
     this.drawQuad();
@@ -1190,6 +1180,7 @@ export class Ripples {
   public destroy() {
     const el = this.getElement?.();
     const safeEl = el ?? this.$el;
+
     if (typeof this.onMouseMove === 'function') {
       safeEl.removeEventListener('mousemove', this.onMouseMove);
     }
