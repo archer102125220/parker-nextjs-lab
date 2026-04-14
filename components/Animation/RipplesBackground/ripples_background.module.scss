@@ -1,0 +1,12 @@
+.ripples_background {
+  /* Positioning */
+  position: relative;
+
+  /* Display & Box Model */
+  width: 100%;
+  height: 100%;
+
+  /* Visual - for Ripples animation */
+  background-size: cover;
+  background-position: center;
+}

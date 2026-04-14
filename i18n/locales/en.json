@@ -79,6 +79,8 @@
                 "cssDrawingDesc": "Pure CSS graphics & animations",
                 "directiveEffects": "Directive Effects",
                 "directiveEffectsDesc": "Lazy loading, ripple effects",
+                "ripplesBackground": "Ripples Background",
+                "ripplesBackgroundDesc": "WebGL water ripple animation",
                 "webRTC": "WebRTC Video",
                 "webRTCDesc": "P2P video calls",
                 "socketIO": "Socket.IO",
@@ -148,7 +150,8 @@
                 "youtube": "YouTube player embed",
                 "wangEditor": "Rich text editor",
                 "enterLabel": "Typewriter animation",
-                "wavingImage": "Waving image effect"
+                "wavingImage": "Waving image effect",
+                "ripplesBackground": "WebGL water ripple"
             },
             "stats": {
                 "uiComponents": "UI Components",
@@ -244,6 +247,10 @@
             "wavingImage": {
                 "title": "WavingImage Component Test",
                 "description": "Demonstrating waving image effect"
+            },
+            "ripplesBackground": {
+                "title": "RipplesBackground Component Test",
+                "description": "Demonstrating WebGL water ripple animation background"
             }
         },
         "cssDrawing": {

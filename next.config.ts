@@ -18,6 +18,11 @@ const withSerwist = withSerwistInit({
 const nextConfig: NextConfig = withSerwist(
   withNextIntl({
     webpack(config, { isServer }) {
+      config.module.rules.push({
+        test: /\.(glsl|vs|fs|vert|frag)$/,
+        type: 'asset/source'
+      });
+
       if (isServer) {
         // Add canvas as external for server-side to prevent webpack bundling
         config.externals = config.externals || [];
@@ -34,7 +39,18 @@ const nextConfig: NextConfig = withSerwist(
         '@use "@/styles/variable.scss" as *; @use "@/styles/mixin.scss" as *;'
     },
     // Socket.IO and canvas need to be external for server-side
-    serverExternalPackages: ['socket.io', 'engine.io', 'canvas']
+    serverExternalPackages: ['socket.io', 'engine.io', 'canvas'],
+
+    // Turbopack 設定 (用於 next dev 預設)
+    turbopack: {
+      rules: {
+        // 注意：Turbopack 支援透過萬用字元對應附檔名
+        '*.{glsl,vs,fs,vert,frag}': {
+          loaders: ['raw-loader'],
+          as: '*.js'
+        }
+      }
+    }
   })
 );
 

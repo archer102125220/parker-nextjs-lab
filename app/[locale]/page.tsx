@@ -48,6 +48,12 @@ const LINK_SECTIONS = [
         icon: '✨'
       },
       {
+        href: '/components/ripples-background',
+        labelKey: 'links.ripplesBackground',
+        descKey: 'links.ripplesBackgroundDesc',
+        icon: '🌊'
+      },
+      {
         href: '/krpano-demo',
         labelKey: 'links.krpano',
         descKey: 'links.krpanoDesc',
