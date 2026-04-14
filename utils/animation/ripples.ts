@@ -307,6 +307,7 @@ export class Ripples {
     this.transparentPixels = this.createImageData(32, 32);
 
     this.$el = el as RipplesElement;
+    this.$el.setAttribute('css-ripples-animation', 'true');
 
     // Init properties from options
     this.interactive = options.interactive ?? Ripples.DEFAULTS.interactive;

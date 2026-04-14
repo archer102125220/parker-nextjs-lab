@@ -1,7 +1,4 @@
 .ripples_background {
-  /* Positioning */
-  position: relative;
-
   /* Display & Box Model */
   width: 100%;
   height: 100%;
@@ -9,4 +6,17 @@
   /* Visual - for Ripples animation */
   background-size: cover;
   background-position: center;
+
+  > [css-ripples-animation="true"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+  > *:not([css-ripples-animation="true"]) {
+    position: relative;
+    z-index: 1;
+  }
 }

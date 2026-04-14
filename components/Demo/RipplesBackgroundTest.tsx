@@ -32,7 +32,11 @@ export default function RipplesBackgroundTest() {
             }
             imageUrl="/img/test-img/hero-gradient.svg"
             autoDrops={autoDrops}
-          />
+          >
+            <p className={style['ripples_background_test_page-section-image_container-test_label']}>
+              描述文字
+            </p>
+          </RipplesBackground>
         </div>
       </div>
 
