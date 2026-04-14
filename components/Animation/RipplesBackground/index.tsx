@@ -95,13 +95,9 @@ export default function RipplesBackground({
     };
   }, [dropRadius, autoDropsStrength, autoDropsStrengthVariance]);
 
-  const getElement = useEffectEvent(() => {
-    return containerRef.current as RipplesElement | null;
-  });
-
   const dropsAnimation = useEffectEvent(() => {
     if (!isVisibleRef.current) return;
-    const el = getElement();
+    const el = containerRef.current as RipplesElement | null;
     if (!el || !el.ripples) return;
 
     const rect = el.getBoundingClientRect();
