@@ -72,16 +72,12 @@ export default function FaceSwapIndex(): React.ReactNode {
         <Card
           className={`${style['face_swap_page-cards-card']} ${style['face_swap_page-cards-card--coming_soon']}`}
         >
-          <Chip
+          {isVercelEnv ? (<Chip
             className={style['face_swap_page-cards-card-chip']}
-            label={
-              isVercelEnv
-                ? t('backend.chipServerless')
-                : t('backend.chipDeveloping')
-            }
-            color={isVercelEnv ? 'error' : 'warning'}
+            label={t('backend.chipServerless')}
+            color={'error'}
             size="small"
-          />
+          />) : null}
           <CardContent>
             <Typography variant="h6" gutterBottom>
               <StorageIcon sx={{ mr: 1, verticalAlign: 'middle' }} />

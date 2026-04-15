@@ -19,7 +19,6 @@ export default function DemoFaceSwapFrontend(): React.ReactNode {
   // Refs
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const overlayCanvasRef = useRef<HTMLCanvasElement>(null);
   const sourceImageRef = useRef<HTMLImageElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -175,16 +174,34 @@ export default function DemoFaceSwapFrontend(): React.ReactNode {
     const sourceBox = sourceDetection.detection.box;
     const targetBox = targetDetection.detection.box;
     const padding = 20;
+    const sourceImageWidth =
+      typeof sourceImg.naturalWidth === 'number' && sourceImg.naturalWidth > 0
+        ? sourceImg.naturalWidth
+        : sourceImg.width;
+    const sourceImageHeight =
+      typeof sourceImg.naturalHeight === 'number' && sourceImg.naturalHeight > 0
+        ? sourceImg.naturalHeight
+        : sourceImg.height;
 
     const sx = Math.max(0, sourceBox.x - padding);
     const sy = Math.max(0, sourceBox.y - padding);
-    const sw = Math.min(sourceImg.width - sx, sourceBox.width + padding * 2);
-    const sh = Math.min(sourceImg.height - sy, sourceBox.height + padding * 2);
+    const sw = Math.max(
+      0,
+      Math.min(sourceImageWidth - sx, sourceBox.width + padding * 2)
+    );
+    const sh = Math.max(
+      0,
+      Math.min(sourceImageHeight - sy, sourceBox.height + padding * 2)
+    );
 
     const tx = targetBox.x - padding;
     const ty = targetBox.y - padding;
     const tw = targetBox.width + padding * 2;
     const th = targetBox.height + padding * 2;
+
+    if (sw === 0 || sh === 0 || tw <= 0 || th <= 0) {
+      throw new Error('來源照片裁切區域無效，請換一張更清晰的來源照片');
+    }
 
     const tempCanvas = document.createElement('canvas');
     tempCanvas.width = sw;
@@ -324,7 +341,7 @@ export default function DemoFaceSwapFrontend(): React.ReactNode {
           <div
             className={
               style[
-                'face_swap_frontend_page-swap_section-target-video_container'
+              'face_swap_frontend_page-swap_section-target-video_container'
               ]
             }
           >
@@ -338,14 +355,6 @@ export default function DemoFaceSwapFrontend(): React.ReactNode {
               autoPlay
               muted
               playsInline
-            />
-            <canvas
-              ref={overlayCanvasRef}
-              className={
-                style['face_swap_frontend_page-swap_section-target-overlay']
-              }
-              width={480}
-              height={360}
             />
           </div>
         </Paper>

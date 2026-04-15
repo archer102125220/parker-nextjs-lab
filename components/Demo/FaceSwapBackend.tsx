@@ -119,7 +119,7 @@ export default function DemoFaceSwapBackend(): React.ReactNode {
       </Typography>
 
       <Alert severity="warning" sx={{ mb: 3, maxWidth: 800 }}>
-        <strong>開發中：</strong>此功能需要後端 API 支援。 請確保{' '}
+        此功能需要後端 API 支援。 請確保{' '}
         <code>/api/face-swap/process</code> API 已正確配置。
       </Alert>
 
