@@ -1,6 +1,7 @@
 'use client';
 
 // 還可以再改善
+// WebGL 版還未開發，shader 檔已先移動至 @/shaders/waving-image 中
 
 import {
   type ReactNode,
