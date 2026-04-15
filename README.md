@@ -1238,8 +1238,8 @@ NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-client-id
 NEXT_PUBLIC_FACEBOOK_APP_ID=your-facebook-app-id
 
 # Upstash Redis (for WebRTC)
-UPSTASH_REDIS_REST_URL=your-redis-url
-UPSTASH_REDIS_REST_TOKEN=your-redis-token
+UPSTASH_REDIS_V2_REST_URL=your-redis-url
+UPSTASH_REDIS_V2_REST_TOKEN=your-redis-token
 ```
 
 ## 🚀 Deployment

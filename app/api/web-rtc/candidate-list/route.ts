@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { Redis } from '@upstash/redis';
 
 // Initialize Upstash Redis from environment variables
-// Uses UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN
+// Uses UPSTASH_REDIS_V2_REST_URL and UPSTASH_REDIS_V2_REST_TOKEN
 const redis = Redis.fromEnv();
 
 function safeToJSON(obj: unknown): string {

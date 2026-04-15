@@ -59,8 +59,8 @@ NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
 
 # WebRTC (Upstash Redis)
-UPSTASH_REDIS_REST_URL=https://your-redis.upstash.io
-UPSTASH_REDIS_REST_TOKEN=your-token
+UPSTASH_REDIS_V2_REST_URL=https://your-redis.upstash.io
+UPSTASH_REDIS_V2_REST_TOKEN=your-token
 ```
 
 ---
