@@ -97,9 +97,6 @@ async function AnimationPage({ params }: Props): Promise<ReactNode> {
         </div>
 
         <div className={styles['animation_page-hero-content']}>
-          <div className={styles['animation_page-hero-content-badge']}>
-            {t('badge')}
-          </div>
           <h1 className={styles['animation_page-hero-content-title']}>
             {t('hero.title')}
           </h1>

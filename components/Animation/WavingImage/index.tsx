@@ -1,5 +1,7 @@
 'use client';
 
+// 還可以再改善
+
 import {
   type ReactNode,
   type CSSProperties,
@@ -192,6 +194,14 @@ export default function WavingImage({
     // eslint-disable-next-line react-hooks/immutability
     animationFrameIdRef.current = requestAnimationFrame(animateFrame);
   })
+
+  const handleWavingImageCalculate = useEffectEvent(() => {
+    if (typeof imgWidthRef.current !== 'number') return;
+    wavelengthRef.current = imgWidthRef.current / period; // 波長
+    waveSpeedRef.current = wavelengthRef.current * frequency; // 波速
+    spatialFrequencyRef.current = (2 * Math.PI) / wavelengthRef.current; // x係數
+    amplitudeRatioRef.current = amplitude / imgWidthRef.current; // 振幅係數
+  });
   const initWavingImageDOM = useEffectEvent(() => {
     if (animationFrameIdRef.current !== null) {
       cancelAnimationFrame(animationFrameIdRef.current);
@@ -232,16 +242,12 @@ export default function WavingImage({
     setCanvasWidth(canvasWidth);
     setCanvasHeight(canvasHeight);
 
-    wavelengthRef.current = imgWidthRef.current / period; // 波長
-    waveSpeedRef.current = wavelengthRef.current * frequency; // 波速
-    spatialFrequencyRef.current = (2 * Math.PI) / wavelengthRef.current; // x係數
-    amplitudeRatioRef.current = amplitude / imgWidthRef.current; // 振幅係數
+    handleWavingImageCalculate();
 
     timeNowRef.current = Date.now(); // 當前時間
     timeLastRef.current = timeNowRef.current; // 上一幀時間
     deltaRef.current = 0; // 連續幀之間間隔（實際）
     distanceRef.current = 0;
-
 
     animationFrameIdRef.current = requestAnimationFrame(animateFrame);
     requestAnimationFrame(function () {
@@ -251,17 +257,18 @@ export default function WavingImage({
   });
 
   useLayoutEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setShowImg(true);
     setImgLoading(true);
   }, [src]);
 
   useLayoutEffect(() => {
     if (imgRef.current?.complete) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowImg(true);
     }
-  }, [windowWidth, windowHeight]);
+  }, [windowWidth, windowHeight, direction, amplitude]);
+  useEffect(() => {
+    handleWavingImageCalculate();
+  }, [period, frequency, amplitude, wavePadding]);
   useEffect(() => {
     if (imgRef.current?.complete) {
       requestAnimationFrame(initWavingImageDOM);
@@ -273,7 +280,7 @@ export default function WavingImage({
         animationFrameIdRef.current = null;
       }
     };
-  }, [imgLoading, windowWidth, windowHeight]);
+  }, [imgLoading, windowWidth, windowHeight, direction, amplitude]);
 
   return (
     <div
