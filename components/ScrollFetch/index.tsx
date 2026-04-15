@@ -250,12 +250,28 @@ const initialInfinityState: InfinityState = {
 function infinityReducer(state: InfinityState, action: InfinityAction): InfinityState {
   switch (action.type) {
     case 'SET_INTERSECTING':
+      // observer 在邊界附近可能重複送出相同值，這裡直接忽略 no-op update，避免多餘 render。
+      if (state.isIntersecting === action.value) {
+        return state;
+      }
       return { ...state, isIntersecting: action.value };
     case 'SET_TRIGGER':
+      // 底部停留時可能反覆 dispatch 相同 trigger，若每次都回傳新 state 容易形成更新迴圈。
+      if (state.trigger === action.value) {
+        return state;
+      }
       return { ...state, trigger: action.value };
     case 'START_LOADING':
+      // loading 狀態只需要在邊界切換時更新，重複 START_LOADING 不應建立新的 state 物件。
+      if (state.loading === true) {
+        return state;
+      }
       return { ...state, loading: true };
     case 'END_LOADING':
+      // END_LOADING 也做同樣保護，避免非同步清理階段重複 dispatch 時持續觸發 render。
+      if (state.loading === false) {
+        return state;
+      }
       return { ...state, loading: false };
     default:
       return state;
@@ -315,6 +331,8 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
   const infinityTriggerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const infinityTimeoutTimerRef = useRef<NodeJS.Timeout | null>(null);
+  // 當 sentinel 持續停留在可視範圍內時先上鎖，等它離開畫面後再解除，避免 observer 連續觸發。
+  const observerTriggerLockRef = useRef(false);
   const startYRef = useRef<number>(0);
 
   // Reducers
@@ -898,8 +916,18 @@ const ScrollFetch: FunctionComponent<ScrollFetchProps> = (props) => {
         } else {
           observerRef.current = new IntersectionObserver(
             (entries) => {
-              dispatchInfinity({ type: 'SET_INTERSECTING', value: entries[0].isIntersecting });
-              if (entries[0].isIntersecting) {
+              const isIntersecting = entries[0].isIntersecting;
+
+              dispatchInfinity({ type: 'SET_INTERSECTING', value: isIntersecting });
+
+              if (isIntersecting === false) {
+                observerTriggerLockRef.current = false;
+                return;
+              }
+
+              // append 資料後若 sentinel 仍在畫面內，IntersectionObserver 可能對同一次可見狀態重複觸發。
+              if (observerTriggerLockRef.current === false) {
+                observerTriggerLockRef.current = true;
                 dispatchInfinity({ type: 'SET_TRIGGER', value: true });
               }
             },

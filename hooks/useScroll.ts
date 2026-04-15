@@ -1,4 +1,4 @@
-import { useSyncExternalStore, type RefObject } from 'react';
+import { useRef, useSyncExternalStore, type RefObject } from 'react';
 
 export interface ScrollPosition {
   windowScrollTop: number;
@@ -7,9 +7,6 @@ export interface ScrollPosition {
 
 // Cache for server snapshot to avoid creating new objects
 const SERVER_SNAPSHOT: ScrollPosition = { windowScrollTop: 0, elementScrollTop: 0 };
-
-// Cache for client snapshots to ensure stable references when values don't change
-let cachedSnapshot: ScrollPosition | null = null;
 
 /**
  * Hook to track scroll position changes for window and optional element
@@ -23,9 +20,13 @@ let cachedSnapshot: ScrollPosition | null = null;
 export function useScroll(
   elementRef?: RefObject<HTMLElement | null>
 ): ScrollPosition {
+  // snapshot cache 必須是每個 hook instance 各自持有；
+  // 若共用模組層級快取，多個 GoTop / ScrollFetch 會互相覆寫，進而讓 useSyncExternalStore 持續重算。
+  const cachedSnapshotRef = useRef<ScrollPosition>(SERVER_SNAPSHOT);
+
   return useSyncExternalStore(
     (callback) => subscribeScroll(callback, elementRef),
-    () => getScrollSnapshot(elementRef),
+    () => getScrollSnapshot(elementRef, cachedSnapshotRef),
     () => getServerScrollSnapshot()
   );
 }
@@ -54,7 +55,8 @@ function subscribeScroll(
 }
 
 function getScrollSnapshot(
-  elementRef?: RefObject<HTMLElement | null>
+  elementRef: RefObject<HTMLElement | null> | undefined,
+  cachedSnapshotRef: RefObject<ScrollPosition>
 ): ScrollPosition {
   const windowScrollTop =
     typeof window !== 'undefined'
@@ -67,20 +69,17 @@ function getScrollSnapshot(
   const elementScrollTop =
     elementRef?.current?.parentElement?.scrollTop || 0;
 
-  // ✅ FIXED: Cache snapshot to avoid creating new objects when values haven't changed
-  // This prevents infinite loop in useSyncExternalStore
+  // useSyncExternalStore 要求底層值沒變時，必須回傳相同的 snapshot reference，否則會被視為 store 持續更新。
   if (
-    cachedSnapshot &&
-    cachedSnapshot.windowScrollTop === windowScrollTop &&
-    cachedSnapshot.elementScrollTop === elementScrollTop
+    cachedSnapshotRef.current.windowScrollTop === windowScrollTop &&
+    cachedSnapshotRef.current.elementScrollTop === elementScrollTop
   ) {
-    return cachedSnapshot;
+    return cachedSnapshotRef.current;
   }
 
-  // Update cache
-  cachedSnapshot = { windowScrollTop, elementScrollTop };
-  
-  return cachedSnapshot;
+  cachedSnapshotRef.current = { windowScrollTop, elementScrollTop };
+
+  return cachedSnapshotRef.current;
 }
 
 function getServerScrollSnapshot(): ScrollPosition {
