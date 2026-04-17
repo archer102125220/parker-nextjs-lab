@@ -143,7 +143,7 @@
 - [ ] `Demo/TriangleAnimation.tsx`
 - [ ] `Demo/VirtualScrollerTest.tsx`
 - [ ] `Demo/WangEditorTest.tsx`
-- [ ] `Demo/WebAuthn.tsx`
+- [x] `Demo/WebAuthn.tsx` ✅ useReducer (9 → 1 useState) + useCallback（2026-04-17）
 - [x] `Demo/WebRTCSSERoom.tsx` ✅ useEffectEvent
 - [x] `Demo/WebRTCSocketIORoom.tsx` ✅ useEffectEvent
 - [x] `Demo/WebSocketTest.tsx`
@@ -208,7 +208,7 @@
 - [ ] `[locale]/server-sent-event-test/global-get/page.tsx`
 - [ ] `[locale]/server-sent-event-test/global-post/page.tsx`
 - [ ] `[locale]/socket-io-test/page.tsx`
-- [ ] `[locale]/web-authn/page.tsx`
+- [x] `[locale]/web-authn/page.tsx` ✅ Server Component 包裝，無 hooks 需重構（2026-04-17）
 - [ ] `[locale]/web-rtc/page.tsx`
 - [ ] `[locale]/web-socket-test/page.tsx`
 
@@ -369,3 +369,18 @@
 **需關注的特殊實作** (詳見 `simplified-implementations.md`):
 1. `TriangleEnter/animationFinish` — 使用 ref 取代 `useEffectEvent`（規則：後者不能在 onClick 中呼叫）
 2. `Krpano/hotspots` — 刻意從初始化 deps 排除，避免 Krpano 實例重新初始化
+
+---
+
+### 2026-04-17 Demo/WebAuthn 重構
+
+**審查範圍**: `Demo/WebAuthn.tsx`, `[locale]/web-authn/page.tsx`
+
+**已完成改進**:
+
+| 檔案 | 改進 |
+|------|------|
+| `Demo/WebAuthn.tsx` | 9 個 `useState` → `useReducer`；4 個 onChange inline arrow → `useCallback` handlers；`generateChallenge` / `generatePublicKeyCreationOptions` → `useCallback`；`React.FormEvent` / `React.ReactNode` → inline `type FormEvent`, `type ReactNode`, `type ChangeEvent` |
+| `[locale]/web-authn/page.tsx` | Server Component 包裝，無 hooks，標記完成 |
+
+**驗證**: ESLint ✅ Exit code 0，無警告

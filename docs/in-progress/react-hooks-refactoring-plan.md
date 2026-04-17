@@ -187,3 +187,13 @@ yarn dev:webpack  # 手動功能測試
 
 - `__tests__/components/Countdown.test.tsx`
 - `components/Tabs/Content.tsx` 目前沒有專屬測試，先以 ESLint 驗證
+
+## 近期進度（2026-04-17）
+
+### 本次完成
+
+1. **WebAuthn** - 9 個 `useState` 整合為 `useReducer`，所有 handler 使用 `useCallback`，修正 inline type imports（`ReactNode`、`FormEvent`、`ChangeEvent`）
+
+### 驗證
+
+- `components/Demo/WebAuthn.tsx` - ESLint ✅ Exit code 0，無警告

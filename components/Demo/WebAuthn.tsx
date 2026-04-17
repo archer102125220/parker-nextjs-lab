@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useReducer, useRef, useCallback, type ReactNode, type ChangeEvent, type FormEvent } from 'react';
 import Image from 'next/image';
 import { Base64 } from 'js-base64';
 import {
@@ -20,35 +20,101 @@ interface CredentialData {
   credentialPublicKeyJwk: string;
 }
 
-export default function DemoWebAuthn(): React.ReactNode {
+// --------------- State / Reducer ---------------
+
+interface WebAuthnState {
+  registerId: string;
+  registerAccount: string;
+  registerName: string;
+  registerWebApiOutput: string;
+  registerOutput: string;
+  loginId: string;
+  loginWebApiOutput: string;
+  loginOutput: string;
+  loading: boolean;
+}
+
+type WebAuthnAction =
+  | { type: 'SET_REGISTER_ID'; payload: string }
+  | { type: 'SET_REGISTER_ACCOUNT'; payload: string }
+  | { type: 'SET_REGISTER_NAME'; payload: string }
+  | { type: 'SET_REGISTER_WEB_API_OUTPUT'; payload: string }
+  | { type: 'SET_REGISTER_OUTPUT'; payload: string }
+  | { type: 'SET_LOGIN_ID'; payload: string }
+  | { type: 'SET_LOGIN_WEB_API_OUTPUT'; payload: string }
+  | { type: 'SET_LOGIN_OUTPUT'; payload: string }
+  | { type: 'SET_LOADING'; payload: boolean };
+
+const initialState: WebAuthnState = {
+  registerId: 'testId',
+  registerAccount: 'testAccount',
+  registerName: 'testName',
+  registerWebApiOutput: '',
+  registerOutput: '',
+  loginId: 'testId',
+  loginWebApiOutput: '',
+  loginOutput: '',
+  loading: false
+};
+
+function webAuthnReducer(
+  state: WebAuthnState,
+  action: WebAuthnAction
+): WebAuthnState {
+  switch (action.type) {
+    case 'SET_REGISTER_ID':
+      return { ...state, registerId: action.payload };
+    case 'SET_REGISTER_ACCOUNT':
+      return { ...state, registerAccount: action.payload };
+    case 'SET_REGISTER_NAME':
+      return { ...state, registerName: action.payload };
+    case 'SET_REGISTER_WEB_API_OUTPUT':
+      return { ...state, registerWebApiOutput: action.payload };
+    case 'SET_REGISTER_OUTPUT':
+      return { ...state, registerOutput: action.payload };
+    case 'SET_LOGIN_ID':
+      return { ...state, loginId: action.payload };
+    case 'SET_LOGIN_WEB_API_OUTPUT':
+      return { ...state, loginWebApiOutput: action.payload };
+    case 'SET_LOGIN_OUTPUT':
+      return { ...state, loginOutput: action.payload };
+    case 'SET_LOADING':
+      return { ...state, loading: action.payload };
+    default:
+      return state;
+  }
+}
+
+// --------------- Component ---------------
+
+export default function DemoWebAuthn(): ReactNode {
   const dispatch = useAppDispatch();
+  const [state, localDispatch] = useReducer(webAuthnReducer, initialState);
 
-  // Register form state
-  const [registerId, setRegisterId] = useState('testId');
-  const [registerAccount, setRegisterAccount] = useState('testAccount');
-  const [registerName, setRegisterName] = useState('testName');
-  const [registerWebApiOutput, setRegisterWebApiOutput] = useState<string>('');
-  const [registerOutput, setRegisterOutput] = useState<string>('');
-
-  // Login form state
-  const [loginId, setLoginId] = useState('testId');
-  const [loginWebApiOutput, setLoginWebApiOutput] = useState<string>('');
-  const [loginOutput, setLoginOutput] = useState<string>('');
+  const {
+    registerId,
+    registerAccount,
+    registerName,
+    registerWebApiOutput,
+    registerOutput,
+    loginId,
+    loginWebApiOutput,
+    loginOutput,
+    loading
+  } = state;
 
   // Credential storage (in production, this should be stored securely)
   const credentialDataRef = useRef<CredentialData | null>(null);
 
-  const [loading, setLoading] = useState(false);
-
   // Generate challenge from server
-  const generateChallenge = async (): Promise<string> => {
+  const generateChallenge = useCallback(async (): Promise<string> => {
     const response = await fetch('/api/web-authn/generate-challenge');
     const challengeString = await response.json();
     return challengeString;
-  };
+  }, []);
 
   // Generate public key creation options
-  const generatePublicKeyCreationOptions = async () => {
+  const generatePublicKeyCreationOptions = useCallback(async () => {
     const challengeString = await generateChallenge();
     const challengeUint8 = Base64.toUint8Array(challengeString);
     // Cast to BufferSource for TypeScript compatibility
@@ -86,197 +152,254 @@ export default function DemoWebAuthn(): React.ReactNode {
       };
 
     return { publicKeyCredentialCreationOptions, challengeString, challenge };
-  };
+  }, [generateChallenge]);
 
   // Handle WebAuthn Registration
-  const handleWebAuthnRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (loading) return;
+  const handleWebAuthnRegister = useCallback(
+    async (e: FormEvent) => {
+      e.preventDefault();
+      if (loading) return;
 
-    setLoading(true);
+      localDispatch({ type: 'SET_LOADING', payload: true });
 
-    try {
-      const { publicKeyCredentialCreationOptions, challengeString } =
-        await generatePublicKeyCreationOptions();
+      try {
+        const { publicKeyCredentialCreationOptions, challengeString } =
+          await generatePublicKeyCreationOptions();
 
-      // Set user info
-      const userId = Uint8Array.from(registerId, (c) => c.charCodeAt(0));
-      publicKeyCredentialCreationOptions.user = {
-        id: userId,
-        name: registerAccount,
-        displayName: registerName
-      };
+        // Set user info
+        const userId = Uint8Array.from(registerId, (c) => c.charCodeAt(0));
+        publicKeyCredentialCreationOptions.user = {
+          id: userId,
+          name: registerAccount,
+          displayName: registerName
+        };
 
-      // Create credential
-      const credential = (await navigator.credentials.create({
-        publicKey: publicKeyCredentialCreationOptions
-      })) as PublicKeyCredential;
+        // Create credential
+        const credential = (await navigator.credentials.create({
+          publicKey: publicKeyCredentialCreationOptions
+        })) as PublicKeyCredential;
 
-      if (!credential) {
-        throw new Error('Failed to create credential');
+        if (!credential) {
+          throw new Error('Failed to create credential');
+        }
+
+        const response =
+          credential.response as AuthenticatorAttestationResponse;
+
+        // Format credential for display and API
+        const credentialJSON = {
+          authenticatorAttachment: credential.authenticatorAttachment,
+          id: credential.id,
+          rawId: Base64.fromUint8Array(new Uint8Array(credential.rawId), true),
+          response: {
+            attestationObject: Base64.fromUint8Array(
+              new Uint8Array(response.attestationObject),
+              true
+            ),
+            clientDataJSON: Base64.fromUint8Array(
+              new Uint8Array(response.clientDataJSON),
+              true
+            ),
+            publicKey: response.getPublicKey
+              ? Base64.fromUint8Array(
+                  new Uint8Array(response.getPublicKey()!),
+                  true
+                )
+              : null,
+            publicKeyAlgorithm: response.getPublicKeyAlgorithm?.() ?? null,
+            transports: response.getTransports?.() ?? []
+          },
+          type: credential.type
+        };
+
+        localDispatch({
+          type: 'SET_REGISTER_WEB_API_OUTPUT',
+          payload: JSON.stringify(credentialJSON, null, 2)
+        });
+
+        // Send to server for registration
+        const serverResponse = await fetch('/api/web-authn/registration', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            challengeString,
+            credential: credentialJSON
+          })
+        });
+
+        const serverData = await serverResponse.json();
+        localDispatch({
+          type: 'SET_REGISTER_OUTPUT',
+          payload: JSON.stringify(serverData, null, 2)
+        });
+
+        if (serverData.base64URLServerSaveData) {
+          credentialDataRef.current = serverData.base64URLServerSaveData;
+          dispatch({
+            type: 'system/message_success',
+            payload: '憑證註冊成功！'
+          });
+        }
+      } catch (err) {
+        console.error('Registration error:', err);
+        dispatch({
+          type: 'system/message_error',
+          payload: err instanceof Error ? err.message : '註冊失敗'
+        });
+      } finally {
+        localDispatch({ type: 'SET_LOADING', payload: false });
       }
-
-      const response = credential.response as AuthenticatorAttestationResponse;
-
-      // Format credential for display and API
-      const credentialJSON = {
-        authenticatorAttachment: credential.authenticatorAttachment,
-        id: credential.id,
-        rawId: Base64.fromUint8Array(new Uint8Array(credential.rawId), true),
-        response: {
-          attestationObject: Base64.fromUint8Array(
-            new Uint8Array(response.attestationObject),
-            true
-          ),
-          clientDataJSON: Base64.fromUint8Array(
-            new Uint8Array(response.clientDataJSON),
-            true
-          ),
-          publicKey: response.getPublicKey
-            ? Base64.fromUint8Array(
-                new Uint8Array(response.getPublicKey()!),
-                true
-              )
-            : null,
-          publicKeyAlgorithm: response.getPublicKeyAlgorithm?.() ?? null,
-          transports: response.getTransports?.() ?? []
-        },
-        type: credential.type
-      };
-
-      setRegisterWebApiOutput(JSON.stringify(credentialJSON, null, 2));
-
-      // Send to server for registration
-      const serverResponse = await fetch('/api/web-authn/registration', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          challengeString,
-          credential: credentialJSON
-        })
-      });
-
-      const serverData = await serverResponse.json();
-      setRegisterOutput(JSON.stringify(serverData, null, 2));
-
-      if (serverData.base64URLServerSaveData) {
-        credentialDataRef.current = serverData.base64URLServerSaveData;
-        dispatch({ type: 'system/message_success', payload: '憑證註冊成功！' });
-      }
-    } catch (err) {
-      console.error('Registration error:', err);
-      dispatch({
-        type: 'system/message_error',
-        payload: err instanceof Error ? err.message : '註冊失敗'
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [
+      loading,
+      registerId,
+      registerAccount,
+      registerName,
+      generatePublicKeyCreationOptions,
+      dispatch
+    ]
+  );
 
   // Handle WebAuthn Login/Verify
-  const handleWebAuthnLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (loading) return;
+  const handleWebAuthnLogin = useCallback(
+    async (e: FormEvent) => {
+      e.preventDefault();
+      if (loading) return;
 
-    if (!credentialDataRef.current) {
-      dispatch({ type: 'system/message_error', payload: '請先完成註冊' });
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const { publicKeyCredentialCreationOptions, challengeString } =
-        await generatePublicKeyCreationOptions();
-
-      const credentialIdUint8 = Base64.toUint8Array(
-        credentialDataRef.current.credentialId
-      );
-      const credentialIdBuffer = credentialIdUint8.buffer.slice(
-        credentialIdUint8.byteOffset,
-        credentialIdUint8.byteOffset + credentialIdUint8.byteLength
-      ) as ArrayBuffer;
-
-      const allowCredentials: PublicKeyCredentialDescriptor[] = [
-        {
-          id: credentialIdBuffer,
-          type: 'public-key',
-          transports: ['internal', 'usb', 'ble', 'nfc']
-        }
-      ];
-
-      // Get credential
-      const credential = (await navigator.credentials.get({
-        publicKey: {
-          ...publicKeyCredentialCreationOptions,
-          allowCredentials
-        }
-      })) as PublicKeyCredential;
-
-      if (!credential) {
-        throw new Error('Failed to get credential');
+      if (!credentialDataRef.current) {
+        dispatch({ type: 'system/message_error', payload: '請先完成註冊' });
+        return;
       }
 
-      const response = credential.response as AuthenticatorAssertionResponse;
+      localDispatch({ type: 'SET_LOADING', payload: true });
 
-      // Format credential for display and API
-      const credentialJSON = {
-        authenticatorAttachment: credential.authenticatorAttachment,
-        id: credential.id,
-        rawId: Base64.fromUint8Array(new Uint8Array(credential.rawId), true),
-        response: {
-          authenticatorData: Base64.fromUint8Array(
-            new Uint8Array(response.authenticatorData),
-            true
-          ),
-          clientDataJSON: Base64.fromUint8Array(
-            new Uint8Array(response.clientDataJSON),
-            true
-          ),
-          signature: Base64.fromUint8Array(
-            new Uint8Array(response.signature),
-            true
-          ),
-          userHandle: response.userHandle
-            ? Base64.fromUint8Array(new Uint8Array(response.userHandle), true)
-            : null
-        },
-        type: credential.type
-      };
+      try {
+        const { publicKeyCredentialCreationOptions, challengeString } =
+          await generatePublicKeyCreationOptions();
 
-      setLoginWebApiOutput(JSON.stringify(credentialJSON, null, 2));
+        const credentialIdUint8 = Base64.toUint8Array(
+          credentialDataRef.current.credentialId
+        );
+        const credentialIdBuffer = credentialIdUint8.buffer.slice(
+          credentialIdUint8.byteOffset,
+          credentialIdUint8.byteOffset + credentialIdUint8.byteLength
+        ) as ArrayBuffer;
 
-      // Send to server for verification
-      const serverResponse = await fetch('/api/web-authn/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: loginId,
-          challengeString,
-          credential: credentialJSON,
-          base64URLServerSaveData: credentialDataRef.current
-        })
-      });
+        const allowCredentials: PublicKeyCredentialDescriptor[] = [
+          {
+            id: credentialIdBuffer,
+            type: 'public-key',
+            transports: ['internal', 'usb', 'ble', 'nfc']
+          }
+        ];
 
-      const serverData = await serverResponse.json();
-      setLoginOutput(JSON.stringify(serverData, null, 2));
+        // Get credential
+        const credential = (await navigator.credentials.get({
+          publicKey: {
+            ...publicKeyCredentialCreationOptions,
+            allowCredentials
+          }
+        })) as PublicKeyCredential;
 
-      if (serverData.verified) {
-        dispatch({ type: 'system/message_success', payload: '登入驗證成功！' });
-      } else {
-        dispatch({ type: 'system/message_error', payload: '驗證失敗' });
+        if (!credential) {
+          throw new Error('Failed to get credential');
+        }
+
+        const response = credential.response as AuthenticatorAssertionResponse;
+
+        // Format credential for display and API
+        const credentialJSON = {
+          authenticatorAttachment: credential.authenticatorAttachment,
+          id: credential.id,
+          rawId: Base64.fromUint8Array(new Uint8Array(credential.rawId), true),
+          response: {
+            authenticatorData: Base64.fromUint8Array(
+              new Uint8Array(response.authenticatorData),
+              true
+            ),
+            clientDataJSON: Base64.fromUint8Array(
+              new Uint8Array(response.clientDataJSON),
+              true
+            ),
+            signature: Base64.fromUint8Array(
+              new Uint8Array(response.signature),
+              true
+            ),
+            userHandle: response.userHandle
+              ? Base64.fromUint8Array(
+                  new Uint8Array(response.userHandle),
+                  true
+                )
+              : null
+          },
+          type: credential.type
+        };
+
+        localDispatch({
+          type: 'SET_LOGIN_WEB_API_OUTPUT',
+          payload: JSON.stringify(credentialJSON, null, 2)
+        });
+
+        // Send to server for verification
+        const serverResponse = await fetch('/api/web-authn/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: loginId,
+            challengeString,
+            credential: credentialJSON,
+            base64URLServerSaveData: credentialDataRef.current
+          })
+        });
+
+        const serverData = await serverResponse.json();
+        localDispatch({
+          type: 'SET_LOGIN_OUTPUT',
+          payload: JSON.stringify(serverData, null, 2)
+        });
+
+        if (serverData.verified) {
+          dispatch({
+            type: 'system/message_success',
+            payload: '登入驗證成功！'
+          });
+        } else {
+          dispatch({ type: 'system/message_error', payload: '驗證失敗' });
+        }
+      } catch (err) {
+        console.error('Login error:', err);
+        dispatch({
+          type: 'system/message_error',
+          payload: err instanceof Error ? err.message : '驗證失敗'
+        });
+      } finally {
+        localDispatch({ type: 'SET_LOADING', payload: false });
       }
-    } catch (err) {
-      console.error('Login error:', err);
-      dispatch({
-        type: 'system/message_error',
-        payload: err instanceof Error ? err.message : '驗證失敗'
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [loading, loginId, generatePublicKeyCreationOptions, dispatch]
+  );
+
+  // Input change handlers
+  const handleRegisterIdChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) =>
+      localDispatch({ type: 'SET_REGISTER_ID', payload: e.target.value }),
+    []
+  );
+  const handleRegisterAccountChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) =>
+      localDispatch({ type: 'SET_REGISTER_ACCOUNT', payload: e.target.value }),
+    []
+  );
+  const handleRegisterNameChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) =>
+      localDispatch({ type: 'SET_REGISTER_NAME', payload: e.target.value }),
+    []
+  );
+  const handleLoginIdChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) =>
+      localDispatch({ type: 'SET_LOGIN_ID', payload: e.target.value }),
+    []
+  );
 
   return (
     <>
@@ -331,7 +454,7 @@ export default function DemoWebAuthn(): React.ReactNode {
             fullWidth
             label="ID"
             value={registerId}
-            onChange={(e) => setRegisterId(e.target.value)}
+            onChange={handleRegisterIdChange}
             className={style['web_authn_page-register-id']}
             margin="normal"
           />
@@ -339,7 +462,7 @@ export default function DemoWebAuthn(): React.ReactNode {
             fullWidth
             label="帳號"
             value={registerAccount}
-            onChange={(e) => setRegisterAccount(e.target.value)}
+            onChange={handleRegisterAccountChange}
             className={style['web_authn_page-register-account']}
             margin="normal"
           />
@@ -347,7 +470,7 @@ export default function DemoWebAuthn(): React.ReactNode {
             fullWidth
             label="名稱"
             value={registerName}
-            onChange={(e) => setRegisterName(e.target.value)}
+            onChange={handleRegisterNameChange}
             className={style['web_authn_page-register-name']}
             margin="normal"
           />
@@ -401,7 +524,7 @@ export default function DemoWebAuthn(): React.ReactNode {
             fullWidth
             label="帳號"
             value={loginId}
-            onChange={(e) => setLoginId(e.target.value)}
+            onChange={handleLoginIdChange}
             className={style['web_authn_page-login-id']}
             margin="normal"
           />
