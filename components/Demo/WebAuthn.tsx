@@ -1,15 +1,12 @@
 'use client';
 
 import { useReducer, useRef, useCallback, type ReactNode, type ChangeEvent, type FormEvent } from 'react';
-import Image from 'next/image';
 import { Base64 } from 'js-base64';
 import {
   Typography,
   TextField,
   Button,
-  Paper,
-  Box,
-  Divider
+  Box
 } from '@mui/material';
 import { useAppDispatch } from '@/store';
 import style from '@/app/[locale]/web-authn/page.module.scss';
@@ -402,165 +399,136 @@ export default function DemoWebAuthn(): ReactNode {
   );
 
   return (
-    <>
-      <Typography variant="h5" gutterBottom>
-        WebAuthn 生物辨識測試
-      </Typography>
-
-      <Typography variant="body2" color="text.secondary" paragraph>
-        原生方式為主，套件用來編碼、解碼的方式實作
-      </Typography>
-
-      <Box className={style['web_authn_page-outbound_link']}>
-        <Typography variant="body2">記錄筆記：</Typography>
-        <a
-          href="https://www.notion.so/Web-Authn-6480f13abf224ef59a41571df1531f6a"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={style['web_authn_page-outbound_link-item']}
-        >
-          Notion 筆記連結
-        </a>
-      </Box>
-
-      {/* <Image
-        className={style['web_authn_page-banner']}
-        src="/img/web-authn/web-authn-v.06.webp"
-        alt="WebAuthn Banner"
-        width={1200}
-        height={400}
-        priority
-      /> */}
-      <Image
-        className={style['web_authn_page-banner']}
-        src="/img/icon/Next.jsLab.v.03.webp"
-        alt="WebAuthn Banner"
-        width={1200}
-        height={400}
-        priority
-      />
-
+    <Box className={style['web_authn_page-panels']}>
       {/* Registration Section */}
-      <Paper className={style['web_authn_page-register']} elevation={2}>
-        <form onSubmit={handleWebAuthnRegister}>
-          <Typography
-            variant="h6"
-            className={style['web_authn_page-register-title']}
-          >
-            向伺服器註冊生物辨識資料
+      <Box className={style['web_authn_page-panel']}>
+        <Box className={style['web_authn_page-panel-header']}>
+          <Box className={style['web_authn_page-panel-header-icon']} data-type="register">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <line x1="19" y1="8" x2="19" y2="14" />
+              <line x1="22" y1="11" x2="16" y2="11" />
+            </svg>
+          </Box>
+          <Typography variant="h6" className={style['web_authn_page-panel-header-title']}>
+            註冊生物辨識
           </Typography>
+        </Box>
 
+        <form onSubmit={handleWebAuthnRegister} className={style['web_authn_page-panel-form']}>
           <TextField
             fullWidth
             label="ID"
             value={registerId}
             onChange={handleRegisterIdChange}
-            className={style['web_authn_page-register-id']}
-            margin="normal"
+            variant="outlined"
+            size="small"
           />
           <TextField
             fullWidth
             label="帳號"
             value={registerAccount}
             onChange={handleRegisterAccountChange}
-            className={style['web_authn_page-register-account']}
-            margin="normal"
+            variant="outlined"
+            size="small"
           />
           <TextField
             fullWidth
             label="名稱"
             value={registerName}
             onChange={handleRegisterNameChange}
-            className={style['web_authn_page-register-name']}
-            margin="normal"
+            variant="outlined"
+            size="small"
           />
 
-          <Box className={style['web_authn_page-register-submit']}>
+          <Box className={style['web_authn_page-panel-submit']}>
             <Button
               variant="contained"
               color="primary"
               type="submit"
               disabled={loading}
+              disableElevation
             >
-              {loading ? '處理中...' : '註冊'}
+              {loading ? '處理中...' : '建立 WebAuthn 憑證'}
             </Button>
           </Box>
         </form>
 
-        <Typography
-          variant="subtitle2"
-          className={style['web_authn_page-register-output_title']}
-        >
-          WebAuthn API 回傳：
-        </Typography>
-        <Box className={style['web_authn_page-register-output']}>
-          <pre>{registerWebApiOutput || '(尚未執行)'}</pre>
+        <Box className={style['web_authn_page-panel-output_wrap']}>
+          <Typography className={style['web_authn_page-panel-output_title']}>
+            WebAuthn API 輸出
+          </Typography>
+          <Box className={style['web_authn_page-panel-output']}>
+            <pre>{registerWebApiOutput || '等待執行...'}</pre>
+          </Box>
         </Box>
 
-        <Typography
-          variant="subtitle2"
-          className={style['web_authn_page-register-output_title']}
-        >
-          伺服端回傳：
-        </Typography>
-        <Box className={style['web_authn_page-register-output']}>
-          <pre>{registerOutput || '(尚未執行)'}</pre>
+        <Box className={style['web_authn_page-panel-output_wrap']}>
+          <Typography className={style['web_authn_page-panel-output_title']}>
+            伺服器回應
+          </Typography>
+          <Box className={style['web_authn_page-panel-output']}>
+            <pre>{registerOutput || '等待執行...'}</pre>
+          </Box>
         </Box>
-      </Paper>
-
-      <Divider sx={{ my: 3 }} />
+      </Box>
 
       {/* Login/Verify Section */}
-      <Paper className={style['web_authn_page-login']} elevation={2}>
-        <form onSubmit={handleWebAuthnLogin}>
-          <Typography
-            variant="h6"
-            className={style['web_authn_page-login-title']}
-          >
+      <Box className={style['web_authn_page-panel']}>
+        <Box className={style['web_authn_page-panel-header']}>
+          <Box className={style['web_authn_page-panel-header-icon']} data-type="login">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          </Box>
+          <Typography variant="h6" className={style['web_authn_page-panel-header-title']}>
             執行身份驗證
           </Typography>
+        </Box>
 
+        <form onSubmit={handleWebAuthnLogin} className={style['web_authn_page-panel-form']}>
           <TextField
             fullWidth
             label="帳號"
             value={loginId}
             onChange={handleLoginIdChange}
-            className={style['web_authn_page-login-id']}
-            margin="normal"
+            variant="outlined"
+            size="small"
           />
 
-          <Box className={style['web_authn_page-login-submit']}>
+          <Box className={style['web_authn_page-panel-submit']}>
             <Button
               variant="contained"
-              color="primary"
+              color="secondary"
               type="submit"
               disabled={loading || !credentialDataRef.current}
+              disableElevation
             >
-              {loading ? '處理中...' : '驗證'}
+              {loading ? '處理中...' : '進行驗證'}
             </Button>
           </Box>
         </form>
 
-        <Typography
-          variant="subtitle2"
-          className={style['web_authn_page-login-output_title']}
-        >
-          WebAuthn API 回傳：
-        </Typography>
-        <Box className={style['web_authn_page-login-output']}>
-          <pre>{loginWebApiOutput || '(尚未執行)'}</pre>
+        <Box className={style['web_authn_page-panel-output_wrap']}>
+          <Typography className={style['web_authn_page-panel-output_title']}>
+            WebAuthn API 輸出
+          </Typography>
+          <Box className={style['web_authn_page-panel-output']}>
+            <pre>{loginWebApiOutput || '等待執行...'}</pre>
+          </Box>
         </Box>
 
-        <Typography
-          variant="subtitle2"
-          className={style['web_authn_page-login-output_title']}
-        >
-          伺服端回傳：
-        </Typography>
-        <Box className={style['web_authn_page-login-output']}>
-          <pre>{loginOutput || '(尚未執行)'}</pre>
+        <Box className={style['web_authn_page-panel-output_wrap']}>
+          <Typography className={style['web_authn_page-panel-output_title']}>
+            伺服器回應
+          </Typography>
+          <Box className={style['web_authn_page-panel-output']}>
+            <pre>{loginOutput || '等待執行...'}</pre>
+          </Box>
         </Box>
-      </Paper>
-    </>
+      </Box>
+    </Box>
   );
 }
