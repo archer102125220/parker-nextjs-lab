@@ -3,11 +3,12 @@ import { headers } from 'next/headers';
 import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
-import { Link } from '@/i18n/navigation';
 import { locales } from '@/i18n';
 
 import GTMScnOpen from '@/components/Google/GTMScnOpen';
 import { DefaultLayout } from '@/layout/default';
+
+import { LinkCard } from '@/components/Index/LinkCard';
 
 import styles from './page.module.scss';
 
@@ -146,7 +147,7 @@ const LINK_SECTIONS = [
     titleKey: 'sections.knowledgeBase',
     links: [
       {
-        href: '/notes',
+        href: 'https://valley-hortensia-084.notion.site/Parker-Chen-3446dcd96fa280c7b1ecdd139384ee12',
         labelKey: 'links.notes',
         descKey: 'links.notesDesc',
         icon: '📝'
@@ -201,21 +202,7 @@ async function HomePage({ params }: Props): Promise<ReactNode> {
             </h2>
             <div className={styles['home_page-section-grid']}>
               {section.links.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={styles['home_page-card']}
-                >
-                  <span className={styles['home_page-card-icon']}>
-                    {link.icon}
-                  </span>
-                  <h3 className={styles['home_page-card-title']}>
-                    {t(link.labelKey)}
-                  </h3>
-                  <p className={styles['home_page-card-description']}>
-                    {t(link.descKey)}
-                  </p>
-                </Link>
+                <LinkCard key={link.href} link={link} />
               ))}
             </div>
           </section>
