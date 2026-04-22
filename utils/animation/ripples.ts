@@ -646,7 +646,8 @@ export class Ripples {
     this.handleUserDrop(e, true);
   }
   private handleTouchStart(e: TouchEvent) {
-    this.handleUserDrop(e.changedTouches[0], true);
+    const touches = e.changedTouches || e.touches;
+    this.handleUserDrop(touches[0], true);
   }
   private handleTouchMove(e: TouchEvent) {
     const touches = e.changedTouches || e.touches;
